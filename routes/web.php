@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/robots.txt', RobotsController::class)->name('robots');
@@ -15,6 +16,10 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
+
+    Route::middleware('admin')->group(function () {
+        Route::resource('users', UserController::class)->except(['show']);
+    });
 });
 
 require __DIR__.'/settings.php';

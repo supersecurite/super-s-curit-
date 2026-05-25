@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -39,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? $this->formatAuthUser($request->user()) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'aristech' => [
@@ -69,6 +70,27 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function formatAuthUser(User $user): array
+    {
+        return [
+            'id' => $user->id,
+            'uuid' => $user->uuid,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $user->role->value,
+            'role_label' => $user->role->label(),
+            'is_admin' => $user->isAdmin(),
+            'email_verified_at' => $user->email_verified_at,
+            'two_factor_enabled' => $user->two_factor_secret !== null,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
         ];
     }
 }
