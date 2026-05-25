@@ -1,0 +1,99 @@
+import { ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react';
+import Reveal from '@/components/marketing/reveal';
+import type { AristechConfig } from '@/types/aristech';
+
+type ContactChannelsProps = {
+    aristech: AristechConfig;
+};
+
+export default function ContactChannels({ aristech }: ContactChannelsProps) {
+    const phoneDigits = aristech.phone_href.replace(/[^0-9]/g, '');
+
+    const channels = [
+        {
+            icon: Mail,
+            label: 'Email',
+            value: aristech.email,
+            description: 'Réponse sous 24h ouvrées',
+            href: `mailto:${aristech.email}`,
+            cta: 'Écrire un email',
+        },
+        {
+            icon: Phone,
+            label: 'Téléphone',
+            value: aristech.phone,
+            description: 'Lun – Ven · 9h à 18h GMT',
+            href: aristech.phone_href,
+            cta: 'Appeler',
+        },
+        {
+            icon: MessageCircle,
+            label: 'WhatsApp',
+            value: aristech.phone,
+            description: 'Discussion rapide et fichiers',
+            href: `https://wa.me/${phoneDigits}`,
+            cta: 'Ouvrir WhatsApp',
+        },
+    ] as const;
+
+    return (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {channels.map((channel, index) => {
+                const Icon = channel.icon;
+                const isExternal = channel.href.startsWith('http');
+
+                return (
+                    <Reveal
+                        key={channel.label}
+                        delay={index * 100}
+                        className="h-full"
+                    >
+                        <a
+                            href={channel.href}
+                            target={isExternal ? '_blank' : undefined}
+                            rel={isExternal ? 'noopener noreferrer' : undefined}
+                            className="marketing-card-interactive group relative flex h-full flex-col overflow-hidden"
+                        >
+                            <div
+                                className="pointer-events-none absolute -top-12 -right-12 size-32 rounded-full bg-aristech-accent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20"
+                                aria-hidden
+                            />
+
+                            <div className="flex items-start justify-between">
+                                <div className="inline-flex size-12 items-center justify-center rounded-xl bg-aristech-accent/10 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100">
+                                    <Icon
+                                        className="size-6 text-aristech-accent"
+                                        strokeWidth={2}
+                                        aria-hidden
+                                    />
+                                </div>
+                                <ArrowUpRight
+                                    className="size-5 text-aristech-muted opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-aristech-accent group-hover:opacity-100 motion-reduce:transition-none"
+                                    aria-hidden
+                                />
+                            </div>
+
+                            <h3 className="mt-6 font-heading text-lg font-semibold text-aristech-heading">
+                                {channel.label}
+                            </h3>
+                            <p className="mt-1 font-heading text-sm font-medium text-aristech-accent">
+                                {channel.value}
+                            </p>
+                            <p className="mt-3 flex-1 text-sm leading-relaxed text-aristech-muted">
+                                {channel.description}
+                            </p>
+
+                            <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-aristech-heading uppercase">
+                                {channel.cta}
+                                <ArrowUpRight
+                                    className="size-3.5"
+                                    aria-hidden
+                                />
+                            </span>
+                        </a>
+                    </Reveal>
+                );
+            })}
+        </div>
+    );
+}
