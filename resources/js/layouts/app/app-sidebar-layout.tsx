@@ -3,15 +3,12 @@ import { AppContent } from '@/components/app-content';
 import { AppShell } from '@/components/app-shell';
 import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
-import { useVisitTracker } from '@/hooks/use-visit-tracker';
 import type { AppLayoutProps } from '@/types';
 
 export default function AppSidebarLayout({
     children,
     breadcrumbs = [],
 }: AppLayoutProps) {
-    useVisitTracker();
-
     useEffect(() => {
         document.documentElement.classList.add('app-page');
         document.documentElement.classList.remove('dark', 'marketing-page');

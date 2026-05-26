@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Visit;
+use App\Support\VisitTracking;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,6 +57,10 @@ class AnalyticsController extends Controller
             'path' => ['required', 'string', 'max:2048'],
             'duration' => ['required', 'integer', 'min:1', 'max:86400'],
         ]);
+
+        if (VisitTracking::isExcludedPath($validated['path'])) {
+            return response()->json(['ok' => true]);
+        }
 
         Visit::query()
             ->where('session_id', $validated['session_id'])

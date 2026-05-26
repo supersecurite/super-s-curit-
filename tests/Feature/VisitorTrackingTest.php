@@ -87,6 +87,34 @@ test('login page is not tracked', function () {
     expect(Visit::query()->count())->toBe(0);
 });
 
+test('admin and app pages are not tracked', function () {
+    $admin = User::factory()->admin()->create();
+    $user = User::factory()->create();
+
+    $this->actingAs($admin)->get('/dashboard');
+    $this->actingAs($admin)->get(route('analytics.index'));
+    $this->actingAs($admin)->get(route('users.index'));
+    $this->actingAs($user)->get(route('profile.edit'));
+
+    expect(Visit::query()->count())->toBe(0);
+});
+
+test('duration endpoint ignores admin paths', function () {
+    $visit = Visit::factory()->create([
+        'path' => '/dashboard',
+        'is_bounce' => true,
+        'duration_seconds' => null,
+    ]);
+
+    $this->postJson(route('analytics.duration'), [
+        'session_id' => $visit->session_id,
+        'path' => '/dashboard',
+        'duration' => 120,
+    ])->assertOk();
+
+    expect($visit->fresh()->duration_seconds)->toBeNull();
+});
+
 test('geoip resolves country from cloudflare header', function () {
     $this->withHeaders(['CF-IPCountry' => 'GN'])->get('/');
 

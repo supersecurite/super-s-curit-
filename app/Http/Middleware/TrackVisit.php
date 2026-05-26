@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Visit;
 use App\Services\GeoIpService;
+use App\Support\VisitTracking;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,30 +16,6 @@ class TrackVisit
     private const VISITOR_COOKIE = 'aristech_vid';
 
     private const COOKIE_TTL_DAYS = 365;
-
-    /** Paths to never track */
-    private const EXCLUDED_PATHS = [
-        'robots.txt',
-        'sitemap.xml',
-        'analytics/duration',
-        '_debugbar',
-        'api/',
-        'up',
-        'health',
-        'livewire',
-    ];
-
-    /** Auth pages (Fortify) — excluded from analytics */
-    private const AUTH_PATH_PREFIXES = [
-        'login',
-        'register',
-        'forgot-password',
-        'reset-password',
-        'email/verify',
-        'two-factor-challenge',
-        'user/confirm-password',
-        'passkey',
-    ];
 
     public function __construct(private GeoIpService $geoIp) {}
 
@@ -68,18 +45,8 @@ class TrackVisit
             return false;
         }
 
-        $path = ltrim($request->path(), '/');
-
-        foreach (self::EXCLUDED_PATHS as $excluded) {
-            if (str_starts_with($path, $excluded)) {
-                return false;
-            }
-        }
-
-        foreach (self::AUTH_PATH_PREFIXES as $authPath) {
-            if ($path === $authPath || str_starts_with($path, $authPath.'/')) {
-                return false;
-            }
+        if (VisitTracking::isExcludedPath($request->path())) {
+            return false;
         }
 
         return true;
