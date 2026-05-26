@@ -63,7 +63,7 @@ test('contact form accepts optional company project type and budget', function (
         'name' => 'Aristide Gnimassou',
         'email' => 'client@example.com',
         'phone' => '+224621630916',
-        'company' => 'ArisTech',
+        'company' => 'ARISTECH',
         'project_type' => 'Application web sur mesure',
         'budget' => '5 000 – 15 000 €',
         'message' => 'Refonte complète de notre plateforme.',

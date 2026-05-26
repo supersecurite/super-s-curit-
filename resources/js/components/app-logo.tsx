@@ -7,8 +7,8 @@ export default function AppLogo() {
                 <AppLogoIcon className="size-5 fill-current text-primary-foreground" />
             </div>
             <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="font-heading mb-0.5 truncate leading-tight font-semibold text-aristech-heading">
-                    ArisTech
+                <span className="font-heading mb-0.5 truncate leading-tight font-semibold text-ARISTECH-heading">
+                    ARISTECH
                 </span>
             </div>
         </>

@@ -2,11 +2,11 @@
 
 return [
 
-    'site_name' => env('SEO_SITE_NAME', 'ArisTech'),
+    'site_name' => env('SEO_SITE_NAME', 'ARISTECH'),
 
     'default_description' => env(
         'SEO_DEFAULT_DESCRIPTION',
-        'ArisTech conçoit des sites WordPress, boutiques WooCommerce et applications web sur mesure en Guinée et à l\'international.',
+        'ARISTECH conçoit des sites WordPress, boutiques WooCommerce et applications web sur mesure en Guinée et à l\'international.',
     ),
 
     'locale' => env('SEO_LOCALE', 'fr_FR'),
@@ -18,8 +18,8 @@ return [
     'default_og_image' => '/images/aristech/aristech.jpeg',
 
     'organization' => [
-        'name' => 'ArisTech',
-        'legal_name' => 'ArisTech',
+        'name' => 'ARISTECH',
+        'legal_name' => 'ARISTECH',
         'founder' => 'Aristide Gnimassou',
         'description' => 'Studio de développement web et mobile — WordPress, WooCommerce, Shopify et applications sur mesure.',
         'area_served' => 'Guinée',

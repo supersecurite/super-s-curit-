@@ -1,8 +1,11 @@
 import { useEffect, type ReactNode } from 'react';
 import MarketingFooter from '@/components/marketing/marketing-footer';
 import MarketingHeader from '@/components/marketing/marketing-header';
+import { useVisitTracker } from '@/hooks/use-visit-tracker';
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
+    useVisitTracker();
+
     useEffect(() => {
         document.documentElement.lang = 'fr';
         document.documentElement.classList.add('marketing-page');

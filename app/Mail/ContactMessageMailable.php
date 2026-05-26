@@ -22,7 +22,7 @@ class ContactMessageMailable extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nouveau message — ArisTech',
+            subject: 'Nouveau message — ARISTECH',
             replyTo: [$this->contact['email']],
         );
     }
