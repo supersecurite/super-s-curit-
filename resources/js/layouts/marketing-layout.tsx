@@ -3,6 +3,7 @@ import BackToTop from '@/components/marketing/back-to-top';
 import MarketingFooter from '@/components/marketing/marketing-footer';
 import MarketingHeader from '@/components/marketing/marketing-header';
 import { useVisitTracker } from '@/hooks/use-visit-tracker';
+import { Head } from '@inertiajs/react';
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
     useVisitTracker();
@@ -24,6 +25,10 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
     }, []);
 
     return (
+        <>
+            <Head>
+                <script src="https://analytics.ahrefs.com/analytics.js" data-key="aeIyQftV2tqhVjscqcASrg" async></script>
+            </Head>
         <div className="marketing-site flex min-h-screen flex-col">
             <a
                 href="#main-content"
@@ -38,5 +43,6 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             <MarketingFooter />
             <BackToTop />
         </div>
+        </>
     );
 }
