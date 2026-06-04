@@ -1,9 +1,9 @@
-import { aristechTechStack } from '@/data/aristech-content';
+import { superSecuriteTechStack } from '@/data/super-securite-content';
 
 const featuredTech = [
-    ...aristechTechStack.frontend,
-    ...aristechTechStack.backend,
-    ...aristechTechStack.mobile,
+    ...superSecuriteTechStack.frontend,
+    ...superSecuriteTechStack.backend,
+    ...superSecuriteTechStack.mobile,
 ];
 
 export default function TechMarquee() {
@@ -11,15 +11,15 @@ export default function TechMarquee() {
 
     return (
         <div
-            className="marketing-marquee-paused relative overflow-hidden border-y border-aristech-border bg-aristech-surface/60 py-6"
-            aria-label="Technologies maîtrisées par ArisTech"
+            className="marketing-marquee-paused relative overflow-hidden border-y border-super-securite-border bg-super-securite-surface/60 py-6"
+            aria-label="Technologies maîtrisées par Super Sécurité"
         >
             <div
-                className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-aristech-bg to-transparent"
+                className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-super-securite-bg to-transparent"
                 aria-hidden
             />
             <div
-                className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-linear-to-l from-aristech-bg to-transparent"
+                className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-linear-to-l from-super-securite-bg to-transparent"
                 aria-hidden
             />
 
@@ -31,7 +31,7 @@ export default function TechMarquee() {
                 {items.map((item, i) => (
                     <li
                         key={`${item.label}-${i}`}
-                        className="flex shrink-0 items-center gap-3 text-aristech-muted"
+                        className="flex shrink-0 items-center gap-3 text-super-securite-muted"
                     >
                         <img
                             src={item.path}

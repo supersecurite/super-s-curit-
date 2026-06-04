@@ -4,7 +4,7 @@ import MissionSection from '@/components/marketing/mission-section';
 import PageHero from '@/components/marketing/page-hero';
 import ValuesSection from '@/components/marketing/values-section';
 import WhyUsSection from '@/components/marketing/why-us-section';
-import { aristechImages } from '@/data/aristech-images';
+import { superSecuriteImages } from '@/data/super-securite-images';
 
 export default function MarketingAbout() {
     return (
@@ -24,9 +24,9 @@ export default function MarketingAbout() {
                 description="Expérience, réactivité, disponibilité 24/7 et équipe certifiée : Super Sécurité accompagne entreprises et particuliers pour une protection fiable à Conakry et en Guinée."
                 media={
                     <div className="relative mx-auto w-full max-w-lg">
-                        <div className="relative overflow-hidden rounded-3xl border border-aristech-border bg-aristech-surface p-8 shadow-xl shadow-slate-900/10">
+                        <div className="relative overflow-hidden rounded-3xl border border-super-securite-border bg-super-securite-surface p-8 shadow-xl shadow-slate-900/10">
                             <img
-                                src={aristechImages.brand}
+                                src={superSecuriteImages.brand}
                                 alt="Super Sécurité — sécurité privée"
                                 width={400}
                                 height={400}

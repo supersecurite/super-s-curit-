@@ -28,7 +28,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                 title={study.title}
                 description={study.summary}
                 media={
-                    <div className="relative overflow-hidden rounded-3xl border border-aristech-border shadow-xl">
+                    <div className="relative overflow-hidden rounded-3xl border border-super-securite-border shadow-xl">
                         <img
                             src={study.image}
                             alt={study.title}
@@ -45,37 +45,37 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                 <div className="mx-auto max-w-3xl space-y-12 px-4 sm:px-6 lg:px-8">
                     <Reveal>
                         <div>
-                            <h2 className="font-heading text-2xl font-bold text-aristech-heading">
+                            <h2 className="font-heading text-2xl font-bold text-super-securite-heading">
                                 Contexte & enjeu
                             </h2>
-                            <p className="mt-4 leading-relaxed text-aristech-muted">
+                            <p className="mt-4 leading-relaxed text-super-securite-muted">
                                 {study.challenge}
                             </p>
                         </div>
                     </Reveal>
                     <Reveal delay={120}>
                         <div>
-                            <h2 className="font-heading text-2xl font-bold text-aristech-heading">
-                                Solution ArisTech
+                            <h2 className="font-heading text-2xl font-bold text-super-securite-heading">
+                                Solution Super Sécurité
                             </h2>
-                            <p className="mt-4 leading-relaxed text-aristech-muted">
+                            <p className="mt-4 leading-relaxed text-super-securite-muted">
                                 {study.solution}
                             </p>
                         </div>
                     </Reveal>
                     <Reveal delay={240}>
                         <div>
-                            <h2 className="font-heading text-2xl font-bold text-aristech-heading">
+                            <h2 className="font-heading text-2xl font-bold text-super-securite-heading">
                                 Résultats
                             </h2>
                             <ul className="mt-4 space-y-3">
                                 {study.results.map((result) => (
                                     <li
                                         key={result}
-                                        className="flex gap-3 text-sm leading-relaxed text-aristech-muted"
+                                        className="flex gap-3 text-sm leading-relaxed text-super-securite-muted"
                                     >
                                         <span
-                                            className="mt-1.5 size-2 shrink-0 rounded-full bg-aristech-accent"
+                                            className="mt-1.5 size-2 shrink-0 rounded-full bg-super-securite-accent"
                                             aria-hidden
                                         />
                                         {result}
@@ -90,7 +90,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                                 href={study.external_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 font-semibold text-aristech-accent"
+                                className="inline-flex items-center gap-2 font-semibold text-super-securite-accent"
                             >
                                 Visiter le projet en ligne
                                 <ArrowUpRight className="size-4" aria-hidden />
@@ -100,7 +100,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                     <p>
                         <Link
                             href="/realisations"
-                            className="text-sm font-medium text-aristech-muted hover:text-aristech-heading"
+                            className="text-sm font-medium text-super-securite-muted hover:text-super-securite-heading"
                         >
                             ← Toutes les réalisations
                         </Link>

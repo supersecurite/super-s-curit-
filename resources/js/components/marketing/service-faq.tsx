@@ -11,10 +11,10 @@ export default function ServiceFaq({ faqs }: { faqs: readonly FaqItem[] }) {
     }
 
     return (
-        <section className="border-t border-aristech-border bg-aristech-surface py-16 md:py-24">
+        <section className="border-t border-super-securite-border bg-super-securite-surface py-10">
             <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
                 <Reveal>
-                    <h2 className="font-heading text-center text-2xl font-bold tracking-tight text-aristech-heading md:text-3xl">
+                    <h2 className="font-heading text-center text-2xl font-bold tracking-tight text-super-securite-heading md:text-3xl">
                         Questions fréquentes
                     </h2>
                 </Reveal>
@@ -22,10 +22,10 @@ export default function ServiceFaq({ faqs }: { faqs: readonly FaqItem[] }) {
                     {faqs.map((faq, index) => (
                         <Reveal key={faq.question} delay={index * 80}>
                             <div className="marketing-card">
-                                <dt className="font-heading text-base font-semibold text-aristech-heading">
+                                <dt className="font-heading text-base font-semibold text-super-securite-heading">
                                     {faq.question}
                                 </dt>
-                                <dd className="mt-3 text-sm leading-relaxed text-aristech-muted">
+                                <dd className="mt-3 text-sm leading-relaxed text-super-securite-muted">
                                     {faq.answer}
                                 </dd>
                             </div>

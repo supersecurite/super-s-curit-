@@ -3,7 +3,7 @@ import { lazy, Suspense, type ComponentType, type ReactNode } from 'react';
 import MarketingLayout from '@/layouts/marketing-layout';
 import { initializeTheme } from '@/hooks/use-appearance';
 
-const appName = import.meta.env.VITE_APP_NAME || 'ARISTECH';
+const appName = import.meta.env.VITE_APP_NAME || 'SUPER_SECURITE';
 
 const AuthLayout = lazy(() => import('@/layouts/auth-layout'));
 const AppLayout = lazy(() => import('@/layouts/app-layout'));

@@ -2,19 +2,19 @@ import { usePage } from '@inertiajs/react';
 import SeoHead from '@/components/marketing/seo-head';
 import PageHero from '@/components/marketing/page-hero';
 import Reveal from '@/components/marketing/reveal';
-import type { AristechConfig } from '@/types/aristech';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type PageProps = {
-    aristech: AristechConfig;
+    superSecurite: SuperSecuriteConfig;
 };
 
 export default function PrivacyPage() {
-    const { aristech } = usePage<PageProps>().props;
+    const { superSecurite } = usePage<PageProps>().props;
 
     const sections = [
         {
             title: 'Responsable du traitement',
-            body: `Super Sécurité — ${aristech.address}. Contact : ${aristech.email}.`,
+            body: `Super Sécurité — ${superSecurite.address}. Contact : ${superSecurite.email}.`,
         },
         {
             title: 'Données collectées',
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
         },
         {
             title: 'Vos droits',
-            body: `Accès, rectification ou suppression de vos données sur simple demande à ${aristech.email}.`,
+            body: `Accès, rectification ou suppression de vos données sur simple demande à ${superSecurite.email}.`,
         },
     ] as const;
 
@@ -53,10 +53,10 @@ export default function PrivacyPage() {
                 <div className="mx-auto max-w-3xl space-y-10 px-4 sm:px-6 lg:px-8">
                     {sections.map((section, index) => (
                         <Reveal key={section.title} delay={index * 60}>
-                            <h2 className="font-heading text-lg font-semibold text-aristech-heading">
+                            <h2 className="font-heading text-lg font-semibold text-super-securite-heading">
                                 {section.title}
                             </h2>
-                            <p className="mt-3 text-sm leading-relaxed text-aristech-muted">
+                            <p className="mt-3 text-sm leading-relaxed text-super-securite-muted">
                                 {section.body}
                             </p>
                         </Reveal>

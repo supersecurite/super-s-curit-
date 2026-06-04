@@ -63,7 +63,7 @@ test('contact form accepts optional company and project type', function () {
         'name' => 'Aristide Gnimassou',
         'email' => 'client@example.com',
         'phone' => '+224621630916',
-        'company' => 'ARISTECH',
+        'company' => 'SUPER_SECURITE',
         'project_type' => 'Application web sur mesure',
         'message' => 'Refonte complète de notre plateforme.',
     ];

@@ -9,17 +9,17 @@ export default function Dashboard() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="app-panel relative aspect-video overflow-hidden">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-aristech-muted/30" />
+                        <PlaceholderPattern className="absolute inset-0 size-full stroke-super-securite-muted/30" />
                     </div>
                     <div className="app-panel relative aspect-video overflow-hidden">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-aristech-muted/30" />
+                        <PlaceholderPattern className="absolute inset-0 size-full stroke-super-securite-muted/30" />
                     </div>
                     <div className="app-panel relative aspect-video overflow-hidden">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-aristech-muted/30" />
+                        <PlaceholderPattern className="absolute inset-0 size-full stroke-super-securite-muted/30" />
                     </div>
                 </div>
                 <div className="app-panel relative min-h-[100vh] flex-1 overflow-hidden md:min-h-min">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-aristech-muted/30" />
+                    <PlaceholderPattern className="absolute inset-0 size-full stroke-super-securite-muted/30" />
                 </div>
             </div>
         </>

@@ -1,35 +1,35 @@
 import { ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
-import type { AristechConfig } from '@/types/aristech';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type ContactChannelsProps = {
-    aristech: AristechConfig;
+    superSecurite: SuperSecuriteConfig;
 };
 
-export default function ContactChannels({ aristech }: ContactChannelsProps) {
-    const phoneDigits = aristech.phone_href.replace(/[^0-9]/g, '');
+export default function ContactChannels({ superSecurite }: ContactChannelsProps) {
+    const phoneDigits = superSecurite.phone_href.replace(/[^0-9]/g, '');
 
     const channels = [
         {
             icon: Mail,
             label: 'Email',
-            value: aristech.email,
+            value: superSecurite.email,
             description: 'Réponse rapide à votre demande',
-            href: `mailto:${aristech.email}`,
+            href: `mailto:${superSecurite.email}`,
             cta: 'Écrire un email',
         },
         {
             icon: Phone,
             label: 'Téléphone',
-            value: aristech.phone,
+            value: superSecurite.phone,
             description: 'Disponible 24h/24 et 7j/7',
-            href: aristech.phone_href,
+            href: superSecurite.phone_href,
             cta: 'Appeler',
         },
         {
             icon: MessageCircle,
             label: 'WhatsApp',
-            value: aristech.phone,
+            value: superSecurite.phone,
             description: 'Discussion rapide et fichiers',
             href: `https://wa.me/${phoneDigits}`,
             cta: 'Ouvrir WhatsApp',
@@ -55,35 +55,35 @@ export default function ContactChannels({ aristech }: ContactChannelsProps) {
                             className="marketing-card-interactive group relative flex h-full flex-col overflow-hidden"
                         >
                             <div
-                                className="pointer-events-none absolute -top-12 -right-12 size-32 rounded-full bg-aristech-accent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20"
+                                className="pointer-events-none absolute -top-12 -right-12 size-32 rounded-full bg-super-securite-accent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20"
                                 aria-hidden
                             />
 
                             <div className="flex items-start justify-between">
-                                <div className="inline-flex size-12 items-center justify-center rounded-xl bg-aristech-accent/10 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100">
+                                <div className="inline-flex size-12 items-center justify-center rounded-xl bg-super-securite-accent/10 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100">
                                     <Icon
-                                        className="size-6 text-aristech-accent"
+                                        className="size-6 text-super-securite-accent"
                                         strokeWidth={2}
                                         aria-hidden
                                     />
                                 </div>
                                 <ArrowUpRight
-                                    className="size-5 text-aristech-muted opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-aristech-accent group-hover:opacity-100 motion-reduce:transition-none"
+                                    className="size-5 text-super-securite-muted opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-super-securite-accent group-hover:opacity-100 motion-reduce:transition-none"
                                     aria-hidden
                                 />
                             </div>
 
-                            <h3 className="mt-6 font-heading text-lg font-semibold text-aristech-heading">
+                            <h3 className="mt-6 font-heading text-lg font-semibold text-super-securite-heading">
                                 {channel.label}
                             </h3>
-                            <p className="mt-1 font-heading text-sm font-medium text-aristech-accent">
+                            <p className="mt-1 font-heading text-sm font-medium text-super-securite-accent">
                                 {channel.value}
                             </p>
-                            <p className="mt-3 flex-1 text-sm leading-relaxed text-aristech-muted">
+                            <p className="mt-3 flex-1 text-sm leading-relaxed text-super-securite-muted">
                                 {channel.description}
                             </p>
 
-                            <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-aristech-heading uppercase">
+                            <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-super-securite-heading uppercase">
                                 {channel.cta}
                                 <ArrowUpRight
                                     className="size-3.5"

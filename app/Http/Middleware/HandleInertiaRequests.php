@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use App\Seo\SeoPageRegistry;
+use App\Support\BusinessLocation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -56,14 +57,19 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user() ? $this->formatAuthUser($request->user()) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'aristech' => [
-                'email' => config('aristech.email'),
-                'phone' => config('aristech.phone'),
-                'phone_secondary' => config('aristech.phone_secondary'),
-                'phone_href' => config('aristech.phone_href'),
-                'address' => config('aristech.address'),
-                'rccm' => config('aristech.rccm'),
-                'social' => config('aristech.social'),
+            'superSecurite' => [
+                'email' => config('super-securite.email'),
+                'phone' => config('super-securite.phone'),
+                'phone_secondary' => config('super-securite.phone_secondary'),
+                'phone_href' => config('super-securite.phone_href'),
+                'address' => config('super-securite.address'),
+                'rccm' => config('super-securite.rccm'),
+                'social' => config('super-securite.social'),
+                'map' => [
+                    ...BusinessLocation::coordinates(),
+                    'embedUrl' => BusinessLocation::embedUrl(),
+                    'directionsUrl' => BusinessLocation::directionsUrl(),
+                ],
             ],
             'seo' => [
                 'siteName' => config('seo.site_name'),
@@ -75,12 +81,12 @@ class HandleInertiaRequests extends Middleware
                 'ogImage' => config('seo.og_image'),
                 'geo' => config('seo.geo'),
                 'sameAs' => array_values(array_filter([
-                    config('aristech.social.facebook'),
-                    config('aristech.social.twitter'),
-                    config('aristech.social.youtube'),
-                    config('aristech.social.instagram'),
-                    config('aristech.social.linkedin'),
-                    config('aristech.social.github'),
+                    config('super-securite.social.facebook'),
+                    config('super-securite.social.twitter'),
+                    config('super-securite.social.youtube'),
+                    config('super-securite.social.instagram'),
+                    config('super-securite.social.linkedin'),
+                    config('super-securite.social.github'),
                 ])),
                 'services' => config('seo.services'),
                 'knowsAbout' => config('seo.knows_about'),
@@ -93,8 +99,8 @@ class HandleInertiaRequests extends Middleware
                     'founder' => config('seo.organization.founder'),
                     'founderJobTitle' => config('seo.organization.founder_job_title'),
                     'description' => config('seo.organization.description'),
-                    'email' => config('aristech.email'),
-                    'phone' => config('aristech.phone'),
+                    'email' => config('super-securite.email'),
+                    'phone' => config('super-securite.phone'),
                     'areaServed' => config('seo.organization.area_served'),
                     'addressCountry' => config('seo.organization.address_country'),
                     'addressLocality' => config('seo.organization.address_locality'),
@@ -102,14 +108,14 @@ class HandleInertiaRequests extends Middleware
                     'geoLatitude' => config('seo.organization.geo_latitude'),
                     'geoLongitude' => config('seo.organization.geo_longitude'),
                     'openingHours' => config('seo.organization.opening_hours'),
-                    'rccm' => config('aristech.rccm'),
+                    'rccm' => config('super-securite.rccm'),
                 ],
             ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],
             'tracking' => [
-                'visitor_uuid' => $request->cookie('aristech_vid'),
+                'visitor_uuid' => $request->cookie('super_securite_vid'),
             ],
             'caseStudies' => collect(config('seo.case_studies', []))
                 ->map(fn (array $study): array => [

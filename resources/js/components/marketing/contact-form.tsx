@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
-import { aristechProjectTypes } from '@/data/aristech-contact';
+import { superSecuriteProjectTypes } from '@/data/super-securite-contact';
 import { store } from '@/routes/contact';
 import { cn } from '@/lib/utils';
 
@@ -14,7 +14,7 @@ type SharedPageProps = {
 };
 
 const fieldClasses =
-    'border-aristech-border bg-aristech-surface-elevated text-aristech-heading placeholder:text-aristech-muted focus-visible:border-aristech-accent focus-visible:ring-aristech-accent/30';
+    'border-super-securite-border bg-super-securite-surface-elevated text-super-securite-heading placeholder:text-super-securite-muted focus-visible:border-super-securite-accent focus-visible:ring-super-securite-accent/30';
 
 export default function ContactForm() {
     const { flash } = usePage<SharedPageProps>().props;
@@ -22,18 +22,18 @@ export default function ContactForm() {
     return (
         <div className="marketing-card relative overflow-hidden">
             <div
-                className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-aristech-accent/10 blur-3xl"
+                className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-super-securite-accent/10 blur-3xl"
                 aria-hidden
             />
 
             <div className="relative">
                 <p className="marketing-label mb-2">Formulaire de contact</p>
-                <h2 className="font-heading text-2xl font-semibold text-aristech-heading">
+                <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
                     Décrivez votre besoin de sécurité
                 </h2>
-                <p className="mt-2 text-sm text-aristech-muted">
+                <p className="mt-2 text-sm text-super-securite-muted">
                     Les champs marqués d&apos;un{' '}
-                    <span className="text-aristech-accent">*</span> sont
+                    <span className="text-super-securite-accent">*</span> sont
                     obligatoires.
                 </p>
 
@@ -61,10 +61,10 @@ export default function ContactForm() {
                                 <div className="grid gap-2">
                                     <Label
                                         htmlFor="name"
-                                        className="text-aristech-heading"
+                                        className="text-super-securite-heading"
                                     >
                                         Nom complet{' '}
-                                        <span className="text-aristech-accent">
+                                        <span className="text-super-securite-accent">
                                             *
                                         </span>
                                     </Label>
@@ -82,10 +82,10 @@ export default function ContactForm() {
                                 <div className="grid gap-2">
                                     <Label
                                         htmlFor="email"
-                                        className="text-aristech-heading"
+                                        className="text-super-securite-heading"
                                     >
                                         E-mail{' '}
-                                        <span className="text-aristech-accent">
+                                        <span className="text-super-securite-accent">
                                             *
                                         </span>
                                     </Label>
@@ -106,10 +106,10 @@ export default function ContactForm() {
                                 <div className="grid gap-2">
                                     <Label
                                         htmlFor="phone"
-                                        className="text-aristech-heading"
+                                        className="text-super-securite-heading"
                                     >
                                         Téléphone{' '}
-                                        <span className="text-aristech-muted">
+                                        <span className="text-super-securite-muted">
                                             (optionnel)
                                         </span>
                                     </Label>
@@ -127,10 +127,10 @@ export default function ContactForm() {
                                 <div className="grid gap-2">
                                     <Label
                                         htmlFor="company"
-                                        className="text-aristech-heading"
+                                        className="text-super-securite-heading"
                                     >
                                         Entreprise{' '}
-                                        <span className="text-aristech-muted">
+                                        <span className="text-super-securite-muted">
                                             (optionnel)
                                         </span>
                                     </Label>
@@ -148,7 +148,7 @@ export default function ContactForm() {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="project_type"
-                                    className="text-aristech-heading"
+                                    className="text-super-securite-heading"
                                 >
                                     Type de projet
                                 </Label>
@@ -159,20 +159,20 @@ export default function ContactForm() {
                                         defaultValue=""
                                         className={cn(
                                             fieldClasses,
-                                            'h-9 w-full appearance-none rounded-md border bg-aristech-surface-elevated px-3 pr-9 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none disabled:opacity-50',
+                                            'h-9 w-full appearance-none rounded-md border bg-super-securite-surface-elevated px-3 pr-9 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none disabled:opacity-50',
                                         )}
                                     >
                                         <option value="">
                                             Sélectionner...
                                         </option>
-                                        {aristechProjectTypes.map((type) => (
+                                        {superSecuriteProjectTypes.map((type) => (
                                             <option key={type} value={type}>
                                                 {type}
                                             </option>
                                         ))}
                                     </select>
                                     <ChevronDown
-                                        className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-aristech-muted"
+                                        className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-super-securite-muted"
                                         aria-hidden
                                     />
                                 </div>
@@ -182,10 +182,10 @@ export default function ContactForm() {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="message"
-                                    className="text-aristech-heading"
+                                    className="text-super-securite-heading"
                                 >
                                     Détails du projet{' '}
-                                    <span className="text-aristech-accent">
+                                    <span className="text-super-securite-accent">
                                         *
                                     </span>
                                 </Label>
@@ -201,7 +201,7 @@ export default function ContactForm() {
                             </div>
 
                             <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                                <p className="text-xs text-aristech-muted">
+                                <p className="text-xs text-super-securite-muted">
                                     Vos informations restent confidentielles et
                                     ne sont jamais partagées.
                                 </p>

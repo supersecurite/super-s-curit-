@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
-import { aristechProjects } from '@/data/aristech-content';
+import { superSecuriteProjects } from '@/data/super-securite-content';
 import { cn } from '@/lib/utils';
 
 function ProjectLink({
@@ -36,7 +36,7 @@ function ProjectLink({
 function SpotlightProject({
     project,
 }: {
-    project: (typeof aristechProjects)[number];
+    project: (typeof superSecuriteProjects)[number];
 }) {
     return (
         <ProjectLink
@@ -116,7 +116,7 @@ function CatalogueItem({
     project,
     index,
 }: {
-    project: (typeof aristechProjects)[number];
+    project: (typeof superSecuriteProjects)[number];
     index: number;
 }) {
     const number = String(index + 1).padStart(2, '0');
@@ -177,7 +177,7 @@ export default function LatestProjects() {
     const categories = useMemo(
         () => [
             'Tous',
-            ...Array.from(new Set(aristechProjects.map((p) => p.category))),
+            ...Array.from(new Set(superSecuriteProjects.map((p) => p.category))),
         ],
         [],
     );
@@ -187,8 +187,8 @@ export default function LatestProjects() {
     const filtered = useMemo(
         () =>
             filter === 'Tous'
-                ? aristechProjects
-                : aristechProjects.filter((p) => p.category === filter),
+                ? superSecuriteProjects
+                : superSecuriteProjects.filter((p) => p.category === filter),
         [filter],
     );
 

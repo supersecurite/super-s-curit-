@@ -63,15 +63,15 @@
     --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
     --font-marketing: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
-    --color-aristech-bg: var(--aristech-bg);
-    --color-aristech-surface: var(--aristech-surface);
-    --color-aristech-surface-elevated: var(--aristech-surface-elevated);
-    --color-aristech-text: var(--aristech-text);
-    --color-aristech-heading: var(--aristech-heading);
-    --color-aristech-accent: var(--aristech-accent);
-    --color-aristech-accent-hover: var(--aristech-accent-hover);
-    --color-aristech-muted: var(--aristech-muted);
-    --color-aristech-border: var(--aristech-border);
+    --color-super-securite-bg: var(--super-securite-bg);
+    --color-super-securite-surface: var(--super-securite-surface);
+    --color-super-securite-surface-elevated: var(--super-securite-surface-elevated);
+    --color-super-securite-text: var(--super-securite-text);
+    --color-super-securite-heading: var(--super-securite-heading);
+    --color-super-securite-accent: var(--super-securite-accent);
+    --color-super-securite-accent-hover: var(--super-securite-accent-hover);
+    --color-super-securite-muted: var(--super-securite-muted);
+    --color-super-securite-border: var(--super-securite-border);
 }
 
 :root {
@@ -146,15 +146,15 @@
 }
 
 :root {
-    --aristech-bg: #e8ecf1;
-    --aristech-surface: #f4f6f9;
-    --aristech-surface-elevated: #e2e8f0;
-    --aristech-text: #334155;
-    --aristech-heading: #0f172a;
-    --aristech-accent: #d32f2f;
-    --aristech-accent-hover: #b71c1c;
-    --aristech-muted: #4a5668;
-    --aristech-border: #b8c5d4;
+    --super-securite-bg: #e8ecf1;
+    --super-securite-surface: #f4f6f9;
+    --super-securite-surface-elevated: #e2e8f0;
+    --super-securite-text: #334155;
+    --super-securite-heading: #0f172a;
+    --super-securite-accent: #d32f2f;
+    --super-securite-accent-hover: #b71c1c;
+    --super-securite-muted: #4a5668;
+    --super-securite-border: #b8c5d4;
 }
 
 @layer base {
@@ -168,37 +168,37 @@
 }
 
 /*
- * Application shell (dashboard, auth, settings) — maps shadcn tokens to ArisTech palette.
+ * Application shell (dashboard, auth, settings) — maps shadcn tokens to Super Sécurité palette.
  * Activated via `html.app-page` in app/auth layouts.
  */
 html.app-page {
-    --background: var(--aristech-bg);
-    --foreground: var(--aristech-heading);
-    --card: var(--aristech-surface);
-    --card-foreground: var(--aristech-heading);
-    --popover: var(--aristech-surface);
-    --popover-foreground: var(--aristech-heading);
-    --primary: var(--aristech-accent);
+    --background: var(--super-securite-bg);
+    --foreground: var(--super-securite-heading);
+    --card: var(--super-securite-surface);
+    --card-foreground: var(--super-securite-heading);
+    --popover: var(--super-securite-surface);
+    --popover-foreground: var(--super-securite-heading);
+    --primary: var(--super-securite-accent);
     --primary-foreground: #ffffff;
-    --secondary: var(--aristech-surface-elevated);
-    --secondary-foreground: var(--aristech-heading);
-    --muted: var(--aristech-surface-elevated);
-    --muted-foreground: var(--aristech-muted);
-    --accent: var(--aristech-surface-elevated);
-    --accent-foreground: var(--aristech-heading);
+    --secondary: var(--super-securite-surface-elevated);
+    --secondary-foreground: var(--super-securite-heading);
+    --muted: var(--super-securite-surface-elevated);
+    --muted-foreground: var(--super-securite-muted);
+    --accent: var(--super-securite-surface-elevated);
+    --accent-foreground: var(--super-securite-heading);
     --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: #ffffff;
-    --border: var(--aristech-border);
-    --input: var(--aristech-border);
-    --ring: var(--aristech-accent);
-    --sidebar: var(--aristech-surface);
-    --sidebar-foreground: var(--aristech-heading);
-    --sidebar-primary: var(--aristech-accent);
+    --border: var(--super-securite-border);
+    --input: var(--super-securite-border);
+    --ring: var(--super-securite-accent);
+    --sidebar: var(--super-securite-surface);
+    --sidebar-foreground: var(--super-securite-heading);
+    --sidebar-primary: var(--super-securite-accent);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: var(--aristech-surface-elevated);
-    --sidebar-accent-foreground: var(--aristech-heading);
-    --sidebar-border: var(--aristech-border);
-    --sidebar-ring: var(--aristech-accent);
+    --sidebar-accent: var(--super-securite-surface-elevated);
+    --sidebar-accent-foreground: var(--super-securite-heading);
+    --sidebar-border: var(--super-securite-border);
+    --sidebar-ring: var(--super-securite-accent);
     color-scheme: light;
 }
 
@@ -235,7 +235,15 @@ html.app-page {
     }
 
     .marketing-site {
-        @apply min-h-screen bg-aristech-bg font-marketing text-aristech-text antialiased;
+        @apply min-h-screen bg-super-securite-bg font-marketing text-super-securite-text antialiased;
+    }
+
+    .marketing-section-band {
+        @apply w-full bg-super-securite-bg;
+    }
+
+    .marketing-section-band-alt {
+        @apply w-full border-y border-super-securite-border/50 bg-super-securite-surface;
     }
 
     .marketing-below-fold {
@@ -247,7 +255,7 @@ html.app-page {
     .marketing-site h2,
     .marketing-site h3,
     .marketing-site h4 {
-        @apply font-heading text-aristech-heading;
+        @apply font-heading text-super-securite-heading;
     }
 
     .marketing-grid-bg {
@@ -258,31 +266,31 @@ html.app-page {
     }
 
     .marketing-heading-display {
-        @apply font-heading text-4xl leading-[1.1] font-bold tracking-tight text-aristech-heading md:text-5xl lg:text-6xl;
+        @apply font-heading text-4xl leading-[1.1] font-bold tracking-tight text-super-securite-heading md:text-5xl lg:text-6xl;
     }
 
     .marketing-heading-section {
-        @apply font-heading text-2xl font-semibold tracking-tight text-aristech-heading md:text-3xl;
+        @apply font-heading text-2xl font-semibold tracking-tight text-super-securite-heading md:text-3xl;
     }
 
     .marketing-label {
-        @apply font-heading text-xs font-semibold tracking-widest text-aristech-accent uppercase;
+        @apply font-heading text-xs font-semibold tracking-widest text-super-securite-accent uppercase;
     }
 
     .marketing-card {
-        @apply rounded-2xl border border-aristech-border bg-aristech-surface p-6 shadow-md shadow-slate-900/5 transition-colors duration-200 md:p-8;
+        @apply rounded-2xl border border-super-securite-border bg-super-securite-surface p-6 shadow-md shadow-slate-900/5 transition-colors duration-200 md:p-8;
     }
 
     .marketing-card-interactive {
-        @apply cursor-pointer rounded-2xl border border-aristech-border bg-aristech-surface p-6 shadow-md shadow-slate-900/5 transition-colors duration-200 hover:border-aristech-accent/60 hover:shadow-lg hover:shadow-slate-900/10 md:p-8;
+        @apply cursor-pointer rounded-2xl border border-super-securite-border bg-super-securite-surface p-6 shadow-md shadow-slate-900/5 transition-colors duration-200 hover:border-super-securite-accent/60 hover:shadow-lg hover:shadow-slate-900/10 md:p-8;
     }
 
     .marketing-cta-primary {
-        @apply inline-flex cursor-pointer items-center justify-center rounded-xl bg-aristech-accent px-8 py-3.5 font-heading text-sm font-semibold text-white transition-colors duration-200 hover:bg-aristech-accent-hover focus-visible:ring-2 focus-visible:ring-aristech-accent focus-visible:ring-offset-2 focus-visible:ring-offset-aristech-bg focus-visible:outline-none;
+        @apply inline-flex cursor-pointer items-center justify-center rounded-xl bg-super-securite-accent px-8 py-3.5 font-heading text-sm font-semibold text-white transition-colors duration-200 hover:bg-super-securite-accent-hover focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-super-securite-bg focus-visible:outline-none;
     }
 
     .marketing-cta-secondary {
-        @apply inline-flex cursor-pointer items-center justify-center rounded-xl border border-aristech-border bg-transparent px-8 py-3.5 font-heading text-sm font-semibold text-aristech-heading transition-colors duration-200 hover:border-aristech-accent/50 hover:bg-aristech-surface focus-visible:ring-2 focus-visible:ring-aristech-accent focus-visible:ring-offset-2 focus-visible:ring-offset-aristech-bg focus-visible:outline-none;
+        @apply inline-flex cursor-pointer items-center justify-center rounded-xl border border-super-securite-border bg-transparent px-8 py-3.5 font-heading text-sm font-semibold text-super-securite-heading transition-colors duration-200 hover:border-super-securite-accent/50 hover:bg-super-securite-surface focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-super-securite-bg focus-visible:outline-none;
     }
 
     .marketing-text-gradient {
@@ -356,7 +364,7 @@ html.app-page {
         height: 2px;
         background: linear-gradient(
             90deg,
-            var(--aristech-accent) 0%,
+            var(--super-securite-accent) 0%,
             #0ea5e9 100%
         );
         transform-origin: left center;

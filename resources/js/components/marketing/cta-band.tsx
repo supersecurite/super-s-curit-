@@ -3,22 +3,22 @@ import { ArrowRight, Phone } from 'lucide-react';
 import { usePage } from '@inertiajs/react';
 import Reveal from '@/components/marketing/reveal';
 import { contact } from '@/routes';
-import type { AristechConfig } from '@/types/aristech';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type SharedPageProps = {
-    aristech: AristechConfig;
+    superSecurite: SuperSecuriteConfig;
 };
 
 export default function CtaBand() {
-    const { aristech } = usePage<SharedPageProps>().props;
+    const { superSecurite } = usePage<SharedPageProps>().props;
 
     return (
         <section className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal>
-                    <div className="relative overflow-hidden rounded-3xl border border-aristech-border bg-aristech-surface px-6 py-12 shadow-lg shadow-slate-900/5 md:px-12 md:py-16">
+                    <div className="relative overflow-hidden rounded-3xl border border-super-securite-border bg-super-securite-surface px-6 py-12 shadow-lg shadow-slate-900/5 md:px-12 md:py-16">
                         <div
-                            className="marketing-blob bg-aristech-accent"
+                            className="marketing-blob bg-super-securite-accent"
                             style={{
                                 top: '-4rem',
                                 right: '-4rem',
@@ -34,23 +34,23 @@ export default function CtaBand() {
                                 <p className="marketing-label mb-3">
                                     Contactez-nous
                                 </p>
-                                <h2 className="font-heading text-3xl font-bold tracking-tight text-aristech-heading md:text-4xl">
+                                <h2 className="font-heading text-3xl font-bold tracking-tight text-super-securite-heading md:text-4xl">
                                     Besoin d&apos;une équipe de{' '}
                                     <span className="marketing-text-gradient">
                                         sécurité ?
                                     </span>
                                 </h2>
                                 <p className="mt-4 text-sm leading-relaxed md:text-base">
-                                    Téléphone : {aristech.phone}
+                                    Téléphone : {superSecurite.phone}
                                     <br />
-                                    E-mail : {aristech.email}
+                                    E-mail : {superSecurite.email}
                                     <br />
-                                    {aristech.address}
+                                    {superSecurite.address}
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-3">
                                 <a
-                                    href={aristech.phone_href}
+                                    href={superSecurite.phone_href}
                                     className="marketing-cta-primary marketing-magnetic inline-flex items-center gap-2"
                                 >
                                     <Phone className="size-4" />

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TrackVisit
 {
-    private const VISITOR_COOKIE = 'aristech_vid';
+    private const VISITOR_COOKIE = 'super_securite_vid';
 
     private const COOKIE_TTL_DAYS = 365;
 

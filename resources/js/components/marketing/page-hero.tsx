@@ -24,12 +24,12 @@ export default function PageHero({
     return (
         <section
             className={cn(
-                'marketing-grid-bg relative overflow-hidden border-b border-aristech-border',
+                'marketing-grid-bg relative overflow-hidden border-b border-super-securite-border',
                 className,
             )}
         >
             <div
-                className="marketing-blob bg-aristech-accent"
+                className="marketing-blob bg-super-securite-accent"
                 style={
                     {
                         top: '-6rem',
@@ -55,7 +55,7 @@ export default function PageHero({
                 }
                 aria-hidden
             />
-            <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-transparent to-aristech-bg" />
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-transparent to-super-securite-bg" />
 
             <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32 lg:px-8">
                 <div
@@ -75,7 +75,7 @@ export default function PageHero({
                         )}
 
                         <Reveal delay={120}>
-                            <h1 className="font-heading text-4xl leading-[1.1] font-bold tracking-tight text-aristech-heading md:text-5xl lg:text-6xl">
+                            <h1 className="font-heading text-4xl leading-[1.1] font-bold tracking-tight text-super-securite-heading md:text-5xl lg:text-6xl">
                                 {title}
                             </h1>
                         </Reveal>

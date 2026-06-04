@@ -13,7 +13,7 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        Mail::to(config('aristech.mail_to'))->send(
+        Mail::to(config('super-securite.mail_to'))->send(
             new ContactMessageMailable($validated),
         );
 

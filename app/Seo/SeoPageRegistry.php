@@ -35,7 +35,7 @@ class SeoPageRegistry
             'robots' => $meta['robots'] ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
             'og_image' => str_starts_with($ogImagePath, 'http') ? $ogImagePath : $siteUrl.$ogImagePath,
             'og_image_type' => $this->mimeTypeForPath($ogImagePath),
-            'og_image_alt' => $meta['og_image_alt'] ?? config('seo.site_name').' — développement web et mobile en Guinée',
+            'og_image_alt' => $meta['og_image_alt'] ?? config('seo.site_name').' — sécurité privée à Conakry, Guinée',
             'og_type' => $meta['og_type'] ?? 'website',
             'path' => $path,
             'schema_type' => $meta['schema_type'] ?? 'WebPage',
@@ -86,7 +86,7 @@ class SeoPageRegistry
                 'title' => $caseStudy['meta_title'],
                 'description' => $caseStudy['meta_description'],
                 'og_image' => $caseStudy['image'] ?? config('seo.default_og_image'),
-                'og_image_alt' => ($caseStudy['title'] ?? '').' — réalisation ArisTech Guinée',
+                'og_image_alt' => ($caseStudy['title'] ?? '').' — réalisation Super Sécurité Guinée',
                 'schema_type' => 'WebPage',
             ];
         }

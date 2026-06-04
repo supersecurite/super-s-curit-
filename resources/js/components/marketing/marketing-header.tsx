@@ -2,17 +2,17 @@ import { Link, usePage } from '@inertiajs/react';
 import { Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import MarketingMobileNav from '@/components/marketing/marketing-mobile-nav';
-import { aristechImages } from '@/data/aristech-images';
+import { superSecuriteImages } from '@/data/super-securite-images';
 import { useScrollProgress } from '@/hooks/use-scroll-progress';
 import { about, contact, home } from '@/routes';
-import type { AristechConfig } from '@/types/aristech';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 import type { User } from '@/types/auth';
 import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 
 type SharedPageProps = {
     auth: { user: User | null };
-    aristech: AristechConfig;
+    superSecurite: SuperSecuriteConfig;
 };
 
 const primaryNavLinks = [
@@ -23,7 +23,7 @@ const primaryNavLinks = [
 
 export default function MarketingHeader() {
     const { props } = usePage<SharedPageProps>();
-    const { aristech } = props;
+    const { superSecurite } = props;
     const progress = useScrollProgress();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -40,7 +40,7 @@ export default function MarketingHeader() {
             className={cn(
                 'sticky top-0 z-40 transition-[background-color,box-shadow,backdrop-filter] duration-300',
                 scrolled
-                    ? 'border-b border-aristech-border bg-aristech-surface/85 shadow-md shadow-slate-900/5 backdrop-blur-xl'
+                    ? 'border-b border-super-securite-border bg-super-securite-surface/85 shadow-md shadow-slate-900/5 backdrop-blur-xl'
                     : 'border-b border-transparent bg-transparent',
             )}
         >
@@ -50,10 +50,10 @@ export default function MarketingHeader() {
             >
                 <Link
                     href={home.url()}
-                    className="group flex shrink-0 cursor-pointer items-center gap-2 focus-visible:ring-2 focus-visible:ring-aristech-accent focus-visible:outline-none"
+                    className="group flex shrink-0 cursor-pointer items-center gap-2 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
                 >
                     <img
-                        src={aristechImages.brand}
+                        src={superSecuriteImages.brand}
                         alt="Super Sécurité"
                         className="h-10 w-auto max-w-[200px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:h-11 sm:max-w-[240px]"
                         width={240}
@@ -66,11 +66,11 @@ export default function MarketingHeader() {
                         <li key={item.label}>
                             <Link
                                 href={item.href}
-                                className="group relative cursor-pointer text-sm font-medium text-aristech-muted transition-colors duration-200 hover:text-aristech-heading"
+                                className="group relative cursor-pointer text-sm font-medium text-super-securite-muted transition-colors duration-200 hover:text-super-securite-heading"
                             >
                                 {item.label}
                                 <span
-                                    className="absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 bg-aristech-accent transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none"
+                                    className="absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 bg-super-securite-accent transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none"
                                     aria-hidden
                                 />
                             </Link>
@@ -80,7 +80,7 @@ export default function MarketingHeader() {
 
                 <div className="flex items-center gap-2 sm:gap-3">
                     <a
-                        href={aristech.phone_href}
+                        href={superSecurite.phone_href}
                         className="marketing-cta-primary marketing-magnetic hidden shrink-0 items-center gap-2 text-sm whitespace-nowrap md:inline-flex"
                     >
                         <Phone className="size-4" />
@@ -88,7 +88,7 @@ export default function MarketingHeader() {
                     </a>
 
                     <MarketingMobileNav
-                        aristech={aristech}
+                        superSecurite={superSecurite}
                         open={mobileMenuOpen}
                         onOpenChange={setMobileMenuOpen}
                     />

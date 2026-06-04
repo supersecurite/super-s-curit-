@@ -13,21 +13,21 @@ class RoleUserSeeder extends Seeder
         $accounts = [
             [
                 'name' => 'Super Administrateur',
-                'email' => env('SEED_SUPER_ADMIN_EMAIL', 'super_admin@aristechguinee.com'),
+                'email' => env('SEED_SUPER_ADMIN_EMAIL', 'super_admin@supersecurite.com'),
                 'password' => env('SEED_SUPER_ADMIN_PASSWORD', 'password'),
                 'phone' => env('SEED_SUPER_ADMIN_PHONE'),
                 'role' => UserRole::SuperAdmin,
             ],
             [
                 'name' => 'Administrateur',
-                'email' => env('SEED_ADMIN_EMAIL', 'admin@aristechguinee.com'),
+                'email' => env('SEED_ADMIN_EMAIL', 'admin@supersecurite.com'),
                 'password' => env('SEED_ADMIN_PASSWORD', 'password'),
                 'phone' => env('SEED_ADMIN_PHONE'),
                 'role' => UserRole::Admin,
             ],
             [
                 'name' => 'Utilisateur',
-                'email' => env('SEED_USER_EMAIL', 'user@aristechguinee.com'),
+                'email' => env('SEED_USER_EMAIL', 'user@supersecurite.com'),
                 'password' => env('SEED_USER_PASSWORD', 'password'),
                 'phone' => env('SEED_USER_PHONE'),
                 'role' => UserRole::User,

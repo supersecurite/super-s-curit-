@@ -33,7 +33,7 @@ export default function AuthSimpleLayout({
                                 <AppLogoIcon className="size-6 fill-current text-primary-foreground" />
                             </div>
                             <span className="font-heading text-sm font-semibold text-foreground">
-                                ARISTECH
+                                SUPER_SECURITE
                             </span>
                             <span className="sr-only">{title}</span>
                         </Link>

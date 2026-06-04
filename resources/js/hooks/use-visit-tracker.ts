@@ -2,7 +2,7 @@ import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef } from 'react';
 import { duration as durationRoute } from '@/routes/analytics';
 
-const VISITOR_COOKIE = 'aristech_vid';
+const VISITOR_COOKIE = 'super_securite_vid';
 const HEARTBEAT_INTERVAL_MS = 30_000;
 const MIN_DURATION_SECONDS = 1;
 

@@ -2,6 +2,7 @@
 
 namespace App\Seo;
 
+use App\Support\BusinessLocation;
 use Illuminate\Http\Request;
 
 class StructuredDataBuilder
@@ -24,8 +25,8 @@ class StructuredDataBuilder
         $webpageId = "{$canonical}#webpage";
         $services = config('seo.services', []);
         $defaultImage = url(config('seo.default_og_image'));
-        $email = config('aristech.email');
-        $phone = config('aristech.phone');
+        $email = config('super-securite.email');
+        $phone = config('super-securite.phone');
 
         $graph = [
             $this->organizationNode($siteUrl, $orgId, $defaultImage, $organization, $email, $phone),
@@ -44,6 +45,10 @@ class StructuredDataBuilder
 
         if (! empty($organization['founder'])) {
             array_splice($graph, 1, 0, [$this->founderNode($siteUrl, $orgId, $organization)]);
+        }
+
+        if ($path === '/contact') {
+            $graph[] = $this->placeNode($siteUrl, $organization);
         }
 
         return [
@@ -65,12 +70,12 @@ class StructuredDataBuilder
         string $phone,
     ): array {
         $sameAs = array_values(array_filter([
-            config('aristech.social.facebook'),
-            config('aristech.social.twitter'),
-            config('aristech.social.youtube'),
-            config('aristech.social.instagram'),
-            config('aristech.social.linkedin'),
-            config('aristech.social.github'),
+            config('super-securite.social.facebook'),
+            config('super-securite.social.twitter'),
+            config('super-securite.social.youtube'),
+            config('super-securite.social.instagram'),
+            config('super-securite.social.linkedin'),
+            config('super-securite.social.github'),
         ]));
 
         $node = [
@@ -112,9 +117,10 @@ class StructuredDataBuilder
                 'addressLocality' => $organization['address_locality'],
                 'addressCountry' => $organization['address_country'],
             ],
+            'hasMap' => BusinessLocation::directionsUrl(),
         ];
 
-        $rccm = config('aristech.rccm');
+        $rccm = config('super-securite.rccm');
 
         if ($rccm) {
             $node['identifier'] = [
@@ -150,6 +156,44 @@ class StructuredDataBuilder
             'jobTitle' => $organization['founder_job_title'],
             'worksFor' => ['@id' => $orgId],
             'url' => "{$siteUrl}/a-propos",
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $organization
+     * @return array<string, mixed>
+     */
+    private function placeNode(string $siteUrl, array $organization): array
+    {
+        return [
+            '@type' => 'Place',
+            '@id' => "{$siteUrl}/contact#place",
+            'name' => $organization['name'].' — '.$organization['address_locality'],
+            'description' => 'Localisation des bureaux '.($organization['alternate_name'] ?? $organization['name']).' à Conakry.',
+            'url' => "{$siteUrl}/contact#plan-acces",
+            'hasMap' => BusinessLocation::directionsUrl(),
+            'containedInPlace' => [
+                '@type' => 'City',
+                'name' => $organization['address_locality'],
+                'addressCountry' => $organization['address_country'],
+            ],
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => $organization['address_street'],
+                'addressLocality' => $organization['address_locality'],
+                'addressCountry' => $organization['address_country'],
+            ],
+            'geo' => [
+                '@type' => 'GeoCoordinates',
+                'latitude' => $organization['geo_latitude'],
+                'longitude' => $organization['geo_longitude'],
+            ],
+            'additionalProperty' => [
+                '@type' => 'PropertyValue',
+                'name' => 'Adresse complète',
+                'value' => config('super-securite.address'),
+            ],
+            'mainEntityOfPage' => ['@id' => "{$siteUrl}/contact#webpage"],
         ];
     }
 
@@ -193,6 +237,7 @@ class StructuredDataBuilder
                 'latitude' => $organization['geo_latitude'],
                 'longitude' => $organization['geo_longitude'],
             ],
+            'hasMap' => BusinessLocation::directionsUrl(),
             'parentOrganization' => ['@id' => $orgId],
             'hasOfferCatalog' => [
                 '@type' => 'OfferCatalog',

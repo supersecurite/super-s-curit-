@@ -91,8 +91,8 @@ test('marketing pages include server rendered structured data for contact and se
         ->toContain('application/ld+json')
         ->toContain('ContactPoint')
         ->toContain('ItemList')
-        ->toContain(config('aristech.email'))
-        ->toContain(config('aristech.phone'));
+        ->toContain(config('super-securite.email'))
+        ->toContain(config('super-securite.phone'));
 });
 
 test('contact page structured data includes faq and contact page type', function () {
@@ -101,7 +101,27 @@ test('contact page structured data includes faq and contact page type', function
     expect($response->getContent())
         ->toContain('ContactPage')
         ->toContain('FAQPage')
+        ->toContain('Place')
+        ->toContain('hasMap')
         ->toContain(config('seo.faqs.0.question'));
+});
+
+test('contact page includes map section and local seo meta', function () {
+    $contactPage = collect(config('seo.pages'))->firstWhere('path', '/contact');
+
+    $this->get(route('contact'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/contact')
+            ->has('superSecurite.map.embedUrl')
+            ->has('superSecurite.map.directionsUrl')
+            ->where('pageMeta.title', $contactPage['meta_title'])
+        );
+
+    expect($this->get(route('contact'))->getContent())
+        ->toContain('maps.google.com')
+        ->toContain('plan-acces')
+        ->toContain('Lambanyi');
 });
 
 test('home seo meta includes local search terms', function () {

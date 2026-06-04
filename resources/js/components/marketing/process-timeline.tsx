@@ -1,10 +1,10 @@
 import Reveal from '@/components/marketing/reveal';
-import { aristechProcess } from '@/data/aristech-about';
-import { aristechStock } from '@/data/aristech-stock';
+import { superSecuriteProcess } from '@/data/super-securite-about';
+import { superSecuriteStock } from '@/data/super-securite-stock';
 
 export default function ProcessTimeline() {
     return (
-        <section className="border-y border-aristech-border bg-aristech-surface-elevated/80 py-24 md:py-32">
+        <section className="border-y border-super-securite-border bg-super-securite-surface-elevated/80 py-24 md:py-32">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-16 grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
                     <div className="lg:col-span-7">
@@ -15,7 +15,7 @@ export default function ProcessTimeline() {
                                 livrer sereinement
                             </span>
                         </h2>
-                        <p className="mt-4 text-base leading-relaxed text-aristech-text">
+                        <p className="mt-4 text-base leading-relaxed text-super-securite-text">
                             Une méthodologie éprouvée, transparente, où chaque
                             jalon s&apos;accompagne de livrables concrets et
                             validés ensemble.
@@ -23,10 +23,10 @@ export default function ProcessTimeline() {
                     </div>
 
                     <div className="relative lg:col-span-5">
-                        <div className="overflow-hidden rounded-2xl border border-aristech-border shadow-md shadow-slate-900/5">
+                        <div className="overflow-hidden rounded-2xl border border-super-securite-border shadow-md shadow-slate-900/5">
                             <img
-                                src={aristechStock.about.processBanner}
-                                alt="Atelier de cadrage projet chez ArisTech"
+                                src={superSecuriteStock.about.processBanner}
+                                alt="Atelier de cadrage projet chez Super Sécurité"
                                 width={1200}
                                 height={800}
                                 loading="lazy"
@@ -38,11 +38,11 @@ export default function ProcessTimeline() {
 
                 <ol className="relative space-y-12 md:space-y-16">
                     <div
-                        className="pointer-events-none absolute top-0 left-6 hidden h-full w-px bg-linear-to-b from-aristech-accent/40 via-aristech-border to-transparent md:block"
+                        className="pointer-events-none absolute top-0 left-6 hidden h-full w-px bg-linear-to-b from-super-securite-accent/40 via-super-securite-border to-transparent md:block"
                         aria-hidden
                     />
 
-                    {aristechProcess.map((step, index) => {
+                    {superSecuriteProcess.map((step, index) => {
                         const Icon = step.icon;
 
                         return (
@@ -53,7 +53,7 @@ export default function ProcessTimeline() {
                             >
                                 <li className="group relative grid gap-6 md:grid-cols-[3rem_1fr] md:gap-8">
                                     <div className="relative flex md:justify-center">
-                                        <span className="relative z-10 inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-aristech-border bg-aristech-surface text-aristech-accent shadow-md shadow-slate-900/5 transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+                                        <span className="relative z-10 inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-super-securite-border bg-super-securite-surface text-super-securite-accent shadow-md shadow-slate-900/5 transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100">
                                             <Icon
                                                 className="size-5"
                                                 strokeWidth={2}
@@ -65,14 +65,14 @@ export default function ProcessTimeline() {
                                     <div className="marketing-card flex-1">
                                         <div className="flex flex-wrap items-center justify-between gap-3">
                                             <div className="flex items-baseline gap-3">
-                                                <span className="font-heading text-sm font-bold text-aristech-accent">
+                                                <span className="font-heading text-sm font-bold text-super-securite-accent">
                                                     {step.number}
                                                 </span>
-                                                <h3 className="font-heading text-xl font-semibold text-aristech-heading md:text-2xl">
+                                                <h3 className="font-heading text-xl font-semibold text-super-securite-heading md:text-2xl">
                                                     {step.title}
                                                 </h3>
                                             </div>
-                                            <span className="rounded-full border border-aristech-border bg-aristech-bg px-3 py-1 text-xs font-medium text-aristech-muted">
+                                            <span className="rounded-full border border-super-securite-border bg-super-securite-bg px-3 py-1 text-xs font-medium text-super-securite-muted">
                                                 {step.duration}
                                             </span>
                                         </div>
@@ -85,7 +85,7 @@ export default function ProcessTimeline() {
                                             {step.deliverables.map((item) => (
                                                 <li
                                                     key={item}
-                                                    className="rounded-md border border-aristech-border bg-aristech-surface-elevated px-3 py-1.5 text-xs font-medium text-aristech-heading"
+                                                    className="rounded-md border border-super-securite-border bg-super-securite-surface-elevated px-3 py-1.5 text-xs font-medium text-super-securite-heading"
                                                 >
                                                     {item}
                                                 </li>

@@ -34,7 +34,7 @@ export default function RealisationsPage() {
                 description="Plateformes web, e-commerce et applications livrées pour des clients en Guinée et à l'international."
             />
 
-            <section className="py-16 md:py-24">
+            <section className="py-10">
                 <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8">
                     {caseStudies.map((study, index) => (
                         <Reveal key={study.slug} delay={index * 100}>
@@ -49,20 +49,20 @@ export default function RealisationsPage() {
                                 />
                                 <div className="flex flex-1 flex-col p-6">
                                     <p className="marketing-label mb-2">{study.category}</p>
-                                    <h2 className="font-heading text-xl font-semibold text-aristech-heading">
+                                    <h2 className="font-heading text-xl font-semibold text-super-securite-heading">
                                         <Link
                                             href={study.path}
-                                            className="cursor-pointer hover:text-aristech-accent"
+                                            className="cursor-pointer hover:text-super-securite-accent"
                                         >
                                             {study.title}
                                         </Link>
                                     </h2>
-                                    <p className="mt-3 flex-1 text-sm leading-relaxed text-aristech-muted">
+                                    <p className="mt-3 flex-1 text-sm leading-relaxed text-super-securite-muted">
                                         {study.summary}
                                     </p>
                                     <Link
                                         href={study.path}
-                                        className="mt-4 text-sm font-semibold text-aristech-accent"
+                                        className="mt-4 text-sm font-semibold text-super-securite-accent"
                                     >
                                         Voir l&apos;étude de cas →
                                     </Link>

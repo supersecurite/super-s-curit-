@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: [
             'appearance',
             'sidebar_state',
-            'aristech_vid',
+            'super_securite_vid',
         ]);
 
         $middleware->alias([

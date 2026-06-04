@@ -1,15 +1,23 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
-import { aristechImages } from '@/data/aristech-images';
+import { superSecuriteImages } from '@/data/super-securite-images';
+import { superSecuriteStock } from '@/data/super-securite-stock';
 import Reveal from '@/components/marketing/reveal';
 import { about, contact } from '@/routes';
 
 export default function MarketingHero() {
     return (
         <section className="marketing-grid-bg relative overflow-hidden">
+            <div
+                className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.14]"
+                style={{
+                    backgroundImage: `url(${superSecuriteStock.hero.background})`,
+                }}
+                aria-hidden
+            />
             <div className="pointer-events-none absolute inset-0">
                 <div
-                    className="marketing-blob bg-aristech-accent"
+                    className="marketing-blob bg-super-securite-accent"
                     style={{
                         top: '-6rem',
                         left: '-4rem',
@@ -34,7 +42,7 @@ export default function MarketingHero() {
                 />
             </div>
 
-            <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-aristech-bg" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-super-securite-bg" />
 
             <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 md:py-32 lg:grid-cols-12 lg:gap-16 lg:py-40">
                 <div className="lg:col-span-7">
@@ -43,7 +51,7 @@ export default function MarketingHero() {
                     </Reveal>
 
                     <Reveal delay={120} className="mt-2">
-                        <h1 className="font-heading text-4xl leading-[1.05] font-bold tracking-tight text-aristech-heading md:text-5xl lg:text-6xl xl:text-7xl">
+                        <h1 className="font-heading text-4xl leading-[1.05] font-bold tracking-tight text-super-securite-heading md:text-5xl lg:text-6xl xl:text-7xl">
                             Confiez votre sécurité{' '}
                             <span className="relative inline-block">
                                 à l&apos;excellence
@@ -110,29 +118,29 @@ export default function MarketingHero() {
                     <Reveal
                         as="dl"
                         delay={560}
-                        className="mt-14 grid grid-cols-3 gap-4 border-t border-aristech-border pt-8"
+                        className="mt-14 grid grid-cols-3 gap-4 border-t border-super-securite-border pt-8"
                     >
                         <div>
-                            <dt className="text-xs text-aristech-muted">
+                            <dt className="text-xs text-super-securite-muted">
                                 Disponibilité
                             </dt>
-                            <dd className="mt-1 font-heading text-sm font-semibold text-aristech-heading">
+                            <dd className="mt-1 font-heading text-sm font-semibold text-super-securite-heading">
                                 24h/24 · 7j/7
                             </dd>
                         </div>
                         <div>
-                            <dt className="text-xs text-aristech-muted">
+                            <dt className="text-xs text-super-securite-muted">
                                 Zone
                             </dt>
-                            <dd className="mt-1 font-heading text-sm font-semibold text-aristech-heading">
+                            <dd className="mt-1 font-heading text-sm font-semibold text-super-securite-heading">
                                 Conakry &amp; Guinée
                             </dd>
                         </div>
                         <div>
-                            <dt className="text-xs text-aristech-muted">
+                            <dt className="text-xs text-super-securite-muted">
                                 Expertise
                             </dt>
-                            <dd className="mt-1 font-heading text-sm font-semibold text-aristech-heading">
+                            <dd className="mt-1 font-heading text-sm font-semibold text-super-securite-heading">
                                 Sécurité privée
                             </dd>
                         </div>
@@ -144,25 +152,27 @@ export default function MarketingHero() {
                     variant="fade"
                     className="relative lg:col-span-5"
                 >
-                    <div className="relative mx-auto aspect-square w-full max-w-md">
-                        <div
-                            className="absolute inset-8 rounded-full border-2 border-dashed border-aristech-border opacity-60"
-                            aria-hidden
-                        />
-                        <div
-                            className="absolute inset-16 rounded-full border border-aristech-accent/30"
-                            aria-hidden
-                        />
-                        <div className="marketing-float relative flex h-full items-center justify-center">
+                    <div className="relative mx-auto w-full max-w-md">
+                        <div className="overflow-hidden rounded-3xl border border-super-securite-border shadow-xl shadow-slate-900/10">
                             <img
-                                src={aristechImages.brand}
-                                alt="Super Sécurité — sécurité privée à Conakry"
-                                width={320}
-                                height={320}
+                                src={superSecuriteStock.home.welcome}
+                                alt="Super Sécurité — agents de sécurité à Conakry"
+                                width={640}
+                                height={640}
                                 loading="eager"
                                 decoding="async"
                                 fetchPriority="high"
-                                className="relative z-10 h-auto w-full max-w-xs object-contain px-4 drop-shadow-2xl"
+                                className="aspect-square w-full object-cover"
+                            />
+                        </div>
+                        <div className="marketing-float absolute -bottom-4 -right-2 z-10 flex size-28 items-center justify-center rounded-2xl border border-super-securite-border bg-white p-3 shadow-lg md:-right-6 md:size-32">
+                            <img
+                                src={superSecuriteImages.brandtransparent}
+                                alt=""
+                                width={120}
+                                height={120}
+                                className="h-auto w-full object-contain"
+                                aria-hidden
                             />
                         </div>
                     </div>

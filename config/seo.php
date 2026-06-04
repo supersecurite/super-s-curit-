@@ -97,6 +97,10 @@ return [
             'question' => 'Comment obtenir un devis ?',
             'answer' => 'Contactez-nous par téléphone au +224 612 13 13 14 ou par e-mail à contact@supersecurite.com.',
         ],
+        [
+            'question' => 'Où se trouve Super Sécurité à Conakry ?',
+            'answer' => 'Nos bureaux sont situés à Lambanyi, en face de Cis Media — Conakry, République de Guinée. Un plan d\'accès interactif est disponible sur la page contact.',
+        ],
     ],
 
     'knows_about' => [
@@ -109,6 +113,9 @@ return [
         'agents de sécurité Conakry',
         'vidéosurveillance Guinée',
         'télésurveillance Conakry',
+        'Super Sécurité Lambanyi',
+        'sécurité privée Lambanyi Conakry',
+        'plan accès Super Sécurité',
     ],
 
     'legal_pages' => [
@@ -157,15 +164,16 @@ return [
         ],
         [
             'path' => '/contact',
-            'meta_title' => 'Contact Super Sécurité | Conakry, Guinée',
-            'meta_description' => 'Contactez Super Sécurité : +224 612 13 13 14, contact@supersecurite.com. Lambanyi, Conakry.',
+            'meta_title' => 'Contact & plan d\'accès | Super Sécurité — Lambanyi, Conakry',
+            'meta_description' => 'Contactez Super Sécurité à Lambanyi (face Cis Media), Conakry : +224 612 13 13 14, contact@supersecurite.com. Formulaire, FAQ et plan Google Maps.',
             'schema_type' => 'ContactPage',
             'changefreq' => 'monthly',
             'priority' => 0.9,
             'image' => '/web-app-manifest-512x512.png',
-            'og_image_alt' => 'Contacter Super Sécurité à Conakry',
+            'og_image_alt' => 'Contact et localisation Super Sécurité — Lambanyi, Conakry',
             'sources' => [
                 'resources/js/pages/marketing/contact.tsx',
+                'resources/js/components/marketing/contact-map-section.tsx',
                 'config/seo.php',
             ],
         ],

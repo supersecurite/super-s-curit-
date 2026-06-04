@@ -1,4 +1,4 @@
-import type { AristechConfig } from '@/types/aristech';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 import type { Auth } from '@/types/auth';
 
 declare module 'react' {
@@ -14,7 +14,7 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
-            aristech: AristechConfig;
+            superSecurite: SuperSecuriteConfig;
             flash: {
                 success?: string | null;
             };
