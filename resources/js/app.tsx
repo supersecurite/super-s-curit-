@@ -1,13 +1,53 @@
 import { createInertiaApp } from '@inertiajs/react';
-import { Toaster } from '@/components/ui/sonner';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { initializeTheme } from '@/hooks/use-appearance';
-import AppLayout from '@/layouts/app-layout';
-import AuthLayout from '@/layouts/auth-layout';
+import { lazy, Suspense, type ComponentType, type ReactNode } from 'react';
 import MarketingLayout from '@/layouts/marketing-layout';
-import SettingsLayout from '@/layouts/settings/layout';
+import { initializeTheme } from '@/hooks/use-appearance';
 
 const appName = import.meta.env.VITE_APP_NAME || 'ARISTECH';
+
+const AuthLayout = lazy(() => import('@/layouts/auth-layout'));
+const AppLayout = lazy(() => import('@/layouts/app-layout'));
+const SettingsLayout = lazy(() => import('@/layouts/settings/layout'));
+const AppChrome = lazy(() =>
+    import('@/components/app-chrome').then((module) => ({
+        default: module.AppChrome,
+    })),
+);
+
+function withSuspense<P extends { children: ReactNode }>(
+    Layout: ComponentType<P>,
+    fallbackClassName = 'min-h-screen',
+): ComponentType<P> {
+    return function LayoutWithSuspense(props: P) {
+        return (
+            <Suspense
+                fallback={
+                    <div className={fallbackClassName}>{props.children}</div>
+                }
+            >
+                <Layout {...props} />
+            </Suspense>
+        );
+    };
+}
+
+const SuspendedAuthLayout = withSuspense(AuthLayout);
+const SuspendedAppLayout = withSuspense(AppLayout, 'min-h-svh');
+function initialPageComponent(): string {
+    const pageData = document.querySelector<HTMLScriptElement>(
+        'script[data-page="app"]',
+    )?.textContent;
+
+    if (!pageData) {
+        return '';
+    }
+
+    try {
+        return (JSON.parse(pageData) as { component?: string }).component ?? '';
+    } catch {
+        return '';
+    }
+}
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
@@ -16,20 +56,33 @@ createInertiaApp({
             case name.startsWith('marketing/'):
                 return MarketingLayout;
             case name.startsWith('auth/'):
-                return AuthLayout;
+                return SuspendedAuthLayout;
             case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
+                return (page: ReactNode) => (
+                    <Suspense
+                        fallback={
+                            <div className="min-h-svh">{page}</div>
+                        }
+                    >
+                        <AppLayout>
+                            <SettingsLayout>{page}</SettingsLayout>
+                        </AppLayout>
+                    </Suspense>
+                );
             default:
-                return AppLayout;
+                return SuspendedAppLayout;
         }
     },
     strictMode: true,
     withApp(app) {
+        if (initialPageComponent().startsWith('marketing/')) {
+            return app;
+        }
+
         return (
-            <TooltipProvider delayDuration={0}>
-                {app}
-                <Toaster />
-            </TooltipProvider>
+            <Suspense fallback={app}>
+                <AppChrome>{app}</AppChrome>
+            </Suspense>
         );
     },
     progress: {
@@ -37,5 +90,4 @@ createInertiaApp({
     },
 });
 
-// This will set light / dark mode on load...
 initializeTheme();

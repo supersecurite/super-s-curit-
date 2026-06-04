@@ -5,7 +5,7 @@ import Reveal from '@/components/marketing/reveal';
 
 export default function ServiceCards() {
     return (
-        <section className="py-24 md:py-32">
+        <section className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-14 max-w-2xl">
                     <p className="marketing-label mb-3">Services</p>
@@ -40,7 +40,11 @@ export default function ServiceCards() {
                                     <img
                                         src={service.cover}
                                         alt=""
-                                        loading="lazy"
+                                        width={640}
+                                        height={360}
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+                                        loading={index === 0 ? 'eager' : 'lazy'}
+                                        decoding="async"
                                         className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.05] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                                         aria-hidden
                                     />

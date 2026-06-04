@@ -61,14 +61,14 @@ export default function MarketingHero() {
                                 <span className="relative inline-block">
                                     présence digitale
                                     <svg
-                                        viewBox="0 0 380 18"
-                                        className="marketing-underline-draw absolute -bottom-2 left-0 w-full"
+                                        viewBox="0 0 380 22"
+                                        className="marketing-underline-draw absolute -bottom-5 left-0 w-full"
                                         fill="none"
                                         preserveAspectRatio="none"
                                         aria-hidden
                                     >
                                         <path
-                                            d="M2 14 C 80 4, 200 4, 378 12"
+                                            d="M2 16 C 100 1, 280 1, 378 16"
                                             stroke="url(#hero-underline)"
                                             strokeWidth="3"
                                             strokeLinecap="round"
@@ -182,8 +182,10 @@ export default function MarketingHero() {
                                 alt="Logo ArisTech"
                                 width={320}
                                 height={320}
+                                loading="lazy"
+                                decoding="async"
+                                fetchPriority="low"
                                 className="relative z-10 h-auto w-3/4 max-w-xs object-contain drop-shadow-2xl"
-                                fetchPriority="high"
                             />
                         </div>
                     </div>

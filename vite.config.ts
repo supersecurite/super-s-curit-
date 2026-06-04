@@ -12,14 +12,13 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
-                }),
-                bunny('Space Grotesk', {
-                    weights: [500, 600, 700],
-                }),
                 bunny('DM Sans', {
                     weights: [400, 500, 600],
+                    display: 'swap',
+                }),
+                bunny('Space Grotesk', {
+                    weights: [600, 700],
+                    display: 'swap',
                 }),
             ],
         }),
@@ -34,4 +33,29 @@ export default defineConfig({
             formVariants: true,
         }),
     ],
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (!id.includes('node_modules')) {
+                        return;
+                    }
+
+                    if (id.includes('recharts') || id.includes('d3-')) {
+                        return 'charts';
+                    }
+
+                    if (id.includes('@radix-ui')) {
+                        return 'ui';
+                    }
+
+                    if (id.includes('@inertiajs')) {
+                        return 'inertia';
+                    }
+
+                    return 'vendor';
+                },
+            },
+        },
+    },
 });

@@ -44,7 +44,7 @@ export default function RotatingWords({
         >
             <span
                 aria-hidden
-                className="invisible block whitespace-nowrap leading-[inherit]"
+                className="invisible block whitespace-nowrap pe-[0.15em] leading-[inherit]"
             >
                 {longest}
             </span>

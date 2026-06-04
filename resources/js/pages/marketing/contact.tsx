@@ -54,7 +54,7 @@ export default function MarketingContact() {
                 }
             ></PageHero>
 
-            <section className="py-16 md:py-24">
+            <section className="py-10">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <Reveal className="mb-12 max-w-2xl">
                         <p className="marketing-label mb-3">Canaux directs</p>
@@ -81,7 +81,7 @@ export default function MarketingContact() {
                 </div>
             </section>
 
-            <section className="pb-16 md:pb-24">
+            <section className="">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-12">
                         <Reveal className="lg:col-span-3">

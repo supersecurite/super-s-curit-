@@ -9,7 +9,7 @@
 
 @theme {
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'DM Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
@@ -236,6 +236,11 @@ html.app-page {
 
     .marketing-site {
         @apply min-h-screen bg-aristech-bg font-marketing text-aristech-text antialiased;
+    }
+
+    .marketing-below-fold {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 600px;
     }
 
     .marketing-site h1,

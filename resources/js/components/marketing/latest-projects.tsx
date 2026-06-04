@@ -172,7 +172,7 @@ export default function LatestProjects() {
     );
 
     return (
-        <section id="projets" className="border-t border-aristech-border py-24 md:py-32">
+        <section id="projets" className="border-t border-aristech-border py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
