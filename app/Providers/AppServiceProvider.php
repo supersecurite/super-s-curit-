@@ -7,8 +7,8 @@ use App\Seo\StructuredDataBuilder;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureFrontendAssets(): void
     {
-        Vite::usePrefetchStrategy('tap');
+        Vite::prefetch(concurrency: 2, event: 'click');
     }
 
     protected function configureSeoViews(): void
