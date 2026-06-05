@@ -177,6 +177,20 @@ return [
             ],
         ],
         [
+            'path' => '/conseils-securite',
+            'meta_title' => 'Conseils de sécurité | Super Sécurité — Conakry',
+            'meta_description' => 'Conseils pratiques de Super Sécurité : prévention, gardiennage, surveillance et bonnes pratiques pour protéger vos locaux en Guinée.',
+            'schema_type' => 'CollectionPage',
+            'changefreq' => 'weekly',
+            'priority' => 0.8,
+            'image' => '/web-app-manifest-512x512.png',
+            'og_image_alt' => 'Conseils de sécurité Super Sécurité — Conakry',
+            'sources' => [
+                'resources/js/pages/marketing/conseils-securite/index.tsx',
+                'config/seo.php',
+            ],
+        ],
+        [
             'path' => '/contact',
             'meta_title' => 'Contact & plan d\'accès | Super Sécurité — Lambanyi, Conakry',
             'meta_description' => 'Contactez Super Sécurité à Lambanyi (face Cis Media), Conakry : +224 612 13 13 14, contact@supersecurite.com. Formulaire, FAQ et plan Google Maps.',
@@ -198,6 +212,7 @@ return [
         '/analytics',
         '/users',
         '/articles',
+        '/conseils',
         '/login',
         '/register',
         '/forgot-password',

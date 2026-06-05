@@ -3,6 +3,7 @@
 namespace App\Seo;
 
 use App\Models\Article;
+use App\Models\SecurityTip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -108,6 +109,27 @@ class SeoPageRegistry
                     'description' => $description,
                     'og_image' => $article->image_url ?? config('seo.default_og_image'),
                     'og_image_alt' => $article->title.' — '.config('seo.site_name'),
+                    'og_type' => 'article',
+                    'schema_type' => 'Article',
+                ];
+            }
+        }
+
+        if (preg_match('#^/conseils-securite/([a-z0-9\-]+)$#', $path, $matches) === 1) {
+            $securityTip = SecurityTip::query()
+                ->published()
+                ->where('slug', $matches[1])
+                ->first();
+
+            if ($securityTip !== null) {
+                $description = $securityTip->excerpt
+                    ?? Str::limit(SecurityTip::extractTextFromContent($securityTip->content), 160);
+
+                return [
+                    'title' => $securityTip->title.' | '.config('seo.site_name'),
+                    'description' => $description,
+                    'og_image' => $securityTip->image_url ?? config('seo.default_og_image'),
+                    'og_image_alt' => $securityTip->title.' — '.config('seo.site_name'),
                     'og_type' => 'article',
                     'schema_type' => 'Article',
                 ];

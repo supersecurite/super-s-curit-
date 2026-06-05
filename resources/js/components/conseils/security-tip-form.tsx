@@ -13,7 +13,7 @@ export type StatusOption = {
     label: string;
 };
 
-export type ArticleFormData = {
+export type SecurityTipFormData = {
     id?: number;
     title: string;
     excerpt: string;
@@ -26,8 +26,8 @@ export type ArticleFormData = {
     image_url?: string | null;
 };
 
-type ArticleFormProps = {
-    article?: ArticleFormData;
+type SecurityTipFormProps = {
+    securityTip?: SecurityTipFormData;
     statusOptions?: StatusOption[];
     submitUrl: string;
     method?: 'post' | 'put';
@@ -36,31 +36,31 @@ type ArticleFormProps = {
     errors?: Record<string, string>;
 };
 
-export default function ArticleForm({
-    article,
+export default function SecurityTipForm({
+    securityTip,
     statusOptions = [],
     submitUrl,
     method = 'post',
     submitLabel,
     cancelHref,
     errors = {},
-}: ArticleFormProps) {
+}: SecurityTipFormProps) {
     const isEditing = method === 'put';
     const [formData, setFormData] = useState({
-        title: article?.title ?? '',
-        excerpt: article?.excerpt ?? '',
-        content: article?.content ?? '',
-        category: article?.category ?? '',
-        tags: (article?.tags ?? []).join(', '),
-        featured: article?.featured ?? false,
-        status: article?.status ?? 'pending_approval',
-        published_at: article?.published_at
-            ? article.published_at.split('T')[0]
+        title: securityTip?.title ?? '',
+        excerpt: securityTip?.excerpt ?? '',
+        content: securityTip?.content ?? '',
+        category: securityTip?.category ?? '',
+        tags: (securityTip?.tags ?? []).join(', '),
+        featured: securityTip?.featured ?? false,
+        status: securityTip?.status ?? 'pending_approval',
+        published_at: securityTip?.published_at
+            ? securityTip.published_at.split('T')[0]
             : '',
         image: null as File | null,
     });
     const [imagePreview, setImagePreview] = useState<string | null>(
-        article?.image_url ?? null,
+        securityTip?.image_url ?? null,
     );
     const [processing, setProcessing] = useState(false);
 
@@ -155,8 +155,8 @@ export default function ArticleForm({
                         <div className="grid gap-2">
                             <Label>Contenu</Label>
                             <Editor
-                                key={article?.id ?? 'new'}
-                                initialContent={article?.content ?? ''}
+                                key={securityTip?.id ?? 'new'}
+                                initialContent={securityTip?.content ?? ''}
                                 onChange={(content) =>
                                     updateField('content', content)
                                 }
@@ -190,7 +190,7 @@ export default function ArticleForm({
                                 </select>
                                 <p className="text-muted-foreground text-xs">
                                     Modifiez le statut pour valider, refuser ou
-                                    republier l&apos;article.
+                                    republier le conseil.
                                 </p>
                                 <InputError message={errors.status} />
                             </div>
@@ -201,7 +201,7 @@ export default function ArticleForm({
                                 Soumission automatique
                             </p>
                             <p className="text-muted-foreground text-xs">
-                                L&apos;article sera enregistré en attente de
+                                Le conseil sera enregistré en attente de
                                 validation par un autre administrateur.
                             </p>
                         </div>

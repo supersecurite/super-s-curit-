@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Article;
+use App\Models\SecurityTip;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreArticleRequest extends FormRequest
+class StoreSecurityTipRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can('create', Article::class) ?? false;
+        return $this->user()?->can('create', SecurityTip::class) ?? false;
     }
 
     /**

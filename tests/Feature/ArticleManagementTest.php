@@ -60,7 +60,6 @@ test('admins can create articles pending approval with author tracking', functio
     $this->actingAs($admin)
         ->post(route('articles.store'), [
             'title' => 'Nouvelle actualité sécurité',
-            'status' => ArticleStatus::PendingApproval->value,
             'excerpt' => 'Résumé de test',
             'content' => json_encode([
                 'root' => [
@@ -181,13 +180,31 @@ test('admins soft delete articles', function () {
         ->and(Article::withTrashed()->find($article->id))->not->toBeNull();
 });
 
-test('featured articles are limited to five published articles', function () {
+test('created articles always start as pending approval even if status is forged', function () {
     $admin = User::factory()->admin()->create();
-    Article::factory()->count(5)->featured()->published()->create();
 
     $this->actingAs($admin)
         ->post(route('articles.store'), [
-            'title' => 'Sixième à la une',
+            'title' => 'Tentative publication directe',
+            'status' => ArticleStatus::Published->value,
+        ])
+        ->assertRedirect(route('articles.index'));
+
+    $article = Article::query()->where('title', 'Tentative publication directe')->first();
+
+    expect($article)->not->toBeNull()
+        ->and($article->status)->toBe(ArticleStatus::PendingApproval)
+        ->and($article->submitted_at)->not->toBeNull();
+});
+
+test('featured articles are limited to five published articles', function () {
+    $admin = User::factory()->admin()->create();
+    Article::factory()->count(5)->featured()->published()->create();
+    $article = Article::factory()->pendingApproval()->create(['title' => 'Sixième à la une']);
+
+    $this->actingAs($admin)
+        ->put(route('articles.update', $article), [
+            'title' => $article->title,
             'status' => ArticleStatus::Published->value,
             'featured' => true,
             'published_at' => now()->toDateString(),
@@ -195,13 +212,12 @@ test('featured articles are limited to five published articles', function () {
         ->assertSessionHasErrors('featured');
 });
 
-test('non published articles cannot be featured', function () {
+test('non published articles cannot be featured on create', function () {
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
         ->post(route('articles.store'), [
-            'title' => 'Article brouillon à la une',
-            'status' => ArticleStatus::Draft->value,
+            'title' => 'Article à la une à la création',
             'featured' => true,
         ])
         ->assertSessionHasErrors('featured');

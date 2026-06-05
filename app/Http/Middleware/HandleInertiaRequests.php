@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Enums\ArticleStatus;
 use App\Models\Article;
+use App\Models\SecurityTip;
 use App\Models\User;
 use App\Seo\SeoPageRegistry;
 use App\Support\BusinessLocation;
@@ -61,6 +62,18 @@ class HandleInertiaRequests extends Middleware
             'articlesPendingCount' => $request->user()?->isAdmin()
                 ? Article::query()->where('status', ArticleStatus::PendingApproval)->count()
                 : 0,
+            'securityTipsPendingCount' => $request->user()?->isAdmin()
+                ? SecurityTip::query()->where('status', ArticleStatus::PendingApproval)->count()
+                : 0,
+            'featuredSecurityTips' => SecurityTip::query()
+                ->published()
+                ->where('featured', true)
+                ->orderByDesc('published_at')
+                ->limit(3)
+                ->get()
+                ->map(fn (SecurityTip $securityTip) => $securityTip->toPublicArray())
+                ->values()
+                ->all(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'superSecurite' => [
                 'email' => config('super-securite.email'),
@@ -142,8 +155,12 @@ class HandleInertiaRequests extends Middleware
             return false;
         }
 
+        $requestPath = '/'.ltrim($request->path(), '/');
+
         foreach (config('seo.robots_disallow', []) as $blockedPath) {
-            if (str_starts_with('/'.$request->path(), rtrim($blockedPath, '/'))) {
+            $normalized = rtrim($blockedPath, '/');
+
+            if ($requestPath === $normalized || str_starts_with($requestPath, $normalized.'/')) {
                 return false;
             }
         }

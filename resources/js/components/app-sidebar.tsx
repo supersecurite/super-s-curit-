@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, FolderGit2, LayoutGrid, Newspaper, Users } from 'lucide-react';
+import { BarChart3, BookOpen, FolderGit2, LayoutGrid, Newspaper, Shield, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -16,6 +16,7 @@ import {
 import { dashboard } from '@/routes';
 import { index as analyticsIndex } from '@/routes/analytics';
 import { index as articlesIndex } from '@/routes/articles';
+import { index as conseilsIndex } from '@/routes/conseils';
 import { index as usersIndex } from '@/routes/users';
 import type { Auth, NavItem } from '@/types';
 
@@ -40,6 +41,11 @@ function buildMainNavItems(isAdmin: boolean): NavItem[] {
             icon: Newspaper,
         });
         items.push({
+            title: 'Conseils',
+            href: conseilsIndex.url(),
+            icon: Shield,
+        });
+        items.push({
             title: 'Utilisateurs',
             href: usersIndex.url(),
             icon: Users,
@@ -50,31 +56,40 @@ function buildMainNavItems(isAdmin: boolean): NavItem[] {
 }
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
+    // {
+    //     title: 'Repository',
+    //     href: 'https://github.com/laravel/react-starter-kit',
+    //     icon: FolderGit2,
+    // },
+    // {
+    //     title: 'Documentation',
+    //     href: 'https://laravel.com/docs/starter-kits#react',
+    //     icon: BookOpen,
+    // },
 ];
 
 type SidebarPageProps = {
     auth: Auth;
     articlesPendingCount?: number;
+    securityTipsPendingCount?: number;
 };
 
 export function AppSidebar() {
-    const { auth, articlesPendingCount = 0 } =
-        usePage<SidebarPageProps>().props;
+    const {
+        auth,
+        articlesPendingCount = 0,
+        securityTipsPendingCount = 0,
+    } = usePage<SidebarPageProps>().props;
     const mainNavItems = buildMainNavItems(auth.user?.is_admin ?? false).map(
-        (item) =>
-            item.title === 'Actualités'
-                ? { ...item, badge: articlesPendingCount }
-                : item,
+        (item) => {
+            if (item.title === 'Actualités') {
+                return { ...item, badge: articlesPendingCount };
+            }
+            if (item.title === 'Conseils') {
+                return { ...item, badge: securityTipsPendingCount };
+            }
+            return item;
+        },
     );
 
     return (

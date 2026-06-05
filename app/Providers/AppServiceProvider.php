@@ -42,8 +42,12 @@ class AppServiceProvider extends ServiceProvider
         View::composer('app', function ($view): void {
             $request = request();
 
+            $requestPath = '/'.ltrim($request->path(), '/');
+
             foreach (config('seo.robots_disallow', []) as $blockedPath) {
-                if (str_starts_with('/'.$request->path(), rtrim($blockedPath, '/'))) {
+                $normalized = rtrim($blockedPath, '/');
+
+                if ($requestPath === $normalized || str_starts_with($requestPath, $normalized.'/')) {
                     return;
                 }
             }

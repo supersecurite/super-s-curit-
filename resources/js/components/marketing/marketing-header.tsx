@@ -5,6 +5,7 @@ import MarketingMobileNav from '@/components/marketing/marketing-mobile-nav';
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { useScrollProgress } from '@/hooks/use-scroll-progress';
 import { index as actualitesIndex } from '@/routes/actualites';
+import { index as conseilsIndex } from '@/routes/conseils-securite';
 import { about, contact, home } from '@/routes';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 import type { User } from '@/types/auth';
@@ -20,6 +21,7 @@ const primaryNavLinks = [
     { href: home.url(), label: 'Accueil' },
     { href: about.url(), label: 'Pourquoi nous' },
     { href: actualitesIndex.url(), label: 'Actualités' },
+    { href: conseilsIndex.url(), label: 'Conseils' },
     { href: contact.url(), label: 'Nous contacter' },
 ] as const;
 

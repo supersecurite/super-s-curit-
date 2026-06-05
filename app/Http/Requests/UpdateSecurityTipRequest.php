@@ -2,15 +2,20 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Article;
+use App\Enums\ArticleStatus;
+use App\Models\SecurityTip;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreArticleRequest extends FormRequest
+class UpdateSecurityTipRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can('create', Article::class) ?? false;
+        $securityTip = $this->route('conseil');
+
+        return $securityTip instanceof SecurityTip
+            && ($this->user()?->can('update', $securityTip) ?? false);
     }
 
     /**
@@ -20,6 +25,7 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'status' => ['required', Rule::enum(ArticleStatus::class)],
             'excerpt' => ['nullable', 'string', 'max:1000'],
             'content' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:2048'],
@@ -38,6 +44,7 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title.required' => 'Le titre est obligatoire.',
+            'status.required' => 'Le statut est obligatoire.',
             'image.image' => 'Le fichier doit être une image.',
             'image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
         ];
@@ -50,6 +57,7 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title' => 'titre',
+            'status' => 'statut',
             'excerpt' => 'résumé',
             'content' => 'contenu',
             'image' => 'image',

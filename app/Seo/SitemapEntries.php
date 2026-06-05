@@ -3,6 +3,7 @@
 namespace App\Seo;
 
 use App\Models\Article;
+use App\Models\SecurityTip;
 
 class SitemapEntries
 {
@@ -53,11 +54,25 @@ class SitemapEntries
             ])
             ->all();
 
+        $securityTipPages = SecurityTip::query()
+            ->published()
+            ->orderByDesc('published_at')
+            ->get()
+            ->map(fn (SecurityTip $securityTip): array => [
+                'path' => '/conseils-securite/'.$securityTip->slug,
+                'changefreq' => 'monthly',
+                'priority' => 0.7,
+                'image' => $securityTip->image_url ?? config('seo.default_og_image'),
+                'sources' => ['database/security_tips'],
+                'lastmod' => $securityTip->updated_at?->toAtomString(),
+            ])
+            ->all();
+
         $existingPaths = collect($pages)->pluck('path')->all();
 
         $merged = $pages;
 
-        foreach ([...$servicePages, ...$caseStudies, ...$legal, ...$articlePages] as $entry) {
+        foreach ([...$servicePages, ...$caseStudies, ...$legal, ...$articlePages, ...$securityTipPages] as $entry) {
             if (! in_array($entry['path'], $existingPaths, true)) {
                 $merged[] = $entry;
                 $existingPaths[] = $entry['path'];

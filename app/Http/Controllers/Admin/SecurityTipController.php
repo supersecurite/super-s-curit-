@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreArticleRequest;
-use App\Http\Requests\UpdateArticleRequest;
-use App\Models\Article;
-use App\Support\ArticleStatusTransition;
+use App\Http\Requests\StoreSecurityTipRequest;
+use App\Http\Requests\UpdateSecurityTipRequest;
+use App\Models\SecurityTip;
+use App\Support\SecurityTipStatusTransition;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,20 +15,20 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ArticleController extends Controller
+class SecurityTipController extends Controller
 {
     private const int MAX_FEATURED = 5;
 
     public function index(Request $request): Response
     {
-        $this->authorize('viewAny', Article::class);
+        $this->authorize('viewAny', SecurityTip::class);
 
         $tab = $request->string('tab', 'all')->toString();
         if (! in_array($tab, ['all', 'pending'], true)) {
             $tab = 'all';
         }
 
-        $query = Article::query()->with(['createdBy', 'approvedBy', 'rejectedBy']);
+        $query = SecurityTip::query()->with(['createdBy', 'approvedBy', 'rejectedBy']);
 
         if ($tab === 'pending') {
             $query->where('status', ArticleStatus::PendingApproval);
@@ -58,17 +58,17 @@ class ArticleController extends Controller
 
         $query->orderBy($sortBy, $sortDirection);
 
-        return Inertia::render('articles/index', [
-            'articles' => $query
+        return Inertia::render('conseils/index', [
+            'securityTips' => $query
                 ->paginate(15)
                 ->withQueryString()
-                ->through(fn (Article $article) => $this->formatArticle($article)),
+                ->through(fn (SecurityTip $securityTip) => $this->formatSecurityTip($securityTip)),
             'filters' => $request->only(['search', 'category', 'status', 'sort_by', 'sort_direction', 'tab']),
             'tab' => $tab,
-            'pendingCount' => Article::query()
+            'pendingCount' => SecurityTip::query()
                 ->where('status', ArticleStatus::PendingApproval)
                 ->count(),
-            'categories' => Article::query()
+            'categories' => SecurityTip::query()
                 ->whereNotNull('category')
                 ->distinct()
                 ->orderBy('category')
@@ -81,12 +81,12 @@ class ArticleController extends Controller
 
     public function create(): Response
     {
-        $this->authorize('create', Article::class);
+        $this->authorize('create', SecurityTip::class);
 
-        return Inertia::render('articles/create');
+        return Inertia::render('conseils/create');
     }
 
-    public function store(StoreArticleRequest $request, ArticleStatusTransition $statusTransition): RedirectResponse
+    public function store(StoreSecurityTipRequest $request, SecurityTipStatusTransition $statusTransition): RedirectResponse
     {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
@@ -95,7 +95,7 @@ class ArticleController extends Controller
         $this->ensureFeaturedLimit($featured, status: $status);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('articles/images', 'public');
+            $validated['image'] = $request->file('image')->store('security-tips/images', 'public');
         } else {
             unset($validated['image']);
         }
@@ -106,39 +106,39 @@ class ArticleController extends Controller
         $validated['tags'] = $validated['tags'] ?? [];
         $validated['created_by_id'] = $request->user()->id;
 
-        $article = new Article($validated);
-        $statusTransition->apply($article, $status, $request->user());
-        $article->save();
+        $securityTip = new SecurityTip($validated);
+        $statusTransition->apply($securityTip, $status, $request->user());
+        $securityTip->save();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Actualité créée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Conseil créé avec succès.']);
 
-        return to_route('articles.index');
+        return to_route('conseils.index');
     }
 
-    public function edit(Article $article): Response
+    public function edit(SecurityTip $conseil): Response
     {
-        $this->authorize('update', $article);
+        $this->authorize('update', $conseil);
 
-        return Inertia::render('articles/edit', [
-            'article' => $this->formatArticle($article, includeContent: true),
+        return Inertia::render('conseils/edit', [
+            'securityTip' => $this->formatSecurityTip($conseil, includeContent: true),
             'statusOptions' => ArticleStatus::options(),
         ]);
     }
 
-    public function update(UpdateArticleRequest $request, Article $article, ArticleStatusTransition $statusTransition): RedirectResponse
+    public function update(UpdateSecurityTipRequest $request, SecurityTip $conseil, SecurityTipStatusTransition $statusTransition): RedirectResponse
     {
         $validated = $request->validated();
         $status = ArticleStatus::from($validated['status']);
         $featured = (bool) ($validated['featured'] ?? false);
 
-        $this->ensureFeaturedLimit($featured, $article, $status);
+        $this->ensureFeaturedLimit($featured, $conseil, $status);
 
         if ($request->hasFile('image')) {
-            if ($article->image !== null) {
-                Storage::disk('public')->delete($article->image);
+            if ($conseil->image !== null) {
+                Storage::disk('public')->delete($conseil->image);
             }
 
-            $validated['image'] = $request->file('image')->store('articles/images', 'public');
+            $validated['image'] = $request->file('image')->store('security-tips/images', 'public');
         } else {
             unset($validated['image']);
         }
@@ -148,39 +148,39 @@ class ArticleController extends Controller
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
 
-        $article->fill($validated);
+        $conseil->fill($validated);
 
-        if ($article->status !== $status) {
-            $statusTransition->apply($article, $status, $request->user());
+        if ($conseil->status !== $status) {
+            $statusTransition->apply($conseil, $status, $request->user());
         }
 
-        $article->save();
+        $conseil->save();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Actualité mise à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Conseil mis à jour avec succès.']);
 
-        return to_route('articles.index');
+        return to_route('conseils.index');
     }
 
-    public function destroy(Article $article): RedirectResponse
+    public function destroy(SecurityTip $conseil): RedirectResponse
     {
-        $this->authorize('delete', $article);
+        $this->authorize('delete', $conseil);
 
-        $article->delete();
+        $conseil->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Actualité archivée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Conseil archivé avec succès.']);
 
-        return to_route('articles.index');
+        return to_route('conseils.index');
     }
 
     /**
      * @return array<string, mixed>
      */
-    private function formatArticle(Article $article, bool $includeContent = false): array
+    private function formatSecurityTip(SecurityTip $securityTip, bool $includeContent = false): array
     {
-        return $article->toAdminArray($includeContent);
+        return $securityTip->toAdminArray($includeContent);
     }
 
-    private function ensureFeaturedLimit(bool $featured, ?Article $except = null, ?ArticleStatus $status = null): void
+    private function ensureFeaturedLimit(bool $featured, ?SecurityTip $except = null, ?ArticleStatus $status = null): void
     {
         if (! $featured) {
             return;
@@ -188,11 +188,11 @@ class ArticleController extends Controller
 
         if ($status !== null && $status !== ArticleStatus::Published) {
             throw ValidationException::withMessages([
-                'featured' => 'Seuls les articles publiés peuvent être mis à la une.',
+                'featured' => 'Seuls les conseils publiés peuvent être mis à la une.',
             ]);
         }
 
-        $count = Article::query()
+        $count = SecurityTip::query()
             ->where('featured', true)
             ->where('status', ArticleStatus::Published)
             ->when($except !== null, fn ($query) => $query->where('id', '!=', $except->id))
@@ -200,7 +200,7 @@ class ArticleController extends Controller
 
         if ($count >= self::MAX_FEATURED) {
             throw ValidationException::withMessages([
-                'featured' => 'Vous ne pouvez pas avoir plus de '.self::MAX_FEATURED.' articles à la une.',
+                'featured' => 'Vous ne pouvez pas avoir plus de '.self::MAX_FEATURED.' conseils à la une.',
             ]);
         }
     }

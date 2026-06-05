@@ -20,7 +20,7 @@ import {
     type EditorState,
     type LexicalEditor,
 } from 'lexical';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import ImagePlugin, { ImageNode } from '@/components/lexical-editor/plugins/image-plugin';
 import Toolbar from '@/components/lexical-editor/toolbar';
 
@@ -58,11 +58,14 @@ function initializeWithText(editor: LexicalEditor, text: string) {
 
 function EditorInitializer({ initialContent }: { initialContent: string }) {
     const [editor] = useLexicalComposerContext();
+    const hasInitialized = useRef(false);
 
     useEffect(() => {
-        if (!initialContent.trim()) {
+        if (hasInitialized.current || !initialContent.trim()) {
             return;
         }
+
+        hasInitialized.current = true;
 
         try {
             const parsedContent = JSON.parse(initialContent) as {
@@ -115,6 +118,8 @@ export default function Editor({
     onChange,
     initialContent = '',
 }: EditorProps) {
+    const mountInitialContent = useRef(initialContent);
+
     const initialConfig = useMemo(
         () => ({
             namespace: 'SuperSecuriteArticleEditor',
@@ -132,9 +137,9 @@ export default function Editor({
                 CodeNode,
                 ImageNode,
             ],
-            editorState: prepareInitialState(initialContent),
+            editorState: prepareInitialState(mountInitialContent.current),
         }),
-        [initialContent],
+        [],
     );
 
     const handleChange = useCallback(
@@ -169,7 +174,9 @@ export default function Editor({
                     <MarkdownShortcutPlugin />
                     <ImagePlugin />
                     <OnChangePlugin onChange={handleChange} />
-                    <EditorInitializer initialContent={initialContent} />
+                    <EditorInitializer
+                        initialContent={mountInitialContent.current}
+                    />
                 </div>
             </div>
         </LexicalComposer>

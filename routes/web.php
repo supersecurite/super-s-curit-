@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Marketing\ArticleController as MarketingArticleController;
+use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UserController;
@@ -41,6 +43,8 @@ Route::redirect('/realisations', '/', 301);
 Route::redirect('/realisations/{slug}', '/', 301)->where('slug', '[a-z0-9\-]+');
 Route::get('/actualites', [MarketingArticleController::class, 'index'])->name('actualites.index');
 Route::get('/actualites/{article:slug}', [MarketingArticleController::class, 'show'])->name('actualites.show');
+Route::get('/conseils-securite', [MarketingSecurityTipController::class, 'index'])->name('conseils-securite.index');
+Route::get('/conseils-securite/{securityTip:slug}', [MarketingSecurityTipController::class, 'show'])->name('conseils-securite.show');
 Route::inertia('/contact', 'marketing/contact')->name('contact');
 Route::inertia('/politique-de-confidentialite', 'marketing/privacy')->name('privacy');
 Route::inertia('/mentions-legales', 'marketing/legal')->name('legal');
@@ -54,6 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('articles', AdminArticleController::class)->except(['show']);
+        Route::resource('conseils', AdminSecurityTipController::class)->except(['show']);
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
     });
 });
