@@ -5,7 +5,7 @@ import { index as devenirAgentIndex } from '@/routes/devenir-agent';
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { superSecuriteFooterServices } from '@/data/super-securite-content';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
-import { FacebookIcon, TwitterIcon, Youtube } from 'lucide-react';
+import { FacebookIcon, InstagramIcon, TwitterIcon, Youtube } from 'lucide-react';
 
 type SharedPageProps = {
     superSecurite: SuperSecuriteConfig;
@@ -150,6 +150,19 @@ export default function MarketingFooter() {
                                     >
                                         <FacebookIcon className="h-4 w-4 text-blue-500" />
                                         Facebook
+                                    </a>
+                                </li>
+                            )}
+                            {superSecurite.social.instagram && (
+                                <li>
+                                    <a
+                                        href={superSecurite.social.instagram}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex cursor-pointer items-center gap-2 text-sm text-super-securite-muted transition-colors duration-200 hover:text-super-securite-accent"
+                                    >
+                                        <InstagramIcon className="h-4 w-4 text-pink-500" />
+                                        Instagram
                                     </a>
                                 </li>
                             )}
