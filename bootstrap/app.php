@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Middleware\EnsureUserIsAdmin;
-use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\TrackVisit;
 use Illuminate\Foundation\Application;
@@ -17,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: [
-            'appearance',
             'sidebar_state',
             'super_securite_vid',
         ]);
@@ -31,7 +29,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
-            HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);

@@ -1,38 +1,24 @@
 import { createInertiaApp } from '@inertiajs/react';
-import { lazy, Suspense, type ComponentType, type ReactNode } from 'react';
+import { AppChrome } from '@/components/app-chrome';
+import AppLayout from '@/layouts/app-layout';
+import AuthLayout from '@/layouts/auth-layout';
 import MarketingLayout from '@/layouts/marketing-layout';
-import { initializeTheme } from '@/hooks/use-appearance';
+import SettingsLayout from '@/layouts/settings/layout';
+import type { AppLayoutProps } from '@/types/ui';
 
 const appName = import.meta.env.VITE_APP_NAME || 'SUPER_SECURITE';
 
-const AuthLayout = lazy(() => import('@/layouts/auth-layout'));
-const AppLayout = lazy(() => import('@/layouts/app-layout'));
-const SettingsLayout = lazy(() => import('@/layouts/settings/layout'));
-const AppChrome = lazy(() =>
-    import('@/components/app-chrome').then((module) => ({
-        default: module.AppChrome,
-    })),
-);
-
-function withSuspense<P extends { children: ReactNode }>(
-    Layout: ComponentType<P>,
-    fallbackClassName = 'min-h-screen',
-): ComponentType<P> {
-    return function LayoutWithSuspense(props: P) {
-        return (
-            <Suspense
-                fallback={
-                    <div className={fallbackClassName}>{props.children}</div>
-                }
-            >
-                <Layout {...props} />
-            </Suspense>
-        );
-    };
+function SettingsAppLayout({
+    children,
+    breadcrumbs = [],
+}: AppLayoutProps) {
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <SettingsLayout>{children}</SettingsLayout>
+        </AppLayout>
+    );
 }
 
-const SuspendedAuthLayout = withSuspense(AuthLayout);
-const SuspendedAppLayout = withSuspense(AppLayout, 'min-h-svh');
 function initialPageComponent(): string {
     const pageData = document.querySelector<HTMLScriptElement>(
         'script[data-page="app"]',
@@ -56,38 +42,21 @@ createInertiaApp({
             case name.startsWith('marketing/'):
                 return MarketingLayout;
             case name.startsWith('auth/'):
-                return SuspendedAuthLayout;
+                return AuthLayout;
             case name.startsWith('settings/'):
-                return (page: ReactNode) => (
-                    <Suspense
-                        fallback={
-                            <div className="min-h-svh">{page}</div>
-                        }
-                    >
-                        <AppLayout>
-                            <SettingsLayout>{page}</SettingsLayout>
-                        </AppLayout>
-                    </Suspense>
-                );
+                return SettingsAppLayout;
             default:
-                return SuspendedAppLayout;
+                return AppLayout;
         }
     },
-    strictMode: true,
     withApp(app) {
         if (initialPageComponent().startsWith('marketing/')) {
             return app;
         }
 
-        return (
-            <Suspense fallback={app}>
-                <AppChrome>{app}</AppChrome>
-            </Suspense>
-        );
+        return <AppChrome>{app}</AppChrome>;
     },
     progress: {
         color: '#4B5563',
     },
 });
-
-initializeTheme();

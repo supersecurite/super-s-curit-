@@ -29,12 +29,11 @@ export default function AuthSimpleLayout({
                             href={home()}
                             className="flex cursor-pointer flex-col items-center gap-2 font-medium transition-opacity duration-200 hover:opacity-80"
                         >
-                            <div className="mb-1 flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                                <AppLogoIcon className="size-6 fill-current text-primary-foreground" />
-                            </div>
-                            <span className="font-heading text-sm font-semibold text-foreground">
-                                SUPER_SECURITE
-                            </span>
+                            <AppLogoIcon
+                                className="h-10 w-auto max-w-[200px] object-contain"
+                                width={200}
+                                height={40}
+                            />
                             <span className="sr-only">{title}</span>
                         </Link>
 

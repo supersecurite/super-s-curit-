@@ -44,7 +44,7 @@ export default function ManagePasskeys(props: Props) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="bg-white p-5 rounded-xl mx-auto space-y-6">
             <Heading
                 variant="small"
                 title="Passkeys"

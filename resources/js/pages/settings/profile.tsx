@@ -1,9 +1,8 @@
-import { Form, Head, usePage } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
+import { Form, Head, Link, usePage } from '@inertiajs/react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +14,18 @@ type PageProps = {
     auth: Auth;
 };
 
+function formatDate(value: string | null): string {
+    if (!value) {
+        return '—';
+    }
+
+    return new Intl.DateTimeFormat('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    }).format(new Date(value));
+}
+
 export default function Profile({
     mustVerifyEmail,
     status,
@@ -23,19 +34,48 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage<PageProps>().props;
+    const user = auth.user;
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <>
-            <Head title="Profile settings" />
+            <Head title="Mon profil" />
 
-            <h1 className="sr-only">Profile settings</h1>
+            <h1 className="sr-only">Mon profil</h1>
 
+            <div className="bg-white p-5 rounded-xl mx-auto flex min-h-[calc(100svh-12rem)] w-full max-w-6xl flex-col justify-center py-8">
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Profile"
-                    description="Update your name and email address"
+                    title="Informations personnelles"
+                    description="Mettez à jour vos coordonnées de contact"
                 />
+
+                <div className="app-panel space-y-3 p-4 text-sm">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-muted-foreground">Rôle</span>
+                        <Badge variant="secondary">{user.role_label}</Badge>
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                        <div>
+                            <p className="text-muted-foreground">Membre depuis</p>
+                            <p className="font-medium">
+                                {formatDate(user.created_at)}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-muted-foreground">E-mail vérifié</p>
+                            <p className="font-medium">
+                                {user.email_verified_at
+                                    ? formatDate(user.email_verified_at)
+                                    : 'Non vérifié'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <Form
                     {...ProfileController.update.form()}
@@ -47,16 +87,16 @@ export default function Profile({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Nom complet</Label>
 
                                 <Input
                                     id="name"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.name}
+                                    defaultValue={user.name}
                                     name="name"
                                     required
                                     autoComplete="name"
-                                    placeholder="Full name"
+                                    placeholder="Votre nom complet"
                                 />
 
                                 <InputError
@@ -66,17 +106,17 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">E-mail</Label>
 
                                 <Input
                                     id="email"
                                     type="email"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.email}
+                                    defaultValue={user.email}
                                     name="email"
                                     required
                                     autoComplete="username"
-                                    placeholder="Email address"
+                                    placeholder="votre@email.com"
                                 />
 
                                 <InputError
@@ -85,26 +125,47 @@ export default function Profile({
                                 />
                             </div>
 
+                            <div className="grid gap-2">
+                                <Label htmlFor="phone">Téléphone</Label>
+
+                                <Input
+                                    id="phone"
+                                    type="tel"
+                                    className="mt-1 block w-full"
+                                    defaultValue={user.phone ?? ''}
+                                    name="phone"
+                                    autoComplete="tel"
+                                    placeholder="+224 ..."
+                                />
+
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.phone}
+                                />
+                            </div>
+
                             {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
+                                user.email_verified_at === null && (
                                     <div>
                                         <p className="-mt-4 text-sm text-muted-foreground">
-                                            Your email address is unverified.{' '}
+                                            Votre adresse e-mail n&apos;est pas
+                                            vérifiée.{' '}
                                             <Link
                                                 href={send()}
                                                 as="button"
-                                                className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                                className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current!"
                                             >
-                                                Click here to re-send the
-                                                verification email.
+                                                Cliquez ici pour renvoyer
+                                                l&apos;e-mail de vérification.
                                             </Link>
                                         </p>
 
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                A new verification link has been
-                                                sent to your email address.
+                                                Un nouveau lien de vérification a
+                                                été envoyé à votre adresse
+                                                e-mail.
                                             </div>
                                         )}
                                     </div>
@@ -115,15 +176,14 @@ export default function Profile({
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Save
+                                    Enregistrer
                                 </Button>
                             </div>
                         </>
                     )}
                 </Form>
             </div>
-
-            <DeleteUser />
+            </div>
         </>
     );
 }
@@ -131,7 +191,7 @@ export default function Profile({
 Profile.layout = {
     breadcrumbs: [
         {
-            title: 'Profile settings',
+            title: 'Mon profil',
             href: edit(),
         },
     ],
