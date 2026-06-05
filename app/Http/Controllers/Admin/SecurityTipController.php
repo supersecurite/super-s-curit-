@@ -17,7 +17,7 @@ use Inertia\Response;
 
 class SecurityTipController extends Controller
 {
-    private const int MAX_FEATURED = 5;
+    private const MAX_FEATURED = 5;
 
     public function index(Request $request): Response
     {
