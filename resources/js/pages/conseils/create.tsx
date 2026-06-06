@@ -3,11 +3,12 @@ import SecurityTipForm from '@/components/conseils/security-tip-form';
 import { create, index, store } from '@/routes/conseils';
 
 type PageProps = {
+    canApprove: boolean;
     errors: Record<string, string>;
 };
 
 export default function ConseilsCreate() {
-    const { errors } = usePage<PageProps>().props;
+    const { canApprove, errors } = usePage<PageProps>().props;
 
     return (
         <>
@@ -25,6 +26,7 @@ export default function ConseilsCreate() {
                 </div>
 
                 <SecurityTipForm
+                    canApprove={canApprove}
                     submitUrl={store.url()}
                     submitLabel="Créer le conseil"
                     cancelHref={index.url()}

@@ -114,6 +114,11 @@ class Article extends Model
             && $this->published_at->lte(now());
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function getImageUrlAttribute(): ?string
     {
         if ($this->image === null) {

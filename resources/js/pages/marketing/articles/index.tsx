@@ -8,6 +8,7 @@ import {
     Star,
 } from 'lucide-react';
 import PageHero from '@/components/marketing/page-hero';
+import ContentShareButton from '@/components/content-share-button';
 import SeoHead from '@/components/marketing/seo-head';
 import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
 
@@ -94,13 +95,21 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
                         <Eye className="size-4" />
                         {article.views}
                     </span>
-                    <Link
-                        href={actualitesShow.url(article.slug)}
-                        className="text-super-securite-accent inline-flex items-center gap-1 text-sm font-semibold"
-                    >
-                        Lire
-                        <ArrowRight className="size-4" />
-                    </Link>
+                    <div className="flex items-center gap-1">
+                        <ContentShareButton
+                            title={article.title}
+                            url={actualitesShow.url(article.slug)}
+                            description={article.excerpt}
+                            variant="marketing"
+                        />
+                        <Link
+                            href={actualitesShow.url(article.slug)}
+                            className="text-super-securite-accent inline-flex items-center gap-1 text-sm font-semibold"
+                        >
+                            Lire
+                            <ArrowRight className="size-4" />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </article>

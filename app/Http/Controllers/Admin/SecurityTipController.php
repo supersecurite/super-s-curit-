@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSecurityTipRequest;
 use App\Http\Requests\UpdateSecurityTipRequest;
 use App\Models\SecurityTip;
+use App\Models\User;
 use App\Support\SecurityTipStatusTransition;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,8 +24,12 @@ class SecurityTipController extends Controller
     {
         $this->authorize('viewAny', SecurityTip::class);
 
+        /** @var User $user */
+        $user = $request->user();
+        $isAdmin = $user->isAdmin();
+
         $tab = $request->string('tab', 'all')->toString();
-        if (! in_array($tab, ['all', 'pending'], true)) {
+        if (! $isAdmin || ! in_array($tab, ['all', 'pending'], true)) {
             $tab = 'all';
         }
 
@@ -62,12 +67,13 @@ class SecurityTipController extends Controller
             'securityTips' => $query
                 ->paginate(15)
                 ->withQueryString()
-                ->through(fn (SecurityTip $securityTip) => $this->formatSecurityTip($securityTip)),
+                ->through(fn (SecurityTip $securityTip) => $this->formatSecurityTip($securityTip, $user)),
             'filters' => $request->only(['search', 'category', 'status', 'sort_by', 'sort_direction', 'tab']),
             'tab' => $tab,
-            'pendingCount' => SecurityTip::query()
-                ->where('status', ArticleStatus::PendingApproval)
-                ->count(),
+            'canApprove' => $isAdmin,
+            'pendingCount' => $isAdmin
+                ? SecurityTip::query()->where('status', ArticleStatus::PendingApproval)->count()
+                : 0,
             'categories' => SecurityTip::query()
                 ->whereNotNull('category')
                 ->distinct()
@@ -79,18 +85,21 @@ class SecurityTipController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
         $this->authorize('create', SecurityTip::class);
 
-        return Inertia::render('conseils/create');
+        return Inertia::render('conseils/create', [
+            'canApprove' => $request->user()?->isAdmin() ?? false,
+        ]);
     }
 
     public function store(StoreSecurityTipRequest $request, SecurityTipStatusTransition $statusTransition): RedirectResponse
     {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
-        $featured = (bool) ($validated['featured'] ?? false);
+        $isAdmin = $request->user()->isAdmin();
+        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
 
         $this->ensureFeaturedLimit($featured, status: $status);
 
@@ -106,6 +115,10 @@ class SecurityTipController extends Controller
         $validated['tags'] = $validated['tags'] ?? [];
         $validated['created_by_id'] = $request->user()->id;
 
+        if (! $isAdmin) {
+            unset($validated['published_at']);
+        }
+
         $securityTip = new SecurityTip($validated);
         $statusTransition->apply($securityTip, $status, $request->user());
         $securityTip->save();
@@ -115,21 +128,51 @@ class SecurityTipController extends Controller
         return to_route('conseils.index');
     }
 
-    public function edit(SecurityTip $conseil): Response
+    public function show(Request $request, SecurityTip $conseil): Response
+    {
+        $this->authorize('view', $conseil);
+
+        $conseil->load(['createdBy', 'approvedBy', 'rejectedBy']);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        return Inertia::render('conseils/show', [
+            'securityTip' => $this->formatSecurityTip($conseil, $user, includeContent: true),
+            'canApprove' => $user->isAdmin(),
+            'publicUrl' => $conseil->isPublished()
+                ? route('conseils-securite.show', $conseil)
+                : null,
+        ]);
+    }
+
+    public function edit(Request $request, SecurityTip $conseil): Response
     {
         $this->authorize('update', $conseil);
 
+        $isAdmin = $request->user()->isAdmin();
+
         return Inertia::render('conseils/edit', [
-            'securityTip' => $this->formatSecurityTip($conseil, includeContent: true),
-            'statusOptions' => ArticleStatus::options(),
+            'securityTip' => $this->formatSecurityTip($conseil, $request->user(), includeContent: true),
+            'statusOptions' => $this->statusOptionsFor($conseil, $isAdmin),
+            'canApprove' => $isAdmin,
+            'publicUrl' => $conseil->isPublished()
+                ? route('conseils-securite.show', $conseil)
+                : null,
         ]);
     }
 
     public function update(UpdateSecurityTipRequest $request, SecurityTip $conseil, SecurityTipStatusTransition $statusTransition): RedirectResponse
     {
         $validated = $request->validated();
-        $status = ArticleStatus::from($validated['status']);
-        $featured = (bool) ($validated['featured'] ?? false);
+        $user = $request->user();
+        $isAdmin = $user->isAdmin();
+        $status = $this->resolveStatusForUpdate($conseil, ArticleStatus::from($validated['status']), $isAdmin);
+        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
+
+        if ($conseil->status !== $status && in_array($status, [ArticleStatus::Published, ArticleStatus::Rejected], true)) {
+            $this->authorize('approve', $conseil);
+        }
 
         $this->ensureFeaturedLimit($featured, $conseil, $status);
 
@@ -148,10 +191,14 @@ class SecurityTipController extends Controller
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
 
+        if (! $isAdmin) {
+            unset($validated['published_at']);
+        }
+
         $conseil->fill($validated);
 
         if ($conseil->status !== $status) {
-            $statusTransition->apply($conseil, $status, $request->user());
+            $statusTransition->apply($conseil, $status, $user);
         }
 
         $conseil->save();
@@ -175,9 +222,72 @@ class SecurityTipController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function formatSecurityTip(SecurityTip $securityTip, bool $includeContent = false): array
+    private function formatSecurityTip(SecurityTip $securityTip, User $viewer, bool $includeContent = false): array
     {
-        return $securityTip->toAdminArray($includeContent);
+        return [
+            ...$securityTip->toAdminArray($includeContent),
+            'can_update' => $viewer->can('update', $securityTip),
+            'can_delete' => $viewer->can('delete', $securityTip),
+            'is_own' => $securityTip->created_by_id === $viewer->id,
+        ];
+    }
+
+    /**
+     * @return list<array{value: string, label: string}>
+     */
+    private function statusOptionsFor(SecurityTip $securityTip, bool $isAdmin): array
+    {
+        if ($isAdmin) {
+            return ArticleStatus::options();
+        }
+
+        if ($securityTip->status === ArticleStatus::Published) {
+            return [
+                [
+                    'value' => ArticleStatus::Published->value,
+                    'label' => ArticleStatus::Published->label(),
+                ],
+            ];
+        }
+
+        if ($securityTip->status === ArticleStatus::Rejected) {
+            return [
+                [
+                    'value' => ArticleStatus::Rejected->value,
+                    'label' => ArticleStatus::Rejected->label(),
+                ],
+                ...ArticleStatus::authorOptions(),
+            ];
+        }
+
+        return ArticleStatus::authorOptions();
+    }
+
+    private function resolveStatusForUpdate(SecurityTip $securityTip, ArticleStatus $requested, bool $isAdmin): ArticleStatus
+    {
+        if ($isAdmin) {
+            return $requested;
+        }
+
+        if (in_array($requested, [ArticleStatus::Published, ArticleStatus::Rejected], true)) {
+            throw ValidationException::withMessages([
+                'status' => 'Vous ne pouvez pas valider ou refuser un conseil.',
+            ]);
+        }
+
+        if ($securityTip->status === ArticleStatus::Published) {
+            return ArticleStatus::Published;
+        }
+
+        if ($securityTip->status === ArticleStatus::Rejected && $requested === ArticleStatus::Draft) {
+            return ArticleStatus::Draft;
+        }
+
+        if (in_array($requested, [ArticleStatus::Draft, ArticleStatus::PendingApproval], true)) {
+            return $requested;
+        }
+
+        return $securityTip->status;
     }
 
     private function ensureFeaturedLimit(bool $featured, ?SecurityTip $except = null, ?ArticleStatus $status = null): void

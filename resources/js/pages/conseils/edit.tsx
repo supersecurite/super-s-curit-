@@ -3,16 +3,20 @@ import SecurityTipForm, {
     type SecurityTipFormData,
     type StatusOption,
 } from '@/components/conseils/security-tip-form';
+import ContentShareLinks from '@/components/content-share-links';
 import { edit, index, update } from '@/routes/conseils';
 
 type PageProps = {
     securityTip: SecurityTipFormData & { id: number };
     statusOptions: StatusOption[];
+    canApprove: boolean;
+    publicUrl: string | null;
     errors: Record<string, string>;
 };
 
 export default function ConseilsEdit() {
-    const { securityTip, statusOptions, errors } = usePage<PageProps>().props;
+    const { securityTip, statusOptions, canApprove, publicUrl, errors } =
+        usePage<PageProps>().props;
 
     return (
         <>
@@ -28,10 +32,20 @@ export default function ConseilsEdit() {
                     </p>
                 </div>
 
+                {publicUrl ? (
+                    <ContentShareLinks
+                        title={securityTip.title}
+                        url={publicUrl}
+                        description={securityTip.excerpt}
+                        variant="app"
+                    />
+                ) : null}
+
                 <SecurityTipForm
                     securityTip={securityTip}
                     statusOptions={statusOptions}
-                    submitUrl={update.url(securityTip.id)}
+                    canApprove={canApprove}
+                    submitUrl={update.url(securityTip.slug)}
                     method="put"
                     submitLabel="Enregistrer"
                     cancelHref={index.url()}
@@ -45,6 +59,6 @@ export default function ConseilsEdit() {
 ConseilsEdit.layout = {
     breadcrumbs: [
         { title: 'Conseils', href: index.url() },
-        { title: 'Modifier', href: edit.url(0) },
+        { title: 'Modifier', href: "#" },
     ],
 };

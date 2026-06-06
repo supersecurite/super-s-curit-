@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Spinner, type SpinnerProps } from '@/components/ui/spinner';
@@ -119,38 +118,6 @@ function renderSpinner(
 
 /**
  * Composant de loader plein écran réutilisable
- *
- * @example
- * ```tsx
- * // Avec le spinner par défaut (Loader2)
- * <FullscreenLoader
- *   isLoading={isSubmitting}
- *   message="Création de votre compte en cours..."
- *   subtitle="Veuillez patienter quelques instants"
- * />
- *
- * // Avec une variante de Spinner
- * <FullscreenLoader
- *   isLoading={isSubmitting}
- *   spinnerType="ring"
- *   spinnerSize={80}
- *   message="Chargement..."
- * />
- *
- * // Avec LumaSpin
- * <FullscreenLoader
- *   isLoading={isSubmitting}
- *   spinnerType="luma-spin"
- *   message="Traitement en cours..."
- * />
- *
- * // Avec SnowBall
- * <FullscreenLoader
- *   isLoading={isSubmitting}
- *   spinnerType="snow-ball"
- *   message="Chargement..."
- * />
- * ```
  */
 export function FullscreenLoader({
     isLoading,
@@ -162,27 +129,37 @@ export function FullscreenLoader({
     overlayClassName,
     zIndex = 10000,
 }: FullscreenLoaderProps) {
-    if (!isLoading) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
         return null;
     }
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+        <div
+            role="status"
+            aria-live="polite"
+            aria-busy={isLoading}
+            aria-hidden={!isLoading}
             className={cn(
-                'fixed inset-0 flex items-center justify-center backdrop-blur-sm',
+                'fixed inset-0 flex items-center justify-center backdrop-blur-sm transition-opacity duration-200',
                 overlayClassName || 'bg-[color:var(--primary-500)]/5',
-                className
+                isLoading
+                    ? 'pointer-events-auto opacity-100'
+                    : 'pointer-events-none opacity-0',
+                className,
             )}
-            style={{ zIndex }}
+            style={{ zIndex: isLoading ? zIndex : -1 }}
         >
-            <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                className="flex flex-col items-center gap-4"
+            <div
+                className={cn(
+                    'flex flex-col items-center gap-4 transition-opacity duration-200',
+                    isLoading ? 'opacity-100' : 'opacity-0',
+                )}
             >
                 {renderSpinner(spinnerType, spinnerSize)}
                 {message && (
@@ -195,8 +172,7 @@ export function FullscreenLoader({
                         {subtitle}
                     </p>
                 )}
-            </motion.div>
-        </motion.div>
+            </div>
+        </div>
     );
 }
-

@@ -23,18 +23,41 @@ class UpdateSecurityTipRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        /** @var SecurityTip $securityTip */
+        $securityTip = $this->route('conseil');
+        $user = $this->user();
+
+        $allowedStatuses = ArticleStatus::authorEditableValues();
+
+        if ($user !== null && ! $user->isAdmin()) {
+            if ($securityTip->status === ArticleStatus::Published) {
+                $allowedStatuses[] = ArticleStatus::Published->value;
+            }
+
+            if ($securityTip->status === ArticleStatus::Rejected) {
+                $allowedStatuses[] = ArticleStatus::Rejected->value;
+            }
+        } else {
+            $allowedStatuses = ArticleStatus::values();
+        }
+
+        $rules = [
             'title' => ['required', 'string', 'max:255'],
-            'status' => ['required', Rule::enum(ArticleStatus::class)],
+            'status' => ['required', Rule::in($allowedStatuses)],
             'excerpt' => ['nullable', 'string', 'max:1000'],
             'content' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:2048'],
             'category' => ['nullable', 'string', 'max:255'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],
-            'featured' => ['nullable', 'boolean'],
-            'published_at' => ['nullable', 'date'],
         ];
+
+        if ($user !== null && $user->isAdmin()) {
+            $rules['featured'] = ['nullable', 'boolean'];
+            $rules['published_at'] = ['nullable', 'date'];
+        }
+
+        return $rules;
     }
 
     /**
@@ -45,6 +68,7 @@ class UpdateSecurityTipRequest extends FormRequest
         return [
             'title.required' => 'Le titre est obligatoire.',
             'status.required' => 'Le statut est obligatoire.',
+            'status.in' => 'Ce statut n\'est pas autorisé.',
             'image.image' => 'Le fichier doit être une image.',
             'image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
         ];

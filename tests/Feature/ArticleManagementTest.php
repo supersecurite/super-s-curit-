@@ -18,7 +18,214 @@ test('regular users cannot access article management', function () {
 
     $this->actingAs($user)
         ->get(route('articles.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('articles/index')
+            ->where('canApprove', false)
+            ->where('pendingCount', 0)
+        );
+});
+
+test('regular users see all articles but only manage their own', function () {
+    $user = User::factory()->create();
+    $other = User::factory()->create();
+    Article::factory()->create(['created_by_id' => $other->id, 'title' => 'Article tiers']);
+    Article::factory()->pendingApproval()->create([
+        'created_by_id' => $user->id,
+        'title' => 'Mon article',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->get(route('articles.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('articles/index')
+            ->has('articles.data', 2)
+        );
+
+    $articles = collect($response->original->getData()['page']['props']['articles']['data']);
+
+    expect($articles->firstWhere('title', 'Mon article')['can_update'])->toBeTrue()
+        ->and($articles->firstWhere('title', 'Mon article')['can_delete'])->toBeTrue()
+        ->and($articles->firstWhere('title', 'Mon article')['is_own'])->toBeTrue()
+        ->and($articles->firstWhere('title', 'Article tiers')['can_update'])->toBeFalse()
+        ->and($articles->firstWhere('title', 'Article tiers')['can_delete'])->toBeFalse()
+        ->and($articles->firstWhere('title', 'Article tiers')['is_own'])->toBeFalse();
+});
+
+test('regular users can create articles pending approval', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('articles.store'), [
+            'title' => 'Actualité utilisateur',
+            'excerpt' => 'Résumé',
+            'content' => json_encode([
+                'root' => [
+                    'type' => 'root',
+                    'children' => [
+                        [
+                            'type' => 'paragraph',
+                            'children' => [
+                                ['type' => 'text', 'text' => 'Contenu'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+            'featured' => true,
+            'published_at' => now()->toDateString(),
+        ])
+        ->assertRedirect(route('articles.index'));
+
+    $article = Article::query()->where('title', 'Actualité utilisateur')->first();
+
+    expect($article)->not->toBeNull()
+        ->and($article->status)->toBe(ArticleStatus::PendingApproval)
+        ->and($article->created_by_id)->toBe($user->id)
+        ->and($article->featured)->toBeFalse()
+        ->and($article->approved_by_id)->toBeNull();
+});
+
+test('regular users cannot edit another users article', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->pendingApproval()->create([
+        'created_by_id' => User::factory()->create()->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('articles.edit', $article))
         ->assertForbidden();
+});
+
+test('authenticated users can view article details by slug', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->pendingApproval()->create([
+        'title' => 'Article détail',
+        'created_by_id' => User::factory()->create()->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('articles.show', $article->slug))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('articles/show')
+            ->where('article.title', 'Article détail')
+            ->where('article.slug', $article->slug)
+            ->where('article.can_update', false)
+            ->where('publicUrl', null)
+        );
+});
+
+test('published articles expose public preview url on detail page', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->published()->create();
+
+    $this->actingAs($user)
+        ->get(route('articles.show', $article->slug))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('publicUrl', route('actualites.show', $article))
+        );
+});
+
+test('published articles expose public url on edit page', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->published()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('articles.edit', $article->slug))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('articles/edit')
+            ->where('publicUrl', route('actualites.show', $article))
+        );
+});
+
+test('draft articles do not expose public url on edit page', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->pendingApproval()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('articles.edit', $article->slug))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('publicUrl', null)
+        );
+});
+
+test('guests cannot view back-office article details', function () {
+    $article = Article::factory()->create();
+
+    $this->get(route('articles.show', $article->slug))
+        ->assertRedirect(route('login'));
+});
+
+test('regular users cannot publish articles by forging status', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->pendingApproval()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->put(route('articles.update', $article), [
+            'title' => $article->title,
+            'status' => ArticleStatus::Published->value,
+            'content' => $article->content,
+        ])
+        ->assertSessionHasErrors('status');
+
+    $article->refresh();
+
+    expect($article->status)->toBe(ArticleStatus::PendingApproval);
+});
+
+test('regular users can resubmit rejected articles for approval', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->rejected()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->put(route('articles.update', $article), [
+            'title' => 'Article corrigé',
+            'status' => ArticleStatus::PendingApproval->value,
+            'content' => $article->content,
+        ])
+        ->assertRedirect(route('articles.index'));
+
+    $article->refresh();
+
+    expect($article->status)->toBe(ArticleStatus::PendingApproval)
+        ->and($article->title)->toBe('Article corrigé')
+        ->and($article->submitted_at)->not->toBeNull();
+});
+
+test('regular users cannot delete published articles', function () {
+    $user = User::factory()->create();
+    $article = Article::factory()->published()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->delete(route('articles.destroy', $article))
+        ->assertForbidden();
+});
+
+test('regular users cannot access pending approval tab', function () {
+    $user = User::factory()->create();
+    Article::factory()->pendingApproval()->create(['created_by_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->get(route('articles.index', ['tab' => 'pending']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('tab', 'all')
+        );
 });
 
 test('admins can list articles', function () {
@@ -32,6 +239,7 @@ test('admins can list articles', function () {
             ->component('articles/index')
             ->has('articles.data', 2)
             ->has('statuses', 4)
+            ->where('canApprove', true)
             ->where('tab', 'all')
             ->where('pendingCount', 0)
         );

@@ -3,16 +3,20 @@ import ArticleForm, {
     type ArticleFormData,
     type StatusOption,
 } from '@/components/articles/article-form';
+import ContentShareLinks from '@/components/content-share-links';
 import { edit, index, update } from '@/routes/articles';
 
 type PageProps = {
-    article: ArticleFormData & { id: number };
+    article: ArticleFormData;
     statusOptions: StatusOption[];
+    canApprove: boolean;
+    publicUrl: string | null;
     errors: Record<string, string>;
 };
 
 export default function ArticlesEdit() {
-    const { article, statusOptions, errors } = usePage<PageProps>().props;
+    const { article, statusOptions, canApprove, publicUrl, errors } =
+        usePage<PageProps>().props;
 
     return (
         <>
@@ -28,10 +32,20 @@ export default function ArticlesEdit() {
                     </p>
                 </div>
 
+                {publicUrl ? (
+                    <ContentShareLinks
+                        title={article.title}
+                        url={publicUrl}
+                        description={article.excerpt}
+                        variant="app"
+                    />
+                ) : null}
+
                 <ArticleForm
                     article={article}
                     statusOptions={statusOptions}
-                    submitUrl={update.url(article.id)}
+                    canApprove={canApprove}
+                    submitUrl={update.url(article.slug)}
                     method="put"
                     submitLabel="Enregistrer"
                     cancelHref={index.url()}
@@ -45,6 +59,6 @@ export default function ArticlesEdit() {
 ArticlesEdit.layout = {
     breadcrumbs: [
         { title: 'Actualités', href: index.url() },
-        { title: 'Modifier', href: edit.url(0) },
+        { title: 'Modifier', href: "#" },
     ],
 };

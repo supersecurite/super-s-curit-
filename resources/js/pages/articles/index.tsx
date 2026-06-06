@@ -14,11 +14,13 @@ import {
     User,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import ContentShareButton from '@/components/content-share-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { cn } from '@/lib/utils';
-import { create, destroy, edit, index } from '@/routes/articles';
+import { create, destroy, edit, index, show } from '@/routes/articles';
+import { show as actualitesShow } from '@/routes/actualites';
 
 type UserRef = { id: number; name: string } | null;
 
@@ -34,6 +36,9 @@ type ArticleRow = {
     read_time: number;
     status: string;
     status_label: string;
+    can_update: boolean;
+    can_delete: boolean;
+    is_own: boolean;
     created_by: UserRef;
     approved_by: UserRef;
     rejected_by: UserRef;
@@ -64,6 +69,7 @@ type PageProps = {
         tab?: ArticleTab;
     };
     tab: ArticleTab;
+    canApprove: boolean;
     pendingCount: number;
     categories: string[];
     statuses: StatusOption[];
@@ -90,7 +96,7 @@ function statusBadgeVariant(
 }
 
 export default function ArticlesIndex() {
-    const { articles, filters, tab, pendingCount, categories, statuses } =
+    const { articles, filters, tab, canApprove, pendingCount, categories, statuses } =
         usePage<PageProps>().props;
 
     const applyFilters = (updates: Record<string, string | undefined>) => {
@@ -127,7 +133,7 @@ export default function ArticlesIndex() {
             return;
         }
 
-        router.delete(destroy.url(article.id));
+        router.delete(destroy.url(article.slug));
     };
 
     return (
@@ -140,14 +146,16 @@ export default function ArticlesIndex() {
                         <h1 className="font-heading flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <Newspaper className="size-6" aria-hidden />
                             Actualités
-                            {pendingCount > 0 ? (
+                            {canApprove && pendingCount > 0 ? (
                                 <Badge variant="destructive" className="text-xs">
                                     {pendingCount} en attente
                                 </Badge>
                             ) : null}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Gérez, validez et publiez les articles du site.
+                            {canApprove
+                                ? 'Gérez, validez et publiez les articles du site.'
+                                : 'Consultez toutes les actualités et gérez vos propres articles.'}
                         </p>
                     </div>
                     <Button asChild>
@@ -158,36 +166,38 @@ export default function ArticlesIndex() {
                     </Button>
                 </div>
 
-                <div className="inline-flex w-fit gap-1 rounded-lg bg-muted p-1">
-                    {tabs.map(({ value, label, icon: Icon }) => (
-                        <button
-                            key={value}
-                            type="button"
-                            onClick={() => switchTab(value)}
-                            className={cn(
-                                'flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors',
-                                tab === value
-                                    ? 'bg-background text-foreground shadow-sm'
-                                    : 'text-muted-foreground hover:bg-background/60 hover:text-foreground',
-                            )}
-                        >
-                            <Icon className="size-4" aria-hidden />
-                            {label}
-                            {value === 'pending' && pendingCount > 0 ? (
-                                <Badge
-                                    variant={
-                                        tab === 'pending'
-                                            ? 'destructive'
-                                            : 'secondary'
-                                    }
-                                    className="size-5 justify-center rounded-full px-0 text-[10px]"
-                                >
-                                    {pendingCount > 9 ? '9+' : pendingCount}
-                                </Badge>
-                            ) : null}
-                        </button>
-                    ))}
-                </div>
+                {canApprove ? (
+                    <div className="inline-flex w-fit gap-1 rounded-lg bg-muted p-1">
+                        {tabs.map(({ value, label, icon: Icon }) => (
+                            <button
+                                key={value}
+                                type="button"
+                                onClick={() => switchTab(value)}
+                                className={cn(
+                                    'flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors',
+                                    tab === value
+                                        ? 'bg-background text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:bg-background/60 hover:text-foreground',
+                                )}
+                            >
+                                <Icon className="size-4" aria-hidden />
+                                {label}
+                                {value === 'pending' && pendingCount > 0 ? (
+                                    <Badge
+                                        variant={
+                                            tab === 'pending'
+                                                ? 'destructive'
+                                                : 'secondary'
+                                        }
+                                        className="size-5 justify-center rounded-full px-0 text-[10px]"
+                                    >
+                                        {pendingCount > 9 ? '9+' : pendingCount}
+                                    </Badge>
+                                ) : null}
+                            </button>
+                        ))}
+                    </div>
+                ) : null}
 
                 <div
                     className={cn(
@@ -236,7 +246,19 @@ export default function ArticlesIndex() {
                     ) : null}
                 </div>
 
-                {tab === 'pending' && pendingCount === 0 ? (
+                <div className="text-muted-foreground flex flex-wrap items-center gap-3 text-xs">
+                    <span className="font-medium text-foreground">Légende :</span>
+                    <span className="inline-flex items-center gap-2 rounded-md border border-super-securite-accent/30 bg-super-securite-accent/5 px-2.5 py-1">
+                        <span className="size-2 rounded-full bg-super-securite-accent" />
+                        Mes articles
+                    </span>
+                    <span className="inline-flex items-center gap-2 rounded-md border border-dashed border-slate-300/90 bg-slate-50/70 px-2.5 py-1">
+                        <span className="size-2 rounded-full bg-slate-400" />
+                        Articles des autres auteurs
+                    </span>
+                </div>
+
+                {tab === 'pending' && canApprove && pendingCount === 0 ? (
                     <div className="app-panel p-8 text-center">
                         <CheckCircle2 className="text-muted-foreground mx-auto size-10" />
                         <p className="mt-3 font-medium">
@@ -251,8 +273,58 @@ export default function ArticlesIndex() {
                         {articles.data.map((article) => (
                             <article
                                 key={article.id}
-                                className="app-panel overflow-hidden"
+                                className={cn(
+                                    'app-panel overflow-hidden',
+                                    article.is_own
+                                        ? 'article-card-own'
+                                        : 'article-card-other',
+                                )}
                             >
+                                <div
+                                    className={cn(
+                                        'flex items-center gap-2 px-5 py-2.5',
+                                        article.is_own
+                                            ? 'article-card-author-own'
+                                            : 'article-card-author-other',
+                                    )}
+                                >
+                                    <User
+                                        className={cn(
+                                            'size-4 shrink-0',
+                                            article.is_own
+                                                ? 'text-super-securite-accent'
+                                                : 'text-slate-500',
+                                        )}
+                                        aria-hidden
+                                    />
+                                    <div className="min-w-0 flex-1">
+                                        <p className="truncate text-sm font-semibold text-foreground">
+                                            {article.created_by?.name ??
+                                                'Auteur inconnu'}
+                                        </p>
+                                        {article.created_at_formatted ? (
+                                            <p className="text-muted-foreground truncate text-[11px]">
+                                                Créé le{' '}
+                                                {article.created_at_formatted}
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                    <Badge
+                                        variant={
+                                            article.is_own ? 'default' : 'outline'
+                                        }
+                                        className={cn(
+                                            'shrink-0 text-[10px]',
+                                            article.is_own &&
+                                                'bg-super-securite-accent hover:bg-super-securite-accent',
+                                        )}
+                                    >
+                                        {article.is_own
+                                            ? 'Mon article'
+                                            : 'Autre auteur'}
+                                    </Badge>
+                                </div>
+
                                 {article.image_url ? (
                                     <img
                                         src={article.image_url}
@@ -288,7 +360,12 @@ export default function ArticlesIndex() {
                                     </div>
 
                                     <h2 className="font-heading line-clamp-2 text-lg font-semibold">
-                                        {article.title}
+                                        <Link
+                                            href={show.url(article.slug)}
+                                            className="hover:text-super-securite-accent transition-colors"
+                                        >
+                                            {article.title}
+                                        </Link>
                                     </h2>
 
                                     {article.excerpt ? (
@@ -298,16 +375,6 @@ export default function ArticlesIndex() {
                                     ) : null}
 
                                     <div className="text-muted-foreground space-y-1.5 text-xs">
-                                        {article.created_by ? (
-                                            <p className="flex items-center gap-1">
-                                                <User className="size-3.5" />
-                                                Créé par{' '}
-                                                {article.created_by.name}
-                                                {article.created_at_formatted
-                                                    ? ` — ${article.created_at_formatted}`
-                                                    : ''}
-                                            </p>
-                                        ) : null}
                                         {article.submitted_at_formatted ? (
                                             <p className="flex items-center gap-1 text-amber-700">
                                                 <Clock className="size-3.5" />
@@ -353,24 +420,52 @@ export default function ArticlesIndex() {
                                     </div>
 
                                     <div className="flex justify-end gap-2 border-t pt-3">
+                                        <ContentShareButton
+                                            title={article.title}
+                                            url={
+                                                article.status === 'published'
+                                                    ? actualitesShow.url(
+                                                          article.slug,
+                                                      )
+                                                    : show.url(article.slug)
+                                            }
+                                            description={article.excerpt}
+                                            variant="app"
+                                        />
                                         <Button
                                             variant="ghost"
                                             size="icon"
                                             asChild
                                         >
-                                            <Link href={edit.url(article.id)}>
-                                                <Edit2 className="size-4" />
+                                            <Link
+                                                href={show.url(article.slug)}
+                                                title="Voir l'article"
+                                            >
+                                                <Eye className="size-4" />
                                             </Link>
                                         </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() =>
-                                                handleDelete(article)
-                                            }
-                                        >
-                                            <Trash2 className="size-4 text-destructive" />
-                                        </Button>
+                                        {article.can_update ? (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                asChild
+                                            >
+                                                <Link href={edit.url(article.slug)}>
+                                                    <Edit2 className="size-4" />
+                                                </Link>
+                                            </Button>
+                                        ) : null}
+                                        {article.can_delete ? (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() =>
+                                                    handleDelete(article)
+                                                }
+                                            >
+                                                <Trash2 className="size-4 text-destructive" />
+                                            </Button>
+                                        ) : null}
                                     </div>
                                 </div>
                             </article>

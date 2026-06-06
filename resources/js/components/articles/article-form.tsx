@@ -15,6 +15,7 @@ export type StatusOption = {
 
 export type ArticleFormData = {
     id?: number;
+    slug: string;
     title: string;
     excerpt: string;
     content: string;
@@ -29,6 +30,7 @@ export type ArticleFormData = {
 type ArticleFormProps = {
     article?: ArticleFormData;
     statusOptions?: StatusOption[];
+    canApprove?: boolean;
     submitUrl: string;
     method?: 'post' | 'put';
     submitLabel: string;
@@ -39,6 +41,7 @@ type ArticleFormProps = {
 export default function ArticleForm({
     article,
     statusOptions = [],
+    canApprove = false,
     submitUrl,
     method = 'post',
     submitLabel,
@@ -46,6 +49,7 @@ export default function ArticleForm({
     errors = {},
 }: ArticleFormProps) {
     const isEditing = method === 'put';
+    const showStatusField = isEditing && statusOptions.length > 0;
     const [formData, setFormData] = useState({
         title: article?.title ?? '',
         excerpt: article?.excerpt ?? '',
@@ -94,14 +98,16 @@ export default function ArticleForm({
         }
 
         payload.append('title', formData.title);
-        if (isEditing) {
+        if (showStatusField) {
             payload.append('status', formData.status);
         }
         payload.append('excerpt', formData.excerpt);
         payload.append('content', formData.content);
         payload.append('category', formData.category);
-        payload.append('featured', formData.featured ? '1' : '0');
-        payload.append('published_at', formData.published_at);
+        if (canApprove) {
+            payload.append('featured', formData.featured ? '1' : '0');
+            payload.append('published_at', formData.published_at);
+        }
 
         formData.tags
             .split(',')
@@ -167,7 +173,7 @@ export default function ArticleForm({
                 </div>
 
                 <div className="space-y-6">
-                    {isEditing ? (
+                    {showStatusField ? (
                         <div className="app-panel space-y-4 p-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="status">Statut</Label>
@@ -177,7 +183,11 @@ export default function ArticleForm({
                                     onChange={(e) =>
                                         updateField('status', e.target.value)
                                     }
-                                    className="border-input bg-background h-9 w-full rounded-md border px-3 text-sm"
+                                    disabled={
+                                        !canApprove &&
+                                        formData.status === 'published'
+                                    }
+                                    className="border-input bg-background h-9 w-full rounded-md border px-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
                                 >
                                     {statusOptions.map((option) => (
                                         <option
@@ -189,8 +199,13 @@ export default function ArticleForm({
                                     ))}
                                 </select>
                                 <p className="text-muted-foreground text-xs">
-                                    Modifiez le statut pour valider, refuser ou
-                                    republier l&apos;article.
+                                    {canApprove
+                                        ? 'Modifiez le statut pour valider, refuser ou republier l\'article.'
+                                        : formData.status === 'published'
+                                          ? 'Article publié : seul un administrateur peut modifier le statut.'
+                                          : formData.status === 'rejected'
+                                            ? 'Repassez en brouillon ou soumettez à nouveau pour validation.'
+                                            : 'Enregistrez en brouillon ou soumettez pour validation.'}
                                 </p>
                                 <InputError message={errors.status} />
                             </div>
@@ -202,7 +217,7 @@ export default function ArticleForm({
                             </p>
                             <p className="text-muted-foreground text-xs">
                                 L&apos;article sera enregistré en attente de
-                                validation par un autre administrateur.
+                                validation par un administrateur.
                             </p>
                         </div>
                     )}
@@ -267,37 +282,50 @@ export default function ArticleForm({
                         </div>
                     </div>
 
-                    <div className="app-panel space-y-4 p-6">
-                        <div className="flex items-center gap-2">
-                            <Checkbox
-                                id="featured"
-                                checked={formData.featured}
-                                onCheckedChange={(checked) =>
-                                    updateField('featured', checked === true)
-                                }
-                                disabled={!isEditing || formData.status !== 'published'}
-                            />
-                            <Label htmlFor="featured">Mettre à la une</Label>
+                    {canApprove ? (
+                        <div className="app-panel space-y-4 p-6">
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="featured"
+                                    checked={formData.featured}
+                                    onCheckedChange={(checked) =>
+                                        updateField(
+                                            'featured',
+                                            checked === true,
+                                        )
+                                    }
+                                    disabled={
+                                        !isEditing ||
+                                        formData.status !== 'published'
+                                    }
+                                />
+                                <Label htmlFor="featured">Mettre à la une</Label>
+                            </div>
+                            <InputError message={errors.featured} />
                         </div>
-                        <InputError message={errors.featured} />
-                    </div>
+                    ) : null}
 
-                    <div className="app-panel space-y-4 p-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="published_at">
-                                Date de publication
-                            </Label>
-                            <Input
-                                id="published_at"
-                                type="date"
-                                value={formData.published_at}
-                                onChange={(e) =>
-                                    updateField('published_at', e.target.value)
-                                }
-                            />
-                            <InputError message={errors.published_at} />
+                    {canApprove ? (
+                        <div className="app-panel space-y-4 p-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="published_at">
+                                    Date de publication
+                                </Label>
+                                <Input
+                                    id="published_at"
+                                    type="date"
+                                    value={formData.published_at}
+                                    onChange={(e) =>
+                                        updateField(
+                                            'published_at',
+                                            e.target.value,
+                                        )
+                                    }
+                                />
+                                <InputError message={errors.published_at} />
+                            </div>
                         </div>
-                    </div>
+                    ) : null}
                 </div>
             </div>
 

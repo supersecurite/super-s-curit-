@@ -13,12 +13,193 @@ test('guests cannot access security tip management', function () {
     $this->get(route('conseils.index'))->assertRedirect(route('login'));
 });
 
-test('regular users cannot access security tip management', function () {
+test('regular users can access security tip management', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
         ->get(route('conseils.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('conseils/index')
+            ->where('canApprove', false)
+            ->where('pendingCount', 0)
+        );
+});
+
+test('regular users see all security tips but only manage their own', function () {
+    $user = User::factory()->create();
+    $other = User::factory()->create();
+    SecurityTip::factory()->create([
+        'created_by_id' => $other->id,
+        'title' => 'Conseil tiers',
+    ]);
+    SecurityTip::factory()->pendingApproval()->create([
+        'created_by_id' => $user->id,
+        'title' => 'Mon conseil',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->get(route('conseils.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('conseils/index')
+            ->has('securityTips.data', 2)
+        );
+
+    $securityTips = collect($response->original->getData()['page']['props']['securityTips']['data']);
+
+    expect($securityTips->firstWhere('title', 'Mon conseil')['can_update'])->toBeTrue()
+        ->and($securityTips->firstWhere('title', 'Mon conseil')['can_delete'])->toBeTrue()
+        ->and($securityTips->firstWhere('title', 'Mon conseil')['is_own'])->toBeTrue()
+        ->and($securityTips->firstWhere('title', 'Conseil tiers')['can_update'])->toBeFalse()
+        ->and($securityTips->firstWhere('title', 'Conseil tiers')['can_delete'])->toBeFalse()
+        ->and($securityTips->firstWhere('title', 'Conseil tiers')['is_own'])->toBeFalse();
+});
+
+test('regular users can create security tips pending approval', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('conseils.store'), [
+            'title' => 'Conseil utilisateur',
+            'excerpt' => 'Résumé',
+            'content' => json_encode([
+                'root' => [
+                    'type' => 'root',
+                    'children' => [
+                        [
+                            'type' => 'paragraph',
+                            'children' => [
+                                ['type' => 'text', 'text' => 'Contenu'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+            'featured' => true,
+            'published_at' => now()->toDateString(),
+        ])
+        ->assertRedirect(route('conseils.index'));
+
+    $securityTip = SecurityTip::query()->where('title', 'Conseil utilisateur')->first();
+
+    expect($securityTip)->not->toBeNull()
+        ->and($securityTip->status)->toBe(ArticleStatus::PendingApproval)
+        ->and($securityTip->created_by_id)->toBe($user->id)
+        ->and($securityTip->featured)->toBeFalse()
+        ->and($securityTip->approved_by_id)->toBeNull();
+});
+
+test('regular users cannot edit another users security tip', function () {
+    $user = User::factory()->create();
+    $securityTip = SecurityTip::factory()->pendingApproval()->create([
+        'created_by_id' => User::factory()->create()->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('conseils.edit', $securityTip->slug))
         ->assertForbidden();
+});
+
+test('authenticated users can view security tip details by slug', function () {
+    $user = User::factory()->create();
+    $securityTip = SecurityTip::factory()->pendingApproval()->create([
+        'title' => 'Conseil détail',
+        'created_by_id' => User::factory()->create()->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('conseils.show', $securityTip->slug))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('conseils/show')
+            ->where('securityTip.title', 'Conseil détail')
+            ->where('securityTip.slug', $securityTip->slug)
+            ->where('securityTip.can_update', false)
+            ->where('publicUrl', null)
+        );
+});
+
+test('published security tips expose public preview url on detail page', function () {
+    $user = User::factory()->create();
+    $securityTip = SecurityTip::factory()->published()->create();
+
+    $this->actingAs($user)
+        ->get(route('conseils.show', $securityTip->slug))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('publicUrl', route('conseils-securite.show', $securityTip))
+        );
+});
+
+test('guests cannot view back-office security tip details', function () {
+    $securityTip = SecurityTip::factory()->create();
+
+    $this->get(route('conseils.show', $securityTip->slug))
+        ->assertRedirect(route('login'));
+});
+
+test('regular users cannot publish security tips by forging status', function () {
+    $user = User::factory()->create();
+    $securityTip = SecurityTip::factory()->pendingApproval()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->put(route('conseils.update', $securityTip), [
+            'title' => $securityTip->title,
+            'status' => ArticleStatus::Published->value,
+            'content' => $securityTip->content,
+        ])
+        ->assertSessionHasErrors('status');
+
+    $securityTip->refresh();
+
+    expect($securityTip->status)->toBe(ArticleStatus::PendingApproval);
+});
+
+test('regular users can resubmit rejected security tips for approval', function () {
+    $user = User::factory()->create();
+    $securityTip = SecurityTip::factory()->rejected()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->put(route('conseils.update', $securityTip), [
+            'title' => 'Conseil corrigé',
+            'status' => ArticleStatus::PendingApproval->value,
+            'content' => $securityTip->content,
+        ])
+        ->assertRedirect(route('conseils.index'));
+
+    $securityTip->refresh();
+
+    expect($securityTip->status)->toBe(ArticleStatus::PendingApproval)
+        ->and($securityTip->title)->toBe('Conseil corrigé')
+        ->and($securityTip->submitted_at)->not->toBeNull();
+});
+
+test('regular users cannot delete published security tips', function () {
+    $user = User::factory()->create();
+    $securityTip = SecurityTip::factory()->published()->create([
+        'created_by_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)
+        ->delete(route('conseils.destroy', $securityTip))
+        ->assertForbidden();
+});
+
+test('regular users cannot access pending approval tab', function () {
+    $user = User::factory()->create();
+    SecurityTip::factory()->pendingApproval()->create(['created_by_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->get(route('conseils.index', ['tab' => 'pending']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('tab', 'all')
+        );
 });
 
 test('admins can list security tips', function () {
@@ -32,6 +213,7 @@ test('admins can list security tips', function () {
             ->component('conseils/index')
             ->has('securityTips.data', 2)
             ->has('statuses', 4)
+            ->where('canApprove', true)
             ->where('tab', 'all')
             ->where('pendingCount', 0)
         );
@@ -221,4 +403,29 @@ test('non published security tips cannot be featured on create', function () {
             'featured' => true,
         ])
         ->assertSessionHasErrors('featured');
+});
+
+test('published security tips expose public url on edit page', function () {
+    $admin = User::factory()->admin()->create();
+    $securityTip = SecurityTip::factory()->published()->create();
+
+    $this->actingAs($admin)
+        ->get(route('conseils.edit', $securityTip))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('conseils/edit')
+            ->where('publicUrl', route('conseils-securite.show', $securityTip))
+        );
+});
+
+test('draft security tips do not expose public url on edit page', function () {
+    $admin = User::factory()->admin()->create();
+    $securityTip = SecurityTip::factory()->pendingApproval()->create();
+
+    $this->actingAs($admin)
+        ->get(route('conseils.edit', $securityTip))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('publicUrl', null)
+        );
 });

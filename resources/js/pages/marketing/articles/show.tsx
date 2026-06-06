@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar, ChevronLeft, Clock, Eye } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
+import ContentShareLinks from '@/components/content-share-links';
 import SeoHead from '@/components/marketing/seo-head';
 import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
 
@@ -97,6 +98,15 @@ export default function MarketingArticleShow() {
                             ) : null}
 
                             <ContentRenderer content={articleContent} />
+
+                            <div className="mt-10">
+                                <ContentShareLinks
+                                    title={article.title}
+                                    url={actualitesShow.url(article.slug)}
+                                    description={article.excerpt}
+                                    variant="marketing"
+                                />
+                            </div>
                         </div>
                     </article>
 

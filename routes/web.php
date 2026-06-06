@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\SecurityAgentApplicationController as AdminSecurityAgentApplicationController;
 use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
 use App\Http\Controllers\AnalyticsController;
-use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Marketing\ArticleController as MarketingArticleController;
 use App\Http\Controllers\Marketing\SecurityAgentApplicationController as MarketingSecurityAgentApplicationController;
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
@@ -60,12 +60,16 @@ Route::post('/analytics/duration', [AnalyticsController::class, 'updateDuration'
 Route::get('/analytics/duration', fn () => redirect()->route('analytics.index'));
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
+
+    Route::resource('articles', AdminArticleController::class)
+        ->parameters(['articles' => 'article:slug']);
+
+    Route::resource('conseils', AdminSecurityTipController::class)
+        ->parameters(['conseils' => 'conseil:slug']);
 
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
-        Route::resource('articles', AdminArticleController::class)->except(['show']);
-        Route::resource('conseils', AdminSecurityTipController::class)->except(['show']);
         Route::resource('candidatures-agents', AdminSecurityAgentApplicationController::class)->only(['index', 'show', 'update']);
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
     });

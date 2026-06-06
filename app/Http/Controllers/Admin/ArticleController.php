@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
+use App\Models\User;
 use App\Support\ArticleStatusTransition;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,8 +24,12 @@ class ArticleController extends Controller
     {
         $this->authorize('viewAny', Article::class);
 
+        /** @var User $user */
+        $user = $request->user();
+        $isAdmin = $user->isAdmin();
+
         $tab = $request->string('tab', 'all')->toString();
-        if (! in_array($tab, ['all', 'pending'], true)) {
+        if (! $isAdmin || ! in_array($tab, ['all', 'pending'], true)) {
             $tab = 'all';
         }
 
@@ -62,12 +67,13 @@ class ArticleController extends Controller
             'articles' => $query
                 ->paginate(15)
                 ->withQueryString()
-                ->through(fn (Article $article) => $this->formatArticle($article)),
+                ->through(fn (Article $article) => $this->formatArticle($article, $user)),
             'filters' => $request->only(['search', 'category', 'status', 'sort_by', 'sort_direction', 'tab']),
             'tab' => $tab,
-            'pendingCount' => Article::query()
-                ->where('status', ArticleStatus::PendingApproval)
-                ->count(),
+            'canApprove' => $isAdmin,
+            'pendingCount' => $isAdmin
+                ? Article::query()->where('status', ArticleStatus::PendingApproval)->count()
+                : 0,
             'categories' => Article::query()
                 ->whereNotNull('category')
                 ->distinct()
@@ -79,18 +85,21 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
         $this->authorize('create', Article::class);
 
-        return Inertia::render('articles/create');
+        return Inertia::render('articles/create', [
+            'canApprove' => $request->user()?->isAdmin() ?? false,
+        ]);
     }
 
     public function store(StoreArticleRequest $request, ArticleStatusTransition $statusTransition): RedirectResponse
     {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
-        $featured = (bool) ($validated['featured'] ?? false);
+        $isAdmin = $request->user()->isAdmin();
+        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
 
         $this->ensureFeaturedLimit($featured, status: $status);
 
@@ -106,6 +115,10 @@ class ArticleController extends Controller
         $validated['tags'] = $validated['tags'] ?? [];
         $validated['created_by_id'] = $request->user()->id;
 
+        if (! $isAdmin) {
+            unset($validated['published_at']);
+        }
+
         $article = new Article($validated);
         $statusTransition->apply($article, $status, $request->user());
         $article->save();
@@ -115,21 +128,51 @@ class ArticleController extends Controller
         return to_route('articles.index');
     }
 
-    public function edit(Article $article): Response
+    public function show(Request $request, Article $article): Response
+    {
+        $this->authorize('view', $article);
+
+        $article->load(['createdBy', 'approvedBy', 'rejectedBy']);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        return Inertia::render('articles/show', [
+            'article' => $this->formatArticle($article, $user, includeContent: true),
+            'canApprove' => $user->isAdmin(),
+            'publicUrl' => $article->isPublished()
+                ? route('actualites.show', $article)
+                : null,
+        ]);
+    }
+
+    public function edit(Request $request, Article $article): Response
     {
         $this->authorize('update', $article);
 
+        $isAdmin = $request->user()->isAdmin();
+
         return Inertia::render('articles/edit', [
-            'article' => $this->formatArticle($article, includeContent: true),
-            'statusOptions' => ArticleStatus::options(),
+            'article' => $this->formatArticle($article, $request->user(), includeContent: true),
+            'statusOptions' => $this->statusOptionsFor($article, $isAdmin),
+            'canApprove' => $isAdmin,
+            'publicUrl' => $article->isPublished()
+                ? route('actualites.show', $article)
+                : null,
         ]);
     }
 
     public function update(UpdateArticleRequest $request, Article $article, ArticleStatusTransition $statusTransition): RedirectResponse
     {
         $validated = $request->validated();
-        $status = ArticleStatus::from($validated['status']);
-        $featured = (bool) ($validated['featured'] ?? false);
+        $user = $request->user();
+        $isAdmin = $user->isAdmin();
+        $status = $this->resolveStatusForUpdate($article, ArticleStatus::from($validated['status']), $isAdmin);
+        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
+
+        if ($article->status !== $status && in_array($status, [ArticleStatus::Published, ArticleStatus::Rejected], true)) {
+            $this->authorize('approve', $article);
+        }
 
         $this->ensureFeaturedLimit($featured, $article, $status);
 
@@ -148,10 +191,14 @@ class ArticleController extends Controller
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
 
+        if (! $isAdmin) {
+            unset($validated['published_at']);
+        }
+
         $article->fill($validated);
 
         if ($article->status !== $status) {
-            $statusTransition->apply($article, $status, $request->user());
+            $statusTransition->apply($article, $status, $user);
         }
 
         $article->save();
@@ -175,9 +222,72 @@ class ArticleController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function formatArticle(Article $article, bool $includeContent = false): array
+    private function formatArticle(Article $article, User $viewer, bool $includeContent = false): array
     {
-        return $article->toAdminArray($includeContent);
+        return [
+            ...$article->toAdminArray($includeContent),
+            'can_update' => $viewer->can('update', $article),
+            'can_delete' => $viewer->can('delete', $article),
+            'is_own' => $article->created_by_id === $viewer->id,
+        ];
+    }
+
+    /**
+     * @return list<array{value: string, label: string}>
+     */
+    private function statusOptionsFor(Article $article, bool $isAdmin): array
+    {
+        if ($isAdmin) {
+            return ArticleStatus::options();
+        }
+
+        if ($article->status === ArticleStatus::Published) {
+            return [
+                [
+                    'value' => ArticleStatus::Published->value,
+                    'label' => ArticleStatus::Published->label(),
+                ],
+            ];
+        }
+
+        if ($article->status === ArticleStatus::Rejected) {
+            return [
+                [
+                    'value' => ArticleStatus::Rejected->value,
+                    'label' => ArticleStatus::Rejected->label(),
+                ],
+                ...ArticleStatus::authorOptions(),
+            ];
+        }
+
+        return ArticleStatus::authorOptions();
+    }
+
+    private function resolveStatusForUpdate(Article $article, ArticleStatus $requested, bool $isAdmin): ArticleStatus
+    {
+        if ($isAdmin) {
+            return $requested;
+        }
+
+        if (in_array($requested, [ArticleStatus::Published, ArticleStatus::Rejected], true)) {
+            throw ValidationException::withMessages([
+                'status' => 'Vous ne pouvez pas valider ou refuser un article.',
+            ]);
+        }
+
+        if ($article->status === ArticleStatus::Published) {
+            return ArticleStatus::Published;
+        }
+
+        if ($article->status === ArticleStatus::Rejected && $requested === ArticleStatus::Draft) {
+            return ArticleStatus::Draft;
+        }
+
+        if (in_array($requested, [ArticleStatus::Draft, ArticleStatus::PendingApproval], true)) {
+            return $requested;
+        }
+
+        return $article->status;
     }
 
     private function ensureFeaturedLimit(bool $featured, ?Article $except = null, ?ArticleStatus $status = null): void

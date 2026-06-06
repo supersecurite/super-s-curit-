@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar, ChevronLeft, Clock, Eye } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
+import ContentShareLinks from '@/components/content-share-links';
 import SeoHead from '@/components/marketing/seo-head';
 import {
     index as conseilsIndex,
@@ -100,6 +101,15 @@ export default function MarketingConseilsSecuriteShow() {
                             ) : null}
 
                             <ContentRenderer content={securityTipContent} />
+
+                            <div className="mt-10">
+                                <ContentShareLinks
+                                    title={securityTip.title}
+                                    url={conseilsShow.url(securityTip.slug)}
+                                    description={securityTip.excerpt}
+                                    variant="marketing"
+                                />
+                            </div>
                         </div>
                     </article>
 

@@ -231,6 +231,22 @@ html.app-page {
         @apply cursor-pointer rounded-xl border border-border bg-card shadow-md shadow-slate-900/5 transition-colors duration-200 hover:border-primary/40 hover:shadow-lg hover:shadow-slate-900/10;
     }
 
+    .article-card-own {
+        @apply border-super-securite-accent/30 bg-card ring-1 ring-super-securite-accent/20;
+    }
+
+    .article-card-other {
+        @apply border-dashed border-slate-300/90 bg-slate-50/70 shadow-sm shadow-slate-900/5;
+    }
+
+    .article-card-author-own {
+        @apply border-b border-super-securite-accent/15 bg-super-securite-accent/5;
+    }
+
+    .article-card-author-other {
+        @apply border-b border-dashed border-slate-300/80 bg-slate-100/80;
+    }
+
     .app-auth-card {
         @apply rounded-2xl border border-border bg-card p-6 shadow-lg shadow-slate-900/5 md:p-8;
     }

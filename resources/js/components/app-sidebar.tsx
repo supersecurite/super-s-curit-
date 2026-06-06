@@ -28,6 +28,16 @@ function buildMainNavItems(isAdmin: boolean): NavItem[] {
             href: dashboard(),
             icon: LayoutGrid,
         },
+        {
+            title: 'Actualités',
+            href: articlesIndex.url(),
+            icon: Newspaper,
+        },
+        {
+            title: 'Conseils',
+            href: conseilsIndex.url(),
+            icon: Shield,
+        },
     ];
 
     if (isAdmin) {
@@ -35,16 +45,6 @@ function buildMainNavItems(isAdmin: boolean): NavItem[] {
             title: 'Analytics',
             href: analyticsIndex.url(),
             icon: BarChart3,
-        });
-        items.push({
-            title: 'Actualités',
-            href: articlesIndex.url(),
-            icon: Newspaper,
-        });
-        items.push({
-            title: 'Conseils',
-            href: conseilsIndex.url(),
-            icon: Shield,
         });
         items.push({
             title: 'Candidatures agents',
@@ -90,10 +90,10 @@ export function AppSidebar() {
     } = usePage<SidebarPageProps>().props;
     const mainNavItems = buildMainNavItems(auth.user?.is_admin ?? false).map(
         (item) => {
-            if (item.title === 'Actualités') {
+            if (item.title === 'Actualités' && (auth.user?.is_admin ?? false)) {
                 return { ...item, badge: articlesPendingCount };
             }
-            if (item.title === 'Conseils') {
+            if (item.title === 'Conseils' && (auth.user?.is_admin ?? false)) {
                 return { ...item, badge: securityTipsPendingCount };
             }
             if (item.title === 'Candidatures agents') {
