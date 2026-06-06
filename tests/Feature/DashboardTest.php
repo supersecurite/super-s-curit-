@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Article;
+use App\Models\SecurityTip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -19,8 +21,18 @@ test('authenticated users can visit the dashboard', function () {
     $response->assertOk();
 });
 
-test('regular users receive a simplified dashboard overview', function () {
+test('regular users receive personal content statistics', function () {
     $user = User::factory()->create();
+    Article::factory()->count(2)->pendingApproval()->create([
+        'created_by_id' => $user->id,
+    ]);
+    Article::factory()->published()->create([
+        'created_by_id' => $user->id,
+        'views' => 42,
+    ]);
+    SecurityTip::factory()->rejected()->create([
+        'created_by_id' => $user->id,
+    ]);
 
     $this->actingAs($user)
         ->get(route('dashboard'))
@@ -28,8 +40,15 @@ test('regular users receive a simplified dashboard overview', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('dashboard')
             ->where('overview.is_admin', false)
-            ->missing('stats')
-            ->missing('trafficChart'));
+            ->where('stats.articles.total', 3)
+            ->where('stats.articles.published', 1)
+            ->where('stats.articles.pending', 2)
+            ->where('stats.tips.rejected', 1)
+            ->has('recentArticles', 3)
+            ->has('recentTips', 1)
+            ->missing('trafficChart')
+            ->missing('recentApplications')
+        );
 });
 
 test('admin users receive dashboard statistics', function () {

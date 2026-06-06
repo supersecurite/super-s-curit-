@@ -18,9 +18,9 @@ import TrafficChart, {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { index as analyticsIndex } from '@/routes/analytics';
-import { index as articlesIndex } from '@/routes/articles';
+import { index as articlesIndex, show as articleShow } from '@/routes/articles';
 import { index as candidaturesIndex, show as candidatureShow } from '@/routes/candidatures-agents';
-import { index as conseilsIndex } from '@/routes/conseils';
+import { index as conseilsIndex, show as conseilShow } from '@/routes/conseils';
 import { dashboard } from '@/routes';
 import { edit as profileEdit } from '@/routes/profile';
 import { index as usersIndex } from '@/routes/users';
@@ -51,6 +51,29 @@ type DashboardStats = {
     users: number;
 };
 
+type UserContentSummary = {
+    total: number;
+    published: number;
+    pending: number;
+    rejected: number;
+    draft: number;
+    views: number;
+};
+
+type UserDashboardStats = {
+    articles: UserContentSummary;
+    tips: UserContentSummary;
+};
+
+type RecentContentItem = {
+    title: string;
+    slug: string;
+    status: string;
+    status_label: string;
+    views: number;
+    created_at_formatted: string | null;
+};
+
 type RecentApplication = {
     uuid: string;
     full_name: string;
@@ -62,9 +85,11 @@ type RecentApplication = {
 
 type DashboardPageProps = {
     overview: Overview;
-    stats?: DashboardStats;
+    stats?: DashboardStats | UserDashboardStats;
     trafficChart?: ChartPoint[];
     recentApplications?: RecentApplication[];
+    recentArticles?: RecentContentItem[];
+    recentTips?: RecentContentItem[];
 };
 
 function ChangeChip({ value }: { value: number | null }) {
@@ -149,6 +174,247 @@ function applicationBadgeVariant(
         return 'destructive';
     }
     return 'outline';
+}
+
+function contentBadgeVariant(
+    status: string,
+): 'default' | 'secondary' | 'outline' | 'destructive' {
+    if (status === 'published') {
+        return 'default';
+    }
+    if (status === 'pending_approval') {
+        return 'secondary';
+    }
+    if (status === 'rejected') {
+        return 'destructive';
+    }
+    return 'outline';
+}
+
+function RecentContentPanel({
+    title,
+    description,
+    items,
+    indexHref,
+    showHref,
+    emptyMessage,
+}: {
+    title: string;
+    description: string;
+    items: RecentContentItem[];
+    indexHref: string;
+    showHref: (slug: string) => string;
+    emptyMessage: string;
+}) {
+    return (
+        <div className="app-panel overflow-hidden">
+            <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
+                <div>
+                    <h2 className="font-heading text-lg font-semibold">
+                        {title}
+                    </h2>
+                    <p className="text-muted-foreground text-sm">
+                        {description}
+                    </p>
+                </div>
+                <Button asChild variant="outline" size="sm">
+                    <Link href={indexHref}>
+                        Voir tout
+                        <ArrowRight className="size-4" />
+                    </Link>
+                </Button>
+            </div>
+
+            {items.length === 0 ? (
+                <p className="text-muted-foreground px-5 py-8 text-sm">
+                    {emptyMessage}
+                </p>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="w-full min-w-[520px] text-sm">
+                        <thead className="bg-muted/40 text-muted-foreground">
+                            <tr>
+                                <th className="px-5 py-3 text-left font-medium">
+                                    Titre
+                                </th>
+                                <th className="px-5 py-3 text-left font-medium">
+                                    Statut
+                                </th>
+                                <th className="px-5 py-3 text-left font-medium">
+                                    Vues
+                                </th>
+                                <th className="px-5 py-3 text-left font-medium">
+                                    Créé le
+                                </th>
+                                <th className="px-5 py-3 text-right font-medium">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.map((item) => (
+                                <tr
+                                    key={item.slug}
+                                    className="border-t border-border hover:bg-muted/30"
+                                >
+                                    <td className="max-w-[220px] truncate px-5 py-3 font-medium">
+                                        {item.title}
+                                    </td>
+                                    <td className="px-5 py-3">
+                                        <Badge
+                                            variant={contentBadgeVariant(
+                                                item.status,
+                                            )}
+                                        >
+                                            {item.status_label}
+                                        </Badge>
+                                    </td>
+                                    <td className="text-muted-foreground px-5 py-3">
+                                        {item.views}
+                                    </td>
+                                    <td className="text-muted-foreground px-5 py-3">
+                                        {item.created_at_formatted ?? '—'}
+                                    </td>
+                                    <td className="px-5 py-3 text-right">
+                                        <Button asChild size="sm" variant="ghost">
+                                            <Link href={showHref(item.slug)}>
+                                                <Eye className="size-4" />
+                                                Voir
+                                            </Link>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function UserDashboard({
+    stats,
+    recentArticles,
+    recentTips,
+}: {
+    stats: UserDashboardStats;
+    recentArticles: RecentContentItem[];
+    recentTips: RecentContentItem[];
+}) {
+    const pendingTotal =
+        stats.articles.pending +
+        stats.tips.pending +
+        stats.articles.rejected +
+        stats.tips.rejected;
+
+    return (
+        <div className="flex flex-col gap-6">
+            {pendingTotal > 0 ? (
+                <div className="app-panel flex flex-col gap-3 border-super-securite-accent/30 bg-super-securite-accent/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p className="font-heading text-sm font-semibold text-super-securite-heading">
+                            Vos contenus à suivre
+                        </p>
+                        <p className="text-muted-foreground mt-1 text-sm">
+                            {stats.articles.pending + stats.tips.pending > 0
+                                ? `${stats.articles.pending + stats.tips.pending} en attente de validation`
+                                : null}
+                            {stats.articles.pending + stats.tips.pending > 0 &&
+                            stats.articles.rejected + stats.tips.rejected > 0
+                                ? ' · '
+                                : null}
+                            {stats.articles.rejected + stats.tips.rejected > 0
+                                ? `${stats.articles.rejected + stats.tips.rejected} refusé${stats.articles.rejected + stats.tips.rejected > 1 ? 's' : ''}`
+                                : null}
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        <Button asChild size="sm" variant="outline">
+                            <Link href={articlesIndex.url()}>
+                                Mes actualités
+                            </Link>
+                        </Button>
+                        <Button asChild size="sm" variant="outline">
+                            <Link href={conseilsIndex.url()}>
+                                Mes conseils
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            ) : null}
+
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <StatCard
+                    icon={Newspaper}
+                    label="Mes actualités"
+                    value={stats.articles.total}
+                    hint={`${stats.articles.published} publiée${stats.articles.published > 1 ? 's' : ''} · ${stats.articles.pending} en attente`}
+                    href={articlesIndex.url()}
+                />
+                <StatCard
+                    icon={Eye}
+                    label="Vues actualités"
+                    value={stats.articles.views.toLocaleString('fr-FR')}
+                    hint={
+                        stats.articles.published > 0
+                            ? 'Sur vos articles publiés'
+                            : 'Aucun article publié'
+                    }
+                    href={articlesIndex.url()}
+                />
+                <StatCard
+                    icon={Lightbulb}
+                    label="Mes conseils"
+                    value={stats.tips.total}
+                    hint={`${stats.tips.published} publié${stats.tips.published > 1 ? 's' : ''} · ${stats.tips.pending} en attente`}
+                    href={conseilsIndex.url()}
+                />
+                <StatCard
+                    icon={Eye}
+                    label="Vues conseils"
+                    value={stats.tips.views.toLocaleString('fr-FR')}
+                    hint={
+                        stats.tips.published > 0
+                            ? 'Sur vos conseils publiés'
+                            : 'Aucun conseil publié'
+                    }
+                    href={conseilsIndex.url()}
+                />
+            </div>
+
+            <div className="grid gap-4 xl:grid-cols-2">
+                <RecentContentPanel
+                    title="Dernières actualités"
+                    description="Vos 5 articles les plus récents"
+                    items={recentArticles}
+                    indexHref={articlesIndex.url()}
+                    showHref={(slug) => articleShow.url(slug)}
+                    emptyMessage="Vous n'avez pas encore rédigé d'actualité."
+                />
+                <RecentContentPanel
+                    title="Derniers conseils"
+                    description="Vos 5 conseils les plus récents"
+                    items={recentTips}
+                    indexHref={conseilsIndex.url()}
+                    showHref={(slug) => conseilShow.url(slug)}
+                    emptyMessage="Vous n'avez pas encore rédigé de conseil."
+                />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+                <Button asChild>
+                    <Link href={articlesIndex.url()}>Nouvelle actualité</Link>
+                </Button>
+                <Button asChild variant="outline">
+                    <Link href={conseilsIndex.url()}>Nouveau conseil</Link>
+                </Button>
+                <Button asChild variant="outline">
+                    <Link href={profileEdit.url()}>Mon profil</Link>
+                </Button>
+            </div>
+        </div>
+    );
 }
 
 function AdminDashboard({
@@ -401,34 +667,24 @@ function AdminDashboard({
     );
 }
 
-function UserDashboard() {
-    return (
-        <div className="app-panel mx-auto max-w-2xl p-8 text-center">
-            <p className="text-muted-foreground text-sm">
-                Votre espace personnel Super Sécurité
-            </p>
-            <p className="mt-3 text-base leading-relaxed">
-                Rédigez vos actualités et conseils de sécurité, suivez leur
-                validation, ou mettez à jour votre profil.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <Button asChild>
-                    <Link href={articlesIndex.url()}>Mes actualités</Link>
-                </Button>
-                <Button asChild variant="outline">
-                    <Link href={conseilsIndex.url()}>Mes conseils</Link>
-                </Button>
-                <Button asChild variant="outline">
-                    <Link href={profileEdit.url()}>Mon profil</Link>
-                </Button>
-            </div>
-        </div>
-    );
-}
-
 export default function Dashboard() {
-    const { overview, stats, trafficChart = [], recentApplications = [] } =
-        usePage<DashboardPageProps>().props;
+    const {
+        overview,
+        stats,
+        trafficChart = [],
+        recentApplications = [],
+        recentArticles = [],
+        recentTips = [],
+    } = usePage<DashboardPageProps>().props;
+
+    const adminStats =
+        overview.is_admin && stats && 'visits' in stats
+            ? (stats as DashboardStats)
+            : null;
+    const userStats =
+        !overview.is_admin && stats && 'articles' in stats
+            ? (stats as UserDashboardStats)
+            : null;
 
     return (
         <>
@@ -444,15 +700,19 @@ export default function Dashboard() {
                     </p>
                 </div>
 
-                {overview.is_admin && stats ? (
+                {adminStats ? (
                     <AdminDashboard
-                        stats={stats}
+                        stats={adminStats}
                         trafficChart={trafficChart}
                         recentApplications={recentApplications}
                     />
-                ) : (
-                    <UserDashboard />
-                )}
+                ) : userStats ? (
+                    <UserDashboard
+                        stats={userStats}
+                        recentArticles={recentArticles}
+                        recentTips={recentTips}
+                    />
+                ) : null}
             </div>
         </>
     );

@@ -10,6 +10,7 @@ use App\Models\SecurityTip;
 use App\Models\User;
 use App\Models\Visit;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -77,6 +78,10 @@ class DashboardController extends Controller
                 ])
                 ->values()
                 ->all();
+        } else {
+            $payload['stats'] = $this->userContentStats($user);
+            $payload['recentArticles'] = $this->recentArticlesFor($user);
+            $payload['recentTips'] = $this->recentTipsFor($user);
         }
 
         return Inertia::render('dashboard', $payload);
@@ -162,5 +167,89 @@ class DashboardController extends Controller
         }
 
         return $days;
+    }
+
+    /**
+     * @return array{
+     *     articles: array{total: int, published: int, pending: int, rejected: int, draft: int, views: int},
+     *     tips: array{total: int, published: int, pending: int, rejected: int, draft: int, views: int}
+     * }
+     */
+    private function userContentStats(User $user): array
+    {
+        return [
+            'articles' => $this->contentSummaryFor(Article::query(), $user),
+            'tips' => $this->contentSummaryFor(SecurityTip::query(), $user),
+        ];
+    }
+
+    /**
+     * @param  Builder<Article|SecurityTip>  $query
+     * @return array{total: int, published: int, pending: int, rejected: int, draft: int, views: int}
+     */
+    private function contentSummaryFor($query, User $user): array
+    {
+        $base = (clone $query)->where('created_by_id', $user->id);
+
+        return [
+            'total' => (clone $base)->count(),
+            'published' => (clone $base)
+                ->where('status', ArticleStatus::Published)
+                ->count(),
+            'pending' => (clone $base)
+                ->where('status', ArticleStatus::PendingApproval)
+                ->count(),
+            'rejected' => (clone $base)
+                ->where('status', ArticleStatus::Rejected)
+                ->count(),
+            'draft' => (clone $base)
+                ->where('status', ArticleStatus::Draft)
+                ->count(),
+            'views' => (int) (clone $base)->sum('views'),
+        ];
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function recentArticlesFor(User $user): array
+    {
+        return Article::query()
+            ->where('created_by_id', $user->id)
+            ->latest()
+            ->limit(5)
+            ->get()
+            ->map(fn (Article $article): array => [
+                'title' => $article->title,
+                'slug' => $article->slug,
+                'status' => $article->status->value,
+                'status_label' => $article->status->label(),
+                'views' => $article->views,
+                'created_at_formatted' => $article->created_at?->locale('fr')->isoFormat('D MMM YYYY'),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function recentTipsFor(User $user): array
+    {
+        return SecurityTip::query()
+            ->where('created_by_id', $user->id)
+            ->latest()
+            ->limit(5)
+            ->get()
+            ->map(fn (SecurityTip $securityTip): array => [
+                'title' => $securityTip->title,
+                'slug' => $securityTip->slug,
+                'status' => $securityTip->status->value,
+                'status_label' => $securityTip->status->label(),
+                'views' => $securityTip->views,
+                'created_at_formatted' => $securityTip->created_at?->locale('fr')->isoFormat('D MMM YYYY'),
+            ])
+            ->values()
+            ->all();
     }
 }
