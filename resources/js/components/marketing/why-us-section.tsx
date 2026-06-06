@@ -16,15 +16,15 @@ export default function WhyUsSection() {
                 </Reveal>
 
                 <Reveal delay={100} className="mb-14">
-                    <div className="overflow-hidden rounded-3xl border border-super-securite-border shadow-md shadow-slate-900/5">
+                    <div className="overflow-hidden rounded-3xl border-none shadow-none">
                         <img
-                            src={superSecuriteStock.home.whyUsBanner}
+                            src={superSecuriteStock.home.whyUsBannerTransparent}
                             alt="Super Sécurité — équipes et sites sécurisés"
                             width={1600}
                             height={500}
                             loading="lazy"
                             decoding="async"
-                            className="aspect-[21/11] w-full object-cover object-center"
+                            className="aspect-[21/11] w-full object-cover object-top"
                         />
                     </div>
                 </Reveal>

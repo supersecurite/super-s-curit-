@@ -1,5 +1,4 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import MarketingMobileNav from '@/components/marketing/marketing-mobile-nav';
 import { superSecuriteImages } from '@/data/super-securite-images';
@@ -24,7 +23,6 @@ const primaryNavLinks = [
     { href: about.url(), label: 'Pourquoi nous' },
     { href: actualitesIndex.url(), label: 'Actualités' },
     { href: conseilsIndex.url(), label: 'Conseils' },
-    { href: devenirAgentIndex.url(), label: 'Devenir agent' },
     { href: contact.url(), label: 'Nous contacter' },
 ] as const;
 
@@ -88,9 +86,9 @@ export default function MarketingHeader() {
                     className="group flex shrink-0 cursor-pointer items-center gap-2 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
                 >
                     <img
-                        src={superSecuriteImages.brandWhite}
+                        src={superSecuriteImages.brandWhiteTransparent}
                         alt="Super Sécurité"
-                        className="h-14 w-auto max-w-[200px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:h-11 sm:max-w-[240px]"
+                        className="h-16 w-auto max-w-[200px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:max-w-[240px]"
                         width={240}
                         height={48}
                     />
@@ -129,13 +127,12 @@ export default function MarketingHeader() {
                 </ul>
 
                 <div className="flex items-center gap-2 sm:gap-3">
-                    <a
-                        href={superSecurite.phone_href}
+                    <Link
+                        href={devenirAgentIndex.url()}
                         className="marketing-cta-primary marketing-magnetic hidden shrink-0 items-center gap-2 text-sm whitespace-nowrap md:inline-flex"
                     >
-                        <Phone className="size-4" />
-                        Appelez-nous
-                    </a>
+                        Rejoignez-nous
+                    </Link>
 
                     <MarketingMobileNav
                         superSecurite={superSecurite}

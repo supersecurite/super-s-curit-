@@ -45,7 +45,7 @@ export default function MarketingHome() {
                 <SecurityTipsSection tips={featuredSecurityTips} />
             </div>
 
-            <div className="marketing-section-band">
+            <div className="marketing-section-band-alt">
                 <WhyUsSection />
             </div>
 

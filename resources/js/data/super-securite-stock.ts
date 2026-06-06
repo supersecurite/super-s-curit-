@@ -26,6 +26,8 @@ export const superSecuriteStock = {
         welcome: '/images/super-securite/IMG_9007-scaled.jpg',
         welcome2: '/images/super-securite/IMG_9008-scaled.jpg',
         whyUsBanner: '/images/super-securite/llustration vectorielle une personne assise devant un ordinateur.jpg',
+        whyUsBanner2: '/images/super-securite/choose-us-3.jpeg',
+        whyUsBannerTransparent: '/images/super-securite/choose-us-3-transparent.png',
         services: {
             gardiennage: 'images/super-securite/services/IMG_9598.jpg',
             industriel: 'images/super-securite/services/Side-view-of-young-black-man-in-workwear-and-safety.jpg',

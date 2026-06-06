@@ -2,6 +2,8 @@ export const superSecuriteImages = {
     brand: '/logo.svg',
     brandBlack: '/logo-black.jpeg',
     brandWhite: '/logo-white.jpeg',
+    brandWhiteTransparent: '/logo-white-transparent.png',
+    brandBlackTransparent: '/logo-black-transparent.png',
     brandtransparent: '/logo-transparent.png',
     brandAlt: '/logo.svg',
     ogDefault: '/web-app-manifest-512x512.png',

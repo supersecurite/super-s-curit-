@@ -144,7 +144,7 @@ function HeroCopy({ variant }: { variant: MarketingHeroVariant }) {
             <Reveal
                 as="dl"
                 delay={560}
-                className="mt-6 grid grid-cols-3 gap-2 border-t border-super-securite-border pt-5 sm:mt-7 sm:gap-3 sm:pt-6"
+                className="mt-6 grid grid-cols-3 gap-2 sm:mt-7 sm:gap-3"
             >
                 {variant.stats.map((stat) => (
                     <div key={stat.label}>
@@ -213,18 +213,6 @@ function HeroImage({
                         )}
                     />
                 </div>
-                {badge && (
-                    <div className="marketing-float absolute -bottom-3 -right-2 z-10 flex size-16 items-center justify-center rounded-2xl border border-super-securite-border bg-white p-2 shadow-lg sm:size-20 md:-right-4 md:size-24 lg:size-28">
-                        <img
-                            src={superSecuriteImages.brandtransparent}
-                            alt=""
-                            width={120}
-                            height={120}
-                            className="h-auto w-full object-contain"
-                            aria-hidden
-                        />
-                    </div>
-                )}
             </div>
         </Reveal>
     );
