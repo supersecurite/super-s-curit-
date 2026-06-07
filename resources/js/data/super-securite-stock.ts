@@ -23,12 +23,12 @@ export const superSecuriteStock = {
     },
 
     pages: {
-        actualites: '/images/super-securite/pages/actualites-hero.jpg',
-        conseils: '/images/super-securite/pages/conseils-hero.jpg',
+        actualites: '/images/super-securite/pages/Logistics-tablet-and-black-man.jpg',
+        conseils: '/images/super-securite/pages/Young-african.jpg',
         devenirAgent: '/images/super-securite/pages/devenir-agent-hero.jpg',
         contact: '/images/super-securite/pages/contact-hero.jpg',
         contact2: '/images/super-securite/hero/Close-up.jpg',
-        about: '/images/super-securite/pages/about-hero.jpg',
+        about: '/images/super-securite/pages/524511.jpg',
     },
 
     about: {

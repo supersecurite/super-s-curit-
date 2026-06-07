@@ -16,31 +16,31 @@ export default function MarketingFooter() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="border-t border-super-securite-border bg-super-securite-surface-elevated py-16">
+        <footer className="border-t border-white/10 bg-black py-16 text-white/70">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
                     <div>
                         <img
-                            src={superSecuriteImages.brandBlack}
+                            src={superSecuriteImages.brandWhite}
                             alt="Super Sécurité"
                             className="h-12 w-auto max-w-[220px] object-contain object-left"
                             width={220}
                             height={48}
                         />
-                        <p className="mt-4 text-sm text-super-securite-muted">
+                        <p className="mt-4 text-sm text-white/50">
                             {year} — SuperSécurité — Tous droits réservés.
                         </p>
                     </div>
 
                     <div>
-                        <h3 className="font-heading text-sm font-semibold text-super-securite-heading">
+                        <h3 className="font-heading text-sm font-semibold text-white">
                             Qui sommes-nous
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
                             <li>
                                 <a
                                     href="/a-propos"
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     Pourquoi nous choisir
                                 </a>
@@ -48,7 +48,7 @@ export default function MarketingFooter() {
                             <li>
                                 <a
                                     href={actualitesIndex.url()}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     Actualités
                                 </a>
@@ -56,7 +56,7 @@ export default function MarketingFooter() {
                             <li>
                                 <a
                                     href={conseilsIndex.url()}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     Conseils de sécurité
                                 </a>
@@ -64,7 +64,7 @@ export default function MarketingFooter() {
                             <li>
                                 <a
                                     href={devenirAgentIndex.url()}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     Devenir agent
                                 </a>
@@ -72,7 +72,7 @@ export default function MarketingFooter() {
                             <li>
                                 <a
                                     href="/#services"
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     Nos services
                                 </a>
@@ -81,7 +81,7 @@ export default function MarketingFooter() {
                                 <li key={service.id}>
                                     <a
                                         href={service.path}
-                                        className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                        className="cursor-pointer transition-colors duration-200 hover:text-white"
                                     >
                                         {service.title}
                                     </a>
@@ -91,7 +91,7 @@ export default function MarketingFooter() {
                     </div>
 
                     <div>
-                        <h3 className="font-heading text-sm font-semibold text-super-securite-heading">
+                        <h3 className="font-heading text-sm font-semibold text-white">
                             Services
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
@@ -102,7 +102,7 @@ export default function MarketingFooter() {
                                 <li key={`link-${service.id}`}>
                                     <a
                                         href={service.path}
-                                        className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                        className="cursor-pointer transition-colors duration-200 hover:text-white"
                                     >
                                         {service.title}
                                     </a>
@@ -112,14 +112,14 @@ export default function MarketingFooter() {
                     </div>
 
                     <div>
-                        <h3 className="font-heading text-sm font-semibold text-super-securite-heading">
+                        <h3 className="font-heading text-sm font-semibold text-white">
                             Nous contacter
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
                             <li>
                                 <a
                                     href={superSecurite.phone_href}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     {superSecurite.phone}
                                     {superSecurite.phone_secondary
@@ -130,17 +130,17 @@ export default function MarketingFooter() {
                             <li>
                                 <a
                                     href={`mailto:${superSecurite.email}`}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-super-securite-heading"
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     {superSecurite.email}
                                 </a>
                             </li>
-                            <li className="text-super-securite-muted">
+                            <li className="text-white/50">
                                 {superSecurite.address}
                             </li>
                         </ul>
 
-                        <h3 className="mt-8 font-heading text-sm font-semibold text-super-securite-heading">
+                        <h3 className="mt-8 font-heading text-sm font-semibold text-white">
                             Réseaux
                         </h3>
                         <ul className="mt-4 flex flex-col gap-2">
@@ -150,7 +150,7 @@ export default function MarketingFooter() {
                                         href={superSecurite.social.facebook}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-super-securite-muted transition-colors duration-200 hover:text-super-securite-accent"
+                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
                                     >
                                         <FacebookIcon className="h-4 w-4 text-blue-500" />
                                         Facebook
@@ -163,7 +163,7 @@ export default function MarketingFooter() {
                                         href={superSecurite.social.instagram}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-super-securite-muted transition-colors duration-200 hover:text-super-securite-accent"
+                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
                                     >
                                         <InstagramIcon className="h-4 w-4 text-pink-500" />
                                         Instagram
@@ -176,7 +176,7 @@ export default function MarketingFooter() {
                                         href={superSecurite.social.twitter}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-super-securite-muted transition-colors duration-200 hover:text-super-securite-accent"
+                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
                                     >
                                         <TwitterIcon className="h-4 w-4 text-blue-500" />
                                         Twitter
@@ -189,7 +189,7 @@ export default function MarketingFooter() {
                                         href={superSecurite.social.youtube}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-super-securite-muted transition-colors duration-200 hover:text-super-securite-accent"
+                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
                                     >
                                         <Youtube className="h-4 w-4 text-red-600" />
                                         Youtube
@@ -200,16 +200,16 @@ export default function MarketingFooter() {
                     </div>
                 </div>
 
-                <div className="mt-12 flex flex-wrap gap-4 border-t border-super-securite-border pt-8 text-xs text-super-securite-muted">
+                <div className="mt-12 flex flex-wrap gap-4 border-t border-white/10 pt-8 text-xs text-white/50">
                     <a
                         href="/politique-de-confidentialite"
-                        className="hover:text-super-securite-heading"
+                        className="hover:text-white"
                     >
                         Conditions générales et confidentialité
                     </a>
                     <a
                         href="/mentions-legales"
-                        className="hover:text-super-securite-heading"
+                        className="hover:text-white"
                     >
                         Mentions légales
                     </a>

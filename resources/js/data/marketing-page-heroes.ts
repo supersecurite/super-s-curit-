@@ -45,9 +45,9 @@ export const marketingPageHeroes = {
         label: 'Veille & terrain',
         titleLead: 'Restez informés de',
         titleHighlight: "l'actualité",
-        titleTrail: 'sécurité en Guinée',
+        titleTrail: 'sur la sécurité',
         description:
-            'Missions sur le terrain, retours d\'expérience, conseils pratiques et nouveautés Super Sécurité — l\'essentiel pour anticiper et réagir.',
+            'Missions sur le terrain, retours d\'expérience, conseils pratiques et nouveautés.',
         image: superSecuriteStock.pages.actualites,
         imageAlt: 'Actualités Super Sécurité — sécurité privée',
         stats: [

@@ -71,10 +71,10 @@ export default function MarketingHeader() {
         <header
             id="marketing-header"
             className={cn(
-                'sticky top-0 z-40 transition-[background-color,box-shadow,backdrop-filter] duration-300',
+                'sticky top-0 z-40 border-b bg-black transition-[box-shadow] duration-300',
                 scrolled
-                    ? 'border-b border-super-securite-border bg-super-securite-surface/85 shadow-md shadow-slate-900/5 backdrop-blur-xl'
-                    : 'border-b border-transparent bg-transparent',
+                    ? 'border-white/10 shadow-lg shadow-black/40'
+                    : 'border-transparent',
             )}
         >
             <nav
@@ -86,7 +86,7 @@ export default function MarketingHeader() {
                     className="group flex shrink-0 cursor-pointer items-center gap-2 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
                 >
                     <img
-                        src={superSecuriteImages.brandWhiteTransparent}
+                        src={superSecuriteImages.brandWhite}
                         alt="Super Sécurité"
                         className="h-16 w-auto max-w-[200px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:max-w-[240px]"
                         width={240}
@@ -107,7 +107,7 @@ export default function MarketingHeader() {
                                         'group relative cursor-pointer text-sm font-medium transition-colors duration-200',
                                         active
                                             ? 'font-semibold text-super-securite-accent'
-                                            : 'text-black hover:text-super-securite-heading',
+                                            : 'text-white/80 hover:text-white',
                                     )}
                                 >
                                     {item.label}
