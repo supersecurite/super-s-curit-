@@ -7,9 +7,10 @@ import {
     Search,
     Star,
 } from 'lucide-react';
-import PageHero from '@/components/marketing/page-hero';
+import MarketingSplitHero from '@/components/marketing/marketing-split-hero';
 import ContentShareButton from '@/components/content-share-button';
 import SeoHead from '@/components/marketing/seo-head';
+import { marketingPageHeroes } from '@/data/marketing-page-heroes';
 import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
 
 type ArticleCard = {
@@ -133,18 +134,7 @@ export default function MarketingArticlesIndex() {
             <SeoHead />
             <Head title="Actualités" />
 
-            <PageHero
-                label="Actualités"
-                title={
-                    <>
-                        Nos dernières{' '}
-                        <span className="marketing-text-gradient">
-                            actualités
-                        </span>
-                    </>
-                }
-                description="Suivez l'activité de Super Sécurité : événements, conseils sécurité et nouveautés en Guinée."
-            />
+            <MarketingSplitHero {...marketingPageHeroes.actualites} />
 
             <section className="marketing-section-band marketing-below-fold py-16">
                 <div className="container mx-auto max-w-6xl px-4">

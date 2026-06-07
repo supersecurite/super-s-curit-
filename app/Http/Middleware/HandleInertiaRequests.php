@@ -140,17 +140,6 @@ class HandleInertiaRequests extends Middleware
             'tracking' => [
                 'visitor_uuid' => $request->cookie('super_securite_vid'),
             ],
-            'caseStudies' => collect(config('seo.case_studies', []))
-                ->map(fn (array $study): array => [
-                    'slug' => $study['slug'],
-                    'title' => $study['title'],
-                    'category' => $study['category'],
-                    'summary' => $study['summary'],
-                    'image' => $study['image'],
-                    'path' => $study['path'],
-                ])
-                ->values()
-                ->all(),
         ];
     }
 

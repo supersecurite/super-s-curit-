@@ -27,7 +27,7 @@ export const superSecuriteSeoPages: Record<SeoPageKey, SeoPageMeta> = {
         focusKeyword: 'sécurité privée Conakry',
         title: 'Super Sécurité | Sécurité privée à Conakry, Guinée',
         description:
-            'Super Sécurité : gardiennage, surveillance industrielle et minière, sécurité événementielle. Intervention 24h/24 et 7j/7 à Conakry.',
+            'Super Sécurité : sécurité entreprise, résidence, chantiers et zones minières. Intervention 24h/24 et 7j/7 à Conakry.',
         path: '/',
         image: superSecuriteImages.ogDefault,
         keywords: superSecuriteMetaKeywords.home,
@@ -38,7 +38,7 @@ export const superSecuriteSeoPages: Record<SeoPageKey, SeoPageMeta> = {
         focusKeyword: 'entreprise sécurité privée Guinée',
         title: 'Pourquoi Super Sécurité | Sécurité privée à Conakry',
         description:
-            'Expérience, réactivité, disponibilité 24/7 et équipe certifiée : découvrez pourquoi choisir Super Sécurité pour protéger vos sites et événements en Guinée.',
+            'Expérience, réactivité, disponibilité 24/7 et équipe certifiée : découvrez pourquoi choisir Super Sécurité pour protéger vos sites en Guinée.',
         path: '/a-propos',
         image: superSecuriteImages.ogDefault,
         keywords: superSecuriteMetaKeywords.about,

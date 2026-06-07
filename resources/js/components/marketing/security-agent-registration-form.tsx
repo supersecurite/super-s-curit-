@@ -13,9 +13,11 @@ import { store } from '@/routes/devenir-agent';
 import { cn } from '@/lib/utils';
 
 type AvailabilityOption = { value: string; label: string };
+type PostOption = { value: string; label: string };
 
 type PageProps = {
     availabilityOptions: AvailabilityOption[];
+    postOptions: PostOption[];
     flash: { success?: string | null };
 };
 
@@ -23,12 +25,11 @@ const fieldClasses =
     'border-super-securite-border bg-super-securite-surface-elevated text-super-securite-heading placeholder:text-super-securite-muted focus-visible:border-super-securite-accent focus-visible:ring-super-securite-accent/30';
 
 export default function SecurityAgentRegistrationForm() {
-    const { availabilityOptions } = usePage<PageProps>().props;
+    const { availabilityOptions, postOptions } = usePage<PageProps>().props;
     const [location, setLocation] = useState<LocationValues>({
         region_id: '',
         prefecture_id: '',
         commune_id: '',
-        quartier_id: '',
     });
 
     return (
@@ -56,6 +57,7 @@ export default function SecurityAgentRegistrationForm() {
                         'last_name',
                         'phone',
                         'email',
+                        'post',
                         'experience_years',
                         'availability',
                         'certifications',
@@ -68,7 +70,6 @@ export default function SecurityAgentRegistrationForm() {
                             region_id: '',
                             prefecture_id: '',
                             commune_id: '',
-                            quartier_id: '',
                         })
                     }
                     className="mt-8 flex flex-col gap-5"
@@ -150,6 +151,37 @@ export default function SecurityAgentRegistrationForm() {
 
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="grid gap-2">
+                                    <Label htmlFor="post">
+                                        Poste{' '}
+                                        <span className="text-super-securite-accent">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <select
+                                        id="post"
+                                        name="post"
+                                        required
+                                        defaultValue=""
+                                        className={cn(
+                                            fieldClasses,
+                                            'h-10 w-full rounded-md border px-3 text-sm',
+                                        )}
+                                    >
+                                        <option value="">
+                                            Sélectionner un poste...
+                                        </option>
+                                        {postOptions.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <InputError message={errors.post} />
+                                </div>
+                                <div className="grid gap-2">
                                     <Label htmlFor="experience_years">
                                         Années d&apos;expérience
                                     </Label>
@@ -165,33 +197,32 @@ export default function SecurityAgentRegistrationForm() {
                                         message={errors.experience_years}
                                     />
                                 </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="availability">
-                                        Disponibilité
-                                    </Label>
-                                    <select
-                                        id="availability"
-                                        name="availability"
-                                        defaultValue=""
-                                        className={cn(
-                                            fieldClasses,
-                                            'h-10 w-full rounded-md border px-3 text-sm',
-                                        )}
-                                    >
-                                        <option value="">
-                                            Sélectionner...
+                            </div>
+
+                            <div className="grid gap-2 sm:max-w-md">
+                                <Label htmlFor="availability">
+                                    Disponibilité
+                                </Label>
+                                <select
+                                    id="availability"
+                                    name="availability"
+                                    defaultValue=""
+                                    className={cn(
+                                        fieldClasses,
+                                        'h-10 w-full rounded-md border px-3 text-sm',
+                                    )}
+                                >
+                                    <option value="">Sélectionner...</option>
+                                    {availabilityOptions.map((option) => (
+                                        <option
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label}
                                         </option>
-                                        {availabilityOptions.map((option) => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <InputError message={errors.availability} />
-                                </div>
+                                    ))}
+                                </select>
+                                <InputError message={errors.availability} />
                             </div>
 
                             <div className="rounded-xl border border-super-securite-border bg-super-securite-surface/50 p-5">

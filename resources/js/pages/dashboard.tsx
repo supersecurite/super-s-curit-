@@ -4,6 +4,7 @@ import {
     ArrowRight,
     ArrowUp,
     BarChart3,
+    Briefcase,
     Eye,
     FileText,
     Lightbulb,
@@ -78,6 +79,7 @@ type RecentApplication = {
     uuid: string;
     full_name: string;
     phone: string;
+    post_label: string | null;
     status: string;
     status_label: string;
     created_at_formatted: string | null;
@@ -599,11 +601,14 @@ function AdminDashboard({
                     </p>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="w-full min-w-[640px] text-sm">
+                        <table className="w-full min-w-[720px] text-sm">
                             <thead className="bg-muted/40 text-muted-foreground">
                                 <tr>
                                     <th className="px-5 py-3 text-left font-medium">
                                         Candidat
+                                    </th>
+                                    <th className="px-5 py-3 text-left font-medium">
+                                        Poste
                                     </th>
                                     <th className="px-5 py-3 text-left font-medium">
                                         Téléphone
@@ -627,6 +632,9 @@ function AdminDashboard({
                                     >
                                         <td className="px-5 py-3 font-medium">
                                             {application.full_name}
+                                        </td>
+                                        <td className="text-muted-foreground px-5 py-3">
+                                            {application.post_label ?? '—'}
                                         </td>
                                         <td className="text-muted-foreground px-5 py-3">
                                             {application.phone}

@@ -9,6 +9,10 @@
 **E-mail :** {{ $application['email'] }}
 @endif
 
+@if (! empty($application['post_label']))
+**Poste :** {{ $application['post_label'] }}
+@endif
+
 @if (! empty($application['experience_years']))
 **Expérience :** {{ $application['experience_years'] }} an(s)
 @endif

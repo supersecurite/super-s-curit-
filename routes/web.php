@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Marketing\ArticleController as MarketingArticleController;
 use App\Http\Controllers\Marketing\SecurityAgentApplicationController as MarketingSecurityAgentApplicationController;
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
+use App\Http\Controllers\Marketing\ServiceController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UserController;
@@ -33,16 +34,12 @@ Route::get('/sitemap.xml', SitemapController::class)
     ]);
 
 Route::inertia('/', 'marketing/home')->name('home');
+Route::get('/entreprise', [ServiceController::class, 'show'])->name('services.entreprise');
+Route::get('/residence', [ServiceController::class, 'show'])->name('services.residence');
+Route::get('/chantiers', [ServiceController::class, 'show'])->name('services.chantiers');
+Route::get('/zones-minieres', [ServiceController::class, 'show'])->name('services.zones-minieres');
 Route::inertia('/a-propos', 'marketing/about')->name('about');
 Route::redirect('/pourquoi-nous', '/a-propos', 301);
-Route::redirect('/site-wordpress', '/', 301);
-Route::redirect('/creation-site', '/', 301);
-Route::redirect('/integrateur-solutions', '/', 301);
-Route::redirect('/woocommerce', '/', 301);
-Route::redirect('/application-web', '/', 301);
-Route::redirect('/seo', '/', 301);
-Route::redirect('/realisations', '/', 301);
-Route::redirect('/realisations/{slug}', '/', 301)->where('slug', '[a-z0-9\-]+');
 Route::get('/actualites', [MarketingArticleController::class, 'index'])->name('actualites.index');
 Route::get('/actualites/{article:slug}', [MarketingArticleController::class, 'show'])->name('actualites.show');
 Route::get('/conseils-securite', [MarketingSecurityTipController::class, 'index'])->name('conseils-securite.index');

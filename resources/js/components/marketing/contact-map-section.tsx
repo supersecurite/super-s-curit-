@@ -13,7 +13,7 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
     return (
         <section
             id="plan-acces"
-            className="marketing-section-band-alt border-t border-super-securite-border/50 py-16 md:py-24"
+            className=""
             aria-labelledby="contact-map-heading"
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

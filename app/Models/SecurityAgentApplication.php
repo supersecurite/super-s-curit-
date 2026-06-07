@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SecurityAgentApplicationStatus;
+use App\Enums\SecurityAgentPost;
 use Database\Factories\SecurityAgentApplicationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
     'availability',
     'certifications',
     'motivation',
+    'post',
     'region_id',
     'region_name',
     'prefecture_id',
@@ -64,6 +66,7 @@ class SecurityAgentApplication extends Model
     {
         return [
             'status' => SecurityAgentApplicationStatus::class,
+            'post' => SecurityAgentPost::class,
             'experience_years' => 'integer',
             'contacted_at' => 'datetime',
         ];
@@ -100,6 +103,8 @@ class SecurityAgentApplication extends Model
             'availability_label' => $this->availabilityLabel(),
             'certifications' => $this->certifications,
             'motivation' => $this->motivation,
+            'post' => $this->post?->value,
+            'post_label' => $this->postLabel(),
             'region_id' => $this->region_id,
             'region_name' => $this->region_name,
             'prefecture_id' => $this->prefecture_id,
@@ -125,13 +130,17 @@ class SecurityAgentApplication extends Model
     public function locationSummary(): string
     {
         $parts = array_filter([
-            $this->quartier_name,
             $this->commune_name,
             $this->prefecture_name,
             $this->region_name,
         ]);
 
         return implode(', ', $parts);
+    }
+
+    public function postLabel(): ?string
+    {
+        return $this->post?->label();
     }
 
     public function availabilityLabel(): ?string

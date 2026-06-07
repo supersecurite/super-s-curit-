@@ -1,7 +1,11 @@
 import { superSecuriteServices } from '@/data/super-securite-content';
-import { superSecuriteImages } from '@/data/super-securite-images';
+import { superSecuriteStock } from '@/data/super-securite-stock';
 
-export type SuperSecuriteServiceId = 'gardiennage' | 'industriel' | 'evenementiel';
+export type SuperSecuriteServiceId =
+    | 'entreprise'
+    | 'residence'
+    | 'chantiers'
+    | 'zones-minieres';
 
 export type SuperSecuriteServiceSection = {
     title: string;
@@ -29,6 +33,8 @@ export type SuperSecuriteServiceDefinition = {
     sections: readonly SuperSecuriteServiceSection[];
 };
 
+const serviceImages = superSecuriteStock.home.services;
+
 const serviceMeta: Record<
     SuperSecuriteServiceId,
     Pick<
@@ -41,86 +47,138 @@ const serviceMeta: Record<
         | 'pageHighlight'
         | 'pageDescription'
         | 'imageAlt'
+        | 'cover'
     >
 > = {
-    gardiennage: {
-        focusKeyword: 'gardiennage Conakry',
-        metaTitle: 'Gardiennage et surveillance Conakry | Super Sécurité',
+    entreprise: {
+        focusKeyword: 'sécurité entreprise Conakry',
+        metaTitle: 'Sécurité entreprise Conakry | Super Sécurité',
         metaDescription:
-            'Gardiennage et surveillance à Conakry : agents professionnels pour bureaux, résidences, chantiers et zones sensibles, 24h/24.',
-        pageHighlight: 'et surveillance',
+            'Sécurité entreprise à Conakry : gardiennage et surveillance pour bureaux, commerces et entrepôts, 24h/24.',
+        pageHighlight: 'entreprise',
         pageDescription:
-            'Des agents de sécurité qualifiés pour protéger vos locaux, bureaux et résidences, de jour comme de nuit.',
-        imageAlt: 'Gardiennage et surveillance par Super Sécurité à Conakry',
+            'Protection de vos locaux professionnels avec des agents qualifiés, disponibles jour et nuit.',
+        imageAlt: 'Sécurité entreprise — Super Sécurité Conakry',
+        cover: `/${serviceImages.entreprise}`,
         benefits: [
-            'Gardiennage 24h/24',
-            'Surveillance résidence et bureau',
-            'Agents qualifiés',
+            'Bureaux & commerces',
+            'Contrôle d’accès',
+            'Disponible 24h/24',
         ],
         sections: [
             {
-                title: 'Présence continue',
+                title: 'Présence sur site',
                 description:
-                    'Des équipes mobilisables en permanence pour sécuriser vos accès et vos espaces sensibles.',
+                    'Des équipes mobilisables en permanence pour sécuriser vos accès, halls et espaces sensibles.',
             },
             {
                 title: 'Protocoles adaptés',
                 description:
                     'Consignes claires, rondes régulières et reporting selon vos exigences opérationnelles.',
             },
+            {
+                title: 'Réactivité',
+                description:
+                    'Intervention rapide en cas d’incident et coordination avec vos équipes internes.',
+            },
         ],
     },
-    industriel: {
-        focusKeyword: 'sécurité industrielle Guinée',
-        metaTitle: 'Sécurité industrielle et minière | Super Sécurité Guinée',
+    residence: {
+        focusKeyword: 'gardiennage résidence Conakry',
+        metaTitle: 'Sécurité résidence Conakry | Super Sécurité',
         metaDescription:
-            'Sécurité des sites industriels et miniers en Guinée : équipes formées aux protocoles les plus stricts.',
-        pageHighlight: 'industriels et miniers',
+            'Gardiennage et surveillance de résidences à Conakry : villas, immeubles et lotissements protégés 24h/24.',
+        pageHighlight: 'résidence',
         pageDescription:
-            'Surveillance rigoureuse de vos installations sensibles avec des protocoles de sécurité exigeants.',
-        imageAlt: 'Sécurité industrielle et minière — Super Sécurité',
+            'Tranquillité d’esprit pour vos villas et immeubles grâce à une surveillance rigoureuse et dissuasive.',
+        imageAlt: 'Sécurité résidence — Super Sécurité Conakry',
+        cover: `/${serviceImages.residence}`,
         benefits: [
-            'Sites industriels',
-            'Zones minières',
+            'Villas & immeubles',
+            'Surveillance continue',
+            'Agents de confiance',
+        ],
+        sections: [
+            {
+                title: 'Protection du domicile',
+                description:
+                    'Présence dissuasive aux accès, parkings et espaces communs de votre résidence.',
+            },
+            {
+                title: 'Surveillance nocturne',
+                description:
+                    'Rondes régulières et vigilance accrue aux heures les plus sensibles.',
+            },
+            {
+                title: 'Accompagnement sur mesure',
+                description:
+                    'Des consignes adaptées à la taille de votre résidence et à vos habitudes.',
+            },
+        ],
+    },
+    chantiers: {
+        focusKeyword: 'sécurité chantier Guinée',
+        metaTitle: 'Sécurité chantiers BTP | Super Sécurité Guinée',
+        metaDescription:
+            'Sécurité de chantiers BTP en Guinée : protection du matériel, contrôle des accès et patrouilles sur site.',
+        pageHighlight: 'chantiers',
+        pageDescription:
+            'Sécurisation de vos chantiers BTP avec contrôle des accès, patrouilles et protection du matériel.',
+        imageAlt: 'Sécurité chantiers — Super Sécurité Guinée',
+        cover: `/${serviceImages.chantiers}`,
+        benefits: [
+            'Chantiers BTP',
+            'Protection matériel',
+            'Patrouilles régulières',
+        ],
+        sections: [
+            {
+                title: 'Sites en construction',
+                description:
+                    'Sécurisation adaptée aux environnements de chantier, avec gestion des flux ouvriers et livraisons.',
+            },
+            {
+                title: 'Prévention des vols',
+                description:
+                    'Présence dissuasive pour limiter le vol de matériaux, équipements et intrusions nocturnes.',
+            },
+            {
+                title: 'Contrôle des accès',
+                description:
+                    'Filtrage à l’entrée et traçabilité des personnes autorisées sur le site.',
+            },
+        ],
+    },
+    'zones-minieres': {
+        focusKeyword: 'sécurité minière Guinée',
+        metaTitle: 'Sécurité zones minières | Super Sécurité Guinée',
+        metaDescription:
+            'Sécurité des zones minières en Guinée : équipes formées aux protocoles les plus stricts pour sites sensibles.',
+        pageHighlight: 'minières',
+        pageDescription:
+            'Surveillance rigoureuse des sites miniers avec des équipes formées aux protocoles de sécurité exigeants.',
+        imageAlt: 'Sécurité zones minières — Super Sécurité Guinée',
+        cover: `/${serviceImages['zones-minieres']}`,
+        benefits: [
+            'Sites miniers',
             'Protocoles stricts',
+            'Équipes spécialisées',
         ],
         sections: [
             {
-                title: 'Installations sensibles',
+                title: 'Environnements à risque',
                 description:
-                    'Protection adaptée aux environnements industriels, logistiques et miniers.',
+                    'Protection adaptée aux sites miniers et installations sensibles en zone isolée.',
             },
             {
-                title: 'Réduction des risques',
+                title: 'Conformité opérationnelle',
                 description:
-                    'Présence dissuasive et réactive pour limiter vols, intrusions et incidents.',
-            },
-        ],
-    },
-    evenementiel: {
-        focusKeyword: 'sécurité événementielle Conakry',
-        metaTitle: 'Sécurité événementielle Conakry | Super Sécurité',
-        metaDescription:
-            'Sécurité événementielle à Conakry : gestion complète pour événements sportifs, culturels et privés.',
-        pageHighlight: 'événementielle',
-        pageDescription:
-            'Gestion complète de la sécurité pour événements publics et privés, même en contexte de forte affluence.',
-        imageAlt: 'Sécurité événementielle — Super Sécurité Conakry',
-        benefits: [
-            'Événements sportifs',
-            'Événements culturels',
-            'Haute exigence',
-        ],
-        sections: [
-            {
-                title: 'Plan de sécurité',
-                description:
-                    'Évaluation des flux, accès et points sensibles avant chaque événement.',
+                    'Respect des consignes HSE et des procédures imposées par vos responsables de site.',
             },
             {
-                title: 'Équipes expérimentées',
+                title: 'Réduction des incidents',
                 description:
-                    'Agents habitués aux situations de forte affluence et aux protocoles événementiels.',
+                    'Présence dissuasive et réactive pour limiter vols, intrusions et incidents de sécurité.',
             },
         ],
     },
@@ -132,15 +190,14 @@ export const superSecuriteServiceDefinitions: readonly SuperSecuriteServiceDefin
 
         return {
             id: service.id as SuperSecuriteServiceId,
-            path: `/#${service.id}`,
+            path: service.path,
             icon: '',
-            cover: superSecuriteImages.ogDefault,
             title: service.title,
-            navLabel: service.title.split(' ').slice(0, 3).join(' '),
+            navLabel: service.title.replace('Sécurité ', ''),
             navTagline: 'Sécurité privée à Conakry',
             cardDescription: service.description,
             pageLabel: service.title,
-            pageTitle: service.title,
+            pageTitle: service.title.replace('Sécurité ', 'Sécurité '),
             ...meta,
         };
     });
@@ -151,3 +208,6 @@ export const superSecuriteServiceById: Record<
 > = Object.fromEntries(
     superSecuriteServiceDefinitions.map((service) => [service.id, service]),
 ) as Record<SuperSecuriteServiceId, SuperSecuriteServiceDefinition>;
+
+export const superSecuriteServiceIds: readonly SuperSecuriteServiceId[] =
+    superSecuriteServiceDefinitions.map((service) => service.id);

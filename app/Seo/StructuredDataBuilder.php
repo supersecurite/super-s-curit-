@@ -403,15 +403,6 @@ class StructuredDataBuilder
             $breadcrumbs[] = ['name' => 'À propos', 'path' => '/a-propos'];
         } elseif ($path === '/contact') {
             $breadcrumbs[] = ['name' => 'Contact', 'path' => '/contact'];
-        } elseif ($path === '/realisations') {
-            $breadcrumbs[] = ['name' => 'Réalisations', 'path' => '/realisations'];
-        } elseif (str_starts_with($path, '/realisations/')) {
-            $breadcrumbs[] = ['name' => 'Réalisations', 'path' => '/realisations'];
-            $study = collect(config('seo.case_studies', []))->firstWhere('path', $path);
-
-            if ($study !== null) {
-                $breadcrumbs[] = ['name' => $study['title'], 'path' => $study['path']];
-            }
         } elseif (str_starts_with($path, '/politique-de-confidentialite')) {
             $breadcrumbs[] = ['name' => 'Confidentialité', 'path' => '/politique-de-confidentialite'];
         } elseif (str_starts_with($path, '/mentions-legales')) {

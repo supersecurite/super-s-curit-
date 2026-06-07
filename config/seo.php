@@ -6,7 +6,7 @@ return [
 
     'default_description' => env(
         'SEO_DEFAULT_DESCRIPTION',
-        'Super Sécurité — sécurité privée à Conakry : gardiennage, surveillance de sites industriels et miniers, sécurité événementielle. Disponible 24h/24, 7j/7.',
+        'Super Sécurité — sécurité privée à Conakry : entreprise, résidence, chantiers et zones minières. Disponible 24h/24, 7j/7.',
     ),
 
     'locale' => env('SEO_LOCALE', 'fr_FR'),
@@ -36,7 +36,7 @@ return [
         'founding_date' => '2020',
         'founder' => null,
         'founder_job_title' => null,
-        'description' => 'Super Sécurité est une entreprise de sécurité privée à Conakry (Guinée) : gardiennage, surveillance industrielle et minière, vidéosurveillance et sécurité événementielle, 24h/24 et 7j/7.',
+        'description' => 'Super Sécurité est une entreprise de sécurité privée à Conakry (Guinée) : sécurité entreprise, résidence, chantiers, zones minières et vidéosurveillance, 24h/24 et 7j/7.',
         'area_served' => 'Guinée',
         'address_country' => 'GN',
         'address_locality' => 'Conakry',
@@ -48,38 +48,53 @@ return [
 
     'services' => [
         [
-            'name' => 'Gardiennage et surveillance',
-            'description' => 'Agents de sécurité qualifiés pour protéger locaux, bureaux, résidences et chantiers, jour et nuit.',
-            'path' => '/#gardiennage',
-            'meta_title' => 'Gardiennage et surveillance Conakry | Super Sécurité',
-            'meta_description' => 'Gardiennage et surveillance à Conakry : agents professionnels pour bureaux, résidences, chantiers et zones sensibles.',
-            'og_image' => '/web-app-manifest-512x512.png',
-            'og_image_alt' => 'Gardiennage et surveillance — Super Sécurité Conakry',
+            'name' => 'Sécurité entreprise',
+            'description' => 'Gardiennage et surveillance pour bureaux, commerces et entrepôts, avec agents qualifiés disponibles 24h/24.',
+            'path' => '/entreprise',
+            'meta_title' => 'Sécurité entreprise Conakry | Super Sécurité',
+            'meta_description' => 'Sécurité entreprise à Conakry : gardiennage et surveillance pour bureaux, commerces et entrepôts, 24h/24.',
+            'og_image' => '/images/super-securite/services/IMG_9598.jpg',
+            'og_image_alt' => 'Sécurité entreprise — Super Sécurité Conakry',
             'faqs' => [
                 [
-                    'question' => 'Proposez-vous du gardiennage 24h/24 ?',
+                    'question' => 'Intervenez-vous pour des bureaux et commerces ?',
+                    'answer' => 'Oui, nous sécurisons bureaux, commerces, entrepôts et locaux professionnels à Conakry et en Guinée.',
+                ],
+            ],
+        ],
+        [
+            'name' => 'Sécurité résidence',
+            'description' => 'Surveillance de villas, immeubles et résidences avec une présence dissuasive et des rondes régulières.',
+            'path' => '/residence',
+            'meta_title' => 'Sécurité résidence Conakry | Super Sécurité',
+            'meta_description' => 'Gardiennage et surveillance de résidences à Conakry : villas, immeubles et lotissements protégés 24h/24.',
+            'og_image' => '/images/super-securite/IMG_9008-scaled.jpg',
+            'og_image_alt' => 'Sécurité résidence — Super Sécurité Conakry',
+            'faqs' => [
+                [
+                    'question' => 'Proposez-vous du gardiennage de résidence 24h/24 ?',
                     'answer' => 'Oui, nos équipes assurent une présence continue 24h/24 et 7j/7 selon vos besoins.',
                 ],
             ],
         ],
         [
-            'name' => 'Sécurité des sites industriels et miniers',
-            'description' => 'Surveillance rigoureuse des installations sensibles avec protocoles de sécurité stricts.',
-            'path' => '/#industriel',
-            'meta_title' => 'Sécurité industrielle et minière | Super Sécurité Guinée',
-            'meta_description' => 'Sécurité des sites industriels et miniers en Guinée : équipes formées aux protocoles les plus exigeants.',
-            'og_image' => '/web-app-manifest-512x512.png',
-            'og_image_alt' => 'Sécurité industrielle — Super Sécurité',
+            'name' => 'Sécurité chantiers',
+            'description' => 'Protection de chantiers BTP : contrôle des accès, patrouilles et sécurisation du matériel sur site.',
+            'path' => '/chantiers',
+            'meta_title' => 'Sécurité chantiers BTP | Super Sécurité Guinée',
+            'meta_description' => 'Sécurité de chantiers BTP en Guinée : protection du matériel, contrôle des accès et patrouilles sur site.',
+            'og_image' => '/images/super-securite/services/Foreman-engineer-male-supervisor.jpg',
+            'og_image_alt' => 'Sécurité chantiers — Super Sécurité Guinée',
             'faqs' => [],
         ],
         [
-            'name' => 'Sécurité événementielle',
-            'description' => 'Gestion complète de la sécurité pour événements publics, privés, sportifs et culturels.',
-            'path' => '/#evenementiel',
-            'meta_title' => 'Sécurité événementielle Conakry | Super Sécurité',
-            'meta_description' => 'Sécurité événementielle à Conakry : experts pour événements sportifs, culturels et privés.',
-            'og_image' => '/web-app-manifest-512x512.png',
-            'og_image_alt' => 'Sécurité événementielle — Super Sécurité',
+            'name' => 'Zones minières',
+            'description' => 'Surveillance rigoureuse des sites miniers avec équipes formées aux protocoles les plus stricts.',
+            'path' => '/zones-minieres',
+            'meta_title' => 'Sécurité zones minières | Super Sécurité Guinée',
+            'meta_description' => 'Sécurité des zones minières en Guinée : équipes formées aux protocoles les plus exigeants.',
+            'og_image' => '/images/super-securite/services/Side-view-of-young-black-man-in-workwear-and-safety.jpg',
+            'og_image_alt' => 'Sécurité zones minières — Super Sécurité Guinée',
             'faqs' => [],
         ],
     ],
@@ -91,7 +106,7 @@ return [
         ],
         [
             'question' => 'Quels types de sites sécurisez-vous ?',
-            'answer' => 'Résidences, bureaux, chantiers, zones minières, sites industriels et événements publics ou privés.',
+            'answer' => 'Résidences, bureaux, chantiers, zones minières et sites sensibles en Guinée.',
         ],
         [
             'question' => 'Comment obtenir un devis ?',
@@ -106,10 +121,10 @@ return [
     'knows_about' => [
         'Super Sécurité',
         'sécurité privée Conakry',
-        'gardiennage Guinée',
-        'surveillance site industriel',
+        'sécurité entreprise Conakry',
+        'sécurité résidence Conakry',
+        'sécurité chantier Guinée',
         'sécurité minière Guinée',
-        'sécurité événementielle Conakry',
         'agents de sécurité Conakry',
         'vidéosurveillance Guinée',
         'télésurveillance Conakry',
@@ -133,13 +148,11 @@ return [
         ],
     ],
 
-    'case_studies' => [],
-
     'pages' => [
         [
             'path' => '/',
             'meta_title' => 'Super Sécurité | Sécurité privée à Conakry, Guinée',
-            'meta_description' => 'Super Sécurité : gardiennage, surveillance industrielle, sécurité événementielle. Experts disponibles 24h/24 et 7j/7 à Conakry.',
+            'meta_description' => 'Super Sécurité : sécurité entreprise, résidence, chantiers et zones minières. Experts disponibles 24h/24 et 7j/7 à Conakry.',
             'schema_type' => 'WebPage',
             'changefreq' => 'weekly',
             'priority' => 1.0,
@@ -165,7 +178,7 @@ return [
         [
             'path' => '/actualites',
             'meta_title' => 'Actualités | Super Sécurité — Sécurité privée à Conakry',
-            'meta_description' => 'Découvrez les dernières actualités de Super Sécurité : gardiennage, surveillance, événements et conseils sécurité en Guinée.',
+            'meta_description' => 'Découvrez les dernières actualités de Super Sécurité : entreprise, résidence, chantiers, zones minières et conseils sécurité en Guinée.',
             'schema_type' => 'CollectionPage',
             'changefreq' => 'weekly',
             'priority' => 0.8,

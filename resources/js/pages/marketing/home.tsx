@@ -33,7 +33,7 @@ export default function MarketingHome() {
 
             <MarketingHeroCarousel />
 
-            <div className="marketing-section-band-alt">
+            <div className="marketing-section-white">
                 <WelcomeSection />
             </div>
 
@@ -41,11 +41,11 @@ export default function MarketingHome() {
                 <ServiceCards />
             </div>
 
-            <div className="marketing-section-band-alt">
+            <div className="marketing-section-white">
                 <SecurityTipsSection tips={featuredSecurityTips} />
             </div>
 
-            <div className="marketing-section-band-alt">
+            <div className="marketing-section-white">
                 <WhyUsSection />
             </div>
 
@@ -53,7 +53,7 @@ export default function MarketingHome() {
                 <PartnersSection />
             </div>
 
-            <div className="marketing-section-band-alt">
+            <div className="marketing-section-white">
                 <TestimonialsSection />
             </div>
 

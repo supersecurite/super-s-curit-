@@ -13,6 +13,7 @@ test('public can view agent registration form', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('marketing/devenir-agent/index')
             ->has('availabilityOptions', 4)
+            ->has('postOptions', 6)
         );
 });
 
@@ -24,6 +25,7 @@ test('public can submit a valid agent application in conakry', function () {
         'last_name' => 'Diallo',
         'phone' => '+224612131314',
         'email' => 'agent@example.com',
+        'post' => 'agent',
         'experience_years' => 3,
         'availability' => 'nuit',
         'certifications' => 'Formation gardiennage',
@@ -31,7 +33,6 @@ test('public can submit a valid agent application in conakry', function () {
         'region_id' => '1',
         'prefecture_id' => '10',
         'commune_id' => '104',
-        'quartier_id' => '10404',
         'address_detail' => 'Face Cis Media',
         'consent' => '1',
     ];
@@ -45,22 +46,12 @@ test('public can submit a valid agent application in conakry', function () {
         ->and($application->first_name)->toBe('Mamadou')
         ->and($application->prefecture_name)->toBe('Conakry')
         ->and($application->commune_name)->toBe('Lambanyi')
-        ->and($application->quartier_name)->toBe('Kinifi')
+        ->and($application->post?->value)->toBe('agent')
+        ->and($application->quartier_name)->toBeNull()
         ->and($application->status->value)->toBe('pending');
 });
 
-test('agent application requires commune when prefecture has communes', function () {
-    $this->post(route('devenir-agent.store'), [
-        'first_name' => 'Test',
-        'last_name' => 'Agent',
-        'phone' => '+224600000000',
-        'region_id' => '1',
-        'prefecture_id' => '10',
-        'consent' => '1',
-    ])->assertSessionHasErrors('commune_id');
-});
-
-test('agent application requires quartier when commune has quartiers', function () {
+test('agent application requires post', function () {
     $this->post(route('devenir-agent.store'), [
         'first_name' => 'Test',
         'last_name' => 'Agent',
@@ -69,7 +60,19 @@ test('agent application requires quartier when commune has quartiers', function 
         'prefecture_id' => '10',
         'commune_id' => '104',
         'consent' => '1',
-    ])->assertSessionHasErrors('quartier_id');
+    ])->assertSessionHasErrors('post');
+});
+
+test('agent application requires commune when prefecture has communes', function () {
+    $this->post(route('devenir-agent.store'), [
+        'first_name' => 'Test',
+        'last_name' => 'Agent',
+        'phone' => '+224600000000',
+        'post' => 'superviseur',
+        'region_id' => '1',
+        'prefecture_id' => '10',
+        'consent' => '1',
+    ])->assertSessionHasErrors('commune_id');
 });
 
 test('agent application rejects invalid location hierarchy', function () {
@@ -77,24 +80,12 @@ test('agent application rejects invalid location hierarchy', function () {
         'first_name' => 'Test',
         'last_name' => 'Agent',
         'phone' => '+224600000000',
+        'post' => 'agent',
         'region_id' => '1',
         'prefecture_id' => '10',
         'commune_id' => '210',
         'consent' => '1',
     ])->assertSessionHasErrors('commune_id');
-});
-
-test('agent application rejects quartier not matching commune', function () {
-    $this->post(route('devenir-agent.store'), [
-        'first_name' => 'Test',
-        'last_name' => 'Agent',
-        'phone' => '+224600000000',
-        'region_id' => '1',
-        'prefecture_id' => '10',
-        'commune_id' => '100',
-        'quartier_id' => '10404',
-        'consent' => '1',
-    ])->assertSessionHasErrors('quartier_id');
 });
 
 test('thank you page is accessible', function () {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\SecurityAgentApplicationStatus;
+use App\Enums\SecurityAgentPost;
 use App\Mail\SecurityAgentApplicationReceived;
 use App\Models\SecurityAgentApplication;
 use App\Models\User;
@@ -34,6 +35,22 @@ test('admins can list agent applications with pending count', function () {
             ->component('candidatures-agents/index')
             ->has('applications.data', 3)
             ->where('pendingCount', 2)
+            ->has('posts', 6)
+        );
+});
+
+test('admins can filter applications by post', function () {
+    $admin = User::factory()->admin()->create();
+    SecurityAgentApplication::factory()->create(['post' => SecurityAgentPost::Agent]);
+    SecurityAgentApplication::factory()->create(['post' => SecurityAgentPost::Superviseur]);
+
+    $this->actingAs($admin)
+        ->get(route('candidatures-agents.index', ['post' => 'superviseur']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('applications.data', 1)
+            ->where('applications.data.0.post', 'superviseur')
+            ->where('applications.data.0.post_label', 'Superviseur')
         );
 });
 
@@ -71,6 +88,7 @@ test('admins can view application detail', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('candidatures-agents/show')
             ->where('application.full_name', 'Alpha Bah')
+            ->where('application.post_label', fn ($label) => $label !== null)
         );
 });
 
@@ -100,10 +118,10 @@ test('public submission sends notification mail', function () {
         'first_name' => 'Mail',
         'last_name' => 'Test',
         'phone' => '+224612000000',
+        'post' => 'coordinateur',
         'region_id' => '1',
         'prefecture_id' => '10',
         'commune_id' => '104',
-        'quartier_id' => '10404',
         'consent' => '1',
     ])->assertRedirect(route('devenir-agent.merci'));
 

@@ -1,5 +1,6 @@
-export const superSecuriteNavLinks = [
-    { href: '/#services', label: 'Gardiennage & sécurité' },
-    { href: '/#industriel', label: 'Sites industriels' },
-    { href: '/#evenementiel', label: 'Événementiel' },
-] as const;
+import { superSecuriteServices } from '@/data/super-securite-content';
+
+export const superSecuriteNavLinks = superSecuriteServices.map((service) => ({
+    href: service.path,
+    label: service.title,
+}));

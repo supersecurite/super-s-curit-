@@ -72,6 +72,7 @@ class DashboardController extends Controller
                     'uuid' => $application->uuid,
                     'full_name' => $application->full_name,
                     'phone' => $application->phone,
+                    'post_label' => $application->postLabel(),
                     'status' => $application->status->value,
                     'status_label' => $application->status->label(),
                     'created_at_formatted' => $application->created_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),

@@ -4,9 +4,9 @@ import ContactChannels from '@/components/marketing/contact-channels';
 import ContactMapSection from '@/components/marketing/contact-map-section';
 import ContactFaq from '@/components/marketing/contact-faq';
 import ContactForm from '@/components/marketing/contact-form';
-import PageHero from '@/components/marketing/page-hero';
+import MarketingSplitHero from '@/components/marketing/marketing-split-hero';
 import Reveal from '@/components/marketing/reveal';
-import { superSecuriteStock } from '@/data/super-securite-stock';
+import { marketingPageHeroes } from '@/data/marketing-page-heroes';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type SharedPageProps = {
@@ -20,42 +20,9 @@ export default function MarketingContact() {
         <>
             <SeoHead />
 
-            <PageHero
-                label="Nous contacter"
-                title={
-                    <>
-                        Parlons de votre{' '}
-                        <span className="marketing-text-gradient">
-                            sécurité
-                        </span>
-                    </>
-                }
-                description="Besoin de gardiennage, surveillance industrielle ou sécurité événementielle à Conakry ? Décrivez votre besoin : notre équipe vous répond rapidement."
-                media={
-                    <div className="relative mx-auto w-full max-w-lg">
-                        <div
-                            className="absolute -inset-4 rounded-3xl border border-dashed border-super-securite-border/60"
-                            aria-hidden
-                        />
-                        <div className="relative overflow-hidden rounded-3xl border border-super-securite-border bg-super-securite-surface shadow-xl shadow-slate-900/10">
-                            <img
-                                src={superSecuriteStock.contact.heroSide}
-                                alt="Contact Super Sécurité"
-                                width={1200}
-                                height={900}
-                                className="aspect-[4/3] h-auto w-full object-cover"
-                                fetchPriority="high"
-                            />
-                            <div
-                                className="pointer-events-none absolute inset-0 bg-linear-to-t from-super-securite-heading/30 via-transparent to-transparent"
-                                aria-hidden
-                            />
-                        </div>
-                    </div>
-                }
-            ></PageHero>
+            <MarketingSplitHero {...marketingPageHeroes.contact} />
 
-            <section className="py-10">
+            <section className="py-10 marketing-section-band">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <Reveal className="mb-12 max-w-2xl">
                         <p className="marketing-label mb-3">Canaux directs</p>
@@ -82,7 +49,7 @@ export default function MarketingContact() {
                 </div>
             </section>
 
-            <section className="">
+            <section className="py-10 marketing-section-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-12">
                         <Reveal className="lg:col-span-3">
@@ -196,9 +163,13 @@ export default function MarketingContact() {
                 </div>
             </section>
 
-            <ContactMapSection superSecurite={superSecurite} />
+            <section className="py-10 marketing-section-band">
+                <ContactMapSection superSecurite={superSecurite} />
+            </section>
 
-            <ContactFaq />
+            <section className="py-10 marketing-section-white">
+                <ContactFaq />
+            </section>
         </>
     );
 }

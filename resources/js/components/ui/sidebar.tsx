@@ -1,9 +1,10 @@
-import { Slot } from "@radix-ui/react-slot"
-import type { VariantProps} from "class-variance-authority";
-import { cva } from "class-variance-authority"
-import { PanelLeftCloseIcon, PanelLeftOpenIcon } from "lucide-react"
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { VariantProps, cva } from "class-variance-authority"
+import { PanelLeftIcon } from "lucide-react"
 
+import { useIsMobile } from "@/hooks/use-mobile"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
@@ -18,10 +19,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { cn } from "@/lib/utils"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -126,23 +126,25 @@ function SidebarProvider({
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <div
-        data-slot="sidebar-wrapper"
-        style={
-          {
-            "--sidebar-width": SIDEBAR_WIDTH,
-            "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
-            ...style,
-          } as React.CSSProperties
-        }
-        className={cn(
-          "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </div>
+      <TooltipProvider delayDuration={0}>
+        <div
+          data-slot="sidebar-wrapper"
+          style={
+            {
+              "--sidebar-width": SIDEBAR_WIDTH,
+              "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+              ...style,
+            } as React.CSSProperties
+          }
+          className={cn(
+            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full",
+            className
+          )}
+          {...props}
+        >
+          {children}
+        </div>
+      </TooltipProvider>
     </SidebarContext.Provider>
   )
 }
@@ -161,17 +163,49 @@ function Sidebar({
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
+  // Générer les positions et durées aléatoires une seule fois avec useState (initialisation lazy)
+  const [particleData] = React.useState(() => {
+    return Array.from({ length: 6 }, () => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      duration: 3 + Math.random() * 2,
+    }))
+  })
+
   if (collapsible === "none") {
     return (
       <div
         data-slot="sidebar"
         className={cn(
-          "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
+          "bg-gradient-to-b from-[color:var(--primary-800)] via-[color:var(--primary-700)] to-[color:var(--primary-800)] dark:from-[color:var(--primary-200)] dark:via-[color:var(--primary-300)] dark:to-[color:var(--primary-200)] text-white flex h-full w-(--sidebar-width) flex-col shadow-xl relative overflow-hidden",
           className
         )}
         {...props}
       >
-        {children}
+        {/* Effet de brillance décoratif */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 opacity-50 pointer-events-none" />
+        {/* Gradient border animé */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--primary-500)]/20 via-[color:var(--accent-500)]/20 to-[color:var(--primary-500)]/20 opacity-30" />
+        {/* Effet décoratif haut */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/60 to-transparent pointer-events-none" />
+        {/* Effet décoratif bas */}
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/60 to-transparent pointer-events-none" />
+        {/* Effet de particules flottantes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {particleData.map((particle, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
+              style={{
+                top: `${particle.top.toFixed(2)}%`,
+                left: `${particle.left.toFixed(2)}%`,
+                animationDelay: `${i * 200}ms`,
+                animationDuration: `${particle.duration.toFixed(2)}s`
+              }}
+            />
+          ))}
+        </div>
+        <div className="relative z-10 flex flex-col h-full overflow-hidden">{children}</div>
       </div>
     )
   }
@@ -187,7 +221,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="bg-gradient-to-b from-[color:var(--primary-800)] via-[color:var(--primary-700)] to-[color:var(--primary-800)] dark:from-[color:var(--primary-200)] dark:via-[color:var(--primary-300)] dark:to-[color:var(--primary-200)] text-white w-(--sidebar-width) p-0 [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -195,7 +229,34 @@ function Sidebar({
           }
           side={side}
         >
-          <div className="flex h-full w-full flex-col">{children}</div>
+          <div className="flex h-full w-full flex-col relative overflow-hidden">
+            {/* Effet de brillance décoratif */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 opacity-50 pointer-events-none" />
+            {/* Gradient border animé */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--primary-500)]/20 via-[color:var(--accent-500)]/20 to-[color:var(--primary-500)]/20 opacity-30 pointer-events-none" />
+            {/* Effet décoratif haut */}
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/60 to-transparent pointer-events-none" />
+            {/* Effet décoratif bas */}
+            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/60 to-transparent pointer-events-none" />
+            {/* Effet de particules flottantes */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {particleData.map((particle, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
+                  style={{
+                    top: `${particle.top.toFixed(2)}%`,
+                    left: `${particle.left.toFixed(2)}%`,
+                    animationDelay: `${i * 200}ms`,
+                    animationDuration: `${particle.duration.toFixed(2)}s`
+                  }}
+                />
+              ))}
+            </div>
+            <div className="relative z-10 flex h-full w-full flex-col">
+              {children}
+            </div>
+          </div>
         </SheetContent>
       </Sheet>
     )
@@ -237,9 +298,37 @@ function Sidebar({
       >
         <div
           data-sidebar="sidebar"
-          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+          className="bg-gradient-to-r from-[color:var(--primary-800)]/95 via-[color:var(--primary-700)]/90 to-[color:var(--primary-600)]/95 dark:from-[color:var(--primary-200)]/95 dark:via-[color:var(--primary-300)]/90 dark:to-[color:var(--primary-400)]/95 text-white flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border-[color:var(--primary-400)]/20 dark:group-data-[variant=floating]:border-[color:var(--primary-600)]/20 group-data-[variant=floating]:shadow-2xl group-data-[variant=floating]:shadow-[color:var(--primary-500)]/20 dark:group-data-[variant=floating]:shadow-[color:var(--primary-400)]/20 relative overflow-hidden backdrop-blur-2xl backdrop-saturate-200"
         >
-          {children}
+          {/* Effet de brillance dynamique */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-50 pointer-events-none" />
+
+          {/* Gradient border animé */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--primary-500)]/20 via-[color:var(--accent-500)]/20 to-[color:var(--primary-500)]/20 opacity-30" />
+
+          {/* Ligne lumineuse animée haut */}
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/60 to-transparent shadow-lg shadow-[color:var(--primary-400)]/50" />
+
+          {/* Ligne lumineuse animée bas */}
+          <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/60 to-transparent shadow-lg shadow-[color:var(--primary-400)]/50" />
+
+          {/* Effet de particules flottantes */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {particleData.map((particle, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
+                style={{
+                  top: `${particle.top.toFixed(2)}%`,
+                  left: `${particle.left.toFixed(2)}%`,
+                  animationDelay: `${i * 200}ms`,
+                  animationDuration: `${particle.duration.toFixed(2)}s`
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="relative z-10 flex flex-col h-full overflow-hidden">{children}</div>
         </div>
       </div>
     </div>
@@ -251,7 +340,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar, isMobile, state } = useSidebar()
+  const { toggleSidebar } = useSidebar()
 
   return (
     <Button
@@ -266,8 +355,8 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      {isMobile || state === "collapsed" ? <PanelLeftOpenIcon /> : <PanelLeftCloseIcon />}
-      <span className="sr-only">Toggle sidebar</span>
+      <PanelLeftIcon />
+      <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
 }
@@ -279,10 +368,10 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle sidebar"
+      aria-label="Toggle Sidebar"
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle sidebar"
+      title="Toggle Sidebar"
       className={cn(
         "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
@@ -355,7 +444,7 @@ function SidebarSeparator({
     <Separator
       data-slot="sidebar-separator"
       data-sidebar="separator"
-      className={cn("bg-sidebar-border mx-2 w-auto", className)}
+      className={cn("bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/30 to-transparent mx-2 w-auto h-px", className)}
       {...props}
     />
   )
@@ -367,7 +456,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb-[color:var(--primary-400)]/20 scrollbar-track-transparent hover:scrollbar-thumb-[color:var(--primary-400)]/30 group-data-[collapsible=icon]:overflow-hidden",
         className
       )}
       {...props}
@@ -398,8 +487,8 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-        "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:select-none group-data-[collapsible=icon]:pointer-events-none",
+        "text-white/70 ring-[color:var(--primary-400)]/30 flex h-8 shrink-0 items-center rounded-full px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className
       )}
       {...props}
@@ -467,13 +556,13 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded p-2 text-left text-sm outline-hidden ring-[color:var(--primary-400)]/30 transition-[width,height,padding,background-color,transform] hover:bg-white/10 hover:text-white focus-visible:ring-2 active:bg-white/15 active:text-white disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-super-securite-heading data-[active=true]:font-medium data-[active=true]:text-white data-[state=open]:hover:bg-white/15 data-[state=open]:hover:text-white group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 hover:scale-105 active:scale-95",
   {
     variants: {
       variant: {
-        default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        default: "hover:bg-gradient-to-r hover:from-white/10 hover:to-white/5 hover:text-white",
         outline:
-          "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
+          "bg-transparent shadow-[0_0_0_1px_rgb(var(--primary-400-rgb)/0.3)] hover:bg-gradient-to-r hover:from-white/10 hover:to-white/5 hover:text-white hover:shadow-[0_0_0_1px_rgb(var(--primary-300-rgb)/0.5)]",
       },
       size: {
         default: "h-8 text-sm",
@@ -599,14 +688,10 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
 }) {
-
-  // wrapping in useState to ensure the width is stable across renders
-  // also ensures we have a stable reference to the style object
-  const [skeletonStyle] = React.useState(() => (
-      {
-        "--skeleton-width": `${Math.floor(Math.random() * 40) + 50}%` // Random width between 50 to 90%.
-    } as React.CSSProperties
-  ))
+  // Random width between 50 to 90%.
+  const [width] = React.useState(() => {
+    return `${Math.floor(Math.random() * 40) + 50}%`
+  })
 
   return (
     <div
@@ -624,7 +709,11 @@ function SidebarMenuSkeleton({
       <Skeleton
         className="h-4 max-w-(--skeleton-width) flex-1"
         data-sidebar="menu-skeleton-text"
-        style={skeletonStyle}
+        style={
+          {
+            "--skeleton-width": width,
+          } as React.CSSProperties
+        }
       />
     </div>
   )
@@ -636,7 +725,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        "border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
+        "border-[color:var(--primary-400)]/20 mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
         "group-data-[collapsible=icon]:hidden",
         className
       )}
@@ -679,8 +768,8 @@ function SidebarMenuSubButton({
       data-size={size}
       data-active={isActive}
       className={cn(
-        "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
-        "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
+        "text-white/80 ring-[color:var(--primary-400)]/30 hover:bg-gradient-to-r hover:from-white/10 hover:to-white/5 hover:text-white active:bg-white/15 active:text-white [&>svg]:text-white/70 flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 transition-all duration-200",
+        "data-[active=true]:bg-super-securite-heading data-[active=true]:text-white data-[active=true]:font-medium",
         size === "sm" && "text-xs",
         size === "md" && "text-sm",
         "group-data-[collapsible=icon]:hidden",

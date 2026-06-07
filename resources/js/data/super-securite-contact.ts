@@ -1,9 +1,9 @@
 export const superSecuriteProjectTypes = [
-    'Gardiennage et surveillance',
-    'Site industriel ou minier',
-    'Sécurité événementielle',
+    'Sécurité entreprise',
+    'Sécurité résidence',
+    'Sécurité chantiers',
+    'Zones minières',
     'Vidéo / télésurveillance',
-    'Résidence ou bureau',
     'Autre',
 ] as const;
 
@@ -21,7 +21,7 @@ export const superSecuriteFaqs: readonly SuperSecuriteFaq[] = [
     {
         question: 'Quels types de sites sécurisez-vous ?',
         answer:
-            'Résidences, bureaux, chantiers, zones minières, sites industriels et événements publics ou privés en Guinée.',
+            'Résidences, bureaux, chantiers, zones minières et sites sensibles en Guinée.',
     },
     {
         question: 'Comment obtenir un devis ?',
@@ -31,7 +31,7 @@ export const superSecuriteFaqs: readonly SuperSecuriteFaq[] = [
     {
         question: 'Vos agents sont-ils formés et certifiés ?',
         answer:
-            'Oui. Nos équipes suivent des protocoles stricts et sont habituées aux environnements industriels, résidentiels et événementiels.',
+            'Oui. Nos équipes suivent des protocoles stricts et sont habituées aux environnements professionnels, résidentiels, chantiers et miniers.',
     },
     {
         question: 'Couvrez-vous toute la Guinée ?',

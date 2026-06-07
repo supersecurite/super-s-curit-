@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Marketing;
 
+use App\Enums\SecurityAgentPost;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSecurityAgentApplicationRequest;
 use App\Mail\SecurityAgentApplicationReceived;
@@ -23,6 +24,7 @@ class SecurityAgentApplicationController extends Controller
                 ['value' => '24h', 'label' => '24h/24'],
                 ['value' => 'evenementiel', 'label' => 'Événementiel'],
             ],
+            'postOptions' => SecurityAgentPost::options(),
         ]);
     }
 

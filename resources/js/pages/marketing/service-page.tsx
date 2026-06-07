@@ -4,23 +4,22 @@ import ServiceFaq from '@/components/marketing/service-faq';
 import CtaBand from '@/components/marketing/cta-band';
 import PageHero from '@/components/marketing/page-hero';
 import Reveal from '@/components/marketing/reveal';
-import type { ServicePageContent } from '@/data/super-securite-service-pages';
+import {
+    superSecuriteServicePages,
+    type ServicePageContent,
+} from '@/data/super-securite-service-pages';
+import type { SuperSecuriteServiceId } from '@/data/super-securite-services';
 
 type PageProps = {
     pageFaqs: { question: string; answer: string }[];
+    serviceId: SuperSecuriteServiceId;
 };
 
-export default function ServicePage({
-    content,
-}: {
-    content: ServicePageContent;
-}) {
+function ServicePageContent({ content }: { content: ServicePageContent }) {
     const { pageFaqs } = usePage<PageProps>().props;
 
     return (
         <>
-            <SeoHead />
-
             <PageHero
                 label={content.label}
                 title={
@@ -90,6 +89,18 @@ export default function ServicePage({
             <ServiceFaq faqs={pageFaqs} />
 
             <CtaBand />
+        </>
+    );
+}
+
+export default function ServicePage() {
+    const { serviceId } = usePage<PageProps>().props;
+    const content = superSecuriteServicePages[serviceId];
+
+    return (
+        <>
+            <SeoHead />
+            <ServicePageContent content={content} />
         </>
     );
 }

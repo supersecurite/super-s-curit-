@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\SecurityAgentApplicationStatus;
+use App\Enums\SecurityAgentPost;
 use App\Models\SecurityAgentApplication;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,14 +29,15 @@ class SecurityAgentApplicationFactory extends Factory
             'availability' => fake()->randomElement(['jour', 'nuit', '24h', 'evenementiel']),
             'certifications' => fake()->optional()->sentence(),
             'motivation' => fake()->optional()->paragraph(),
+            'post' => fake()->randomElement(SecurityAgentPost::cases()),
             'region_id' => '1',
             'region_name' => 'Région de Conakry',
             'prefecture_id' => '10',
             'prefecture_name' => 'Conakry',
             'commune_id' => '104',
             'commune_name' => 'LAMBANYI',
-            'quartier_id' => '10404',
-            'quartier_name' => 'Kinifi',
+            'quartier_id' => null,
+            'quartier_name' => null,
             'address_detail' => fake()->optional()->streetAddress(),
             'status' => SecurityAgentApplicationStatus::Pending,
         ];

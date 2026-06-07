@@ -23,13 +23,6 @@ class SitemapEntries
             ])
             ->all();
 
-        $caseStudies = collect(config('seo.case_studies', []))
-            ->map(fn (array $study): array => [
-                ...$study,
-                'sources' => ['config/seo.php', 'resources/js/pages/marketing/case-study.tsx'],
-            ])
-            ->all();
-
         $servicePages = collect(config('seo.services', []))
             ->map(fn (array $service): array => [
                 'path' => $service['path'],
@@ -72,7 +65,7 @@ class SitemapEntries
 
         $merged = $pages;
 
-        foreach ([...$servicePages, ...$caseStudies, ...$legal, ...$articlePages, ...$securityTipPages] as $entry) {
+        foreach ([...$servicePages, ...$legal, ...$articlePages, ...$securityTipPages] as $entry) {
             if (! in_array($entry['path'], $existingPaths, true)) {
                 $merged[] = $entry;
                 $existingPaths[] = $entry['path'];

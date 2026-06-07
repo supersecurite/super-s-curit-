@@ -1,6 +1,7 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
+    Briefcase,
     Calendar,
     Mail,
     MapPin,
@@ -21,6 +22,7 @@ type ApplicationDetail = {
     last_name: string;
     phone: string;
     email: string | null;
+    post_label: string | null;
     experience_years: number | null;
     availability_label: string | null;
     certifications: string | null;
@@ -29,7 +31,6 @@ type ApplicationDetail = {
     region_name: string;
     prefecture_name: string;
     commune_name: string | null;
-    quartier_name: string | null;
     address_detail: string | null;
     status: string;
     status_label: string;
@@ -79,6 +80,12 @@ export default function CandidaturesAgentsShow() {
                         </h1>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
                             <Badge>{application.status_label}</Badge>
+                            {application.post_label ? (
+                                <Badge variant="outline">
+                                    <Briefcase className="mr-1 size-3" />
+                                    {application.post_label}
+                                </Badge>
+                            ) : null}
                             {application.created_at_formatted ? (
                                 <span className="text-muted-foreground flex items-center gap-1 text-sm">
                                     <Calendar className="size-4" />
@@ -96,6 +103,17 @@ export default function CandidaturesAgentsShow() {
                                 Coordonnées
                             </h2>
                             <div className="grid gap-3 text-sm">
+                                {application.post_label ? (
+                                    <p className="flex items-center gap-2">
+                                        <Briefcase className="text-muted-foreground size-4" />
+                                        <span>
+                                            <span className="font-medium">
+                                                Poste :
+                                            </span>{' '}
+                                            {application.post_label}
+                                        </span>
+                                    </p>
+                                ) : null}
                                 <p className="flex items-center gap-2">
                                     <Phone className="text-muted-foreground size-4" />
                                     <a href={`tel:${application.phone}`}>
@@ -135,12 +153,6 @@ export default function CandidaturesAgentsShow() {
                                     {application.commune_name ? (
                                         <li>
                                             Commune : {application.commune_name}
-                                        </li>
-                                    ) : null}
-                                    {application.quartier_name ? (
-                                        <li>
-                                            Quartier :{' '}
-                                            {application.quartier_name}
                                         </li>
                                     ) : null}
                                 </ul>

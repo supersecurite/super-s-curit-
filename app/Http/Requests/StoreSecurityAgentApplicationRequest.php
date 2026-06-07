@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SecurityAgentPost;
 use App\Support\GuineaLocationValidator;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,10 +30,10 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'availability' => ['nullable', 'string', Rule::in(['jour', 'nuit', '24h', 'evenementiel'])],
             'certifications' => ['nullable', 'string', 'max:2000'],
             'motivation' => ['nullable', 'string', 'max:5000'],
+            'post' => ['required', 'string', Rule::enum(SecurityAgentPost::class)],
             'region_id' => ['required', 'string', 'max:20'],
             'prefecture_id' => ['required', 'string', 'max:20'],
             'commune_id' => ['nullable', 'string', 'max:20'],
-            'quartier_id' => ['nullable', 'string', 'max:20'],
             'address_detail' => ['nullable', 'string', 'max:500'],
             'consent' => ['accepted'],
             'website' => ['nullable', 'max:0'],
@@ -55,6 +56,7 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'phone.required' => 'Le téléphone est obligatoire.',
             'email.email' => 'L\'adresse e-mail n\'est pas valide.',
             'consent.accepted' => 'Vous devez accepter le traitement de vos données.',
+            'post.required' => 'Le poste est obligatoire.',
         ];
     }
 
@@ -72,10 +74,10 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'availability' => 'disponibilité',
             'certifications' => 'certifications',
             'motivation' => 'motivation',
+            'post' => 'poste',
             'region_id' => 'région',
             'prefecture_id' => 'préfecture',
             'commune_id' => 'commune',
-            'quartier_id' => 'quartier',
             'address_detail' => 'adresse complémentaire',
             'consent' => 'consentement',
         ];

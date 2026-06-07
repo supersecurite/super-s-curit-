@@ -1,9 +1,10 @@
 import {
     Award,
+    Building2,
     Clock,
-    Factory,
-    PartyPopper,
-    Shield,
+    HardHat,
+    Home,
+    Mountain,
     Users,
     Zap,
     type LucideIcon,
@@ -14,33 +15,41 @@ export type SuperSecuriteService = {
     icon: LucideIcon;
     title: string;
     description: string;
-    anchor: string;
+    path: string;
 };
 
 export const superSecuriteServices: readonly SuperSecuriteService[] = [
     {
-        id: 'industriel',
-        icon: Factory,
-        title: 'Sécurité des sites industriels et miniers',
+        id: 'entreprise',
+        icon: Building2,
+        title: 'Sécurité entreprise',
         description:
-            'Surveillance rigoureuse de vos installations sensibles avec des équipes professionnelles, formées aux protocoles de sécurité les plus stricts.',
-        anchor: '#services',
+            'Protection de vos locaux professionnels : bureaux, commerces et entrepôts avec des agents qualifiés, disponibles 24h/24.',
+        path: '/entreprise',
     },
     {
-        id: 'gardiennage',
-        icon: Shield,
-        title: 'Gardiennage et surveillance',
+        id: 'residence',
+        icon: Home,
+        title: 'Sécurité résidence',
         description:
-            "Des agents de sécurité hautement qualifiés, disponibles jour et nuit pour protéger vos locaux, bureaux et résidences. Votre tranquillité d'esprit, notre mission.",
-        anchor: '#services',
+            'Tranquillité d’esprit pour villas, immeubles et résidences grâce à une surveillance rigoureuse et une présence dissuasive.',
+        path: '/residence',
     },
     {
-        id: 'evenementiel',
-        icon: PartyPopper,
-        title: 'Sécurité événementielle',
+        id: 'chantiers',
+        icon: HardHat,
+        title: 'Sécurité chantiers',
         description:
-            'Gestion complète de la sécurité pour événements publics et privés, assurée par des experts habitués aux situations de haute exigence.',
-        anchor: '#services',
+            'Sécurisation de vos chantiers BTP : protection du matériel, contrôle des accès et rondes régulières sur site.',
+        path: '/chantiers',
+    },
+    {
+        id: 'zones-minieres',
+        icon: Mountain,
+        title: 'Zones minières',
+        description:
+            'Surveillance rigoureuse des sites miniers avec des équipes formées aux protocoles de sécurité les plus stricts.',
+        path: '/zones-minieres',
     },
 ] as const;
 
@@ -61,7 +70,7 @@ export const superSecuriteAdvantages: readonly SuperSecuriteAdvantage[] = [
         icon: Zap,
         title: "Rapidité d'intervention",
         description:
-            'Réactivité et déploiement rapide pour sécuriser vos sites, événements et installations.',
+            'Réactivité et déploiement rapide pour sécuriser vos sites, chantiers et installations.',
     },
     {
         icon: Clock,
@@ -73,7 +82,7 @@ export const superSecuriteAdvantages: readonly SuperSecuriteAdvantage[] = [
         icon: Users,
         title: 'Équipe certifiée et formée',
         description:
-            'Agents certifiés, habitués aux protocoles industriels, résidentiels et événementiels.',
+            'Agents certifiés, habitués aux environnements professionnels, résidentiels, chantiers et miniers.',
     },
 ] as const;
 
@@ -101,15 +110,17 @@ export const superSecuriteTestimonials: readonly SuperSecuriteTestimonial[] = [
 ] as const;
 
 export const superSecuriteFooterServices = [
-    'Gardiennage résidence — bureaux — chantier — zone minière',
+    'Sécurité entreprise — bureaux et commerces',
+    'Sécurité résidence — villas et immeubles',
+    'Sécurité chantiers — sites BTP',
+    'Zones minières — sites sensibles',
     'Vidéos et télé surveillance',
-    'Sécurité événementiel : sportif et culturel',
 ] as const;
 
 export const superSecuriteWelcome = {
     title: 'Bienvenue chez Super SÉCURITÉ',
     paragraphs: [
-        'La sécurité est un besoin fondamental, et chez Super Sécurité, nous nous engageons à protéger ce qui compte le plus pour vous. Que vous soyez une entreprise cherchant à sécuriser vos installations ou un particulier en quête de tranquillité d’esprit, nous avons les solutions adaptées à vos besoins.',
+        'La sécurité est un besoin fondamental, et chez Super Sécurité, nous nous engageons à protéger ce qui compte le plus pour vous. Que vous soyez une entreprise, un particulier ou un site sensible, nous avons les solutions adaptées à vos besoins.',
         'Super Sécurité, c’est une équipe d’experts en sécurité privée, prêts à intervenir 24h/24 et 7j/7 pour garantir votre protection et celle de vos biens.',
     ],
 } as const;

@@ -36,7 +36,7 @@ export const superSecuriteValues: readonly SuperSecuriteValue[] = [
         icon: Users,
         title: 'Équipe certifiée et formée',
         description:
-            'Personnel qualifié, habitué aux protocoles industriels, résidentiels et événementiels.',
+            'Personnel qualifié, habitué aux environnements professionnels, résidentiels, chantiers et miniers.',
     },
 ] as const;
 
@@ -44,7 +44,7 @@ export const superSecuriteMissionBlocks = [
     {
         title: 'Qui sommes-nous ?',
         content:
-            'Super Sécurité est une entreprise de sécurité privée basée à Conakry, Guinée. Nous protégeons entreprises, sites industriels, chantiers et particuliers avec des solutions de gardiennage, surveillance et sécurité événementielle.',
+            'Super Sécurité est une entreprise de sécurité privée basée à Conakry, Guinée. Nous protégeons entreprises, résidences, chantiers et zones minières avec des solutions de gardiennage et surveillance.',
     },
     {
         title: 'Notre engagement',

@@ -16,6 +16,7 @@ type ApplicationRow = {
     full_name: string;
     phone: string;
     email: string | null;
+    post_label: string | null;
     location_summary: string;
     status: string;
     status_label: string;
@@ -25,6 +26,7 @@ type ApplicationRow = {
 };
 
 type StatusOption = { value: string; label: string };
+type PostOption = { value: string; label: string };
 
 type PaginatedApplications = {
     data: ApplicationRow[];
@@ -38,13 +40,14 @@ type PageProps = {
     filters: {
         search?: string;
         status?: string;
+        post?: string;
         region_id?: string;
         prefecture_id?: string;
         commune_id?: string;
-        quartier_id?: string;
     };
     pendingCount: number;
     statuses: StatusOption[];
+    posts: PostOption[];
 };
 
 function statusBadgeVariant(
@@ -63,7 +66,7 @@ function statusBadgeVariant(
 }
 
 export default function CandidaturesAgentsIndex() {
-    const { applications, filters, pendingCount, statuses } =
+    const { applications, filters, pendingCount, statuses, posts } =
         usePage<PageProps>().props;
 
     const initialLocation = useMemo<LocationValues>(
@@ -71,14 +74,8 @@ export default function CandidaturesAgentsIndex() {
             region_id: filters.region_id ?? '',
             prefecture_id: filters.prefecture_id ?? '',
             commune_id: filters.commune_id ?? '',
-            quartier_id: filters.quartier_id ?? '',
         }),
-        [
-            filters.region_id,
-            filters.prefecture_id,
-            filters.commune_id,
-            filters.quartier_id,
-        ],
+        [filters.region_id, filters.prefecture_id, filters.commune_id],
     );
 
     const [location, setLocation] = useState<LocationValues>(initialLocation);
@@ -105,7 +102,6 @@ export default function CandidaturesAgentsIndex() {
             region_id: nextLocation.region_id || undefined,
             prefecture_id: nextLocation.prefecture_id || undefined,
             commune_id: nextLocation.commune_id || undefined,
-            quartier_id: nextLocation.quartier_id || undefined,
         });
     };
 
@@ -131,12 +127,12 @@ export default function CandidaturesAgentsIndex() {
                 </div>
 
                 <div className="app-panel space-y-4 p-4">
-                    <div className="grid gap-4 md:grid-cols-3">
+                    <div className="grid gap-4 md:grid-cols-4">
                         <div className="relative md:col-span-2">
                             <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                             <Input
                                 className="pl-9"
-                                placeholder="Rechercher par nom, téléphone, e-mail..."
+                                placeholder="Rechercher par nom, téléphone, e-mail, poste..."
                                 defaultValue={filters.search ?? ''}
                                 onChange={(e) => debouncedSearch(e.target.value)}
                             />
@@ -157,6 +153,25 @@ export default function CandidaturesAgentsIndex() {
                             {statuses.map((status) => (
                                 <option key={status.value} value={status.value}>
                                     {status.label}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
+                            defaultValue={filters.post ?? 'all'}
+                            onChange={(e) =>
+                                applyFilters({
+                                    post:
+                                        e.target.value === 'all'
+                                            ? undefined
+                                            : e.target.value,
+                                })
+                            }
+                        >
+                            <option value="all">Tous les postes</option>
+                            {posts.map((post) => (
+                                <option key={post.value} value={post.value}>
+                                    {post.label}
                                 </option>
                             ))}
                         </select>
@@ -182,6 +197,9 @@ export default function CandidaturesAgentsIndex() {
                                 <tr>
                                     <th className="px-4 py-3 font-medium">
                                         Candidat
+                                    </th>
+                                    <th className="px-4 py-3 font-medium">
+                                        Poste
                                     </th>
                                     <th className="px-4 py-3 font-medium">
                                         Téléphone
@@ -213,7 +231,7 @@ export default function CandidaturesAgentsIndex() {
                                 {applications.data.length === 0 ? (
                                     <tr>
                                         <td
-                                            colSpan={9}
+                                            colSpan={10}
                                             className="text-muted-foreground px-4 py-8 text-center"
                                         >
                                             <LayoutList className="mx-auto mb-2 size-8 opacity-60" />
@@ -228,6 +246,9 @@ export default function CandidaturesAgentsIndex() {
                                         >
                                             <td className="px-4 py-3 font-medium">
                                                 {application.full_name}
+                                            </td>
+                                            <td className="text-muted-foreground px-4 py-3">
+                                                {application.post_label ?? '—'}
                                             </td>
                                             <td className="px-4 py-3">
                                                 {application.phone}

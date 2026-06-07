@@ -3,7 +3,6 @@ import {
     getAllRegions,
     getCommunesForPrefecture,
     getPrefecturesForRegion,
-    getQuartiersForCommune,
 } from '@/data/guinea-localisation';
 import InputError from '@/components/input-error';
 import { Label } from '@/components/ui/label';
@@ -13,7 +12,6 @@ export type LocationValues = {
     region_id: string;
     prefecture_id: string;
     commune_id: string;
-    quartier_id: string;
 };
 
 type LocationCascadingSelectsProps = {
@@ -50,20 +48,11 @@ export default function LocationCascadingSelects({
         return getCommunesForPrefecture(values.prefecture_id);
     }, [values.prefecture_id]);
 
-    const quartiers = useMemo(() => {
-        if (!values.commune_id) {
-            return [];
-        }
-
-        return getQuartiersForCommune(values.commune_id);
-    }, [values.commune_id]);
-
     const handleRegionChange = (regionId: string) => {
         onChange({
             region_id: regionId,
             prefecture_id: '',
             commune_id: '',
-            quartier_id: '',
         });
     };
 
@@ -72,15 +61,6 @@ export default function LocationCascadingSelects({
             ...values,
             prefecture_id: prefectureId,
             commune_id: '',
-            quartier_id: '',
-        });
-    };
-
-    const handleCommuneChange = (communeId: string) => {
-        onChange({
-            ...values,
-            commune_id: communeId,
-            quartier_id: '',
         });
     };
 
@@ -135,7 +115,7 @@ export default function LocationCascadingSelects({
                 <InputError message={errors.prefecture_id} />
             </div>
 
-            <div className="grid gap-2">
+            <div className="grid gap-2 sm:col-span-2">
                 <Label htmlFor="commune_id" className="text-super-securite-heading">
                     Commune
                     {communes.length > 0 ? (
@@ -146,7 +126,9 @@ export default function LocationCascadingSelects({
                     id="commune_id"
                     name="commune_id"
                     value={values.commune_id}
-                    onChange={(e) => handleCommuneChange(e.target.value)}
+                    onChange={(e) =>
+                        onChange({ ...values, commune_id: e.target.value })
+                    }
                     disabled={!values.prefecture_id || communes.length === 0}
                     required={communes.length > 0}
                     className={cn(fieldClassName)}
@@ -163,38 +145,6 @@ export default function LocationCascadingSelects({
                     ))}
                 </select>
                 <InputError message={errors.commune_id} />
-            </div>
-
-            <div className="grid gap-2">
-                <Label htmlFor="quartier_id" className="text-super-securite-heading">
-                    Quartier
-                    {quartiers.length > 0 ? (
-                        <span className="text-super-securite-accent"> *</span>
-                    ) : null}
-                </Label>
-                <select
-                    id="quartier_id"
-                    name="quartier_id"
-                    value={values.quartier_id}
-                    onChange={(e) =>
-                        onChange({ ...values, quartier_id: e.target.value })
-                    }
-                    disabled={!values.commune_id || quartiers.length === 0}
-                    required={quartiers.length > 0}
-                    className={cn(fieldClassName)}
-                >
-                    <option value="">
-                        {quartiers.length === 0
-                            ? 'Aucun quartier disponible'
-                            : 'Sélectionner un quartier'}
-                    </option>
-                    {quartiers.map((quartier) => (
-                        <option key={quartier.id} value={quartier.id}>
-                            {quartier.nom}
-                        </option>
-                    ))}
-                </select>
-                <InputError message={errors.quartier_id} />
             </div>
         </div>
     );

@@ -82,18 +82,6 @@ class SeoPageRegistry
             ];
         }
 
-        $caseStudy = collect(config('seo.case_studies', []))->firstWhere('path', $path);
-
-        if ($caseStudy !== null) {
-            return [
-                'title' => $caseStudy['meta_title'],
-                'description' => $caseStudy['meta_description'],
-                'og_image' => $caseStudy['image'] ?? config('seo.default_og_image'),
-                'og_image_alt' => ($caseStudy['title'] ?? '').' — réalisation Super Sécurité Guinée',
-                'schema_type' => 'WebPage',
-            ];
-        }
-
         if (preg_match('#^/actualites/([a-z0-9\-]+)$#', $path, $matches) === 1) {
             $article = Article::query()
                 ->published()

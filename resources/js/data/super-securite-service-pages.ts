@@ -36,7 +36,8 @@ export const superSecuriteServicePages: Record<
     SuperSecuriteServiceId,
     ServicePageContent
 > = {
-    gardiennage: toServicePageContent('gardiennage'),
-    industriel: toServicePageContent('industriel'),
-    evenementiel: toServicePageContent('evenementiel'),
+    entreprise: toServicePageContent('entreprise'),
+    residence: toServicePageContent('residence'),
+    chantiers: toServicePageContent('chantiers'),
+    'zones-minieres': toServicePageContent('zones-minieres'),
 };

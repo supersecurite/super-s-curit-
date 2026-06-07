@@ -72,6 +72,15 @@
     --color-super-securite-accent-hover: var(--super-securite-accent-hover);
     --color-super-securite-muted: var(--super-securite-muted);
     --color-super-securite-border: var(--super-securite-border);
+
+    --color-primary-200: var(--primary-200);
+    --color-primary-300: var(--primary-300);
+    --color-primary-400: var(--primary-400);
+    --color-primary-500: var(--primary-500);
+    --color-primary-600: var(--primary-600);
+    --color-primary-700: var(--primary-700);
+    --color-primary-800: var(--primary-800);
+    --color-accent-500: var(--accent-500);
 }
 
 :root {
@@ -155,9 +164,30 @@
     --super-securite-accent-hover: #cc0016;
     --super-securite-muted: #4a5668;
     --super-securite-border: #b8c5d4;
+
+    /* Échelle dérivée du rouge thème (sidebar, loaders, accents) */
+    --primary-500: var(--super-securite-accent);
+    --primary-600: var(--super-securite-accent-hover);
+    --primary-700: color-mix(in srgb, var(--super-securite-accent-hover) 75%, black);
+    --primary-800: color-mix(in srgb, var(--super-securite-accent-hover) 50%, black);
+    --primary-400: color-mix(in srgb, var(--super-securite-accent) 80%, white);
+    --primary-300: color-mix(in srgb, var(--super-securite-accent) 55%, white);
+    --primary-200: color-mix(in srgb, var(--super-securite-accent) 30%, white);
+    --accent-500: var(--super-securite-accent);
+    --primary-400-rgb: 255 0 27;
+    --primary-300-rgb: 255 102 117;
 }
 
 @layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    
     * {
         @apply border-border;
     }
@@ -263,6 +293,10 @@ html.app-page {
         @apply w-full bg-super-securite-bg;
     }
 
+    .marketing-section-white {
+        @apply w-full bg-white;
+    }
+
     .marketing-section-band-alt {
         @apply w-full border-y border-super-securite-border/50 bg-super-securite-surface;
     }
@@ -284,6 +318,131 @@ html.app-page {
             linear-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px),
             linear-gradient(90deg, rgba(15, 23, 42, 0.07) 1px, transparent 1px);
         background-size: 3rem 3rem;
+    }
+
+    .marketing-why-us-bg {
+        background-color: #ffffff;
+        background-image:
+            radial-gradient(
+                circle at center,
+                color-mix(in oklab, var(--super-securite-accent) 42%, transparent) 1.25px,
+                transparent 1.25px
+            ),
+            radial-gradient(
+                circle at center,
+                color-mix(in oklab, var(--super-securite-heading) 16%, transparent) 0.75px,
+                transparent 0.75px
+            );
+        background-size:
+            2.25rem 2.25rem,
+            1.125rem 1.125rem;
+        background-position:
+            0 0,
+            1.125rem 1.125rem;
+    }
+
+    .marketing-hero-pattern {
+        background-color: #ffffff;
+    }
+
+    .marketing-hero-pattern::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            100deg,
+            #ffffff 0%,
+            color-mix(in oklab, #ffffff 88%, transparent) 42%,
+            transparent 68%
+        );
+        pointer-events: none;
+    }
+
+    .marketing-split-hero-reverse .marketing-hero-pattern::after {
+        background: linear-gradient(
+            260deg,
+            #ffffff 0%,
+            color-mix(in oklab, #ffffff 88%, transparent) 42%,
+            transparent 68%
+        );
+    }
+
+    /* Actualités — radar de surveillance / veille */
+    .marketing-hero-pattern-actualites {
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96' fill='none'%3E%3Ccircle cx='48' cy='48' r='30' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Ccircle cx='48' cy='48' r='20' stroke='%230f172a' stroke-opacity='0.05'/%3E%3Ccircle cx='48' cy='48' r='10' stroke='%23ff001b' stroke-opacity='0.1'/%3E%3Ccircle cx='48' cy='48' r='2.5' fill='%23ff001b' fill-opacity='0.18'/%3E%3Cpath d='M48 48 L72 26' stroke='%23ff001b' stroke-opacity='0.12' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M48 20 V10 M48 86 V76 M20 48 H10 M86 48 H76' stroke='%230f172a' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E"),
+            repeating-radial-gradient(
+                circle at center,
+                transparent 0,
+                transparent 23px,
+                color-mix(in oklab, var(--super-securite-accent) 5%, transparent) 23px,
+                color-mix(in oklab, var(--super-securite-accent) 5%, transparent) 24px
+            );
+        background-size:
+            6rem 6rem,
+            6rem 6rem;
+    }
+
+    /* Conseils — bouclier validé / prévention */
+    .marketing-hero-pattern-conseils {
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='88' viewBox='0 0 80 88' fill='none'%3E%3Cpath d='M40 6 L62 16 V38 C62 52 40 68 40 68 C40 68 18 52 18 38 V16 Z' stroke='%230f172a' stroke-opacity='0.08' stroke-width='1'/%3E%3Cpath d='M28 40 L36 48 L52 30' stroke='%23ff001b' stroke-opacity='0.16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+            repeating-linear-gradient(
+                0deg,
+                transparent 0,
+                transparent 43px,
+                color-mix(in oklab, var(--super-securite-heading) 4%, transparent) 43px,
+                color-mix(in oklab, var(--super-securite-heading) 4%, transparent) 44px
+            );
+        background-size:
+            5rem 5.5rem,
+            auto;
+    }
+
+    /* Devenir agent — badge / matricule */
+    .marketing-hero-pattern-devenir-agent {
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='96' viewBox='0 0 72 96' fill='none'%3E%3Crect x='8' y='8' width='56' height='80' rx='6' stroke='%230f172a' stroke-opacity='0.07' stroke-width='1'/%3E%3Crect x='8' y='8' width='56' height='18' rx='6' fill='%23ff001b' fill-opacity='0.06'/%3E%3Ccircle cx='36' cy='44' r='12' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Cpath d='M22 68 H50' stroke='%230f172a' stroke-opacity='0.06' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M26 76 H46' stroke='%23ff001b' stroke-opacity='0.1' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E"),
+            repeating-linear-gradient(
+                90deg,
+                transparent 0,
+                transparent 17px,
+                color-mix(in oklab, var(--super-securite-accent) 4%, transparent) 17px,
+                color-mix(in oklab, var(--super-securite-accent) 4%, transparent) 18px
+            );
+        background-size:
+            4.5rem 6rem,
+            auto;
+    }
+
+    /* Contact — réseau de liaison / communication */
+    .marketing-hero-pattern-contact {
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96' fill='none'%3E%3Cline x1='24' y1='48' x2='48' y2='28' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Cline x1='48' y1='28' x2='72' y2='48' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Cline x1='24' y1='48' x2='48' y2='68' stroke='%23ff001b' stroke-opacity='0.1'/%3E%3Cline x1='48' y1='68' x2='72' y2='48' stroke='%23ff001b' stroke-opacity='0.1'/%3E%3Ccircle cx='24' cy='48' r='5' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='28' r='5' stroke='%23ff001b' stroke-opacity='0.14'/%3E%3Ccircle cx='72' cy='48' r='5' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='68' r='5' stroke='%23ff001b' stroke-opacity='0.14'/%3E%3C/svg%3E"),
+            radial-gradient(
+                circle at center,
+                color-mix(in oklab, var(--super-securite-accent) 6%, transparent) 1px,
+                transparent 1px
+            );
+        background-size:
+            6rem 6rem,
+            1.5rem 1.5rem;
+    }
+
+    /* À propos — formation d'équipe / boucliers alignés */
+    .marketing-hero-pattern-about {
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80' fill='none'%3E%3Cpath d='M24 10 L38 16 V30 C38 38 24 48 24 48 C24 48 10 38 10 30 V16 Z' stroke='%230f172a' stroke-opacity='0.07'/%3E%3Cpath d='M60 6 L78 14 V32 C78 44 60 58 60 58 C60 58 42 44 42 32 V14 Z' stroke='%23ff001b' stroke-opacity='0.12' stroke-width='1.25'/%3E%3Cpath d='M96 10 L110 16 V30 C110 38 96 48 96 48 C96 48 82 38 82 30 V16 Z' stroke='%230f172a' stroke-opacity='0.07'/%3E%3Cline x1='38' y1='52' x2='82' y2='52' stroke='%230f172a' stroke-opacity='0.05' stroke-width='1' stroke-dasharray='4 4'/%3E%3C/svg%3E"),
+            repeating-linear-gradient(
+                135deg,
+                transparent 0,
+                transparent 13px,
+                color-mix(in oklab, var(--super-securite-heading) 4%, transparent) 13px,
+                color-mix(in oklab, var(--super-securite-heading) 4%, transparent) 14px
+            );
+        background-size:
+            7.5rem 5rem,
+            auto;
     }
 
     .marketing-heading-display {
@@ -373,6 +532,43 @@ html.app-page {
         stroke-dasharray: 600;
         stroke-dashoffset: 600;
         animation: underline-draw 1.4s ease-out 0.6s forwards;
+    }
+
+    .marketing-underline-slide {
+        background: linear-gradient(
+            90deg,
+            var(--super-securite-accent) 0%,
+            #0f172a 100%
+        );
+        transform: scaleX(0);
+        transform-origin: left center;
+        animation: underline-slide 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.45s
+            forwards;
+    }
+
+    .marketing-underline-grow {
+        transform-origin: left center;
+        transform: scaleX(0.35);
+        opacity: 0;
+        animation: underline-grow 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+    }
+
+    .marketing-underline-double path:first-of-type {
+        stroke-dasharray: 420;
+        stroke-dashoffset: 420;
+        animation: underline-draw 0.95s ease-out 0.5s forwards;
+    }
+
+    .marketing-underline-double path:last-of-type {
+        stroke-dasharray: 420;
+        stroke-dashoffset: 420;
+        animation: underline-draw 0.95s ease-out 0.85s forwards;
+    }
+
+    .marketing-underline-scan path {
+        stroke-dasharray: 10 390;
+        stroke-dashoffset: 400;
+        animation: underline-scan 1.25s ease-in-out 0.55s forwards;
     }
 
     .marketing-gradient-text {
@@ -501,6 +697,25 @@ html.app-page {
     }
 }
 
+@keyframes underline-slide {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes underline-grow {
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes underline-scan {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
 @keyframes gradient-shift {
     0%,
     100% {
@@ -509,6 +724,23 @@ html.app-page {
     50% {
         background-position: 100% 50%;
     }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-10px) rotate(120deg);
+    }
+    66% {
+        transform: translateY(-5px) rotate(240deg);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float-soft {

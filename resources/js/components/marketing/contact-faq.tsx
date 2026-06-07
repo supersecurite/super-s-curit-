@@ -4,7 +4,7 @@ import { superSecuriteFaqs } from '@/data/super-securite-contact';
 
 export default function ContactFaq() {
     return (
-        <section className="py-24 md:py-32">
+        <section className="">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-12 text-center">
                     <p className="marketing-label mb-3">FAQ</p>

@@ -1,7 +1,10 @@
 <?php
 
 use App\Support\BusinessLocation;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
+
+uses(RefreshDatabase::class);
 
 test('robots.txt is served dynamically with sitemap reference', function () {
     $response = $this->get(route('robots'));
@@ -35,20 +38,27 @@ test('sitemap.xml lists public marketing pages', function () {
         ->toContain(url('/'))
         ->toContain(url('/a-propos'))
         ->toContain(url('/contact'))
+        ->toContain(url('/entreprise'))
+        ->toContain(url('/residence'))
+        ->toContain(url('/chantiers'))
+        ->toContain(url('/zones-minieres'))
         ->toContain(url('/politique-de-confidentialite'))
         ->toContain(url('/mentions-legales'));
 });
 
-test('legacy agency urls redirect to home', function (string $path) {
-    $this->get($path)->assertRedirect('/');
+test('service pages are available with seo meta', function (string $routeName, string $serviceId) {
+    $this->get(route($routeName))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/service-page')
+            ->where('serviceId', $serviceId)
+            ->has('pageMeta.title')
+        );
 })->with([
-    '/site-wordpress',
-    '/creation-site',
-    '/integrateur-solutions',
-    '/woocommerce',
-    '/application-web',
-    '/seo',
-    '/realisations',
+    ['services.entreprise', 'entreprise'],
+    ['services.residence', 'residence'],
+    ['services.chantiers', 'chantiers'],
+    ['services.zones-minieres', 'zones-minieres'],
 ]);
 
 test('pourquoi-nous redirects to about page', function () {
@@ -142,8 +152,8 @@ test('home seo meta includes local search terms', function () {
             ->where('seo.organization.addressLocality', 'Conakry')
             ->has('seo.knowsAbout')
             ->where('seo.knowsAbout', fn ($terms): bool => $terms->contains('sécurité privée Conakry')
-                && $terms->contains('gardiennage Guinée'))
-            ->where('seo.services.0.name', 'Gardiennage et surveillance')
+                && $terms->contains('sécurité entreprise Conakry'))
+            ->where('seo.services.0.name', 'Sécurité entreprise')
         );
 });
 

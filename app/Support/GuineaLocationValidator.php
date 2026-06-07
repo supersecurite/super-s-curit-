@@ -17,7 +17,6 @@ class GuineaLocationValidator
         $regionId = (string) ($data['region_id'] ?? '');
         $prefectureId = (string) ($data['prefecture_id'] ?? '');
         $communeId = (string) ($data['commune_id'] ?? '');
-        $quartierId = (string) ($data['quartier_id'] ?? '');
 
         if ($regionId === '') {
             $errors['region_id'] = 'La région est obligatoire.';
@@ -62,22 +61,6 @@ class GuineaLocationValidator
                 $errors['commune_id'] = 'La commune sélectionnée est invalide.';
             } elseif (($commune['prefectureId'] ?? null) !== $prefectureId) {
                 $errors['commune_id'] = 'La commune ne correspond pas à la préfecture sélectionnée.';
-            } else {
-                $quartiers = GuineaLocationData::quartiersForCommune($communeId);
-
-                if ($quartiers !== [] && $quartierId === '') {
-                    $errors['quartier_id'] = 'Le quartier est obligatoire pour cette commune.';
-                }
-            }
-        }
-
-        if ($quartierId !== '') {
-            $quartier = GuineaLocationData::findQuartier($quartierId);
-
-            if ($quartier === null) {
-                $errors['quartier_id'] = 'Le quartier sélectionné est invalide.';
-            } elseif ($communeId !== '' && ($quartier['communeId'] ?? null) !== $communeId) {
-                $errors['quartier_id'] = 'Le quartier ne correspond pas à la commune sélectionnée.';
             }
         }
 
@@ -95,15 +78,13 @@ class GuineaLocationValidator
         $commune = ($data['commune_id'] ?? '') !== ''
             ? GuineaLocationData::findCommune((string) $data['commune_id'])
             : null;
-        $quartier = ($data['quartier_id'] ?? '') !== ''
-            ? GuineaLocationData::findQuartier((string) $data['quartier_id'])
-            : null;
 
         return [
             'region_name' => $region['nom'] ?? null,
             'prefecture_name' => $prefecture['nom'] ?? null,
             'commune_name' => $commune['nom'] ?? null,
-            'quartier_name' => $quartier['nom'] ?? null,
+            'quartier_name' => null,
+            'quartier_id' => null,
         ];
     }
 

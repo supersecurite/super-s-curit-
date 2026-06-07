@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\SecurityAgentApplicationStatus;
+use App\Enums\SecurityAgentPost;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateSecurityAgentApplicationRequest;
 use App\Models\SecurityAgentApplication;
@@ -35,18 +36,30 @@ class SecurityAgentApplicationController extends Controller
             $query->where('commune_id', $request->string('commune_id')->toString());
         }
 
-        if ($request->filled('quartier_id') && $request->string('quartier_id')->toString() !== 'all') {
-            $query->where('quartier_id', $request->string('quartier_id')->toString());
+        if ($request->filled('post') && $request->string('post')->toString() !== 'all') {
+            $query->where('post', $request->string('post')->toString());
         }
 
         if ($request->filled('search')) {
             $search = $request->string('search')->toString();
-            $query->where(function ($builder) use ($search): void {
+            $postValues = collect(SecurityAgentPost::cases())
+                ->filter(fn (SecurityAgentPost $post): bool => str_contains(
+                    mb_strtolower($post->label()),
+                    mb_strtolower($search),
+                ))
+                ->map(fn (SecurityAgentPost $post): string => $post->value)
+                ->all();
+
+            $query->where(function ($builder) use ($search, $postValues): void {
                 $builder
                     ->where('first_name', 'like', '%'.$search.'%')
                     ->orWhere('last_name', 'like', '%'.$search.'%')
                     ->orWhere('phone', 'like', '%'.$search.'%')
                     ->orWhere('email', 'like', '%'.$search.'%');
+
+                if ($postValues !== []) {
+                    $builder->orWhereIn('post', $postValues);
+                }
             });
         }
 
@@ -60,15 +73,16 @@ class SecurityAgentApplicationController extends Controller
             'filters' => $request->only([
                 'search',
                 'status',
+                'post',
                 'region_id',
                 'prefecture_id',
                 'commune_id',
-                'quartier_id',
             ]),
             'pendingCount' => SecurityAgentApplication::query()
                 ->where('status', SecurityAgentApplicationStatus::Pending)
                 ->count(),
             'statuses' => SecurityAgentApplicationStatus::options(),
+            'posts' => SecurityAgentPost::options(),
         ]);
     }
 
