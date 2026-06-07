@@ -57,7 +57,7 @@ export default function MarketingMobileNav({
             <SheetTrigger asChild>
                 <button
                     type="button"
-                    className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-all duration-200 hover:bg-super-securite-accent hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none md:hidden"
+                    className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full bg-black/5 text-white transition-all duration-200 hover:bg-super-securite-accent hover:text-white hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none md:hidden"
                     aria-label="Ouvrir le menu"
                 >
                     <Menu className="size-5" aria-hidden />
@@ -87,7 +87,7 @@ export default function MarketingMobileNav({
                             className="flex min-w-0 flex-col gap-1 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
                         >
                             <img
-                                src={superSecuriteImages.brandWhite}
+                                src={superSecuriteImages.brandBlackTransparent}
                                 alt="Super Sécurité"
                                 className="h-16 w-auto max-w-[200px] object-contain object-left"
                                 width={200}

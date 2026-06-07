@@ -86,9 +86,16 @@ export default function MarketingHeader() {
                     className="group flex shrink-0 cursor-pointer items-center gap-2 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
                 >
                     <img
+                        src={superSecuriteImages.brandBlackTransparent}
+                        alt="Super Sécurité"
+                        className="h-16 w-auto max-w-[200px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 md:hidden"
+                        width={200}
+                        height={48}
+                    />
+                    <img
                         src={superSecuriteImages.brandWhite}
                         alt="Super Sécurité"
-                        className="h-16 w-auto max-w-[200px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:max-w-[240px]"
+                        className="hidden h-16 w-auto max-w-[240px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100 md:block"
                         width={240}
                         height={48}
                     />
