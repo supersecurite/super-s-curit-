@@ -92,7 +92,7 @@ function HeroHeading({ variant }: { variant: MarketingHeroVariant }) {
 function HeroCopy({ variant }: { variant: MarketingHeroVariant }) {
     return (
         <>
-            <Reveal delay={80}>
+            <Reveal delay={80} className="hidden md:block">
                 <p className="marketing-label mb-2 sm:mb-3">{variant.label}</p>
             </Reveal>
 
@@ -228,17 +228,6 @@ function SlideBackground({ variant }: { variant: MarketingHeroVariant }) {
             />
             <div className="pointer-events-none absolute inset-0">
                 <div
-                    className="marketing-blob bg-super-securite-accent"
-                    style={{
-                        top: '-6rem',
-                        left: '-4rem',
-                        width: '28rem',
-                        height: '28rem',
-                        opacity: 0.12,
-                    }}
-                    aria-hidden
-                />
-                <div
                     className="marketing-blob bg-slate-600"
                     style={{
                         top: '20%',
@@ -267,7 +256,7 @@ function SplitLayout({
     const imageFirst = imagePosition === 'left';
 
     return (
-        <div className="relative mx-auto grid h-full min-h-0 w-full max-w-7xl grid-cols-1 content-center gap-5 px-4 pt-2 pb-14 sm:gap-6 sm:px-6 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-8 lg:pb-14 xl:gap-12">
+        <div className="relative mx-auto grid h-full min-h-0 w-full max-w-7xl grid-cols-1 content-center gap-5 px-4 pt-4 pb-14 sm:gap-6 sm:px-6 sm:pt-2 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-8 lg:pb-14 xl:gap-12">
             <div
                 className={cn(
                     'flex min-h-0 flex-col justify-center lg:col-span-6 xl:col-span-7',

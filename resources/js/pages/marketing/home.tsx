@@ -1,5 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import SeoHead from '@/components/marketing/seo-head';
+import ArticlesSection from '@/components/marketing/articles-section';
 import CtaBand from '@/components/marketing/cta-band';
 import MarketingHeroCarousel from '@/components/marketing/marketing-hero-carousel';
 import SecurityTipsSection from '@/components/marketing/security-tips-section';
@@ -8,24 +9,16 @@ import TestimonialsSection from '@/components/marketing/testimonials-section';
 import WelcomeSection from '@/components/marketing/welcome-section';
 import PartnersSection from '@/components/marketing/partners-section';
 import WhyUsSection from '@/components/marketing/why-us-section';
-
-type FeaturedSecurityTip = {
-    id: number;
-    title: string;
-    slug: string;
-    excerpt: string | null;
-    image_url: string | null;
-    category: string | null;
-    read_time: number;
-    published_at_formatted: string | null;
-};
+import type { MarketingContentPreview } from '@/types/marketing-content';
 
 type HomePageProps = {
-    featuredSecurityTips: FeaturedSecurityTip[];
+    featuredArticles: MarketingContentPreview[];
+    featuredSecurityTips: MarketingContentPreview[];
 };
 
 export default function MarketingHome() {
-    const { featuredSecurityTips = [] } = usePage<HomePageProps>().props;
+    const { featuredArticles = [], featuredSecurityTips = [] } =
+        usePage<HomePageProps>().props;
 
     return (
         <>
@@ -42,6 +35,10 @@ export default function MarketingHome() {
             </div>
 
             <div className="marketing-section-white">
+                <ArticlesSection articles={featuredArticles} />
+            </div>
+
+            <div className="marketing-section-band">
                 <SecurityTipsSection tips={featuredSecurityTips} />
             </div>
 

@@ -34,4 +34,10 @@ return [
 
     'rccm' => env('SUPER_SECURITE_RCCM'),
 
+    'zone_label' => env('SUPER_SECURITE_ZONE_LABEL', 'Conakry et région'),
+
+    'hours_short' => env('SUPER_SECURITE_HOURS_SHORT', '24h/24 · 7j/7'),
+
+    'hours_long' => env('SUPER_SECURITE_HOURS_LONG', '24h/24 et 7j/7'),
+
 ];

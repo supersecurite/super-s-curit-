@@ -70,6 +70,15 @@ class HandleInertiaRequests extends Middleware
             'securityAgentApplicationsPendingCount' => $request->user()?->isAdmin()
                 ? SecurityAgentApplication::query()->where('status', SecurityAgentApplicationStatus::Pending)->count()
                 : 0,
+            'featuredArticles' => Article::query()
+                ->published()
+                ->where('featured', true)
+                ->orderByDesc('published_at')
+                ->limit(3)
+                ->get()
+                ->map(fn (Article $article) => $article->toPublicArray())
+                ->values()
+                ->all(),
             'featuredSecurityTips' => SecurityTip::query()
                 ->published()
                 ->where('featured', true)

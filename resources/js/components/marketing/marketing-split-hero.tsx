@@ -137,7 +137,7 @@ export default function MarketingSplitHero({
                 aria-hidden
             />
 
-            <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8 lg:py-24 min-h-[60vh]">
+            <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-14 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 min-h-[min(60vh,calc(100dvh-var(--marketing-header-height,5.5rem)-2rem))] md:min-h-[60vh]">
                 <div className="grid grid-cols-1 content-center gap-10 lg:grid-cols-12 lg:items-center lg:gap-12 xl:gap-16">
                     {textColumn}
                     {imageColumn}

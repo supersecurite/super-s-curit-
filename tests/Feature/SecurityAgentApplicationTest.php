@@ -30,8 +30,6 @@ test('public can submit a valid agent application in conakry', function () {
         'availability' => 'nuit',
         'certifications' => 'Formation gardiennage',
         'motivation' => 'Je souhaite rejoindre Super Sécurité.',
-        'region_id' => '1',
-        'prefecture_id' => '10',
         'commune_id' => '104',
         'address_detail' => 'Face Cis Media',
         'consent' => '1',
@@ -44,6 +42,8 @@ test('public can submit a valid agent application in conakry', function () {
 
     expect($application)->not->toBeNull()
         ->and($application->first_name)->toBe('Mamadou')
+        ->and($application->region_id)->toBe('1')
+        ->and($application->prefecture_id)->toBe('10')
         ->and($application->prefecture_name)->toBe('Conakry')
         ->and($application->commune_name)->toBe('Lambanyi')
         ->and($application->post?->value)->toBe('agent')
@@ -56,34 +56,28 @@ test('agent application requires post', function () {
         'first_name' => 'Test',
         'last_name' => 'Agent',
         'phone' => '+224600000000',
-        'region_id' => '1',
-        'prefecture_id' => '10',
         'commune_id' => '104',
         'consent' => '1',
     ])->assertSessionHasErrors('post');
 });
 
-test('agent application requires commune when prefecture has communes', function () {
+test('agent application requires commune', function () {
     $this->post(route('devenir-agent.store'), [
         'first_name' => 'Test',
         'last_name' => 'Agent',
         'phone' => '+224600000000',
         'post' => 'superviseur',
-        'region_id' => '1',
-        'prefecture_id' => '10',
         'consent' => '1',
     ])->assertSessionHasErrors('commune_id');
 });
 
-test('agent application rejects invalid location hierarchy', function () {
+test('agent application rejects invalid commune', function () {
     $this->post(route('devenir-agent.store'), [
         'first_name' => 'Test',
         'last_name' => 'Agent',
         'phone' => '+224600000000',
         'post' => 'agent',
-        'region_id' => '1',
-        'prefecture_id' => '10',
-        'commune_id' => '210',
+        'commune_id' => '99999',
         'consent' => '1',
     ])->assertSessionHasErrors('commune_id');
 });

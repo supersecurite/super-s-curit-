@@ -29,8 +29,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 <span>{item.title}</span>
                                 {item.badge && item.badge > 0 ? (
                                     <Badge
-                                        variant="destructive"
-                                        className="ml-auto size-5 justify-center rounded-full px-0 text-[10px]"
+                                        className="ml-auto size-5 justify-center rounded-full border-transparent bg-yellow-400 px-0 text-[10px] font-semibold text-yellow-950 hover:bg-yellow-400"
                                     >
                                         {item.badge > 9 ? '9+' : item.badge}
                                     </Badge>

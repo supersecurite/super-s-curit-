@@ -133,6 +133,47 @@ export function searchPrefectureByName(nom: string): Prefecture | undefined {
   return prefectures.find(p => p.nom.toLowerCase().includes(searchTerm));
 }
 
+const CONAKRY_PREFECTURE_ID = '10';
+
+export type CommuneSelectOption = {
+    value: string;
+    label: string;
+    searchText: string;
+};
+
+/**
+ * Liste toutes les communes pour un select : Conakry en premier, puis le reste par préfecture.
+ */
+export function getCommunesForAgentSelect(): CommuneSelectOption[] {
+    const all = getAllCommunes();
+    const conakry = all
+        .filter((c) => c.prefectureId === CONAKRY_PREFECTURE_ID)
+        .sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+    const others = all
+        .filter((c) => c.prefectureId !== CONAKRY_PREFECTURE_ID)
+        .sort((a, b) => {
+            const byPrefecture = a.prefectureNom.localeCompare(
+                b.prefectureNom,
+                'fr',
+            );
+
+            return byPrefecture !== 0
+                ? byPrefecture
+                : a.nom.localeCompare(b.nom, 'fr');
+        });
+
+    const toOption = (c: Commune, isConakry: boolean): CommuneSelectOption => ({
+        value: c.id,
+        label: !isConakry ? c.nom : `${c.nom} — ${c.prefectureNom}`,
+        searchText: `${c.nom} ${c.prefectureNom} ${c.regionNom}`.toLowerCase(),
+    });
+
+    return [
+        ...conakry.map((c) => toOption(c, true)),
+        ...others.map((c) => toOption(c, false)),
+    ];
+}
+
 /**
  * Recherche une commune par nom (insensible à la casse)
  */

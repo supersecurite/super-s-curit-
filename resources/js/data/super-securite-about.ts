@@ -1,3 +1,4 @@
+import { superSecuriteHoursLong, superSecuriteHoursTitle } from '@/data/super-securite-hours';
 import {
     Award,
     Clock,
@@ -28,9 +29,9 @@ export const superSecuriteValues: readonly SuperSecuriteValue[] = [
     },
     {
         icon: Clock,
-        title: 'Disponibilité 24/7',
+        title: superSecuriteHoursTitle,
         description:
-            'Une présence continue pour protéger vos biens, vos équipes et vos visiteurs.',
+            `Présence continue ${superSecuriteHoursLong} pour protéger vos biens, vos équipes et vos visiteurs.`,
     },
     {
         icon: Users,
@@ -44,11 +45,11 @@ export const superSecuriteMissionBlocks = [
     {
         title: 'Qui sommes-nous ?',
         content:
-            'Super Sécurité est une entreprise de sécurité privée basée à Conakry, Guinée. Nous protégeons entreprises, résidences, chantiers et zones minières avec des solutions de gardiennage et surveillance.',
+            'Super Sécurité est une entreprise de sécurité privée basée à Lambanyi, Conakry. Nous protégeons entreprises, résidences, chantiers et zones minières à Conakry et région avec des solutions de gardiennage et surveillance.',
     },
     {
         title: 'Notre engagement',
         content:
-            'Protéger ce qui compte le plus pour vous : vos installations, vos collaborateurs et votre tranquillité d’esprit. Intervention 24h/24 et 7j/7 avec des équipes professionnelles et réactives.',
+            `Protéger ce qui compte le plus pour vous : vos installations, vos collaborateurs et votre tranquillité d’esprit. Intervention ${superSecuriteHoursLong} avec des équipes professionnelles et réactives.`,
     },
 ] as const;

@@ -27,7 +27,7 @@ export default function LegalPage() {
                     <Reveal>
                         <p>
                             <strong className="text-super-securite-heading">Éditeur :</strong>{' '}
-                            Super Sécurité — sécurité privée à Conakry, Guinée.
+                            Super Sécurité — sécurité privée à Conakry et région.
                             <br />
                             {superSecurite.address}
                         </p>

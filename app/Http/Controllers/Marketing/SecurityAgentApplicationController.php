@@ -32,7 +32,7 @@ class SecurityAgentApplicationController extends Controller
         StoreSecurityAgentApplicationRequest $request,
         GuineaLocationValidator $locationValidator,
     ): RedirectResponse {
-        $validated = $request->validated();
+        $validated = $locationValidator->enrichFromCommune($request->validated());
         $labels = $locationValidator->resolveLabels($validated);
 
         unset($validated['consent'], $validated['website']);

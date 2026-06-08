@@ -1,3 +1,6 @@
+import { superSecuriteHoursLong } from '@/data/super-securite-hours';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
+
 export const superSecuriteProjectTypes = [
     'Sécurité entreprise',
     'Sécurité résidence',
@@ -16,12 +19,12 @@ export const superSecuriteFaqs: readonly SuperSecuriteFaq[] = [
     {
         question: 'Intervenez-vous en urgence ?',
         answer:
-            'Oui, Super Sécurité assure une disponibilité 24h/24 et 7j/7. Précisez l’urgence dans votre message pour une prise en charge prioritaire.',
+            `Oui, Super Sécurité assure une disponibilité ${superSecuriteHoursLong}. Précisez l’urgence dans votre message pour une prise en charge prioritaire.`,
     },
     {
         question: 'Quels types de sites sécurisez-vous ?',
         answer:
-            'Résidences, bureaux, chantiers, zones minières et sites sensibles en Guinée.',
+            `Résidences, bureaux, chantiers, zones minières et sites sensibles à ${superSecuriteZoneLabel}.`,
     },
     {
         question: 'Comment obtenir un devis ?',
@@ -34,8 +37,8 @@ export const superSecuriteFaqs: readonly SuperSecuriteFaq[] = [
             'Oui. Nos équipes suivent des protocoles stricts et sont habituées aux environnements professionnels, résidentiels, chantiers et miniers.',
     },
     {
-        question: 'Couvrez-vous toute la Guinée ?',
+        question: `Intervenez-vous à ${superSecuriteZoneLabel} ?`,
         answer:
-            'Notre base est à Conakry ; nous intervenons sur Conakry et selon vos besoins sur d’autres sites en Guinée.',
+            `Oui. Notre base est à Lambanyi, Conakry, et nous intervenons sur ${superSecuriteZoneLabel} selon vos besoins.`,
     },
 ] as const;

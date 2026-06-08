@@ -1,3 +1,4 @@
+import { superSecuriteHoursLong, superSecuriteHoursTitle } from '@/data/super-securite-hours';
 import {
     Award,
     Building2,
@@ -24,7 +25,7 @@ export const superSecuriteServices: readonly SuperSecuriteService[] = [
         icon: Building2,
         title: 'Sécurité entreprise',
         description:
-            'Protection de vos locaux professionnels : bureaux, commerces et entrepôts avec des agents qualifiés, disponibles 24h/24.',
+            `Protection de vos locaux professionnels : bureaux, commerces et entrepôts avec des agents qualifiés, disponibles ${superSecuriteHoursLong}.`,
         path: '/entreprise',
     },
     {
@@ -74,9 +75,9 @@ export const superSecuriteAdvantages: readonly SuperSecuriteAdvantage[] = [
     },
     {
         icon: Clock,
-        title: 'Disponibilité 24/7',
+        title: superSecuriteHoursTitle,
         description:
-            'Intervention 24h/24 et 7j/7 pour garantir votre protection et celle de vos biens.',
+            `Intervention ${superSecuriteHoursLong} pour garantir votre protection et celle de vos biens.`,
     },
     {
         icon: Users,
@@ -99,7 +100,7 @@ export const superSecuriteTestimonials: readonly SuperSecuriteTestimonial[] = [
     },
     {
         quote:
-            'Le professionnalisme des agents de Super Sécurité est exemplaire. Ils sont disponibles en tout temps (24H/7) et leur réactivité est irréprochable.',
+            `Le professionnalisme des agents de Super Sécurité est exemplaire. Ils sont disponibles ${superSecuriteHoursLong} et leur réactivité est irréprochable.`,
         author: 'Client résidentiel',
     },
     {
@@ -121,6 +122,6 @@ export const superSecuriteWelcome = {
     title: 'Bienvenue chez Super SÉCURITÉ',
     paragraphs: [
         'La sécurité est un besoin fondamental, et chez Super Sécurité, nous nous engageons à protéger ce qui compte le plus pour vous. Que vous soyez une entreprise, un particulier ou un site sensible, nous avons les solutions adaptées à vos besoins.',
-        'Super Sécurité, c’est une équipe d’experts en sécurité privée, prêts à intervenir 24h/24 et 7j/7 pour garantir votre protection et celle de vos biens.',
+        `Super Sécurité, c’est une équipe d’experts en sécurité privée, prêts à intervenir ${superSecuriteHoursLong} pour garantir votre protection et celle de vos biens.`,
     ],
 } as const;

@@ -1,6 +1,11 @@
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 import { superSecuriteServices } from '@/data/super-securite-content';
+import {
+    superSecuriteHoursLong,
+    superSecuriteHoursShort,
+} from '@/data/super-securite-hours';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import { contact } from '@/routes';
 
 export type HeroSlideLayout = 'split-right' | 'split-left';
@@ -48,30 +53,19 @@ const serviceSlideConfigs: Record<
         highlight: 'professionnels',
         stats: [
             { label: 'Surveillance', value: 'Continue' },
-            { label: 'Zone', value: 'Conakry & régions' },
+            { label: 'Zone', value: superSecuriteZoneLabel },
             { label: 'Équipes', value: 'Formées & certifiées' },
-        ],
-    },
-    residence: {
-        layout: 'split-right',
-        typography: 'accent-block',
-        title: 'Sécurisez votre',
-        highlight: 'résidence',
-        stats: [
-            { label: 'Protection', value: 'Villas & immeubles' },
-            { label: 'Présence', value: 'Dissuasive' },
-            { label: 'Disponibilité', value: '24h/24' },
         ],
     },
     chantiers: {
         layout: 'split-left',
-        typography: 'split-lines',
+        typography: 'accent-block',
         title: 'Vos chantiers',
         highlight: 'sous contrôle',
         stats: [
             { label: 'Secteurs', value: 'BTP & travaux' },
             { label: 'Patrouilles', value: 'Régulières' },
-            { label: 'Réactivité', value: '24h/24' },
+            { label: 'Réactivité', value: superSecuriteHoursShort },
         ],
     },
     'zones-minieres': {
@@ -83,6 +77,17 @@ const serviceSlideConfigs: Record<
             { label: 'Secteurs', value: 'Mines & sites sensibles' },
             { label: 'Protocoles', value: 'Sur mesure' },
             { label: 'Expertise', value: 'Terrain' },
+        ],
+    },
+    residence: {
+        layout: 'split-right',
+        typography: 'accent-block',
+        title: 'Sécurisez votre',
+        highlight: 'résidence',
+        stats: [
+            { label: 'Protection', value: 'Villas & immeubles' },
+            { label: 'Présence', value: 'Dissuasive' },
+            { label: 'Disponibilité', value: superSecuriteHoursShort },
         ],
     },
 };
@@ -126,7 +131,7 @@ export const marketingHeroSlides: readonly MarketingHeroVariant[] = [
         title: 'Confiez votre sécurité',
         highlight: "à l'excellence",
         description:
-            'Sécurité privée à Conakry : entreprise, résidence, chantiers et zones minières. Intervention 24h/24 et 7j/7.',
+            `Sécurité privée à ${superSecuriteZoneLabel} : entreprise, résidence, chantiers et zones minières. Intervention ${superSecuriteHoursLong}.`,
         primaryCta: {
             label: 'Nous contacter',
             href: contact.url(),
@@ -136,11 +141,11 @@ export const marketingHeroSlides: readonly MarketingHeroVariant[] = [
             href: '#services',
         },
         image: superSecuriteStock.home.welcome,
-        imageAlt: 'Super Sécurité — agents de sécurité à Conakry',
+        imageAlt: `Super Sécurité — agents de sécurité à ${superSecuriteZoneLabel}`,
         backgroundImage: superSecuriteStock.hero.background,
         stats: [
-            { label: 'Disponibilité', value: '24h/24 · 7j/7' },
-            { label: 'Zone', value: 'Conakry & Guinée' },
+            { label: 'Disponibilité', value: superSecuriteHoursShort },
+            { label: 'Zone', value: superSecuriteZoneLabel },
             { label: 'Expertise', value: 'Sécurité privée' },
         ],
     },

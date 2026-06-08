@@ -1,5 +1,7 @@
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { superSecuriteMetaKeywords } from '@/data/super-securite-search-terms';
+import { superSecuriteHoursLong } from '@/data/super-securite-hours';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 
 export type SeoPageKey = 'home' | 'about' | 'contact';
 
@@ -25,9 +27,9 @@ export type SeoPageMeta = {
 export const superSecuriteSeoPages: Record<SeoPageKey, SeoPageMeta> = {
     home: {
         focusKeyword: 'sécurité privée Conakry',
-        title: 'Super Sécurité | Sécurité privée à Conakry, Guinée',
+        title: `Super Sécurité | Sécurité privée à ${superSecuriteZoneLabel}`,
         description:
-            'Super Sécurité : sécurité entreprise, résidence, chantiers et zones minières. Intervention 24h/24 et 7j/7 à Conakry.',
+            `Super Sécurité : sécurité entreprise, résidence, chantiers et zones minières. Intervention ${superSecuriteHoursLong} à ${superSecuriteZoneLabel}.`,
         path: '/',
         image: superSecuriteImages.ogDefault,
         keywords: superSecuriteMetaKeywords.home,
@@ -36,9 +38,9 @@ export const superSecuriteSeoPages: Record<SeoPageKey, SeoPageMeta> = {
     },
     about: {
         focusKeyword: 'entreprise sécurité privée Guinée',
-        title: 'Pourquoi Super Sécurité | Sécurité privée à Conakry',
+        title: `Pourquoi Super Sécurité | Sécurité privée à ${superSecuriteZoneLabel}`,
         description:
-            'Expérience, réactivité, disponibilité 24/7 et équipe certifiée : découvrez pourquoi choisir Super Sécurité pour protéger vos sites en Guinée.',
+            `Expérience, réactivité, disponibilité ${superSecuriteHoursLong} et équipe certifiée : découvrez pourquoi choisir Super Sécurité pour protéger vos sites à ${superSecuriteZoneLabel}.`,
         path: '/a-propos',
         image: superSecuriteImages.ogDefault,
         keywords: superSecuriteMetaKeywords.about,

@@ -1,5 +1,6 @@
 import { ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
+import { superSecuriteHoursLong } from '@/data/super-securite-hours';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type ContactChannelsProps = {
@@ -22,7 +23,7 @@ export default function ContactChannels({ superSecurite }: ContactChannelsProps)
             icon: Phone,
             label: 'Téléphone',
             value: superSecurite.phone,
-            description: 'Disponible 24h/24 et 7j/7',
+            description: `Disponible ${superSecuriteHoursLong}`,
             href: superSecurite.phone_href,
             cta: 'Appeler',
         },

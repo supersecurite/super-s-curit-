@@ -1,11 +1,16 @@
 import { superSecuriteAdvantages } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
+import {
+    superSecuriteHoursLong,
+    superSecuriteHoursShort,
+} from '@/data/super-securite-hours';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import Reveal from '@/components/marketing/reveal';
 import { cn } from '@/lib/utils';
 
 const whyUsStats = [
-    { label: 'Disponibilité', value: '24h/24 · 7j/7' },
-    { label: 'Zone', value: 'Conakry & Guinée' },
+    { label: 'Disponibilité', value: superSecuriteHoursShort },
+    { label: 'Zone', value: superSecuriteZoneLabel },
     { label: 'Expertise', value: 'Sécurité privée' },
 ] as const;
 
@@ -67,10 +72,10 @@ export default function WhyUsSection() {
 
                         <Reveal delay={260} className="mt-4 max-w-xl sm:mt-5">
                             <p className="text-sm leading-relaxed sm:text-base">
-                                Une équipe expérimentée, réactive et disponible
-                                24h/24 pour sécuriser vos entreprises,
-                                résidences, chantiers et zones sensibles en
-                                Guinée.
+                                Une équipe expérimentée, réactive et disponible{' '}
+                                {superSecuriteHoursLong} pour sécuriser vos entreprises,
+                                résidences, chantiers et zones sensibles à{' '}
+                                {superSecuriteZoneLabel}.
                             </p>
                         </Reveal>
 

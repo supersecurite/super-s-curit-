@@ -1,9 +1,7 @@
 import { Form, usePage } from '@inertiajs/react';
 import { CheckCircle2, Send } from 'lucide-react';
 import { useState } from 'react';
-import LocationCascadingSelects, {
-    type LocationValues,
-} from '@/components/marketing/location-cascading-selects';
+import CommuneSearchSelect from '@/components/marketing/commune-search-select';
 import InputError from '@/components/input-error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,11 +24,7 @@ const fieldClasses =
 
 export default function SecurityAgentRegistrationForm() {
     const { availabilityOptions, postOptions } = usePage<PageProps>().props;
-    const [location, setLocation] = useState<LocationValues>({
-        region_id: '',
-        prefecture_id: '',
-        commune_id: '',
-    });
+    const [communeId, setCommuneId] = useState('');
 
     return (
         <div className="marketing-card relative overflow-hidden">
@@ -42,7 +36,7 @@ export default function SecurityAgentRegistrationForm() {
             <div className="relative">
                 <p className="marketing-label mb-2">Candidature agent</p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
-                    Rejoignez notre réseau d&apos;agents
+                    Rejoignez notre réseau
                 </h2>
                 <p className="mt-2 text-sm text-super-securite-muted">
                     Les champs marqués d&apos;un{' '}
@@ -65,13 +59,7 @@ export default function SecurityAgentRegistrationForm() {
                         'address_detail',
                         'consent',
                     ]}
-                    onSuccess={() =>
-                        setLocation({
-                            region_id: '',
-                            prefecture_id: '',
-                            commune_id: '',
-                        })
-                    }
+                    onSuccess={() => setCommuneId('')}
                     className="mt-8 flex flex-col gap-5"
                 >
                     {({ processing, errors }) => (
@@ -229,10 +217,11 @@ export default function SecurityAgentRegistrationForm() {
                                 <h3 className="font-heading mb-4 font-semibold text-super-securite-heading">
                                     Localisation en Guinée
                                 </h3>
-                                <LocationCascadingSelects
-                                    values={location}
-                                    onChange={setLocation}
-                                    errors={errors}
+                                <CommuneSearchSelect
+                                    value={communeId}
+                                    onChange={setCommuneId}
+                                    error={errors.commune_id}
+                                    fieldClasses={fieldClasses}
                                 />
                                 <div className="mt-5 grid gap-2">
                                     <Label htmlFor="address_detail">

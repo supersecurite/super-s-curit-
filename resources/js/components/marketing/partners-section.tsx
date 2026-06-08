@@ -1,4 +1,5 @@
 import { superSecuritePartners } from '@/data/super-securite-partners';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import Reveal from '@/components/marketing/reveal';
 
 export default function PartnersSection() {
@@ -15,7 +16,7 @@ export default function PartnersSection() {
                     </h2>
                     <p className="mt-4 text-sm leading-relaxed text-super-securite-muted md:text-base">
                         Ils nous font confiance pour la sécurité de leurs sites
-                        et événements en Guinée.
+                        et événements à {superSecuriteZoneLabel}.
                     </p>
                 </Reveal>
 

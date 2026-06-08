@@ -1,4 +1,6 @@
 import { superSecuriteStock } from '@/data/super-securite-stock';
+import { superSecuriteHoursLong, superSecuriteHoursShort } from '@/data/super-securite-hours';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 
 export type MarketingPageHeroStat = {
     label: string;
@@ -52,7 +54,7 @@ export const marketingPageHeroes = {
         imageAlt: 'Actualités Super Sécurité — sécurité privée',
         stats: [
             { label: 'Contenus', value: 'Articles & dossiers' },
-            { label: 'Zone', value: 'Conakry & Guinée' },
+            { label: 'Zone', value: superSecuriteZoneLabel },
             { label: 'Expertise', value: 'Sécurité privée' },
         ],
     },
@@ -85,13 +87,13 @@ export const marketingPageHeroes = {
         titleHighlight: 'professionnels',
         titleTrail: 'de la sécurité',
         description:
-            'Agents qualifiés, missions variées et évolution possible au sein du réseau Super Sécurité en Guinée. Inscrivez-vous dès maintenant.',
+            `Agents qualifiés, missions variées et évolution possible au sein du réseau Super Sécurité à ${superSecuriteZoneLabel}. Inscrivez-vous dès maintenant.`,
         image: superSecuriteStock.pages.devenirAgent,
-        imageAlt: 'Recrutement agents Super Sécurité — Guinée',
+        imageAlt: `Recrutement agents Super Sécurité — ${superSecuriteZoneLabel}`,
         stats: [
             { label: 'Missions', value: 'Entreprise & terrain' },
-            { label: 'Disponibilité', value: 'Jour · nuit · 24h' },
-            { label: 'Zone', value: 'Conakry & Guinée' },
+            { label: 'Disponibilité', value: superSecuriteHoursShort },
+            { label: 'Zone', value: superSecuriteZoneLabel },
         ],
     },
     contact: {
@@ -118,17 +120,17 @@ export const marketingPageHeroes = {
         pattern: 'about',
         layout: 'default',
         underline: 'scan',
-        label: 'Notre entreprise',
+        label: 'POURQUOI',
         titleLead: 'Choisir Super',
-        titleHighlight: 'SÉCURITÉ',
+        titleHighlight: 'SÉCURITÉ ?',
         titleTrail: '',
         description:
-            'Expérience terrain, réactivité et disponibilité 24h/24 — Super Sécurité protège entreprises et particuliers avec une équipe certifiée, engagée et proche de vos enjeux en Guinée.',
+            `Expérience terrain, réactivité et disponibilité ${superSecuriteHoursLong} — Super Sécurité protège entreprises et particuliers avec une équipe certifiée, engagée et proche de vos enjeux à ${superSecuriteZoneLabel}.`,
         image: superSecuriteStock.pages.about,
         imageAlt: 'Super Sécurité — sécurité privée',
         stats: [
-            { label: 'Disponibilité', value: '24h/24 · 7j/7' },
-            { label: 'Zone', value: 'Conakry & Guinée' },
+            { label: 'Disponibilité', value: superSecuriteHoursShort },
+            { label: 'Zone', value: superSecuriteZoneLabel },
             { label: 'Engagement', value: 'Équipe certifiée' },
         ],
     },

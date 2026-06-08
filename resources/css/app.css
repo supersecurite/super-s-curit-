@@ -470,7 +470,7 @@ html.app-page {
     }
 
     .marketing-cta-secondary {
-        @apply inline-flex cursor-pointer items-center justify-center rounded-xl border border-super-securite-border bg-transparent px-8 py-3.5 font-heading text-sm font-semibold text-super-securite-heading transition-colors duration-200 hover:border-super-securite-accent/50 hover:bg-super-securite-surface focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-super-securite-bg focus-visible:outline-none;
+        @apply inline-flex cursor-pointer items-center justify-center rounded-xl border border-black bg-black px-8 py-3.5 font-heading text-sm font-semibold text-white transition-colors duration-200 hover:border-black/90 hover:bg-black/90 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-super-securite-bg focus-visible:outline-none;
     }
 
     .marketing-text-gradient {
@@ -479,11 +479,24 @@ html.app-page {
 
     .marketing-hero-viewport {
         --marketing-header-offset: var(--marketing-header-height, 5.5rem);
+        --marketing-hero-safe-top: calc(
+            var(--marketing-header-offset) + env(safe-area-inset-top, 0px)
+        );
         margin-top: calc(-1 * var(--marketing-header-offset));
         height: 100dvh;
         max-height: 100dvh;
-        padding-top: var(--marketing-header-offset);
+        padding-top: var(--marketing-hero-safe-top);
         box-sizing: border-box;
+    }
+
+    @media (max-width: 767px) {
+        .marketing-hero-viewport {
+            margin-top: 0;
+            padding-top: 0;
+            height: auto;
+            min-height: calc(100dvh - var(--marketing-hero-safe-top));
+            max-height: none;
+        }
     }
 
     .marketing-error-page-bg {

@@ -66,7 +66,7 @@ export default function MarketingFooter() {
                                     href={devenirAgentIndex.url()}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    Devenir agent
+                                    Rejoignez nous
                                 </a>
                             </li>
                         </ul>

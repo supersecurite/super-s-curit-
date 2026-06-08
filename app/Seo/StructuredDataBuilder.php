@@ -103,12 +103,8 @@ class StructuredDataBuilder
             'contactPoint' => $this->contactPoints($email, $phone, $siteUrl),
             'areaServed' => [
                 [
-                    '@type' => 'Country',
-                    'name' => 'Guinée',
-                ],
-                [
                     '@type' => 'AdministrativeArea',
-                    'name' => 'Conakry',
+                    'name' => config('super-securite.zone_label', 'Conakry et région'),
                 ],
             ],
             'address' => [

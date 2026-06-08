@@ -1,13 +1,12 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
-    ChevronRight,
+    ArrowRight,
     Mail,
     MapPin,
     Menu,
     Phone,
     X,
 } from 'lucide-react';
-import { useState } from 'react';
 import {
     Sheet,
     SheetClose,
@@ -16,40 +15,29 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { superSecuriteImages } from '@/data/super-securite-images';
+import {
+    marketingPrimaryNavLinks,
+    marketingServiceNavLinks,
+} from '@/data/marketing-nav';
 import { isMarketingNavActive } from '@/lib/marketing-nav-active';
 import { cn } from '@/lib/utils';
-import { index as actualitesIndex } from '@/routes/actualites';
-import { index as conseilsIndex } from '@/routes/conseils-securite';
-import { about, contact, home } from '@/routes';
-import type { SuperSecuriteConfig } from '@/types/super-securite';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
-
-type SharedPageProps = {
-    superSecurite?: SuperSecuriteConfig;
-};
+import { home } from '@/routes';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type MarketingMobileNavProps = {
-    superSecurite?: SuperSecuriteConfig;
+    pathname: string;
+    superSecurite: SuperSecuriteConfig;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 };
 
-const primaryLinks = [
-    { href: home.url(), label: 'Accueil' },
-    { href: about.url(), label: 'Pourquoi nous' },
-    { href: actualitesIndex.url(), label: 'Actualités' },
-    { href: conseilsIndex.url(), label: 'Conseils' },
-    { href: contact.url(), label: 'Nous contacter' },
-] as const;
-
 export default function MarketingMobileNav({
-    superSecurite: superSecuriteProp,
+    pathname,
+    superSecurite,
     open,
     onOpenChange,
 }: MarketingMobileNavProps) {
-    const { url, props } = usePage<SharedPageProps>();
-    const superSecurite = superSecuriteProp ?? props.superSecurite;
-    const [servicesOpen, setServicesOpen] = useState(false);
     const close = () => onOpenChange(false);
 
     return (
@@ -108,12 +96,16 @@ export default function MarketingMobileNav({
                 </div>
 
                 <nav
-                    className="flex flex-1 flex-col overflow-y-auto overscroll-contain px-3 py-2"
+                    className="flex flex-1 flex-col overflow-y-auto overscroll-contain px-5 py-6"
                     aria-label="Navigation mobile"
                 >
-                    <ul className="divide-y divide-super-securite-border/60">
-                        {primaryLinks.map((item) => {
-                            const active = isMarketingNavActive(item.href, url);
+                    <p className="marketing-label mb-3">Navigation</p>
+                    <ul className="space-y-2">
+                        {marketingPrimaryNavLinks.map((item) => {
+                            const active = isMarketingNavActive(
+                                item.href,
+                                pathname,
+                            );
 
                             return (
                                 <li key={item.href}>
@@ -124,33 +116,63 @@ export default function MarketingMobileNav({
                                             active ? 'page' : undefined
                                         }
                                         className={cn(
-                                            'group flex items-center gap-3 rounded-xl px-3 py-4 transition-colors duration-200',
+                                            'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
                                             active
-                                                ? 'bg-super-securite-accent/8 text-super-securite-accent'
-                                                : 'text-super-securite-heading hover:bg-super-securite-bg',
+                                                ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
+                                                : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
                                         )}
                                     >
-                                        <span
-                                            className={cn(
-                                                'h-8 w-1 shrink-0 rounded-full transition-colors duration-200',
-                                                active
-                                                    ? 'bg-super-securite-accent'
-                                                    : 'bg-transparent group-hover:bg-super-securite-border',
-                                            )}
+                                        {item.label}
+                                        <ArrowRight
+                                            className="size-4 opacity-50"
                                             aria-hidden
                                         />
-                                        <span className="flex-1 font-heading text-[17px] font-semibold tracking-tight">
-                                            {item.label}
-                                        </span>
-                                        <ChevronRight
-                                            className={cn(
-                                                'size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5',
-                                                active
-                                                    ? 'text-super-securite-accent'
-                                                    : 'text-super-securite-muted/60',
-                                            )}
-                                            aria-hidden
-                                        />
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+
+                    <p className="marketing-label mt-8 mb-3">Services</p>
+                    <ul className="space-y-3">
+                        {marketingServiceNavLinks.map((service, index) => {
+                            const active = isMarketingNavActive(
+                                service.href,
+                                pathname,
+                            );
+
+                            return (
+                                <li key={service.href}>
+                                    <Link
+                                        href={service.href}
+                                        onClick={close}
+                                        aria-current={
+                                            active ? 'page' : undefined
+                                        }
+                                        className={cn(
+                                            'group block rounded-2xl border p-4 transition-all duration-200',
+                                            active
+                                                ? 'border-super-securite-accent/40 bg-super-securite-accent/10'
+                                                : 'border-super-securite-border bg-white hover:border-super-securite-accent/30 hover:shadow-md hover:shadow-slate-900/5',
+                                        )}
+                                    >
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <span className="font-heading text-xs font-bold text-super-securite-accent">
+                                                    {String(index + 1).padStart(
+                                                        2,
+                                                        '0',
+                                                    )}
+                                                </span>
+                                                <p className="mt-1 font-heading text-sm font-semibold text-super-securite-heading">
+                                                    {service.label}
+                                                </p>
+                                            </div>
+                                            <ArrowRight
+                                                className="mt-1 size-4 shrink-0 text-super-securite-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-super-securite-accent"
+                                                aria-hidden
+                                            />
+                                        </div>
                                     </Link>
                                 </li>
                             );
@@ -168,49 +190,45 @@ export default function MarketingMobileNav({
                         </span>
                         <span className="flex flex-col items-start gap-0.5">
                             <span className="text-[11px] font-medium tracking-wide text-white/80 uppercase">
-                                Devenir agent
+                                Rejoignez-nous
                             </span>
                             <span className="text-base">Rejoignez-nous</span>
                         </span>
                     </a>
 
-                    {superSecurite ? (
-                        <>
-                            <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
-                                <Phone
-                                    className="size-4 shrink-0 text-super-securite-accent"
-                                    aria-hidden
-                                />
-                                <a
-                                    href={superSecurite.phone_href}
-                                    className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
-                                >
-                                    {superSecurite.phone}
-                                </a>
-                            </div>
+                    <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
+                        <Phone
+                            className="size-4 shrink-0 text-super-securite-accent"
+                            aria-hidden
+                        />
+                        <a
+                            href={superSecurite.phone_href}
+                            className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
+                        >
+                            {superSecurite.phone}
+                        </a>
+                    </div>
 
-                            <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
-                                <Mail
-                                    className="size-4 shrink-0 text-super-securite-accent"
-                                    aria-hidden
-                                />
-                                <a
-                                    href={`mailto:${superSecurite.email}`}
-                                    className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
-                                >
-                                    {superSecurite.email}
-                                </a>
-                            </div>
+                    <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
+                        <Mail
+                            className="size-4 shrink-0 text-super-securite-accent"
+                            aria-hidden
+                        />
+                        <a
+                            href={`mailto:${superSecurite.email}`}
+                            className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
+                        >
+                            {superSecurite.email}
+                        </a>
+                    </div>
 
-                            <p className="flex items-start gap-2 px-1 text-xs leading-relaxed text-super-securite-muted">
-                                <MapPin
-                                    className="mt-0.5 size-3.5 shrink-0 text-super-securite-accent"
-                                    aria-hidden
-                                />
-                                {superSecurite.address}
-                            </p>
-                        </>
-                    ) : null}
+                    <p className="flex items-start gap-2 px-1 text-xs leading-relaxed text-super-securite-muted">
+                        <MapPin
+                            className="mt-0.5 size-3.5 shrink-0 text-super-securite-accent"
+                            aria-hidden
+                        />
+                        {superSecurite.address}
+                    </p>
                 </div>
             </SheetContent>
         </Sheet>

@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
+
+uses(RefreshDatabase::class);
 
 test('home page can be rendered', function () {
     $response = $this->get(route('home'));
@@ -31,3 +34,14 @@ test('contact page can be rendered', function () {
         ->component('marketing/contact'),
     );
 });
+
+test('service pages can be rendered', function (string $routeName) {
+    $this->get(route($routeName))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->component('marketing/service-page'));
+})->with([
+    'services.entreprise',
+    'services.residence',
+    'services.chantiers',
+    'services.zones-minieres',
+]);

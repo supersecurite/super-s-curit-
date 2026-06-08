@@ -1,4 +1,6 @@
 import { superSecuriteServices } from '@/data/super-securite-content';
+import { superSecuriteHoursLong, superSecuriteHoursShort } from '@/data/super-securite-hours';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 
 export type SuperSecuriteServiceId =
@@ -54,16 +56,16 @@ const serviceMeta: Record<
         focusKeyword: 'sécurité entreprise Conakry',
         metaTitle: 'Sécurité entreprise Conakry | Super Sécurité',
         metaDescription:
-            'Sécurité entreprise à Conakry : gardiennage et surveillance pour bureaux, commerces et entrepôts, 24h/24.',
+            `Sécurité entreprise à ${superSecuriteZoneLabel} : gardiennage et surveillance pour bureaux, commerces et entrepôts, ${superSecuriteHoursLong}.`,
         pageHighlight: 'entreprise',
         pageDescription:
-            'Protection de vos locaux professionnels avec des agents qualifiés, disponibles jour et nuit.',
+            `Protection de vos locaux professionnels avec des agents qualifiés, disponibles ${superSecuriteHoursLong}.`,
         imageAlt: 'Sécurité entreprise — Super Sécurité Conakry',
         cover: `/${serviceImages.entreprise}`,
         benefits: [
             'Bureaux & commerces',
             'Contrôle d’accès',
-            'Disponible 24h/24',
+            `Disponible ${superSecuriteHoursShort}`,
         ],
         sections: [
             {
@@ -87,7 +89,7 @@ const serviceMeta: Record<
         focusKeyword: 'gardiennage résidence Conakry',
         metaTitle: 'Sécurité résidence Conakry | Super Sécurité',
         metaDescription:
-            'Gardiennage et surveillance de résidences à Conakry : villas, immeubles et lotissements protégés 24h/24.',
+            `Gardiennage et surveillance de résidences à ${superSecuriteZoneLabel} : villas, immeubles et lotissements protégés ${superSecuriteHoursLong}.`,
         pageHighlight: 'résidence',
         pageDescription:
             'Tranquillité d’esprit pour vos villas et immeubles grâce à une surveillance rigoureuse et dissuasive.',
@@ -118,13 +120,13 @@ const serviceMeta: Record<
     },
     chantiers: {
         focusKeyword: 'sécurité chantier Guinée',
-        metaTitle: 'Sécurité chantiers BTP | Super Sécurité Guinée',
+        metaTitle: `Sécurité chantiers BTP | Super Sécurité — ${superSecuriteZoneLabel}`,
         metaDescription:
-            'Sécurité de chantiers BTP en Guinée : protection du matériel, contrôle des accès et patrouilles sur site.',
+            `Sécurité de chantiers BTP à ${superSecuriteZoneLabel} : protection du matériel, contrôle des accès et patrouilles sur site.`,
         pageHighlight: 'chantiers',
         pageDescription:
             'Sécurisation de vos chantiers BTP avec contrôle des accès, patrouilles et protection du matériel.',
-        imageAlt: 'Sécurité chantiers — Super Sécurité Guinée',
+        imageAlt: `Sécurité chantiers — Super Sécurité ${superSecuriteZoneLabel}`,
         cover: `/${serviceImages.chantiers}`,
         benefits: [
             'Chantiers BTP',
@@ -151,13 +153,13 @@ const serviceMeta: Record<
     },
     'zones-minieres': {
         focusKeyword: 'sécurité minière Guinée',
-        metaTitle: 'Sécurité zones minières | Super Sécurité Guinée',
+        metaTitle: `Sécurité zones minières | Super Sécurité — ${superSecuriteZoneLabel}`,
         metaDescription:
-            'Sécurité des zones minières en Guinée : équipes formées aux protocoles les plus stricts pour sites sensibles.',
+            `Sécurité des zones minières à ${superSecuriteZoneLabel} : équipes formées aux protocoles les plus stricts pour sites sensibles.`,
         pageHighlight: 'minières',
         pageDescription:
             'Surveillance rigoureuse des sites miniers avec des équipes formées aux protocoles de sécurité exigeants.',
-        imageAlt: 'Sécurité zones minières — Super Sécurité Guinée',
+        imageAlt: `Sécurité zones minières — Super Sécurité ${superSecuriteZoneLabel}`,
         cover: `/${serviceImages['zones-minieres']}`,
         benefits: [
             'Sites miniers',
@@ -194,7 +196,7 @@ export const superSecuriteServiceDefinitions: readonly SuperSecuriteServiceDefin
             icon: '',
             title: service.title,
             navLabel: service.title.replace('Sécurité ', ''),
-            navTagline: 'Sécurité privée à Conakry',
+            navTagline: `Sécurité privée à ${superSecuriteZoneLabel}`,
             cardDescription: service.description,
             pageLabel: service.title,
             pageTitle: service.title.replace('Sécurité ', 'Sécurité '),

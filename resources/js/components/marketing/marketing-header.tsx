@@ -1,12 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import MarketingMobileNav from '@/components/marketing/marketing-mobile-nav';
+import MarketingServicesNav from '@/components/marketing/marketing-services-nav';
 import { superSecuriteImages } from '@/data/super-securite-images';
+import { marketingPrimaryNavLinks } from '@/data/marketing-nav';
 import { useScrollProgress } from '@/hooks/use-scroll-progress';
-import { index as actualitesIndex } from '@/routes/actualites';
-import { index as conseilsIndex } from '@/routes/conseils-securite';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
-import { about, contact, home } from '@/routes';
+import { home } from '@/routes';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 import type { User } from '@/types/auth';
 import { isMarketingNavActive } from '@/lib/marketing-nav-active';
@@ -18,26 +18,37 @@ type SharedPageProps = {
     superSecurite: SuperSecuriteConfig;
 };
 
-const primaryNavLinks = [
-    { href: home.url(), label: 'Accueil' },
-    { href: about.url(), label: 'Pourquoi nous' },
-    { href: actualitesIndex.url(), label: 'Actualités' },
-    { href: conseilsIndex.url(), label: 'Conseils' },
-    { href: contact.url(), label: 'Nous contacter' },
-] as const;
-
 export default function MarketingHeader() {
     const { props, url } = usePage<SharedPageProps>();
     const { superSecurite } = props;
     const progress = useScrollProgress();
     const [scrolled, setScrolled] = useState(false);
+    const [servicesOpen, setServicesOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const servicesRef = useRef<HTMLLIElement>(null);
+    const pathname = url.split('?')[0] ?? '/';
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 32);
         onScroll();
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                servicesRef.current &&
+                !servicesRef.current.contains(event.target as Node)
+            ) {
+                setServicesOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () =>
+            document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
     useEffect(() => {
@@ -59,8 +70,15 @@ export default function MarketingHeader() {
         const observer = new ResizeObserver(syncHeaderHeight);
         observer.observe(header);
 
+        header.querySelectorAll('img').forEach((image) => {
+            image.addEventListener('load', syncHeaderHeight);
+        });
+
+        window.addEventListener('resize', syncHeaderHeight);
+
         return () => {
             observer.disconnect();
+            window.removeEventListener('resize', syncHeaderHeight);
             document.documentElement.style.removeProperty(
                 '--marketing-header-height',
             );
@@ -102,8 +120,46 @@ export default function MarketingHeader() {
                 </Link>
 
                 <ul className="hidden items-center gap-8 md:flex">
-                    {primaryNavLinks.map((item) => {
-                        const active = isMarketingNavActive(item.href, url);
+                    <li>
+                        <Link
+                            href={home.url()}
+                            aria-current={
+                                isMarketingNavActive(home.url(), pathname)
+                                    ? 'page'
+                                    : undefined
+                            }
+                            className={cn(
+                                'group relative cursor-pointer text-sm font-medium transition-colors duration-200',
+                                isMarketingNavActive(home.url(), pathname)
+                                    ? 'font-semibold text-super-securite-accent'
+                                    : 'text-white/80 hover:text-white',
+                            )}
+                        >
+                            Accueil
+                            <span
+                                className={cn(
+                                    'absolute -bottom-1 left-0 h-0.5 w-full origin-left bg-super-securite-accent transition-transform duration-300 ease-out motion-reduce:transition-none',
+                                    isMarketingNavActive(home.url(), pathname)
+                                        ? 'scale-x-100'
+                                        : 'scale-x-0 group-hover:scale-x-100',
+                                )}
+                                aria-hidden
+                            />
+                        </Link>
+                    </li>
+
+                    <MarketingServicesNav
+                        pathname={pathname}
+                        open={servicesOpen}
+                        onOpenChange={setServicesOpen}
+                        menuRef={servicesRef}
+                    />
+
+                    {marketingPrimaryNavLinks.slice(1).map((item) => {
+                        const active = isMarketingNavActive(
+                            item.href,
+                            pathname,
+                        );
 
                         return (
                             <li key={item.label}>
@@ -142,6 +198,7 @@ export default function MarketingHeader() {
                     </Link>
 
                     <MarketingMobileNav
+                        pathname={pathname}
                         superSecurite={superSecurite}
                         open={mobileMenuOpen}
                         onOpenChange={setMobileMenuOpen}

@@ -138,7 +138,7 @@ export default function MarketingContact() {
                                             Informations légales
                                         </p>
                                         <p className="text-sm leading-relaxed text-super-securite-text">
-                                            Super Sécurité · Conakry, Guinée
+                                            Super Sécurité · Conakry et région
                                         </p>
                                         <p className="mt-2 font-heading text-sm font-semibold text-super-securite-heading">
                                             RCCM : {superSecurite.rccm}

@@ -14,57 +14,43 @@ class GuineaLocationValidator
     {
         $errors = [];
 
-        $regionId = (string) ($data['region_id'] ?? '');
-        $prefectureId = (string) ($data['prefecture_id'] ?? '');
         $communeId = (string) ($data['commune_id'] ?? '');
 
-        if ($regionId === '') {
-            $errors['region_id'] = 'La région est obligatoire.';
+        if ($communeId === '') {
+            $errors['commune_id'] = 'La commune est obligatoire.';
 
             return $errors;
         }
 
-        $region = GuineaLocationData::findRegion($regionId);
-        if ($region === null) {
-            $errors['region_id'] = 'La région sélectionnée est invalide.';
-
-            return $errors;
-        }
-
-        if ($prefectureId === '') {
-            $errors['prefecture_id'] = 'La préfecture est obligatoire.';
-
-            return $errors;
-        }
-
-        $prefecture = GuineaLocationData::findPrefecture($prefectureId);
-        if ($prefecture === null) {
-            $errors['prefecture_id'] = 'La préfecture sélectionnée est invalide.';
-
-            return $errors;
-        }
-
-        if (($prefecture['regionId'] ?? null) !== $regionId) {
-            $errors['prefecture_id'] = 'La préfecture ne correspond pas à la région sélectionnée.';
-        }
-
-        $communes = GuineaLocationData::communesForPrefecture($prefectureId);
-
-        if ($communes !== [] && $communeId === '') {
-            $errors['commune_id'] = 'La commune est obligatoire pour cette préfecture.';
-        }
-
-        if ($communeId !== '') {
-            $commune = GuineaLocationData::findCommune($communeId);
-
-            if ($commune === null) {
-                $errors['commune_id'] = 'La commune sélectionnée est invalide.';
-            } elseif (($commune['prefectureId'] ?? null) !== $prefectureId) {
-                $errors['commune_id'] = 'La commune ne correspond pas à la préfecture sélectionnée.';
-            }
+        if (GuineaLocationData::findCommune($communeId) === null) {
+            $errors['commune_id'] = 'La commune sélectionnée est invalide.';
         }
 
         return $errors;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    public function enrichFromCommune(array $data): array
+    {
+        $communeId = (string) ($data['commune_id'] ?? '');
+
+        if ($communeId === '') {
+            return $data;
+        }
+
+        $commune = GuineaLocationData::findCommune($communeId);
+
+        if ($commune === null) {
+            return $data;
+        }
+
+        $data['region_id'] = (string) ($commune['regionId'] ?? '');
+        $data['prefecture_id'] = (string) ($commune['prefectureId'] ?? '');
+
+        return $data;
     }
 
     /**
@@ -73,11 +59,22 @@ class GuineaLocationValidator
      */
     public function resolveLabels(array $data): array
     {
-        $region = GuineaLocationData::findRegion((string) ($data['region_id'] ?? ''));
-        $prefecture = GuineaLocationData::findPrefecture((string) ($data['prefecture_id'] ?? ''));
         $commune = ($data['commune_id'] ?? '') !== ''
             ? GuineaLocationData::findCommune((string) $data['commune_id'])
             : null;
+
+        if ($commune === null) {
+            return [
+                'region_name' => null,
+                'prefecture_name' => null,
+                'commune_name' => null,
+                'quartier_name' => null,
+                'quartier_id' => null,
+            ];
+        }
+
+        $prefecture = GuineaLocationData::findPrefecture((string) ($commune['prefectureId'] ?? ''));
+        $region = GuineaLocationData::findRegion((string) ($commune['regionId'] ?? ''));
 
         return [
             'region_name' => $region['nom'] ?? null,
