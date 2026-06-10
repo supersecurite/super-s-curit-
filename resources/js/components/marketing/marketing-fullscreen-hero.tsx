@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 type MarketingFullscreenHeroProps = Pick<
     MarketingPageHeroConfig,
     | 'id'
-    | 'label'
     | 'titleLead'
     | 'titleHighlight'
     | 'titleTrail'
@@ -17,6 +16,7 @@ type MarketingFullscreenHeroProps = Pick<
     | 'stats'
     | 'underline'
 > & {
+    label?: string;
     className?: string;
     children?: ReactNode;
     headingLevel?: 'h1' | 'h2';
@@ -74,11 +74,13 @@ export default function MarketingFullscreenHero({
 
                 <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-28 pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
                     <div className="max-w-2xl min-w-0">
-                        <Reveal delay={80}>
-                            <p className="marketing-label mb-3 flex items-center gap-2 text-white/80 before:block before:h-px before:w-6 before:bg-super-securite-accent">
-                                {label}
-                            </p>
-                        </Reveal>
+                        {label ? (
+                            <Reveal delay={80}>
+                                <p className="marketing-label mb-3 flex items-center gap-2 text-white/80 before:block before:h-px before:w-6 before:bg-super-securite-accent">
+                                    {label}
+                                </p>
+                            </Reveal>
+                        ) : null}
 
                         <Reveal delay={120}>
                             <Heading className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">

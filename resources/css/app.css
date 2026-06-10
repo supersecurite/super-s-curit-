@@ -160,8 +160,8 @@
     --super-securite-surface-elevated: #e2e8f0;
     --super-securite-text: #334155;
     --super-securite-heading: #0f172a;
-    --super-securite-accent: #ff001b;
-    --super-securite-accent-hover: #cc0016;
+    --super-securite-accent: #ed1c24;
+    --super-securite-accent-hover: #c4161d;
     --super-securite-muted: #4a5668;
     --super-securite-border: #b8c5d4;
 
@@ -174,8 +174,8 @@
     --primary-300: color-mix(in srgb, var(--super-securite-accent) 55%, white);
     --primary-200: color-mix(in srgb, var(--super-securite-accent) 30%, white);
     --accent-500: var(--super-securite-accent);
-    --primary-400-rgb: 255 0 27;
-    --primary-300-rgb: 255 102 117;
+    --primary-400-rgb: 237 28 36;
+    --primary-300-rgb: 247 153 156;
 }
 
 @layer base {
@@ -424,7 +424,7 @@ html.app-page {
     /* Actualités — radar de surveillance / veille */
     .marketing-hero-pattern-actualites {
         background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96' fill='none'%3E%3Ccircle cx='48' cy='48' r='30' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Ccircle cx='48' cy='48' r='20' stroke='%230f172a' stroke-opacity='0.05'/%3E%3Ccircle cx='48' cy='48' r='10' stroke='%23ff001b' stroke-opacity='0.1'/%3E%3Ccircle cx='48' cy='48' r='2.5' fill='%23ff001b' fill-opacity='0.18'/%3E%3Cpath d='M48 48 L72 26' stroke='%23ff001b' stroke-opacity='0.12' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M48 20 V10 M48 86 V76 M20 48 H10 M86 48 H76' stroke='%230f172a' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96' fill='none'%3E%3Ccircle cx='48' cy='48' r='30' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Ccircle cx='48' cy='48' r='20' stroke='%230f172a' stroke-opacity='0.05'/%3E%3Ccircle cx='48' cy='48' r='10' stroke='%23ed1c24' stroke-opacity='0.1'/%3E%3Ccircle cx='48' cy='48' r='2.5' fill='%23ed1c24' fill-opacity='0.18'/%3E%3Cpath d='M48 48 L72 26' stroke='%23ed1c24' stroke-opacity='0.12' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M48 20 V10 M48 86 V76 M20 48 H10 M86 48 H76' stroke='%230f172a' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E"),
             repeating-radial-gradient(
                 circle at center,
                 transparent 0,
@@ -440,7 +440,7 @@ html.app-page {
     /* Conseils — bouclier validé / prévention */
     .marketing-hero-pattern-conseils {
         background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='88' viewBox='0 0 80 88' fill='none'%3E%3Cpath d='M40 6 L62 16 V38 C62 52 40 68 40 68 C40 68 18 52 18 38 V16 Z' stroke='%230f172a' stroke-opacity='0.08' stroke-width='1'/%3E%3Cpath d='M28 40 L36 48 L52 30' stroke='%23ff001b' stroke-opacity='0.16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='88' viewBox='0 0 80 88' fill='none'%3E%3Cpath d='M40 6 L62 16 V38 C62 52 40 68 40 68 C40 68 18 52 18 38 V16 Z' stroke='%230f172a' stroke-opacity='0.08' stroke-width='1'/%3E%3Cpath d='M28 40 L36 48 L52 30' stroke='%23ed1c24' stroke-opacity='0.16' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
             repeating-linear-gradient(
                 0deg,
                 transparent 0,
@@ -456,7 +456,7 @@ html.app-page {
     /* Devenir agent — badge / matricule */
     .marketing-hero-pattern-devenir-agent {
         background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='96' viewBox='0 0 72 96' fill='none'%3E%3Crect x='8' y='8' width='56' height='80' rx='6' stroke='%230f172a' stroke-opacity='0.07' stroke-width='1'/%3E%3Crect x='8' y='8' width='56' height='18' rx='6' fill='%23ff001b' fill-opacity='0.06'/%3E%3Ccircle cx='36' cy='44' r='12' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Cpath d='M22 68 H50' stroke='%230f172a' stroke-opacity='0.06' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M26 76 H46' stroke='%23ff001b' stroke-opacity='0.1' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='96' viewBox='0 0 72 96' fill='none'%3E%3Crect x='8' y='8' width='56' height='80' rx='6' stroke='%230f172a' stroke-opacity='0.07' stroke-width='1'/%3E%3Crect x='8' y='8' width='56' height='18' rx='6' fill='%23ed1c24' fill-opacity='0.06'/%3E%3Ccircle cx='36' cy='44' r='12' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Cpath d='M22 68 H50' stroke='%230f172a' stroke-opacity='0.06' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M26 76 H46' stroke='%23ed1c24' stroke-opacity='0.1' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E"),
             repeating-linear-gradient(
                 90deg,
                 transparent 0,
@@ -472,7 +472,7 @@ html.app-page {
     /* Contact — réseau de liaison / communication */
     .marketing-hero-pattern-contact {
         background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96' fill='none'%3E%3Cline x1='24' y1='48' x2='48' y2='28' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Cline x1='48' y1='28' x2='72' y2='48' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Cline x1='24' y1='48' x2='48' y2='68' stroke='%23ff001b' stroke-opacity='0.1'/%3E%3Cline x1='48' y1='68' x2='72' y2='48' stroke='%23ff001b' stroke-opacity='0.1'/%3E%3Ccircle cx='24' cy='48' r='5' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='28' r='5' stroke='%23ff001b' stroke-opacity='0.14'/%3E%3Ccircle cx='72' cy='48' r='5' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='68' r='5' stroke='%23ff001b' stroke-opacity='0.14'/%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96' fill='none'%3E%3Cline x1='24' y1='48' x2='48' y2='28' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Cline x1='48' y1='28' x2='72' y2='48' stroke='%230f172a' stroke-opacity='0.06'/%3E%3Cline x1='24' y1='48' x2='48' y2='68' stroke='%23ed1c24' stroke-opacity='0.1'/%3E%3Cline x1='48' y1='68' x2='72' y2='48' stroke='%23ed1c24' stroke-opacity='0.1'/%3E%3Ccircle cx='24' cy='48' r='5' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='28' r='5' stroke='%23ed1c24' stroke-opacity='0.14'/%3E%3Ccircle cx='72' cy='48' r='5' stroke='%230f172a' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='68' r='5' stroke='%23ed1c24' stroke-opacity='0.14'/%3E%3C/svg%3E"),
             radial-gradient(
                 circle at center,
                 color-mix(in oklab, var(--super-securite-accent) 6%, transparent) 1px,
@@ -486,7 +486,7 @@ html.app-page {
     /* À propos — formation d'équipe / boucliers alignés */
     .marketing-hero-pattern-about {
         background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80' fill='none'%3E%3Cpath d='M24 10 L38 16 V30 C38 38 24 48 24 48 C24 48 10 38 10 30 V16 Z' stroke='%230f172a' stroke-opacity='0.07'/%3E%3Cpath d='M60 6 L78 14 V32 C78 44 60 58 60 58 C60 58 42 44 42 32 V14 Z' stroke='%23ff001b' stroke-opacity='0.12' stroke-width='1.25'/%3E%3Cpath d='M96 10 L110 16 V30 C110 38 96 48 96 48 C96 48 82 38 82 30 V16 Z' stroke='%230f172a' stroke-opacity='0.07'/%3E%3Cline x1='38' y1='52' x2='82' y2='52' stroke='%230f172a' stroke-opacity='0.05' stroke-width='1' stroke-dasharray='4 4'/%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80' fill='none'%3E%3Cpath d='M24 10 L38 16 V30 C38 38 24 48 24 48 C24 48 10 38 10 30 V16 Z' stroke='%230f172a' stroke-opacity='0.07'/%3E%3Cpath d='M60 6 L78 14 V32 C78 44 60 58 60 58 C60 58 42 44 42 32 V14 Z' stroke='%23ed1c24' stroke-opacity='0.12' stroke-width='1.25'/%3E%3Cpath d='M96 10 L110 16 V30 C110 38 96 48 96 48 C96 48 82 38 82 30 V16 Z' stroke='%230f172a' stroke-opacity='0.07'/%3E%3Cline x1='38' y1='52' x2='82' y2='52' stroke='%230f172a' stroke-opacity='0.05' stroke-width='1' stroke-dasharray='4 4'/%3E%3C/svg%3E"),
             repeating-linear-gradient(
                 135deg,
                 transparent 0,
@@ -556,7 +556,7 @@ html.app-page {
     .marketing-error-page-bg {
         background-color: var(--super-securite-bg);
         background-image:
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none'%3E%3Cpath d='M32 8 L46 14 V28 C46 38 32 50 32 50 C32 50 18 38 18 28 V14 Z' stroke='%23ff001b' stroke-opacity='0.06'/%3E%3Cpath d='M8 32 H56 M32 8 V56' stroke='%230f172a' stroke-opacity='0.04'/%3E%3C/svg%3E"),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none'%3E%3Cpath d='M32 8 L46 14 V28 C46 38 32 50 32 50 C32 50 18 38 18 28 V14 Z' stroke='%23ed1c24' stroke-opacity='0.06'/%3E%3Cpath d='M8 32 H56 M32 8 V56' stroke='%230f172a' stroke-opacity='0.04'/%3E%3C/svg%3E"),
             radial-gradient(
                 circle at 50% 0%,
                 color-mix(in oklab, var(--super-securite-accent) 8%, transparent),

@@ -54,7 +54,7 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
                             <div className="relative flex -translate-y-6 flex-col items-center md:-translate-y-8">
                                 <span className="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-super-securite-accent/25 blur-md" />
                                 <MapPin
-                                    className="relative size-10 fill-super-securite-accent text-super-securite-accent drop-shadow-[0_4px_12px_rgba(255,0,27,0.45)]"
+                                    className="relative size-10 fill-super-securite-accent text-super-securite-accent drop-shadow-[0_4px_12px_rgba(237,28,36,0.45)]"
                                     strokeWidth={1.5}
                                 />
                                 <span className="relative -mt-1 rounded-full bg-super-securite-accent px-3 py-1 text-xs font-semibold tracking-wide text-white shadow-md md:text-sm">

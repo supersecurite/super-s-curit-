@@ -9,7 +9,7 @@
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="manifest" href="/site.webmanifest">
-        <meta name="theme-color" content="#ff001b">
+        <meta name="theme-color" content="#ed1c24">
         <meta name="color-scheme" content="light">
 
         @fonts

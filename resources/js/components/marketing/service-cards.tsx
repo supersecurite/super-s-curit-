@@ -1,5 +1,8 @@
 import { Link } from '@inertiajs/react';
-import { superSecuriteServices } from '@/data/super-securite-content';
+import {
+    superSecuriteServices,
+    superSecuriteServicesSection,
+} from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 import Reveal from '@/components/marketing/reveal';
 
@@ -10,13 +13,18 @@ export default function ServiceCards() {
         <section id="services" className="py-10 md:py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-14 max-w-2xl">
-                    <p className="marketing-label mb-3">Services</p>
+                    <p className="marketing-label mb-3">
+                        {superSecuriteServicesSection.sectionLabel}
+                    </p>
                     <h2 className="marketing-heading-section">
                         Nos offres de service de{' '}
                         <span className="marketing-text-gradient">
                             sécurité
                         </span>
                     </h2>
+                    <p className="mt-4 text-sm leading-relaxed md:text-base">
+                        {superSecuriteServicesSection.intro}
+                    </p>
                 </Reveal>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

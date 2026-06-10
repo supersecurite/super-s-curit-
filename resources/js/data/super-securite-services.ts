@@ -1,8 +1,4 @@
 import { superSecuriteServices } from '@/data/super-securite-content';
-import {
-    superSecuriteHoursLong,
-    superSecuriteHoursShort,
-} from '@/data/super-securite-hours';
 import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import type {
     MarketingPageHeroStat,
@@ -29,7 +25,7 @@ export type SuperSecuriteServiceGalleryImage = {
 
 export type SuperSecuriteServiceHero = {
     id: string;
-    label: string;
+    label?: string;
     titleLead: string;
     titleHighlight: string;
     titleTrail?: string;
@@ -54,9 +50,17 @@ export type SuperSecuriteServiceDefinition = {
     metaDescription: string;
     hero: SuperSecuriteServiceHero;
     intro: readonly string[];
+    introLabel?: string;
+    introTitle?: string;
     benefits: readonly string[];
+    sectionsLabel?: string;
+    sectionsTitle?: string;
     sections: readonly SuperSecuriteServiceSection[];
     includes: readonly string[];
+    includesTitle?: string;
+    includesDescription?: string;
+    highlightsTitle?: string;
+    highlights?: readonly string[];
     gallery: readonly SuperSecuriteServiceGalleryImage[];
     galleryTitle: string;
     galleryDescription: string;
@@ -72,63 +76,61 @@ const serviceMeta: Record<
     >
 > = {
     entreprise: {
-        focusKeyword: 'sécurité entreprise Conakry',
-        metaTitle: 'Sécurité entreprise Conakry | Super Sécurité',
-        metaDescription: `Sécurité entreprise à ${superSecuriteZoneLabel} : gardiennage et surveillance pour bureaux, commerces et entrepôts, ${superSecuriteHoursLong}.`,
+        focusKeyword: 'sécurité entreprise Guinée',
+        metaTitle: 'Sécurité des entreprises | Super Sécurité — Guinée',
+        metaDescription:
+            'Gardiennage et surveillance pour entreprises en Guinée : bureaux, commerces, entrepôts, hôtels et sites industriels. Protection des collaborateurs et continuité des activités.',
         cover: `/${serviceImages.entreprise}`,
         hero: {
             id: 'entreprise',
-            label: 'Sécurité entreprise',
-            titleLead: 'Protégez vos locaux',
-            titleHighlight: 'professionnels',
-            description: `Protection de vos locaux professionnels avec des agents qualifiés, disponibles ${superSecuriteHoursLong} à ${superSecuriteZoneLabel}.`,
+            titleLead: 'Sécurité des',
+            titleHighlight: 'entreprises',
+            description:
+                'Protégez vos collaborateurs, vos biens et la continuité de vos activités',
             image: `/${serviceImages.entreprise}`,
-            imageAlt: 'Sécurité entreprise — Super Sécurité Conakry',
+            imageAlt: 'Sécurité des entreprises — Super Sécurité Guinée',
             underline: 'grow',
             stats: [
-                { label: 'Surveillance', value: 'Continue' },
-                { label: 'Zone', value: superSecuriteZoneLabel },
-                { label: 'Équipes', value: 'Formées & certifiées' },
+                { label: 'Surveillance', value: '24h/24 • 7j/7' },
+                { label: 'Couverture', value: 'Conakry & Toute la Guinée' },
+                { label: 'Professionnalisme', value: 'Agents qualifiés et encadrés' },
             ],
         },
         intro: [
-            `Super Sécurité accompagne les entreprises de ${superSecuriteZoneLabel} dans la protection de leurs sites : bureaux, commerces, entrepôts et espaces de réception.`,
-            'Nous déployons des agents formés, des rondes structurées et des consignes adaptées à votre activité pour garantir une présence dissuasive et une réaction rapide en cas d’incident.',
+            "Dans un environnement où les risques de vol, d'intrusion, de vandalisme et d'accès non autorisés sont de plus en plus présents, la sécurité de votre entreprise ne peut être laissée au hasard.",
+            'Super Sécurité accompagne les entreprises en Guinée avec des solutions de gardiennage et de surveillance adaptées à leurs besoins spécifiques. Nos équipes interviennent auprès des bureaux, commerces, entrepôts, hôtels, restaurants, sites industriels et autres infrastructures professionnelles pour assurer une protection efficace et continue de vos installations.',
+            "Grâce à une présence dissuasive, des procédures rigoureuses et un suivi permanent, nous sécurisons vos activités tout en préservant votre image et votre tranquillité d'esprit.",
         ],
-        benefits: [
-            'Bureaux & commerces',
-            'Contrôle d’accès',
-            `Disponible ${superSecuriteHoursShort}`,
-        ],
+        benefits: [],
+        sectionsTitle: 'Nos services de sécurité pour les entreprises',
         sections: [
             {
-                title: 'Présence sur site',
+                title: 'Contrôle des accès',
                 description:
-                    'Des équipes mobilisables en permanence pour sécuriser vos accès, halls d’accueil, parkings et zones sensibles (serveurs, caisses, réserves).',
+                    'Gestion et filtrage des entrées et sorties, vérification des identités et orientation des visiteurs pour garantir un accès sécurisé à vos installations.',
             },
             {
-                title: 'Protocoles adaptés',
+                title: 'Surveillance des locaux',
                 description:
-                    'Consignes claires, rondes horodatées, registres de passage et reporting régulier selon vos exigences opérationnelles et contractuelles.',
+                    "Protection permanente des bureaux, commerces, entrepôts et zones sensibles contre les risques d'intrusion, de vol ou de dégradation.",
             },
             {
-                title: 'Réactivité',
+                title: 'Rondes de sécurité',
                 description:
-                    'Intervention rapide en cas d’intrusion, conflit ou anomalie, avec remontée immédiate vers votre responsable sécurité ou direction.',
+                    "Patrouilles régulières de jour comme de nuit pour détecter toute anomalie et prévenir les incidents avant qu'ils ne surviennent.",
             },
             {
-                title: 'Image professionnelle',
+                title: 'Gestion des incidents',
                 description:
-                    'Des agents en tenue, courtois et formés à l’accueil, pour renforcer la confiance de vos clients, visiteurs et collaborateurs.',
+                    "Intervention rapide et application des procédures adaptées en cas d'intrusion, d'incident ou de situation d'urgence.",
+            },
+            {
+                title: 'Contrôle des véhicules',
+                description:
+                    'Vérification et suivi des véhicules entrant et sortant du site pour renforcer la sécurité de vos accès.',
             },
         ],
-        includes: [
-            'Gardiennage statique et rondes de surveillance',
-            'Contrôle des accès piétons et véhicules',
-            'Tenue de registres et rapports d’activité',
-            'Coordination avec vos équipes internes',
-            'Renforts ponctuels sur demande',
-        ],
+        includes: [],
         galleryTitle: 'Nos interventions entreprise',
         galleryDescription:
             'Quelques scènes de terrain — visuels provisoires, remplaçables par vos photos de missions.',
@@ -156,62 +158,67 @@ const serviceMeta: Record<
         ],
     },
     residence: {
-        focusKeyword: 'gardiennage résidence Conakry',
-        metaTitle: 'Sécurité résidence Conakry | Super Sécurité',
-        metaDescription: `Gardiennage et surveillance de résidences à ${superSecuriteZoneLabel} : villas, immeubles et lotissements protégés ${superSecuriteHoursLong}.`,
+        focusKeyword: 'gardiennage résidence Guinée',
+        metaTitle: 'Sécurité des résidences | Super Sécurité — Guinée',
+        metaDescription:
+            'Gardiennage et surveillance résidentielle en Guinée : villas, immeubles, résidences privées et cités. Protection de votre famille et de votre cadre de vie.',
         cover: `/${serviceImages.residence}`,
         hero: {
             id: 'residence',
-            label: 'Sécurité résidence',
-            titleLead: 'Sécurisez votre',
-            titleHighlight: 'résidence',
-            description: `Tranquillité d’esprit pour vos villas et immeubles grâce à une surveillance rigoureuse et dissuasive à ${superSecuriteZoneLabel}.`,
+            titleLead: 'Sécurité des',
+            titleHighlight: 'résidences',
+            description:
+                'Protégez votre famille et votre cadre de vie en toute sérénité',
             image: `/${serviceImages.residence}`,
-            imageAlt: 'Sécurité résidence — Super Sécurité Conakry',
+            imageAlt: 'Sécurité des résidences — Super Sécurité Guinée',
             underline: 'slide',
             stats: [
-                { label: 'Protection', value: 'Villas & immeubles' },
-                { label: 'Présence', value: 'Dissuasive' },
-                { label: 'Disponibilité', value: superSecuriteHoursShort },
+                { label: 'Résidences', value: 'Villas & immeubles' },
+                { label: 'Surveillance', value: 'Jour et nuit' },
+                { label: 'Disponibilité', value: '24h/24 • 7j/7' },
             ],
         },
         intro: [
-            'La sécurité résidentielle exige discrétion, vigilance et confiance. Super Sécurité protège villas, immeubles et lotissements avec des agents sélectionnés et formés aux spécificités du gardiennage de proximité.',
-            'Nous assurons une présence rassurante pour les résidents tout en filtrant les accès et en signalant toute situation anormale.',
+            "La sécurité de votre domicile ne s'improvise pas. Que vous soyez propriétaire d'une villa, gestionnaire d'immeuble ou responsable d'une résidence privée, garantir un environnement sûr pour les occupants et les biens est une responsabilité que nous prenons au sérieux.",
+            'Super Sécurité vous propose des solutions de gardiennage et de surveillance résidentielle assurées par des agents qualifiés, formés pour allier présence rassurante, discrétion et efficacité opérationnelle.',
         ],
-        benefits: [
-            'Villas & immeubles',
-            'Surveillance continue',
-            'Agents de confiance',
-        ],
+        benefits: [],
+        sectionsTitle: 'Nos solutions de sécurité résidentielle',
         sections: [
             {
-                title: 'Protection du domicile',
+                title: 'Gardiennage 24h/24',
                 description:
-                    'Présence aux portails, parkings et espaces communs pour dissuader les intrusions et accompagner les résidents si besoin.',
+                    "Présence continue d'agents de sécurité pour assurer la protection permanente de votre résidence, de jour comme de nuit, sans interruption.",
             },
             {
-                title: 'Surveillance nocturne',
+                title: 'Contrôle des visiteurs',
                 description:
-                    'Rondes régulières et vigilance accrue aux heures les plus sensibles, avec consignes adaptées à la configuration de votre résidence.',
+                    'Gestion rigoureuse des entrées et sorties, enregistrement des visiteurs et vérification systématique des accès pour aucune intrusion non autorisée.',
             },
             {
-                title: 'Gestion des visiteurs',
+                title: 'Surveillance des accès',
                 description:
-                    'Contrôle des entrées, annonce des visiteurs et respect des procédures définies par le syndic ou le propriétaire.',
+                    'Protection des points sensibles — portails, parkings, zones de passage — pour neutraliser tout risque d\'intrusion dès la périphérie.',
             },
             {
-                title: 'Accompagnement sur mesure',
+                title: 'Rondes de sécurité',
                 description:
-                    'Des effectifs et des horaires ajustés à la taille de votre résidence, du petit lotissement à l’immeuble multi-logements.',
+                    "Patrouilles régulières autour et à l'intérieur du périmètre pour détecter toute activité suspecte avant qu'elle ne devienne un incident.",
+            },
+            {
+                title: 'Gestion des incidents',
+                description:
+                    "Réaction immédiate et intervention structurée en cas de situation anormale, d'intrusion ou de comportement menaçant.",
             },
         ],
+        includesTitle: 'Types de résidences sécurisées',
         includes: [
-            'Gardiennage de portail et accueil résidents',
-            'Rondes dans les parties communes',
-            'Surveillance nocturne renforcée',
-            'Rapports d’incidents et de présence',
-            'Agents formés à la relation résident',
+            'Villas privées',
+            "Résidences de cadres et d'expatriés",
+            'Immeubles résidentiels',
+            'Résidences collectives',
+            'Cités privées',
+            'Résidences diplomatiques',
         ],
         galleryTitle: 'Sécurité résidentielle',
         galleryDescription:
@@ -241,62 +248,60 @@ const serviceMeta: Record<
     },
     chantiers: {
         focusKeyword: 'sécurité chantier Guinée',
-        metaTitle: `Sécurité chantiers BTP | Super Sécurité — ${superSecuriteZoneLabel}`,
-        metaDescription: `Sécurité de chantiers BTP à ${superSecuriteZoneLabel} : protection du matériel, contrôle des accès et patrouilles sur site.`,
+        metaTitle: 'Sécurité des chantiers | Super Sécurité — Guinée',
+        metaDescription:
+            'Gardiennage et surveillance de chantiers BTP en Guinée : contrôle des accès, rondes, protection des matériaux et gestion des incidents.',
         cover: `/${serviceImages.chantiers}`,
         hero: {
             id: 'chantiers',
-            label: 'Sécurité chantiers',
-            titleLead: 'Vos chantiers',
-            titleHighlight: 'sous contrôle',
-            description: `Sécurisation de vos chantiers BTP avec contrôle des accès, patrouilles et protection du matériel à ${superSecuriteZoneLabel}.`,
+            titleLead: 'Sécurité des',
+            titleHighlight: 'chantiers',
+            description:
+                'Protégez vos travaux, vos équipes et vos équipements',
             image: `/${serviceImages.chantiers}`,
-            imageAlt: `Sécurité chantiers — Super Sécurité ${superSecuriteZoneLabel}`,
+            imageAlt: 'Sécurité des chantiers — Super Sécurité Guinée',
             underline: 'draw',
             stats: [
-                { label: 'Secteurs', value: 'BTP & travaux' },
-                { label: 'Patrouilles', value: 'Régulières' },
-                { label: 'Réactivité', value: superSecuriteHoursShort },
+                { label: 'Secteurs', value: 'BTP & infrastructures' },
+                { label: 'Surveillance', value: "Rondes et contrôle d'accès" },
+                { label: 'Disponibilité', value: '24h/24 • 7j/7' },
             ],
         },
         intro: [
-            'Les chantiers sont des cibles privilégiées pour le vol de matériaux et d’équipements. Super Sécurité met en place une organisation de terrain adaptée aux flux ouvriers, livraisons et horaires de travail.',
-            'Nos équipes sécurisent périmètres, zones de stockage et accès pour limiter les pertes et garantir la continuité de vos travaux.',
+            'Les chantiers de construction sont des zones particulièrement vulnérables : vols de matériaux, intrusions, vandalisme, mouvements non contrôlés de personnes et de véhicules — les risques sont constants et peuvent impacter directement vos délais et vos coûts.',
+            "Super Sécurité accompagne les entreprises du BTP en Guinée avec des solutions de gardiennage et de surveillance adaptées aux chantiers de toutes tailles, qu'il s'agisse de travaux publics, de construction immobilière ou d'infrastructures industrielles.",
+            'Notre objectif est clair : assurer la protection continue de vos sites pour que vos équipes travaillent en sécurité et que vos travaux progressent sans interruption.',
         ],
-        benefits: [
-            'Chantiers BTP',
-            'Protection matériel',
-            'Patrouilles régulières',
-        ],
+        benefits: [],
+        sectionsTitle: 'Nos services de sécurité pour chantiers',
         sections: [
-            {
-                title: 'Sites en construction',
-                description:
-                    'Sécurisation adaptée aux environnements de chantier, avec gestion des flux ouvriers, sous-traitants et livraisons.',
-            },
-            {
-                title: 'Prévention des vols',
-                description:
-                    'Présence dissuasive pour limiter le vol de matériaux, outillage et équipements, notamment en dehors des heures ouvrées.',
-            },
             {
                 title: 'Contrôle des accès',
                 description:
-                    'Filtrage à l’entrée, vérification des badges et traçabilité des personnes autorisées sur le site.',
+                    'Gestion rigoureuse des entrées et sorties du personnel, des visiteurs et des fournisseurs pour maintenir un site maîtrisé à tout moment.',
             },
             {
-                title: 'Coordination chantier',
+                title: 'Surveillance du chantier',
                 description:
-                    'Liaison avec le chef de chantier et remontée rapide des anomalies pour ne pas ralentir l’avancement des travaux.',
+                    'Protection permanente des zones de travail, des matériaux stockés et des équipements contre le vol, les dégradations et les accès non autorisés.',
+            },
+            {
+                title: 'Rondes de sécurité',
+                description:
+                    "Patrouilles régulières de jour comme de nuit pour détecter toute anomalie et intervenir avant qu'un incident ne se produise.",
+            },
+            {
+                title: 'Contrôle des véhicules',
+                description:
+                    'Vérification systématique des camions, engins et véhicules entrant et sortant du site pour prévenir tout mouvement suspect.',
+            },
+            {
+                title: 'Gestion des incidents',
+                description:
+                    "Intervention rapide, structurée et documentée en cas d'intrusion, d'incident ou de situation anormale sur le chantier.",
             },
         ],
-        includes: [
-            'Gardiennage de point d’accès chantier',
-            'Patrouilles périmétriques jour et nuit',
-            'Surveillance des zones de stockage',
-            'Registre des entrées / sorties',
-            'Rapports quotidiens au maître d’ouvrage',
-        ],
+        includes: [],
         galleryTitle: 'Chantiers sécurisés',
         galleryDescription:
             'Galerie provisoire — remplacez ces visuels par vos photos de chantiers réels.',
@@ -324,62 +329,86 @@ const serviceMeta: Record<
         ],
     },
     'zones-minieres': {
-        focusKeyword: 'sécurité minière Guinée',
-        metaTitle: `Sécurité zones minières | Super Sécurité — ${superSecuriteZoneLabel}`,
-        metaDescription: `Sécurité des zones minières à ${superSecuriteZoneLabel} : équipes formées aux protocoles les plus stricts pour sites sensibles.`,
+        focusKeyword: 'sécurité sites miniers Guinée',
+        metaTitle: 'Sécurité des sites miniers | Super Sécurité — Guinée',
+        metaDescription:
+            'Sécurité des sites miniers en Guinée : contrôle des accès, surveillance des bases-vie, rondes et gestion des incidents pour mines de bauxite, or et carrières.',
         cover: `/${serviceImages['zones-minieres']}`,
         hero: {
             id: 'zones-minieres',
-            label: 'Zones minières',
-            titleLead: 'Sites miniers',
-            titleHighlight: 'sécurisés',
-            description: `Surveillance rigoureuse des sites miniers avec des équipes formées aux protocoles de sécurité exigeants à ${superSecuriteZoneLabel}.`,
+            titleLead: 'Sécurité des',
+            titleHighlight: 'sites miniers',
+            description:
+                "Une protection adaptée aux exigences de l'industrie minière",
             image: `/${serviceImages['zones-minieres']}`,
-            imageAlt: `Sécurité zones minières — Super Sécurité ${superSecuriteZoneLabel}`,
+            imageAlt: 'Sécurité des sites miniers — Super Sécurité Guinée',
             underline: 'scan',
             stats: [
                 { label: 'Secteurs', value: 'Mines & sites sensibles' },
-                { label: 'Protocoles', value: 'Sur mesure' },
-                { label: 'Expertise', value: 'Terrain' },
+                { label: 'Protocoles', value: 'Stricts et adaptés au terrain' },
+                {
+                    label: 'Expertise',
+                    value: 'Sécurité en environnements à haut risque',
+                },
             ],
         },
         intro: [
-            'Les sites miniers et installations sensibles demandent rigueur, discipline et respect strict des procédures HSE. Super Sécurité déploie des équipes habituées aux environnements à risque et aux consignes opérationnelles exigeantes.',
-            'Nous contribuons à la protection des personnes, des équipements et des accès sur des sites souvent isolés.',
+            "La Guinée occupe une position stratégique dans l'industrie minière mondiale, portée par ses importantes ressources en bauxite, or et autres minerais. Cette richesse s'accompagne d'enjeux de sécurité majeurs : intrusions, vols, sabotages, perturbations des opérations — les risques sont réels et les conséquences potentiellement lourdes.",
+            "Super Sécurité accompagne les acteurs du secteur minier en Guinée avec des dispositifs de sécurité robustes, pensés pour les environnements exigeants et les contraintes opérationnelles propres aux sites d'extraction et d'exploitation.",
         ],
-        benefits: [
-            'Sites miniers',
-            'Protocoles stricts',
-            'Équipes spécialisées',
-        ],
+        benefits: [],
+        sectionsTitle: 'Nos services de sécurité pour sites miniers',
         sections: [
             {
-                title: 'Environnements à risque',
+                title: 'Contrôle des accès',
                 description:
-                    'Protection adaptée aux sites miniers, carrières et installations sensibles en zone isolée ou difficile d’accès.',
+                    'Gestion rigoureuse des entrées et sorties du personnel, des visiteurs et des sous-traitants pour sécuriser l\'ensemble du périmètre du site.',
             },
             {
-                title: 'Conformité opérationnelle',
+                title: 'Surveillance des bases-vie',
                 description:
-                    'Respect des consignes HSE, EPI obligatoires et procédures imposées par vos responsables de site.',
+                    "Protection des zones d'hébergement du personnel pour garantir un cadre de vie sûr, stable et maîtrisé en dehors des heures de travail.",
             },
             {
-                title: 'Réduction des incidents',
+                title: 'Contrôle des véhicules',
                 description:
-                    'Présence dissuasive et réactive pour limiter vols, intrusions et comportements à risque sur le périmètre.',
+                    'Inspection systématique des véhicules entrant et sortant du site afin de prévenir toute tentative de vol ou d\'introduction d\'éléments non autorisés.',
             },
             {
-                title: 'Continuité d’activité',
+                title: 'Sécurisation des infrastructures',
                 description:
-                    'Organisation des effectifs pour couvrir les postes critiques sans interruption, y compris en rotation.',
+                    'Protection des bureaux, ateliers, entrepôts et zones sensibles contre toute tentative d\'intrusion, de dégradation ou de sabotage.',
+            },
+            {
+                title: 'Rondes de sécurité',
+                description:
+                    'Patrouilles continues sur l\'ensemble du site pour maintenir une surveillance active et dissuader tout comportement malveillant.',
+            },
+            {
+                title: 'Gestion des incidents',
+                description:
+                    'Application immédiate des procédures de sécurité et remontée structurée des alertes pour une réponse rapide et traçable.',
             },
         ],
+        includesTitle: 'Sites que nous sécurisons',
         includes: [
-            'Gardiennage de postes fixes et checkpoints',
-            'Patrouilles véhiculaires et périmétriques',
-            'Contrôle strict des accès et badges',
-            'Remontée d’incidents en temps réel',
-            'Équipes briefées aux consignes du site',
+            'Mines de bauxite',
+            "Mines d'or",
+            'Carrières',
+            'Bases-vie',
+            'Entrepôts miniers',
+            "Zones d'exploration",
+            'Infrastructures portuaires liées au secteur minier',
+        ],
+        highlightsTitle:
+            'Pourquoi les acteurs miniers choisissent Super Sécurité ?',
+        highlights: [
+            'Agents expérimentés, formés aux environnements sensibles et isolés',
+            'Supervision terrain dédiée, continue et documentée',
+            'Forte capacité de déploiement sur les sites éloignés',
+            'Respect strict des procédures HSE et des normes de sûreté internationales',
+            "Rapports d'incidents clairs, détaillés et transmis dans les délais",
+            'Présence opérationnelle établie dans les principales zones minières de Guinée',
         ],
         galleryTitle: 'Zones minières & sites sensibles',
         galleryDescription:

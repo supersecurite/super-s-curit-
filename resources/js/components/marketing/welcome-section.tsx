@@ -36,13 +36,6 @@ export default function WelcomeSection() {
                                 {paragraph}
                             </p>
                         ))}
-                        <Link
-                            href={about.url()}
-                            className="marketing-cta-secondary marketing-magnetic mt-8 inline-flex items-center gap-2"
-                        >
-                            Découvrez
-                            <ArrowRight className="size-4" aria-hidden />
-                        </Link>
                     </Reveal>
                 </div>
             </div>

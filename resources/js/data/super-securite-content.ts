@@ -19,6 +19,12 @@ export type SuperSecuriteService = {
     path: string;
 };
 
+export const superSecuriteServicesSection = {
+    sectionLabel: 'Nos services',
+    intro:
+        'Super Sécurité accompagne particuliers et professionnels avec des solutions de sécurité, de surveillance et de gardiennage conçues pour protéger les personnes, les biens et les activités.',
+} as const;
+
 export const superSecuriteServices: readonly SuperSecuriteService[] = [
     {
         id: 'entreprise',
@@ -88,6 +94,7 @@ export const superSecuriteAdvantages: readonly SuperSecuriteAdvantage[] = [
 ] as const;
 
 export const superSecuriteWhyUsModern = {
+    sectionLabel: 'Pourquoi nous choisir',
     title: 'Une sécurité moderne, transparente et efficace',
     intro:
         "Nous combinons l'expertise humaine et la technologie pour offrir à nos clients un service de sécurité performant et réactif.",
