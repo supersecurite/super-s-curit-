@@ -7,7 +7,7 @@ export default function PartnersSection() {
         <section id="partenaires" className="py-10 md:py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-12 max-w-2xl text-center mx-auto">
-                    <p className="marketing-label mb-3">Partenaires</p>
+                    {/* <p className="marketing-label mb-3">Partenaires</p> */}
                     <h2 className="marketing-heading-section">
                         Nos{' '}
                         <span className="marketing-text-gradient">

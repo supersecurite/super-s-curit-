@@ -76,6 +76,28 @@ export default function ServicePageSections({
                                 ))}
                             </div>
 
+                            {content.introIndicators &&
+                            content.introIndicators.length > 0 ? (
+                                <Reveal delay={200} className="mt-8">
+                                    <ul className="grid gap-2 sm:grid-cols-2">
+                                        {content.introIndicators.map(
+                                            (indicator) => (
+                                                <li
+                                                    key={indicator}
+                                                    className="flex items-center gap-2.5 text-sm text-super-securite-heading"
+                                                >
+                                                    <span
+                                                        className="size-1.5 shrink-0 rounded-full bg-super-securite-accent"
+                                                        aria-hidden
+                                                    />
+                                                    {indicator}
+                                                </li>
+                                            ),
+                                        )}
+                                    </ul>
+                                </Reveal>
+                            ) : null}
+
                             {content.benefits.length > 0 ? (
                                 <Reveal
                                     delay={240}

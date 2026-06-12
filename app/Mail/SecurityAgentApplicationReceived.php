@@ -28,7 +28,7 @@ class SecurityAgentApplicationReceived extends Mailable
         }
 
         return new Envelope(
-            subject: 'Nouvelle candidature agent — Super Sécurité',
+            subject: 'Nouvelle candidature — Super Sécurité',
             replyTo: $replyTo,
         );
     }

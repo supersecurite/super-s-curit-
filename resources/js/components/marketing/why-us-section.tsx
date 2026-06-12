@@ -11,13 +11,42 @@ import { cn } from '@/lib/utils';
 
 type WhyUsSectionProps = {
     showCinematicHero?: boolean;
+    showAppFeatures?: boolean;
 };
 
-type WhyUsAppFeaturesProps = {
-    variant?: 'light' | 'dark';
-};
+type WhyUsTone = 'light' | 'dark';
 
-function WhyUsAppFeatures({ variant = 'light' }: WhyUsAppFeaturesProps) {
+function WhyUsReasonsList({ variant = 'light' }: { variant?: WhyUsTone }) {
+    const isDark = variant === 'dark';
+
+    return (
+        <ol className="mt-6 space-y-3">
+            {superSecuriteWhyUsModern.reasons.map((reason, index) => (
+                <li
+                    key={reason}
+                    className={cn(
+                        'flex gap-3 text-sm leading-relaxed md:text-base',
+                        isDark ? 'text-white/85' : undefined,
+                    )}
+                >
+                    <span
+                        className={cn(
+                            'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full font-heading text-xs font-bold',
+                            isDark
+                                ? 'bg-white/15 text-white'
+                                : 'bg-super-securite-accent/10 text-super-securite-accent',
+                        )}
+                    >
+                        {index + 1}
+                    </span>
+                    {reason}
+                </li>
+            ))}
+        </ol>
+    );
+}
+
+function WhyUsAppFeatures({ variant = 'light' }: { variant?: WhyUsTone }) {
     const isDark = variant === 'dark';
 
     return (
@@ -25,8 +54,8 @@ function WhyUsAppFeatures({ variant = 'light' }: WhyUsAppFeaturesProps) {
             <p
                 className={
                     isDark
-                        ? 'mt-6 text-sm font-medium text-white/90 md:text-base'
-                        : 'mt-6 text-sm font-medium text-super-securite-heading md:text-base'
+                        ? 'text-sm font-medium text-white/90 md:text-base'
+                        : 'text-sm font-medium text-super-securite-heading md:text-base'
                 }
             >
                 {superSecuriteWhyUsModern.appLead}
@@ -35,18 +64,18 @@ function WhyUsAppFeatures({ variant = 'light' }: WhyUsAppFeaturesProps) {
                 {superSecuriteWhyUsModern.appFeatures.map((feature) => (
                     <li
                         key={feature}
-                        className={
-                            isDark
-                                ? 'flex gap-3 text-sm leading-relaxed text-white/85 md:text-base'
-                                : 'flex gap-3 text-sm leading-relaxed md:text-base'
-                        }
+                        className={cn(
+                            'flex gap-3 text-sm leading-relaxed md:text-base',
+                            isDark ? 'text-white/85' : undefined,
+                        )}
                     >
                         <span
-                            className={
+                            className={cn(
+                                'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
                                 isDark
-                                    ? 'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white/15'
-                                    : 'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-super-securite-accent/10'
-                            }
+                                    ? 'bg-white/15'
+                                    : 'bg-super-securite-accent/10',
+                            )}
                         >
                             <Check
                                 className="size-3 text-super-securite-accent"
@@ -59,11 +88,10 @@ function WhyUsAppFeatures({ variant = 'light' }: WhyUsAppFeaturesProps) {
                 ))}
             </ul>
             <p
-                className={
-                    isDark
-                        ? 'mt-6 text-sm leading-relaxed font-medium text-white/90 md:text-base'
-                        : 'mt-6 text-sm leading-relaxed font-medium text-super-securite-heading md:text-base'
-                }
+                className={cn(
+                    'mt-6 text-sm leading-relaxed font-medium md:text-base',
+                    isDark ? 'text-white/90' : 'text-super-securite-heading',
+                )}
             >
                 {superSecuriteWhyUsModern.conclusion}
             </p>
@@ -71,7 +99,7 @@ function WhyUsAppFeatures({ variant = 'light' }: WhyUsAppFeaturesProps) {
     );
 }
 
-function WhyUsAboutButton({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
+function WhyUsAboutButton({ variant = 'light' }: { variant?: WhyUsTone }) {
     return (
         <Link
             href={about.url()}
@@ -88,8 +116,29 @@ function WhyUsAboutButton({ variant = 'light' }: { variant?: 'light' | 'dark' })
     );
 }
 
+function WhyUsMobileAppImage({ className }: { className?: string }) {
+    return (
+        <div className={cn('relative mx-auto max-w-sm', className)}>
+            <div
+                className="absolute -inset-4 rounded-[2rem] bg-super-securite-accent/10"
+                aria-hidden
+            />
+            <img
+                src={superSecuriteStock.about.mobileApp}
+                alt="Application mobile Super Sécurité — suivi en temps réel"
+                width={480}
+                height={640}
+                loading="lazy"
+                decoding="async"
+                className="relative w-full object-contain drop-shadow-xl"
+            />
+        </div>
+    );
+}
+
 export default function WhyUsSection({
     showCinematicHero = true,
+    showAppFeatures = false,
 }: WhyUsSectionProps) {
     return (
         <section
@@ -146,7 +195,7 @@ export default function WhyUsSection({
                             </Reveal>
 
                             <Reveal delay={400} className="mt-6 max-w-xl sm:mt-8">
-                                <WhyUsAppFeatures variant="dark" />
+                                <WhyUsReasonsList variant="dark" />
                                 <WhyUsAboutButton variant="dark" />
                             </Reveal>
                         </div>
@@ -171,10 +220,49 @@ export default function WhyUsSection({
                             <p className="mt-4 text-sm leading-relaxed md:text-base">
                                 {superSecuriteWhyUsModern.intro}
                             </p>
-                            <WhyUsAppFeatures />
-                            <WhyUsAboutButton />
+                            <WhyUsReasonsList />
                         </Reveal>
                     ) : null}
+
+                    <Reveal
+                        delay={showCinematicHero ? 80 : 120}
+                        className="mb-12 md:mb-16"
+                    >
+                        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+                            <WhyUsMobileAppImage className="lg:justify-self-center" />
+                            <div>
+                                {showAppFeatures ? (
+                                    <>
+                                        <p className="marketing-label mb-3">
+                                            Innovation
+                                        </p>
+                                        <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
+                                            {superSecuriteWhyUsModern.appSectionTitle}
+                                        </h3>
+                                        <div className="mt-6">
+                                            <WhyUsAppFeatures />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className="marketing-label mb-3">
+                                            Innovation
+                                        </p>
+                                        <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
+                                            {superSecuriteWhyUsModern.appSectionTitle}
+                                        </h3>
+                                        <p className="mt-4 text-sm leading-relaxed text-super-securite-muted md:text-base">
+                                            Suivez vos sites, signalez un incident
+                                            et échangez avec nos équipes depuis
+                                            votre smartphone. Découvrez toutes les
+                                            fonctionnalités sur notre page dédiée.
+                                        </p>
+                                        <WhyUsAboutButton />
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </Reveal>
 
                     <Reveal
                         delay={80}

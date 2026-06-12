@@ -92,10 +92,6 @@ function HeroHeading({ variant }: { variant: MarketingHeroVariant }) {
 function HeroCopy({ variant }: { variant: MarketingHeroVariant }) {
     return (
         <>
-            <Reveal delay={80} className="hidden md:block">
-                <p className="marketing-label mb-2 sm:mb-3">{variant.label}</p>
-            </Reveal>
-
             <Reveal delay={120}>
                 <HeroHeading variant={variant} />
             </Reveal>

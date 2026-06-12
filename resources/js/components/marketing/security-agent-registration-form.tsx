@@ -34,7 +34,7 @@ export default function SecurityAgentRegistrationForm() {
             />
 
             <div className="relative">
-                <p className="marketing-label mb-2">Candidature agent</p>
+                <p className="marketing-label mb-2">Candidature</p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
                     Rejoignez notre réseau
                 </h2>

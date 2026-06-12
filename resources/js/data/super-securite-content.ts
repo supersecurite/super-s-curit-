@@ -98,6 +98,15 @@ export const superSecuriteWhyUsModern = {
     title: 'Une sécurité moderne, transparente et efficace',
     intro:
         "Nous combinons l'expertise humaine et la technologie pour offrir à nos clients un service de sécurité performant et réactif.",
+    reasons: [
+        'Une société de sécurité agréée et conforme à la réglementation guinéenne',
+        'Des agents rigoureusement sélectionnés et formés',
+        'Une supervision permanente pour garantir la qualité du service',
+        'Une application dédiée pour un suivi transparent et en temps réel',
+        'Une présence locale et une grande réactivité partout en Guinée',
+        'Une expertise reconnue dans la sécurité des mines, entreprises, résidences et chantiers',
+    ],
+    appSectionTitle: 'Notre application mobile',
     appLead: 'Notre application dédiée permet notamment à nos clients de :',
     appFeatures: [
         'Signaler rapidement un incident ou un manquement',

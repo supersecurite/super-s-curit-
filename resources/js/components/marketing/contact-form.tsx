@@ -217,7 +217,7 @@ export default function ContactForm() {
                                         </>
                                     ) : (
                                         <>
-                                            Envoyer le message
+                                            Envoyer
                                             <Send
                                                 className="size-4 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
                                                 aria-hidden

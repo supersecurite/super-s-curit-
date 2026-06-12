@@ -14,7 +14,7 @@ export default function MarketingAbout() {
             <MarketingFullscreenHero {...marketingPageHeroes.about} />
 
             <MissionSection />
-            <WhyUsSection showCinematicHero={false} />
+            <WhyUsSection showCinematicHero={false} showAppFeatures />
             <ValuesSection />
             <CtaBand />
         </>

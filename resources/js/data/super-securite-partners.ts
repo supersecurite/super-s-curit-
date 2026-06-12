@@ -12,11 +12,11 @@ const partnerLogo = (filename: string) =>
 
 export const superSecuritePartners: readonly SuperSecuritePartner[] = [
     {
-        name: 'AKIBA',
+        name: 'AKIBA FINANCE',
         logo: partnerLogo('akiba.jpeg'),
     },
     {
-        name: 'Djolof Kitchen',
+        name: 'DJOLOF CHICKEN',
         logo: partnerLogo('Djolof.jpeg'),
     },
     {

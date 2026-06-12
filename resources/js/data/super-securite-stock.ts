@@ -36,6 +36,8 @@ export const superSecuriteStock = {
         story: '/images/super-securite/about/approche.jpg',
         valuesBanner:
             '/images/super-securite/about/Happy-young-woman-pointing-fingers.png',
+        mobileApp:
+            '/images/super-securite/about/closeup-hand-holding-mobile-phone-dark-red-color-background.jpg',
     },
 
     contact: {

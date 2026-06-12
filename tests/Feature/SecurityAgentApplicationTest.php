@@ -71,6 +71,24 @@ test('agent application requires commune', function () {
     ])->assertSessionHasErrors('commune_id');
 });
 
+test('public can submit agent application with boké mining town commune', function () {
+    Mail::fake();
+
+    $this->post(route('devenir-agent.store'), [
+        'first_name' => 'Ibrahima',
+        'last_name' => 'Camara',
+        'phone' => '+224612131315',
+        'post' => 'agent',
+        'commune_id' => '221',
+        'consent' => '1',
+    ])->assertRedirect(route('devenir-agent.merci'));
+
+    expect(SecurityAgentApplication::query()->first())
+        ->commune_name->toBe('Kamsar')
+        ->prefecture_name->toBe('Boké')
+        ->region_id->toBe('2');
+});
+
 test('agent application rejects invalid commune', function () {
     $this->post(route('devenir-agent.store'), [
         'first_name' => 'Test',

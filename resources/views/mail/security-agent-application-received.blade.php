@@ -1,5 +1,5 @@
 <x-mail::message>
-# Nouvelle candidature agent de sécurité
+# Nouvelle candidature
 
 **Nom :** {{ $application['full_name'] }}
 

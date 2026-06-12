@@ -52,6 +52,7 @@ export type SuperSecuriteServiceDefinition = {
     intro: readonly string[];
     introLabel?: string;
     introTitle?: string;
+    introIndicators?: readonly string[];
     benefits: readonly string[];
     sectionsLabel?: string;
     sectionsTitle?: string;
@@ -101,6 +102,14 @@ const serviceMeta: Record<
             'Super Sécurité accompagne les entreprises en Guinée avec des solutions de gardiennage et de surveillance adaptées à leurs besoins spécifiques. Nos équipes interviennent auprès des bureaux, commerces, entrepôts, hôtels, restaurants, sites industriels et autres infrastructures professionnelles pour assurer une protection efficace et continue de vos installations.',
             "Grâce à une présence dissuasive, des procédures rigoureuses et un suivi permanent, nous sécurisons vos activités tout en préservant votre image et votre tranquillité d'esprit.",
         ],
+        introIndicators: [
+            'Banques & institutions financières',
+            'Hôtels & restaurants',
+            'Commerces & supermarchés',
+            'Entrepôts & bases logistiques',
+            'Sites industriels',
+            'Bureaux & sièges sociaux',
+        ],
         benefits: [],
         sectionsTitle: 'Nos services de sécurité pour les entreprises',
         sections: [
@@ -128,6 +137,11 @@ const serviceMeta: Record<
                 title: 'Contrôle des véhicules',
                 description:
                     'Vérification et suivi des véhicules entrant et sortant du site pour renforcer la sécurité de vos accès.',
+            },
+            {
+                title: 'Protocoles & reporting',
+                description:
+                    'Consignes claires, rondes horodatées, registres de passage et rapports réguliers adaptés à vos exigences opérationnelles et contractuelles.',
             },
         ],
         includes: [],
@@ -182,6 +196,14 @@ const serviceMeta: Record<
             "La sécurité de votre domicile ne s'improvise pas. Que vous soyez propriétaire d'une villa, gestionnaire d'immeuble ou responsable d'une résidence privée, garantir un environnement sûr pour les occupants et les biens est une responsabilité que nous prenons au sérieux.",
             'Super Sécurité vous propose des solutions de gardiennage et de surveillance résidentielle assurées par des agents qualifiés, formés pour allier présence rassurante, discrétion et efficacité opérationnelle.',
         ],
+        introIndicators: [
+            'Villas privées',
+            'Immeubles résidentiels',
+            'Cités privées',
+            "Résidences d'expatriés",
+            'Résidences de cadres',
+            'Résidences diplomatiques',
+        ],
         benefits: [],
         sectionsTitle: 'Nos solutions de sécurité résidentielle',
         sections: [
@@ -210,16 +232,13 @@ const serviceMeta: Record<
                 description:
                     "Réaction immédiate et intervention structurée en cas de situation anormale, d'intrusion ou de comportement menaçant.",
             },
+            {
+                title: 'Surveillance nocturne renforcée',
+                description:
+                    'Vigilance accrue en soirée et de nuit sur les accès, parkings et parties communes, lorsque les résidences sont les plus exposées.',
+            },
         ],
-        includesTitle: 'Types de résidences sécurisées',
-        includes: [
-            'Villas privées',
-            "Résidences de cadres et d'expatriés",
-            'Immeubles résidentiels',
-            'Résidences collectives',
-            'Cités privées',
-            'Résidences diplomatiques',
-        ],
+        includes: [],
         galleryTitle: 'Sécurité résidentielle',
         galleryDescription:
             'Images illustratives de nos prestations résidence — à personnaliser avec vos propres visuels.',
@@ -272,6 +291,14 @@ const serviceMeta: Record<
             "Super Sécurité accompagne les entreprises du BTP en Guinée avec des solutions de gardiennage et de surveillance adaptées aux chantiers de toutes tailles, qu'il s'agisse de travaux publics, de construction immobilière ou d'infrastructures industrielles.",
             'Notre objectif est clair : assurer la protection continue de vos sites pour que vos équipes travaillent en sécurité et que vos travaux progressent sans interruption.',
         ],
+        introIndicators: [
+            'Construction immobilière',
+            'Routes & ponts',
+            'Chantiers industriels',
+            'Chantiers de rénovation',
+            'Complexes résidentiels',
+            'Aménagement urbain',
+        ],
         benefits: [],
         sectionsTitle: 'Nos services de sécurité pour chantiers',
         sections: [
@@ -299,6 +326,11 @@ const serviceMeta: Record<
                 title: 'Gestion des incidents',
                 description:
                     "Intervention rapide, structurée et documentée en cas d'intrusion, d'incident ou de situation anormale sur le chantier.",
+            },
+            {
+                title: 'Coordination chantier',
+                description:
+                    "Liaison avec le chef de chantier et remontée rapide des anomalies pour ne pas ralentir l'avancement des travaux.",
             },
         ],
         includes: [],
@@ -356,6 +388,14 @@ const serviceMeta: Record<
             "La Guinée occupe une position stratégique dans l'industrie minière mondiale, portée par ses importantes ressources en bauxite, or et autres minerais. Cette richesse s'accompagne d'enjeux de sécurité majeurs : intrusions, vols, sabotages, perturbations des opérations — les risques sont réels et les conséquences potentiellement lourdes.",
             "Super Sécurité accompagne les acteurs du secteur minier en Guinée avec des dispositifs de sécurité robustes, pensés pour les environnements exigeants et les contraintes opérationnelles propres aux sites d'extraction et d'exploitation.",
         ],
+        introIndicators: [
+            'Mines',
+            'Carrières',
+            'Bases-vie',
+            'Infrastructures portuaires',
+            "Sites d'exploitation",
+            "Zones d'exploration",
+        ],
         benefits: [],
         sectionsTitle: 'Nos services de sécurité pour sites miniers',
         sections: [
@@ -390,16 +430,7 @@ const serviceMeta: Record<
                     'Application immédiate des procédures de sécurité et remontée structurée des alertes pour une réponse rapide et traçable.',
             },
         ],
-        includesTitle: 'Sites que nous sécurisons',
-        includes: [
-            'Mines de bauxite',
-            "Mines d'or",
-            'Carrières',
-            'Bases-vie',
-            'Entrepôts miniers',
-            "Zones d'exploration",
-            'Infrastructures portuaires liées au secteur minier',
-        ],
+        includes: [],
         highlightsTitle:
             'Pourquoi les acteurs miniers choisissent Super Sécurité ?',
         highlights: [

@@ -11,6 +11,7 @@ export type ServicePageContent = {
     intro: readonly string[];
     introLabel?: string;
     introTitle?: string;
+    introIndicators?: readonly string[];
     benefits: readonly string[];
     sectionsLabel?: string;
     sectionsTitle?: string;
@@ -33,6 +34,7 @@ function toServicePageContent(id: SuperSecuriteServiceId): ServicePageContent {
         intro: service.intro,
         introLabel: service.introLabel,
         introTitle: service.introTitle,
+        introIndicators: service.introIndicators,
         benefits: service.benefits,
         sectionsLabel: service.sectionsLabel,
         sectionsTitle: service.sectionsTitle,

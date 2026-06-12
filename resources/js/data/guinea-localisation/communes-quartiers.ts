@@ -137,6 +137,36 @@ export const communes: Commune[] = [
     "numero": 220
   },
   {
+    "id": "221",
+    "nom": "Kamsar",
+    "code": "KAMSAR",
+    "prefectureId": "22",
+    "prefectureNom": "Boké",
+    "regionId": "2",
+    "regionNom": "Région de Boké",
+    "numero": 221
+  },
+  {
+    "id": "222",
+    "nom": "Mafrinyah",
+    "code": "MAFRINYAH",
+    "prefectureId": "22",
+    "prefectureNom": "Boké",
+    "regionId": "2",
+    "regionNom": "Région de Boké",
+    "numero": 222
+  },
+  {
+    "id": "223",
+    "nom": "Sangaredi",
+    "code": "SANGAREDI",
+    "prefectureId": "22",
+    "prefectureNom": "Boké",
+    "regionId": "2",
+    "regionNom": "Région de Boké",
+    "numero": 223
+  },
+  {
     "id": "230",
     "nom": "Fria",
     "code": "FRIA",
