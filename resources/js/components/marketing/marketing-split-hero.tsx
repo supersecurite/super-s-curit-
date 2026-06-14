@@ -1,5 +1,4 @@
 import { type ReactNode } from 'react';
-import HeroTitleUnderline from '@/components/marketing/hero-title-underline';
 import Reveal from '@/components/marketing/reveal';
 import type { MarketingPageHeroConfig } from '@/data/marketing-page-heroes';
 import { cn } from '@/lib/utils';
@@ -13,7 +12,6 @@ export default function MarketingSplitHero({
     id,
     pattern,
     layout,
-    underline,
     label,
     titleLead,
     titleHighlight,
@@ -25,7 +23,6 @@ export default function MarketingSplitHero({
     className,
     children,
 }: MarketingSplitHeroProps) {
-    const underlineGradientId = `page-hero-underline-${id}`;
     const isReverse = layout === 'reverse';
 
     const textColumn = (
@@ -44,12 +41,8 @@ export default function MarketingSplitHero({
             <Reveal delay={120}>
                 <h1 className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-super-securite-heading sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                     {titleLead}{' '}
-                    <span className="relative inline-block">
+                    <span className="text-super-securite-accent">
                         {titleHighlight}
-                        <HeroTitleUnderline
-                            variant={underline}
-                            gradientId={underlineGradientId}
-                        />
                     </span>
                     {titleTrail ? (
                         <>
@@ -105,7 +98,7 @@ export default function MarketingSplitHero({
             )}
         >
             <div className="relative w-full max-w-md lg:max-w-none">
-                <div className="overflow-hidden rounded-3xl border border-super-securite-border shadow-xl shadow-slate-900/10 ring-4 ring-super-securite-accent/10">
+                <div className="overflow-hidden rounded-3xl">
                     <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[5/4]">
                         <img
                             src={image}
@@ -137,7 +130,7 @@ export default function MarketingSplitHero({
                 aria-hidden
             />
 
-            <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-14 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 min-h-[min(60vh,calc(100dvh-var(--marketing-header-height,5.5rem)-2rem))] md:min-h-[60vh]">
+            <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-14 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 min-h-[min(60vh,calc(100dvh-var(--marketing-header-height,5.5rem)-2rem))] md:min-h-[60vh]">
                 <div className="grid grid-cols-1 content-center gap-10 lg:grid-cols-12 lg:items-center lg:gap-12 xl:gap-16">
                     {textColumn}
                     {imageColumn}

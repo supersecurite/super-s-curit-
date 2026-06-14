@@ -26,7 +26,7 @@ function GalleryFigure({
     return (
         <figure
             className={cn(
-                'group overflow-hidden rounded-2xl border border-super-securite-border bg-white shadow-sm shadow-slate-900/5',
+                'group overflow-hidden rounded-2xl bg-white',
                 className,
             )}
         >

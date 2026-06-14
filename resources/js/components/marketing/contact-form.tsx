@@ -109,14 +109,15 @@ export default function ContactForm() {
                                         className="text-super-securite-heading"
                                     >
                                         Téléphone{' '}
-                                        <span className="text-super-securite-muted">
-                                            (optionnel)
+                                        <span className="text-super-securite-accent">
+                                            *
                                         </span>
                                     </Label>
                                     <Input
                                         id="phone"
                                         name="phone"
                                         type="tel"
+                                        required
                                         autoComplete="tel"
                                         className={fieldClasses}
                                         placeholder="+224 ..."

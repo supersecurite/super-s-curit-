@@ -10,7 +10,7 @@ export default function PartnersSection() {
                     {/* <p className="marketing-label mb-3">Partenaires</p> */}
                     <h2 className="marketing-heading-section">
                         Nos{' '}
-                        <span className="marketing-text-gradient">
+                        <span className="text-black">
                             partenaires
                         </span>
                     </h2>
@@ -23,7 +23,7 @@ export default function PartnersSection() {
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-6">
                     {superSecuritePartners.map((partner, index) => (
                         <Reveal key={partner.name} delay={index * 80}>
-                            <figure className="group flex h-36 flex-col items-center justify-center rounded-2xl border border-super-securite-border bg-white p-5 shadow-sm shadow-slate-900/5 transition-colors duration-300 hover:border-super-securite-accent/30 md:h-44">
+                            <figure className="group flex h-36 flex-col items-center justify-center rounded-2xl bg-white p-5 md:h-44">
                                 <img
                                     src={partner.logo}
                                     alt={`Logo ${partner.name}`}

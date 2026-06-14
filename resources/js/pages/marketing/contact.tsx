@@ -28,7 +28,7 @@ export default function MarketingContact() {
                         <p className="marketing-label mb-3">Canaux directs</p>
                         <h2 className="marketing-heading-section">
                             Choisissez le moyen{' '}
-                            <span className="marketing-text-gradient">
+                            <span className="text-black">
                                 qui vous convient
                             </span>
                         </h2>

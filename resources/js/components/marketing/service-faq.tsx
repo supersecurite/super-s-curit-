@@ -19,7 +19,7 @@ export default function ServiceFaq({
                     title={
                         <>
                             Questions{' '}
-                            <span className="marketing-text-gradient">
+                            <span className="text-black">
                                 fréquentes
                             </span>
                         </>

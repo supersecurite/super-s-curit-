@@ -11,7 +11,7 @@ export default function TestimonialsSection() {
                     <p className="marketing-label mb-3">Témoignages</p>
                     <h2 className="marketing-heading-section">
                         De nos{' '}
-                        <span className="marketing-text-gradient">clients</span>
+                        <span className="text-black">clients</span>
                     </h2>
                 </Reveal>
 
@@ -30,7 +30,7 @@ export default function TestimonialsSection() {
                                         height={56}
                                         loading="lazy"
                                         decoding="async"
-                                        className="size-14 shrink-0 rounded-full border border-super-securite-border object-cover"
+                                        className="size-14 shrink-0 rounded-full object-cover"
                                         aria-hidden
                                     />
                                     <Quote

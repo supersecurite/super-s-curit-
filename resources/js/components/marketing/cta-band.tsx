@@ -36,7 +36,7 @@ export default function CtaBand() {
                                 </p>
                                 <h2 className="font-heading text-3xl font-bold tracking-tight text-super-securite-heading md:text-4xl">
                                     {superSecuriteContactHeroCopy.titleLead}{' '}
-                                    <span className="marketing-text-gradient">
+                                    <span className="text-black">
                                         {superSecuriteContactHeroCopy.titleHighlight}
                                     </span>
                                 </h2>

@@ -1,11 +1,17 @@
 import { superSecuriteHoursLong, superSecuriteHoursTitle } from '@/data/super-securite-hours';
+import { superSecuriteStock } from '@/data/super-securite-stock';
 import {
     Award,
     Building2,
+    ClipboardCheck,
     Clock,
     HardHat,
     Home,
+    MapPin,
     Mountain,
+    ShieldCheck,
+    Smartphone,
+    UserCheck,
     Users,
     Zap,
     type LucideIcon,
@@ -109,15 +115,96 @@ export const superSecuriteWhyUsModern = {
     appSectionTitle: 'Notre application mobile',
     appLead: 'Notre application dédiée permet notamment à nos clients de :',
     appFeatures: [
-        'Signaler rapidement un incident ou un manquement',
-        'Suivre le traitement des demandes en temps réel',
-        'Communiquer directement avec nos équipes',
-        'Accéder aux informations et rapports liés à leur site',
-        "Bénéficier d'un meilleur suivi de la qualité de service",
-    ],
+        {
+            label: 'Signaler rapidement un incident ou un manquement',
+            anchor: 'application',
+        },
+        {
+            label: 'Suivre le traitement des demandes en temps réel',
+            anchor: 'application',
+        },
+        {
+            label: 'Communiquer directement avec nos équipes',
+            anchor: 'application',
+        },
+        {
+            label: 'Accéder aux informations et rapports liés à leur site',
+            anchor: 'application',
+        },
+        {
+            label: "Bénéficier d'un meilleur suivi de la qualité de service",
+            anchor: 'supervision',
+        },
+    ] as const,
     conclusion:
         'Cette approche garantit davantage de transparence, de réactivité et de contrôle.',
 } as const;
+
+export type SuperSecuriteWhyUsDetail = {
+    id: string;
+    icon: LucideIcon;
+    title: string;
+    description: string;
+    image: string;
+    imageAlt: string;
+};
+
+export const superSecuriteWhyUsDetails: readonly SuperSecuriteWhyUsDetail[] = [
+    {
+        id: 'agrement',
+        icon: ShieldCheck,
+        title: 'Une société de sécurité agréée et conforme à la réglementation guinéenne',
+        description:
+            'Faire appel à Super Sécurité, c’est choisir une entreprise qui exerce légalement ses activités en République de Guinée. Nous disposons des agréments et autorisations requis pour fournir des prestations de sécurité privée aux entreprises, aux résidences, aux chantiers et aux sites industriels. Cette conformité garantit à nos clients un partenaire fiable, responsable et engagé dans le respect des normes professionnelles du secteur.',
+        image: superSecuriteStock.pages.about,
+        imageAlt: 'Super Sécurité — société de sécurité agréée en Guinée',
+    },
+    {
+        id: 'agents',
+        icon: UserCheck,
+        title: 'Des agents rigoureusement sélectionnés et formés',
+        description:
+            'La qualité de nos services repose sur la compétence de nos agents. Chaque collaborateur est recruté selon des critères stricts de moralité, de discipline et de professionnalisme. Nos agents bénéficient d’une formation adaptée aux réalités du terrain, notamment en matière de contrôle d’accès, de surveillance, de prévention des incidents, de gestion des visiteurs et de relation client. Cette préparation leur permet d’assurer efficacement la sécurité des personnes et des biens qui nous sont confiés.',
+        image: superSecuriteStock.home.services.entreprise,
+        imageAlt: 'Agent de sécurité Super Sécurité en poste',
+    },
+    {
+        id: 'supervision',
+        icon: ClipboardCheck,
+        title: 'Une supervision permanente pour garantir la qualité du service',
+        description:
+            'Chez Super Sécurité, nos prestations ne se limitent pas à la présence d’agents sur site. Nos superviseurs effectuent régulièrement des contrôles de terrain afin de vérifier le respect des consignes, la qualité du service rendu et la bonne tenue des postes de sécurité. Ce suivi permanent nous permet d’identifier rapidement les éventuelles anomalies et d’apporter des solutions immédiates afin de maintenir un niveau de sécurité élevé en toutes circonstances.',
+        image: superSecuriteStock.home.services.chantiers,
+        imageAlt: 'Superviseur Super Sécurité sur chantier',
+    },
+    {
+        id: 'application',
+        icon: Smartphone,
+        title: 'Une application dédiée pour un suivi transparent et en temps réel',
+        description:
+            'Parce que la sécurité moderne doit s’appuyer sur des outils performants, nous mettons à la disposition de nos clients une application dédiée leur permettant de suivre les prestations en temps réel. Grâce à cette plateforme, il est possible de consulter les rapports de ronde, recevoir des notifications, signaler des incidents et communiquer facilement avec nos équipes. Cette transparence renforce la confiance de nos clients et leur offre une meilleure visibilité sur les services réalisés.',
+        image: superSecuriteStock.about.mobileApp,
+        imageAlt: 'Application mobile Super Sécurité — suivi en temps réel',
+    },
+    {
+        id: 'reactivite',
+        icon: MapPin,
+        title: 'Une présence locale et une grande réactivité partout en Guinée',
+        description:
+            'Basée en Guinée, Super Sécurité connaît parfaitement les réalités du terrain et les enjeux sécuritaires auxquels sont confrontés les entreprises et les particuliers. Notre proximité nous permet d’intervenir rapidement en cas de besoin, qu’il s’agisse d’un remplacement d’agent, d’un renforcement temporaire des effectifs ou d’une situation d’urgence. Notre organisation opérationnelle garantit à nos clients une continuité de service et une assistance rapide où qu’ils se trouvent.',
+        image: superSecuriteStock.contact.sidePanel,
+        imageAlt: 'Équipe Super Sécurité — présence locale en Guinée',
+    },
+    {
+        id: 'expertise',
+        icon: Building2,
+        title: 'Une expertise reconnue dans la sécurité des mines, entreprises, résidences et chantiers',
+        description:
+            'Chaque secteur présente des risques et des exigences spécifiques. Grâce à notre expérience auprès de sociétés minières, d’entreprises, de résidences privées, de commerces et de chantiers, nous sommes en mesure de proposer des solutions adaptées à chaque environnement. Nos équipes mettent en œuvre des procédures éprouvées pour prévenir les intrusions, protéger les biens, contrôler les accès et contribuer à la sérénité de nos clients. Cette expertise multisectorielle fait de Super Sécurité un partenaire de confiance pour tous vos besoins en sécurité privée en Guinée.',
+        image: superSecuriteStock.home.services['zones-minieres'],
+        imageAlt: 'Sécurité Super Sécurité sur site minier',
+    },
+] as const;
 
 export type SuperSecuriteTestimonial = {
     quote: string;

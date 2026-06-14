@@ -1,5 +1,4 @@
 import { type ReactNode } from 'react';
-import HeroTitleUnderline from '@/components/marketing/hero-title-underline';
 import Reveal from '@/components/marketing/reveal';
 import type { MarketingPageHeroConfig } from '@/data/marketing-page-heroes';
 import { cn } from '@/lib/utils';
@@ -14,7 +13,6 @@ type MarketingFullscreenHeroProps = Pick<
     | 'image'
     | 'imageAlt'
     | 'stats'
-    | 'underline'
 > & {
     label?: string;
     className?: string;
@@ -32,12 +30,10 @@ export default function MarketingFullscreenHero({
     image,
     imageAlt,
     stats,
-    underline,
     className,
     children,
     headingLevel = 'h1',
 }: MarketingFullscreenHeroProps) {
-    const underlineGradientId = `fullscreen-hero-underline-${id}`;
     const Heading = headingLevel;
 
     return (
@@ -72,7 +68,7 @@ export default function MarketingFullscreenHero({
                     aria-hidden
                 />
 
-                <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-28 pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
+                <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-[calc(var(--marketing-header-height,5.5rem)+3.5rem)] pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
                     <div className="max-w-2xl min-w-0">
                         {label ? (
                             <Reveal delay={80}>
@@ -85,13 +81,8 @@ export default function MarketingFullscreenHero({
                         <Reveal delay={120}>
                             <Heading className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                                 {titleLead}{' '}
-                                <span className="relative inline-block text-super-securite-accent">
+                                <span className="text-super-securite-accent">
                                     {titleHighlight}
-                                    <HeroTitleUnderline
-                                        variant={underline}
-                                        gradientId={underlineGradientId}
-                                        tone="dark"
-                                    />
                                 </span>
                                 {titleTrail ? (
                                     <>

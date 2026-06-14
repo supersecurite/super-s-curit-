@@ -11,7 +11,7 @@ export default function WelcomeSection() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
                     <Reveal delay={200} variant="fade" className="order-2 lg:order-1">
-                        <div className="overflow-hidden rounded-3xl border border-super-securite-border shadow-lg shadow-slate-900/10">
+                        <div className="overflow-hidden rounded-3xl">
                             <img
                                 src={superSecuriteStock.home.welcome2}
                                 alt="Équipe Super Sécurité — sécurité privée en Guinée"

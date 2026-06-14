@@ -6,13 +6,13 @@ import { superSecuriteFaqGroups } from '@/data/super-securite-contact';
 
 export default function ContactFaq() {
     return (
-        <section className="">
+        <section id="faq" className="">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                 <FaqAccordionHeader
                     title={
                         <>
                             Les questions{' '}
-                            <span className="marketing-text-gradient">
+                            <span className="text-black">
                                 qu&apos;on nous pose
                             </span>
                         </>

@@ -31,22 +31,16 @@ export default function ServicePageSections({
                                 variant="fade"
                                 className="lg:col-span-5 lg:sticky lg:top-28"
                             >
-                                <div className="relative">
-                                    <div
-                                        className="absolute -inset-3 rounded-3xl bg-super-securite-accent/10"
-                                        aria-hidden
+                                <div className="overflow-hidden rounded-2xl">
+                                    <img
+                                        src={spotlight.src}
+                                        alt={spotlight.alt}
+                                        width={800}
+                                        height={600}
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="aspect-[4/3] w-full object-cover"
                                     />
-                                    <div className="relative overflow-hidden rounded-2xl border border-super-securite-border shadow-xl shadow-slate-900/10">
-                                        <img
-                                            src={spotlight.src}
-                                            alt={spotlight.alt}
-                                            width={800}
-                                            height={600}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="aspect-[4/3] w-full object-cover"
-                                        />
-                                    </div>
                                 </div>
                             </Reveal>
                         ) : null}
@@ -79,17 +73,20 @@ export default function ServicePageSections({
                             {content.introIndicators &&
                             content.introIndicators.length > 0 ? (
                                 <Reveal delay={200} className="mt-8">
-                                    <ul className="grid gap-2 sm:grid-cols-2">
+                                    <ul className="grid gap-3 sm:grid-cols-2">
                                         {content.introIndicators.map(
                                             (indicator) => (
                                                 <li
                                                     key={indicator}
-                                                    className="flex items-center gap-2.5 text-sm text-super-securite-heading"
+                                                    className="flex h-full items-center gap-3 rounded-xl border border-super-securite-accent/20 bg-super-securite-accent/5 p-0 text-sm font-medium leading-snug text-super-securite-heading transition-colors duration-200 hover:border-super-securite-accent/40 hover:bg-super-securite-accent/10"
                                                 >
-                                                    <span
-                                                        className="size-1.5 shrink-0 rounded-full bg-super-securite-accent"
-                                                        aria-hidden
-                                                    />
+                                                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-super-securite-accent/20 bg-white text-super-securite-accent shadow-sm">
+                                                        <Check
+                                                            className="size-4"
+                                                            strokeWidth={2.5}
+                                                            aria-hidden
+                                                        />
+                                                    </span>
                                                     {indicator}
                                                 </li>
                                             ),
@@ -132,10 +129,10 @@ export default function ServicePageSections({
                         {content.sections.map((section, index) => (
                             <Reveal key={section.title} delay={index * 70}>
                                 <article className="group relative h-full overflow-hidden rounded-2xl border border-super-securite-border bg-white p-6 shadow-sm shadow-slate-900/5 transition-shadow duration-300 hover:shadow-md md:p-7">
-                                    <div
+                                    {/* <div
                                         className="absolute inset-x-0 top-0 h-1 bg-super-securite-accent"
                                         aria-hidden
-                                    />
+                                    /> */}
                                     <span className="inline-flex size-9 items-center justify-center rounded-full bg-super-securite-accent/10 font-heading text-sm font-bold text-super-securite-accent">
                                         {String(index + 1).padStart(2, '0')}
                                     </span>

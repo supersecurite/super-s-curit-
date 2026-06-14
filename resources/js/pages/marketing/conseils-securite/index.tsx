@@ -49,7 +49,7 @@ type PageProps = {
 
 function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
     return (
-        <article className="marketing-card-interactive group overflow-hidden p-0">
+        <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
             <div className="relative aspect-video overflow-hidden">
                 {tip.image_url ? (
                     <img

@@ -10,14 +10,12 @@ type MarketingHeroSlideProps = {
 };
 
 function HeroHeading({ variant }: { variant: MarketingHeroVariant }) {
-    const underlineGradientId = `hero-underline-${variant.id}`;
-
     switch (variant.typography) {
         case 'gradient':
             return (
                 <h2 className="font-heading text-3xl leading-[1.08] font-bold tracking-tight text-super-securite-heading sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                     {variant.title}{' '}
-                    <span className="marketing-text-gradient block sm:inline">
+                    <span className="text-black block sm:inline">
                         {variant.highlight}
                     </span>
                 </h2>
@@ -52,37 +50,8 @@ function HeroHeading({ variant }: { variant: MarketingHeroVariant }) {
             return (
                 <h2 className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-super-securite-heading sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                     {variant.title}{' '}
-                    <span className="relative inline-block">
+                    <span className="text-super-securite-accent">
                         {variant.highlight}
-                        <svg
-                            viewBox="0 0 380 22"
-                            className="marketing-underline-draw absolute -bottom-4 left-0 w-full sm:-bottom-5"
-                            fill="none"
-                            preserveAspectRatio="none"
-                            aria-hidden
-                        >
-                            <path
-                                d="M2 16 C 100 1, 280 1, 378 16"
-                                stroke={`url(#${underlineGradientId})`}
-                                strokeWidth="3"
-                                strokeLinecap="round"
-                            />
-                            <defs>
-                                <linearGradient
-                                    id={underlineGradientId}
-                                    x1="0"
-                                    y1="0"
-                                    x2="1"
-                                    y2="0"
-                                >
-                                    <stop
-                                        offset="0"
-                                        stopColor="var(--super-securite-accent)"
-                                    />
-                                    <stop offset="1" stopColor="#0f172a" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
                     </span>
                 </h2>
             );
@@ -182,15 +151,9 @@ function HeroImage({
             >
                 <div
                     className={cn(
-                        'overflow-hidden shadow-xl shadow-slate-900/10',
-                        framed &&
-                            'rounded-3xl border border-super-securite-border ring-4 ring-super-securite-accent/15',
-                        !framed &&
-                            'h-full rounded-2xl border border-super-securite-border lg:rounded-none lg:border-y-0 lg:border-r-0',
-                        accentEdge === 'left' &&
-                            'lg:rounded-l-none lg:border-l-4 lg:border-l-super-securite-accent',
-                        accentEdge === 'right' &&
-                            'lg:rounded-r-none lg:border-r-4 lg:border-r-super-securite-accent',
+                        'overflow-hidden',
+                        framed && 'rounded-3xl',
+                        !framed && 'h-full lg:rounded-none',
                     )}
                 >
                     <img
@@ -254,7 +217,7 @@ function SplitLayout({
     const imageFirst = imagePosition === 'left';
 
     return (
-        <div className="relative mx-auto grid h-full min-h-0 w-full max-w-7xl grid-cols-1 content-center gap-5 px-4 pt-4 pb-14 sm:gap-6 sm:px-6 sm:pt-2 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-8 lg:pb-14 xl:gap-12">
+        <div className="relative mx-auto grid h-full min-h-0 w-full max-w-7xl grid-cols-1 content-center gap-5 px-4 pt-16 pb-14 sm:gap-6 sm:px-6 sm:pt-2 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-8 lg:pb-14 xl:gap-12">
             <div
                 className={cn(
                     'flex min-h-0 flex-col justify-center lg:col-span-6 xl:col-span-7',

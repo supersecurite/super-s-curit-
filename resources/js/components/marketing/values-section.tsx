@@ -58,40 +58,28 @@ export default function ValuesSection() {
                 </Reveal>
 
                 <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-super-securite-border bg-white shadow-sm shadow-slate-900/5 sm:grid-cols-2 lg:grid-cols-4">
-                    {superSecuriteValues.map((value, index) => {
-                        const Icon = value.icon;
+                    {superSecuriteValues.map((value, index) => (
+                        <Reveal
+                            key={value.title}
+                            delay={index * 100}
+                            className="h-full"
+                        >
+                            <article className="group relative flex h-full flex-col border-b border-super-securite-border p-7 transition-colors duration-300 hover:bg-super-securite-surface/60 sm:border-r sm:border-b-0 sm:last:border-r-0 md:p-8">
+                                <span className="absolute top-0 left-0 h-1 w-0 bg-super-securite-accent transition-all duration-300 group-hover:w-full" />
 
-                        return (
-                            <Reveal
-                                key={value.title}
-                                delay={index * 100}
-                                className="h-full"
-                            >
-                                <article className="group relative flex h-full flex-col border-b border-super-securite-border p-7 transition-colors duration-300 hover:bg-super-securite-surface/60 sm:border-r sm:border-b-0 sm:last:border-r-0 md:p-8">
-                                    <span className="absolute top-0 left-0 h-1 w-0 bg-super-securite-accent transition-all duration-300 group-hover:w-full" />
+                                <span className="mb-5 font-mono text-3xl font-bold leading-none tracking-tight text-super-securite-accent/40 transition-colors duration-300 group-hover:text-super-securite-accent md:text-4xl">
+                                    {String(index + 1).padStart(2, '0')}
+                                </span>
 
-                                    <p className="mb-6 font-mono text-[11px] tracking-[0.15em] text-super-securite-accent/50">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </p>
-
-                                    <div className="mb-5 inline-flex size-12 items-center justify-center rounded-full border border-super-securite-accent/20 bg-super-securite-accent/10 transition-colors duration-300 group-hover:border-super-securite-accent group-hover:bg-super-securite-accent/15">
-                                        <Icon
-                                            className="size-5 text-super-securite-accent"
-                                            strokeWidth={1.8}
-                                            aria-hidden
-                                        />
-                                    </div>
-
-                                    <h3 className="mb-3 font-heading text-lg font-semibold text-super-securite-heading">
-                                        {value.title}
-                                    </h3>
-                                    <p className="flex-1 text-sm leading-relaxed text-super-securite-muted">
-                                        {value.description}
-                                    </p>
-                                </article>
-                            </Reveal>
-                        );
-                    })}
+                                <h3 className="mb-3 font-heading text-lg font-semibold text-super-securite-heading">
+                                    {value.title}
+                                </h3>
+                                <p className="flex-1 text-sm leading-relaxed text-super-securite-muted">
+                                    {value.description}
+                                </p>
+                            </article>
+                        </Reveal>
+                    ))}
                 </div>
             </div>
         </section>

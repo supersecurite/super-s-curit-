@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { usePage } from '@inertiajs/react';
 import GlobalFullscreenLoader from '@/components/global-fullscreen-loader';
 import { Toaster } from '@/components/ui/sonner';
 import BackToTop from '@/components/marketing/back-to-top';
@@ -8,6 +9,25 @@ import { useVisitTracker } from '@/hooks/use-visit-tracker';
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
     useVisitTracker();
+    const { url } = usePage();
+
+    useEffect(() => {
+        const hash = url.split('#')[1];
+
+        if (!hash) {
+            return;
+        }
+
+        const frame = window.requestAnimationFrame(() => {
+            document
+                .getElementById(decodeURIComponent(hash))
+                ?.scrollIntoView({ block: 'start' });
+        });
+
+        return () => {
+            window.cancelAnimationFrame(frame);
+        };
+    }, [url]);
 
     useEffect(() => {
         document.documentElement.lang = 'fr';

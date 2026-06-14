@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MarketingMobileNav from '@/components/marketing/marketing-mobile-nav';
 import MarketingServicesNav from '@/components/marketing/marketing-services-nav';
 import { superSecuriteImages } from '@/data/super-securite-images';
@@ -23,9 +23,7 @@ export default function MarketingHeader() {
     const { superSecurite } = props;
     const progress = useScrollProgress();
     const [scrolled, setScrolled] = useState(false);
-    const [servicesOpen, setServicesOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const servicesRef = useRef<HTMLLIElement>(null);
     const pathname = url.split('?')[0] ?? '/';
 
     useEffect(() => {
@@ -33,22 +31,6 @@ export default function MarketingHeader() {
         onScroll();
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
-    }, []);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                servicesRef.current &&
-                !servicesRef.current.contains(event.target as Node)
-            ) {
-                setServicesOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () =>
-            document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
     useEffect(() => {
@@ -148,12 +130,7 @@ export default function MarketingHeader() {
                         </Link>
                     </li>
 
-                    <MarketingServicesNav
-                        pathname={pathname}
-                        open={servicesOpen}
-                        onOpenChange={setServicesOpen}
-                        menuRef={servicesRef}
-                    />
+                    <MarketingServicesNav pathname={pathname} />
 
                     {marketingPrimaryNavLinks.slice(1).map((item) => {
                         const active = isMarketingNavActive(

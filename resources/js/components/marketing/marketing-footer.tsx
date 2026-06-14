@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/react';
 import { index as actualitesIndex } from '@/routes/actualites';
 import { index as conseilsIndex } from '@/routes/conseils-securite';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
+import { contact } from '@/routes';
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { superSecuriteServices } from '@/data/super-securite-content';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
@@ -95,6 +96,14 @@ export default function MarketingFooter() {
                             Nous contacter
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
+                            <li>
+                                <a
+                                    href={`${contact.url()}#faq`}
+                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
+                                >
+                                    FAQ
+                                </a>
+                            </li>
                             <li>
                                 <a
                                     href={superSecurite.phone_href}

@@ -52,9 +52,9 @@ export default function MarketingArticleShow() {
                         Retour aux actualités
                     </Link>
 
-                    <article className="marketing-card overflow-hidden p-0">
+                    <article>
                         {article.image_url ? (
-                            <div className="relative h-72 md:h-96">
+                            <div className="relative mb-6 h-72 overflow-hidden rounded-2xl md:mb-8 md:h-96">
                                 <img
                                     src={article.image_url}
                                     alt={article.title}
@@ -64,7 +64,7 @@ export default function MarketingArticleShow() {
                             </div>
                         ) : null}
 
-                        <div className="p-6 md:p-10">
+                        <div className="marketing-card">
                             <div className="mb-6 flex flex-wrap items-center gap-4 text-sm">
                                 {article.category ? (
                                     <span className="rounded-full bg-super-securite-accent px-4 py-1 font-medium text-white">
@@ -120,7 +120,7 @@ export default function MarketingArticleShow() {
                                     <Link
                                         key={related.id}
                                         href={actualitesShow.url(related.slug)}
-                                        className="marketing-card-interactive group overflow-hidden p-0"
+                                        className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10"
                                     >
                                         {related.image_url ? (
                                             <img

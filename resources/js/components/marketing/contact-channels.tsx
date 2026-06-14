@@ -61,22 +61,24 @@ export default function ContactChannels({ superSecurite }: ContactChannelsProps)
                             />
 
                             <div className="flex items-start justify-between">
-                                <div className="inline-flex size-12 items-center justify-center rounded-xl bg-super-securite-accent/10 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100">
-                                    <Icon
-                                        className="size-6 text-super-securite-accent"
-                                        strokeWidth={2}
-                                        aria-hidden
-                                    />
+                                <div className="flex flex-row items-center justify-items-center gap-2">
+                                    <div className="inline-flex size-12 items-center justify-center rounded-xl bg-super-securite-accent/10 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100">
+                                        <Icon
+                                            className="size-6 text-super-securite-accent"
+                                            strokeWidth={2}
+                                            aria-hidden
+                                        />
+                                    </div>
+
+                                    <h3 className="mt-6 font-heading text-lg font-semibold text-super-securite-heading">
+                                        {channel.label}
+                                    </h3>
                                 </div>
                                 <ArrowUpRight
                                     className="size-5 text-super-securite-muted opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-super-securite-accent group-hover:opacity-100 motion-reduce:transition-none"
                                     aria-hidden
                                 />
                             </div>
-
-                            <h3 className="mt-6 font-heading text-lg font-semibold text-super-securite-heading">
-                                {channel.label}
-                            </h3>
                             <p className="mt-1 font-heading text-sm font-medium text-super-securite-accent">
                                 {channel.value}
                             </p>

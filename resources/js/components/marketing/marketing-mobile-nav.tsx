@@ -8,7 +8,7 @@ import {
     Phone,
     X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     Collapsible,
     CollapsibleContent,
@@ -51,6 +51,9 @@ export default function MarketingMobileNav({
     const close = () => onOpenChange(false);
     const servicesActive = isMarketingServicesNavActive(pathname);
     const [servicesOpen, setServicesOpen] = useState(servicesActive);
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const servicesSectionRef = useRef<HTMLLIElement>(null);
+    const otherPrimaryLinks = marketingPrimaryNavLinks.slice(1);
 
     useEffect(() => {
         if (servicesActive) {
@@ -58,15 +61,46 @@ export default function MarketingMobileNav({
         }
     }, [servicesActive, pathname]);
 
+    useEffect(() => {
+        if (!open) {
+            setServicesOpen(servicesActive);
+        }
+    }, [open, servicesActive]);
+
+    useEffect(() => {
+        if (!servicesOpen || !open) {
+            return;
+        }
+
+        let timeoutId: number | undefined;
+
+        const frame = window.requestAnimationFrame(() => {
+            timeoutId = window.setTimeout(() => {
+                servicesSectionRef.current?.scrollIntoView({
+                    block: 'nearest',
+                    behavior: 'smooth',
+                });
+            }, 120);
+        });
+
+        return () => {
+            window.cancelAnimationFrame(frame);
+
+            if (timeoutId !== undefined) {
+                window.clearTimeout(timeoutId);
+            }
+        };
+    }, [servicesOpen, open]);
+
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
                 <button
                     type="button"
-                    className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full bg-black/5 text-white transition-all duration-200 hover:bg-super-securite-accent hover:text-white hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none md:hidden"
+                    className="inline-flex size-14 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-all duration-200 hover:bg-super-securite-accent hover:text-white hover:shadow-lg hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none md:hidden"
                     aria-label="Ouvrir le menu"
                 >
-                    <Menu className="size-5" aria-hidden />
+                    <Menu className="size-6" aria-hidden />
                 </button>
             </SheetTrigger>
 
@@ -113,13 +147,151 @@ export default function MarketingMobileNav({
                     </div>
                 </div>
 
-                <nav
-                    className="flex flex-1 flex-col overflow-y-auto overscroll-contain px-5 py-6"
-                    aria-label="Navigation mobile"
+                <div
+                    ref={scrollRef}
+                    className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain"
                 >
+                    <nav
+                        className="px-5 py-6"
+                        aria-label="Navigation mobile"
+                    >
                     <p className="marketing-label mb-3">Navigation</p>
                     <ul className="space-y-2">
-                        {marketingPrimaryNavLinks.map((item) => {
+                        <li>
+                            <Link
+                                href={home.url()}
+                                onClick={close}
+                                aria-current={
+                                    isMarketingNavActive(home.url(), pathname)
+                                        ? 'page'
+                                        : undefined
+                                }
+                                className={cn(
+                                    'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
+                                    isMarketingNavActive(home.url(), pathname)
+                                        ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
+                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
+                                )}
+                            >
+                                Accueil
+                                <ArrowRight
+                                    className="size-4 opacity-50"
+                                    aria-hidden
+                                />
+                            </Link>
+                        </li>
+
+                        <li ref={servicesSectionRef}>
+                            <Collapsible
+                                open={servicesOpen}
+                                onOpenChange={setServicesOpen}
+                            >
+                                <div
+                                    className={cn(
+                                        'overflow-hidden rounded-2xl border transition-all duration-200',
+                                        servicesOpen
+                                            ? 'border-super-securite-accent/50 bg-white shadow-md shadow-super-securite-accent/10'
+                                            : servicesActive
+                                              ? 'border-super-securite-accent/30 bg-super-securite-accent/10'
+                                              : 'border-super-securite-border bg-white',
+                                    )}
+                                >
+                                    <CollapsibleTrigger asChild>
+                                        <button
+                                            type="button"
+                                            aria-expanded={servicesOpen}
+                                            aria-controls="mobile-services-submenu"
+                                            className={cn(
+                                                'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none',
+                                                servicesOpen
+                                                    ? 'border-b border-super-securite-accent/20 bg-super-securite-accent/8 text-super-securite-accent'
+                                                    : servicesActive
+                                                      ? 'text-super-securite-accent'
+                                                      : 'text-super-securite-heading hover:bg-super-securite-surface/60',
+                                            )}
+                                        >
+                                            <span className="flex min-w-0 flex-col items-start gap-0.5 text-left">
+                                                <span>Services</span>
+                                                <span className="text-[11px] font-medium tracking-wide text-super-securite-muted uppercase">
+                                                    {servicesOpen
+                                                        ? 'Sous-menu ouvert'
+                                                        : `${marketingServiceNavLinks.length} prestations`}
+                                                </span>
+                                            </span>
+                                            <ChevronDown
+                                                className={cn(
+                                                    'size-4 shrink-0 transition-transform duration-200',
+                                                    servicesOpen
+                                                        ? 'rotate-180 text-super-securite-accent'
+                                                        : 'opacity-60',
+                                                )}
+                                                aria-hidden
+                                            />
+                                        </button>
+                                    </CollapsibleTrigger>
+
+                                    <CollapsibleContent
+                                        id="mobile-services-submenu"
+                                        className="overflow-hidden"
+                                    >
+                                        <ul
+                                            className="space-y-0.5 border-l-2 border-super-securite-accent/30 bg-super-securite-bg/70 px-2 py-2 pl-3"
+                                            role="list"
+                                            aria-label="Sous-menu Services"
+                                        >
+                                            {marketingServiceNavLinks.map(
+                                                (service) => {
+                                                    const active =
+                                                        isMarketingNavActive(
+                                                            service.href,
+                                                            pathname,
+                                                        );
+
+                                                    return (
+                                                        <li
+                                                            key={service.href}
+                                                        >
+                                                            <Link
+                                                                href={
+                                                                    service.href
+                                                                }
+                                                                onClick={close}
+                                                                aria-current={
+                                                                    active
+                                                                        ? 'page'
+                                                                        : undefined
+                                                                }
+                                                                className={cn(
+                                                                    'block rounded-xl py-2.5 pr-3 pl-3 transition-colors duration-200',
+                                                                    active
+                                                                        ? 'bg-super-securite-accent/12 text-super-securite-accent'
+                                                                        : 'text-super-securite-heading hover:bg-white/80',
+                                                                )}
+                                                            >
+                                                                <span className="block font-heading text-sm leading-snug font-semibold">
+                                                                    {
+                                                                        service.label
+                                                                    }
+                                                                </span>
+                                                                {service.description ? (
+                                                                    <span className="mt-0.5 block text-xs leading-snug text-super-securite-muted">
+                                                                        {
+                                                                            service.description
+                                                                        }
+                                                                    </span>
+                                                                ) : null}
+                                                            </Link>
+                                                        </li>
+                                                    );
+                                                },
+                                            )}
+                                        </ul>
+                                    </CollapsibleContent>
+                                </div>
+                            </Collapsible>
+                        </li>
+
+                        {otherPrimaryLinks.map((item) => {
                             const active = isMarketingNavActive(
                                 item.href,
                                 pathname,
@@ -150,73 +322,9 @@ export default function MarketingMobileNav({
                             );
                         })}
                     </ul>
+                    </nav>
 
-                    <Collapsible
-                        open={servicesOpen}
-                        onOpenChange={setServicesOpen}
-                        className="mt-2"
-                    >
-                        <CollapsibleTrigger asChild>
-                            <button
-                                type="button"
-                                aria-expanded={servicesOpen}
-                                className={cn(
-                                    'flex w-full cursor-pointer items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none',
-                                    servicesActive
-                                        ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
-                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
-                                )}
-                            >
-                                Services
-                                <ChevronDown
-                                    className={cn(
-                                        'size-4 shrink-0 opacity-60 transition-transform duration-200',
-                                        servicesOpen && 'rotate-180',
-                                    )}
-                                    aria-hidden
-                                />
-                            </button>
-                        </CollapsibleTrigger>
-
-                        <CollapsibleContent className="mt-2 overflow-hidden data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-1 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-1">
-                            <ul
-                                className="space-y-1 rounded-2xl border border-super-securite-border bg-white p-2"
-                                role="list"
-                            >
-                                {marketingServiceNavLinks.map((service) => {
-                                    const active = isMarketingNavActive(
-                                        service.href,
-                                        pathname,
-                                    );
-
-                                    return (
-                                        <li key={service.href}>
-                                            <Link
-                                                href={service.href}
-                                                onClick={close}
-                                                aria-current={
-                                                    active ? 'page' : undefined
-                                                }
-                                                className={cn(
-                                                    'block rounded-xl px-3 py-2.5 transition-colors duration-200',
-                                                    active
-                                                        ? 'bg-super-securite-accent/10 text-super-securite-accent'
-                                                        : 'text-super-securite-heading hover:bg-super-securite-surface',
-                                                )}
-                                            >
-                                                <span className="font-heading text-sm font-semibold">
-                                                    {service.label}
-                                                </span>
-                                            </Link>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </CollapsibleContent>
-                    </Collapsible>
-                </nav>
-
-                <div className="shrink-0 space-y-3 border-t border-super-securite-border/80 bg-super-securite-bg p-4">
+                    <div className="space-y-3 border-t border-super-securite-border/80 bg-super-securite-bg p-4 pb-6">
                     <a
                         href={devenirAgentIndex.url()}
                         className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-super-securite-accent px-4 py-3.5 font-heading text-sm font-semibold text-white shadow-lg shadow-super-securite-accent/25 transition-colors duration-200 hover:bg-super-securite-accent-hover focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:outline-none"
@@ -265,6 +373,7 @@ export default function MarketingMobileNav({
                         />
                         {superSecurite.address}
                     </p>
+                    </div>
                 </div>
             </SheetContent>
         </Sheet>

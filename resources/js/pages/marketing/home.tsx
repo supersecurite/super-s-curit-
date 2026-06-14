@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { usePage } from '@inertiajs/react';
 import SeoHead from '@/components/marketing/seo-head';
 import ArticlesSection from '@/components/marketing/articles-section';
@@ -7,9 +8,12 @@ import SecurityTipsSection from '@/components/marketing/security-tips-section';
 import ServiceCards from '@/components/marketing/service-cards';
 import TestimonialsSection from '@/components/marketing/testimonials-section';
 import WelcomeSection from '@/components/marketing/welcome-section';
-import PartnersSection from '@/components/marketing/partners-section';
 import WhyUsSection from '@/components/marketing/why-us-section';
 import type { MarketingContentPreview } from '@/types/marketing-content';
+
+const PartnersMarquee = lazy(
+    () => import('@/components/marketing/partners-marquee'),
+);
 
 type HomePageProps = {
     featuredArticles: MarketingContentPreview[];
@@ -26,6 +30,12 @@ export default function MarketingHome() {
 
             <MarketingHeroCarousel />
 
+            <Suspense fallback={null}>
+                <div className="marketing-below-fold">
+                    <PartnersMarquee />
+                </div>
+            </Suspense>
+
             <div className="marketing-section-white">
                 <WelcomeSection />
             </div>
@@ -41,15 +51,11 @@ export default function MarketingHome() {
             </div>
 
             <div className="marketing-section-white">
-                <PartnersSection />
+                <TestimonialsSection />
             </div>
 
             <div className="marketing-section-band">
                 <SecurityTipsSection tips={featuredSecurityTips} />
-            </div>
-
-            <div className="marketing-section-white">
-                <TestimonialsSection />
             </div>
 
             <div className="marketing-section-band">

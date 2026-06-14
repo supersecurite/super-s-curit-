@@ -25,7 +25,7 @@ class StoreContactRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:50'],
             'company' => ['nullable', 'string', 'max:255'],
             'project_type' => ['nullable', 'string', 'max:100'],
             'message' => ['required', 'string', 'max:5000'],
@@ -41,6 +41,7 @@ class StoreContactRequest extends FormRequest
             'name.required' => 'Le nom est obligatoire.',
             'email.required' => 'L\'adresse e-mail est obligatoire.',
             'email.email' => 'L\'adresse e-mail n\'est pas valide.',
+            'phone.required' => 'Le numéro de téléphone est obligatoire.',
             'message.required' => 'Veuillez décrire votre projet.',
         ];
     }

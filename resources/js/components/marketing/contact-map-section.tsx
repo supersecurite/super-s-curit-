@@ -24,7 +24,7 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
                         className="marketing-heading-section"
                     >
                         Nous{' '}
-                        <span className="marketing-text-gradient">
+                        <span className="text-black">
                             trouver
                         </span>
                     </h2>
@@ -38,7 +38,7 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
                 </Reveal>
 
                 <Reveal delay={120}>
-                    <div className="relative overflow-hidden rounded-2xl border border-super-securite-border bg-super-securite-surface shadow-lg shadow-slate-900/5">
+                    <div className="relative overflow-hidden rounded-2xl bg-super-securite-surface">
                         <iframe
                             title={mapTitle}
                             src={map.embedUrl}

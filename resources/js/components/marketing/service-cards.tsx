@@ -18,7 +18,7 @@ export default function ServiceCards() {
                     </p>
                     <h2 className="marketing-heading-section">
                         Nos offres de service de{' '}
-                        <span className="marketing-text-gradient">
+                        <span className="text-black">
                             sécurité
                         </span>
                     </h2>
@@ -43,10 +43,10 @@ export default function ServiceCards() {
                             >
                                 <Link
                                     href={service.path}
-                                    className="group marketing-card-interactive flex h-full flex-col overflow-hidden p-0"
+                                    className="group flex h-full flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10"
                                 >
                                     <article id={service.id} className="flex h-full flex-col">
-                                        <div className="relative aspect-[16/10] overflow-hidden border-b border-super-securite-border">
+                                        <div className="relative aspect-[16/10] overflow-hidden">
                                             <img
                                                 src={image}
                                                 alt={service.title}
@@ -58,7 +58,7 @@ export default function ServiceCards() {
                                             />
                                         </div>
                                         <div className="flex flex-1 flex-col p-6 md:p-8">
-                                            <div className="mb-5 inline-flex size-12 items-center justify-center rounded-xl border border-super-securite-accent/20 bg-super-securite-accent/10">
+                                            <div className="mb-5 inline-flex size-12 p-0">
                                                 <Icon
                                                     className="size-6 text-super-securite-accent"
                                                     strokeWidth={1.8}

@@ -1,5 +1,6 @@
 import {
     superSecuriteAdvantages,
+    superSecuriteWhyUsDetails,
     superSecuriteWhyUsModern,
 } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
@@ -21,27 +22,41 @@ function WhyUsReasonsList({ variant = 'light' }: { variant?: WhyUsTone }) {
 
     return (
         <ol className="mt-6 space-y-3">
-            {superSecuriteWhyUsModern.reasons.map((reason, index) => (
-                <li
-                    key={reason}
-                    className={cn(
-                        'flex gap-3 text-sm leading-relaxed md:text-base',
-                        isDark ? 'text-white/85' : undefined,
-                    )}
-                >
-                    <span
-                        className={cn(
-                            'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full font-heading text-xs font-bold',
-                            isDark
-                                ? 'bg-white/15 text-white'
-                                : 'bg-super-securite-accent/10 text-super-securite-accent',
-                        )}
-                    >
-                        {index + 1}
-                    </span>
-                    {reason}
-                </li>
-            ))}
+            {superSecuriteWhyUsModern.reasons.map((reason, index) => {
+                const anchor = superSecuriteWhyUsDetails[index]?.id;
+
+                return (
+                    <li key={reason}>
+                        <Link
+                            href={
+                                anchor
+                                    ? `${about.url()}#${anchor}`
+                                    : about.url()
+                            }
+                            className={cn(
+                                'group flex gap-3 text-sm leading-relaxed transition-colors duration-200 md:text-base',
+                                isDark
+                                    ? 'text-white/85 hover:text-white'
+                                    : 'text-super-securite-heading hover:text-super-securite-accent',
+                            )}
+                        >
+                            <span
+                                className={cn(
+                                    'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full font-heading text-xs font-bold',
+                                    isDark
+                                        ? 'bg-white/15 text-white'
+                                        : 'bg-super-securite-accent/10 text-super-securite-accent',
+                                )}
+                            >
+                                {index + 1}
+                            </span>
+                            <span className="underline-offset-2 group-hover:underline">
+                                {reason}
+                            </span>
+                        </Link>
+                    </li>
+                );
+            })}
         </ol>
     );
 }
@@ -60,30 +75,45 @@ function WhyUsAppFeatures({ variant = 'light' }: { variant?: WhyUsTone }) {
             >
                 {superSecuriteWhyUsModern.appLead}
             </p>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {superSecuriteWhyUsModern.appFeatures.map((feature) => (
-                    <li
-                        key={feature}
-                        className={cn(
-                            'flex gap-3 text-sm leading-relaxed md:text-base',
-                            isDark ? 'text-white/85' : undefined,
-                        )}
-                    >
-                        <span
+                    <li key={feature.label}>
+                        <Link
+                            href={`${about.url()}#${feature.anchor}`}
                             className={cn(
-                                'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
+                                'group flex h-full items-center gap-3 rounded-xl border px-4 py-3.5 text-sm leading-snug transition-colors duration-200 md:text-base',
                                 isDark
-                                    ? 'bg-white/15'
-                                    : 'bg-super-securite-accent/10',
+                                    ? 'border-white/20 bg-white/5 text-white/90 hover:border-white/35 hover:bg-white/10'
+                                    : 'border-super-securite-accent/25 bg-super-securite-accent/5 text-super-securite-heading hover:border-super-securite-accent/45 hover:bg-super-securite-accent/10',
                             )}
                         >
-                            <Check
-                                className="size-3 text-super-securite-accent"
-                                strokeWidth={2.5}
+                            <span
+                                className={cn(
+                                    'flex size-8 shrink-0 items-center justify-center rounded-lg border shadow-sm',
+                                    isDark
+                                        ? 'border-white/20 bg-white/10'
+                                        : 'border-super-securite-accent/20 bg-white',
+                                )}
+                            >
+                                <Check
+                                    className="size-4 text-super-securite-accent"
+                                    strokeWidth={2.5}
+                                    aria-hidden
+                                />
+                            </span>
+                            <span className="min-w-0 flex-1 font-medium">
+                                {feature.label}
+                            </span>
+                            <ArrowRight
+                                className={cn(
+                                    'size-4 shrink-0 transition-transform duration-200 motion-reduce:transition-none',
+                                    isDark
+                                        ? 'text-white/50 group-hover:translate-x-0.5 group-hover:text-white'
+                                        : 'text-super-securite-accent/50 group-hover:translate-x-0.5 group-hover:text-super-securite-accent',
+                                )}
                                 aria-hidden
                             />
-                        </span>
-                        {feature}
+                        </Link>
                     </li>
                 ))}
             </ul>
@@ -118,11 +148,7 @@ function WhyUsAboutButton({ variant = 'light' }: { variant?: WhyUsTone }) {
 
 function WhyUsMobileAppImage({ className }: { className?: string }) {
     return (
-        <div className={cn('relative mx-auto max-w-sm', className)}>
-            <div
-                className="absolute -inset-4 rounded-[2rem] bg-super-securite-accent/10"
-                aria-hidden
-            />
+        <div className={cn('mx-auto max-w-sm', className)}>
             <img
                 src={superSecuriteStock.about.mobileApp}
                 alt="Application mobile Super Sécurité — suivi en temps réel"
@@ -130,7 +156,7 @@ function WhyUsMobileAppImage({ className }: { className?: string }) {
                 height={640}
                 loading="lazy"
                 decoding="async"
-                className="relative w-full object-contain drop-shadow-xl"
+                className="w-full object-contain"
             />
         </div>
     );
@@ -174,7 +200,7 @@ export default function WhyUsSection({
                         aria-hidden
                     />
 
-                    <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-28 pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
+                    <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-[calc(var(--marketing-header-height,5.5rem)+3.5rem)] pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
                         <div className="max-w-2xl min-w-0">
                             <Reveal delay={80}>
                                 <p className="marketing-label mb-3 flex items-center gap-2 text-white/80 before:block before:h-px before:w-6 before:bg-super-securite-accent">
@@ -281,7 +307,7 @@ export default function WhyUsSection({
                             return (
                                 <Reveal key={item.title} delay={index * 100}>
                                     <article className="marketing-card-interactive flex h-full flex-col p-6 text-center md:p-8">
-                                        <div className="mx-auto mb-5 inline-flex size-14 items-center justify-center rounded-full border border-super-securite-accent/20 bg-super-securite-accent/10">
+                                        <div className="mx-auto mb-5 inline-flex size-14 items-center justify-center rounded-full p-0">
                                             <Icon
                                                 className="size-6 text-super-securite-accent"
                                                 strokeWidth={1.8}
