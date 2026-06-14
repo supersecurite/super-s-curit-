@@ -78,7 +78,7 @@ export default function MarketingHeader() {
             )}
         >
             <nav
-                className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-8"
+                className="mx-5 flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-8"
                 aria-label="Navigation principale"
             >
                 <Link

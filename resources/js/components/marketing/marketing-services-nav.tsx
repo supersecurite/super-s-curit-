@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { marketingServiceNavLinks } from '@/data/marketing-nav';
 import {
     isMarketingNavActive,
@@ -14,13 +15,33 @@ type MarketingServicesNavProps = {
 export default function MarketingServicesNav({
     pathname,
 }: MarketingServicesNavProps) {
+    const [open, setOpen] = useState(false);
     const active = isMarketingServicesNavActive(pathname);
 
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname]);
+
     return (
-        <li className="group/services relative">
+        <li
+            className="relative"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+            onFocusCapture={() => setOpen(true)}
+            onBlurCapture={(event) => {
+                if (
+                    !event.currentTarget.contains(
+                        event.relatedTarget as Node | null,
+                    )
+                ) {
+                    setOpen(false);
+                }
+            }}
+        >
             <button
                 type="button"
                 aria-haspopup="true"
+                aria-expanded={open}
                 className={cn(
                     'relative inline-flex cursor-pointer items-center gap-1 text-sm font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none',
                     active
@@ -30,21 +51,27 @@ export default function MarketingServicesNav({
             >
                 Services
                 <ChevronDown
-                    className="size-4 transition-transform duration-200 group-hover/services:rotate-180 group-focus-within/services:rotate-180"
+                    className={cn(
+                        'size-4 transition-transform duration-200',
+                        open && 'rotate-180',
+                    )}
                     aria-hidden
                 />
                 <span
                     className={cn(
                         'absolute -bottom-1 left-0 h-0.5 w-full origin-left bg-super-securite-accent transition-transform duration-300 ease-out motion-reduce:transition-none',
-                        active
-                            ? 'scale-x-100'
-                            : 'scale-x-0 group-hover/services:scale-x-100 group-focus-within/services:scale-x-100',
+                        active || open ? 'scale-x-100' : 'scale-x-0',
                     )}
                     aria-hidden
                 />
             </button>
 
-            <div className="absolute top-full left-1/2 z-50 hidden w-80 -translate-x-1/2 pt-3 group-focus-within/services:block group-hover/services:block">
+            <div
+                className={cn(
+                    'absolute top-full left-1/2 z-50 w-80 -translate-x-1/2 pt-3',
+                    open ? 'block' : 'hidden',
+                )}
+            >
                 <div className="rounded-2xl border border-super-securite-border bg-super-securite-surface p-2 shadow-xl shadow-black/20">
                     <ul role="menu">
                         {marketingServiceNavLinks.map((service) => {
@@ -59,6 +86,7 @@ export default function MarketingServicesNav({
                                         href={service.href}
                                         role="menuitem"
                                         prefetch
+                                        onClick={() => setOpen(false)}
                                         className={cn(
                                             'block rounded-xl px-3 py-2.5 transition-colors duration-200 hover:bg-super-securite-bg',
                                             itemActive &&

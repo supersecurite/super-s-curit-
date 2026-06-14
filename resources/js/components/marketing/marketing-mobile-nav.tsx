@@ -120,7 +120,7 @@ export default function MarketingMobileNav({
                         aria-hidden
                     />
 
-                    <div className="relative flex items-start justify-between gap-4">
+                    <div className="relative mx-5 flex items-start justify-between gap-4">
                         <Link
                             href={home.url()}
                             onClick={close}
