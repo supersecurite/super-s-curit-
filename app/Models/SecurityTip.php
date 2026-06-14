@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ArticleStatus;
+use App\Support\MarketingMediaUrl;
 use Database\Factories\SecurityTipFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -121,15 +122,12 @@ class SecurityTip extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        if ($this->image === null) {
-            return null;
-        }
+        return MarketingMediaUrl::resolve($this->image);
+    }
 
-        if (str_starts_with($this->image, 'http')) {
-            return $this->image;
-        }
-
-        return '/storage/'.$this->image;
+    public function getImageSourceAttribute(): ?string
+    {
+        return MarketingMediaUrl::source($this->image);
     }
 
     public function getFormattedReadTimeAttribute(): string
@@ -242,6 +240,7 @@ class SecurityTip extends Model
             'excerpt' => $this->excerpt,
             'image' => $this->image,
             'image_url' => $this->image_url,
+            'image_source' => $this->image_source,
             'category' => $this->category,
             'tags' => $this->tags ?? [],
             'featured' => $this->featured,

@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import type { MarketingContentPreview } from '@/types/marketing-content';
 
 type MarketingContentPreviewCardProps = {
@@ -20,11 +21,10 @@ export default function MarketingContentPreviewCard({
         <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
             <div className="relative aspect-video overflow-hidden">
                 {item.image_url ? (
-                    <img
+                    <MarketingContentImage
                         src={item.image_url}
+                        source={item.image_source}
                         alt={item.title}
-                        loading="lazy"
-                        decoding="async"
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (

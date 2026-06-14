@@ -2,7 +2,9 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar, ChevronLeft, Clock, Eye } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
 import ContentShareLinks from '@/components/content-share-links';
+import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import SeoHead from '@/components/marketing/seo-head';
+import type { MarketingContentImageSource } from '@/types/marketing-content';
 import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
 
 type ArticleDetail = {
@@ -11,6 +13,7 @@ type ArticleDetail = {
     slug: string;
     excerpt: string | null;
     image_url: string | null;
+    image_source?: MarketingContentImageSource | null;
     category: string | null;
     views: number;
     read_time: number;
@@ -24,6 +27,7 @@ type RelatedArticle = {
     slug: string;
     excerpt: string | null;
     image_url: string | null;
+    image_source?: MarketingContentImageSource | null;
     published_at_formatted: string | null;
 };
 
@@ -55,8 +59,9 @@ export default function MarketingArticleShow() {
                     <article>
                         {article.image_url ? (
                             <div className="relative mb-6 h-72 overflow-hidden rounded-2xl md:mb-8 md:h-96">
-                                <img
+                                <MarketingContentImage
                                     src={article.image_url}
+                                    source={article.image_source}
                                     alt={article.title}
                                     className="h-full w-full object-cover"
                                 />
@@ -123,8 +128,9 @@ export default function MarketingArticleShow() {
                                         className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10"
                                     >
                                         {related.image_url ? (
-                                            <img
+                                            <MarketingContentImage
                                                 src={related.image_url}
+                                                source={related.image_source}
                                                 alt={related.title}
                                                 className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             />

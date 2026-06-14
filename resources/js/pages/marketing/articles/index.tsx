@@ -8,8 +8,10 @@ import {
     Star,
 } from 'lucide-react';
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
+import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import ContentShareButton from '@/components/content-share-button';
 import SeoHead from '@/components/marketing/seo-head';
+import type { MarketingContentImageSource } from '@/types/marketing-content';
 import { marketingPageHeroes } from '@/data/marketing-page-heroes';
 import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
 
@@ -19,6 +21,7 @@ type ArticleCard = {
     slug: string;
     excerpt: string | null;
     image_url: string | null;
+    image_source?: MarketingContentImageSource | null;
     category: string | null;
     featured: boolean;
     views: number;
@@ -48,8 +51,9 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
         <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
             <div className="relative aspect-video overflow-hidden">
                 {article.image_url ? (
-                    <img
+                    <MarketingContentImage
                         src={article.image_url}
+                        source={article.image_source}
                         alt={article.title}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
