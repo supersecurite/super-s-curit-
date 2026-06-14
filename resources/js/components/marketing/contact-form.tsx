@@ -1,6 +1,10 @@
 import { Form, usePage } from '@inertiajs/react';
 import { CheckCircle2, ChevronDown, Send } from 'lucide-react';
+import { useRef, useState } from 'react';
 import InputError from '@/components/input-error';
+import RecaptchaField, {
+    type RecaptchaFieldHandle,
+} from '@/components/marketing/recaptcha-field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
@@ -11,13 +15,20 @@ import { cn } from '@/lib/utils';
 
 type SharedPageProps = {
     flash: { success?: string | null };
+    recaptcha: {
+        enabled: boolean;
+        siteKey: string | null;
+        language: string;
+    };
 };
 
 const fieldClasses =
     'border-super-securite-border bg-super-securite-surface-elevated text-super-securite-heading placeholder:text-super-securite-muted focus-visible:border-super-securite-accent focus-visible:ring-super-securite-accent/30';
 
 export default function ContactForm() {
-    const { flash } = usePage<SharedPageProps>().props;
+    const { flash, recaptcha } = usePage<SharedPageProps>().props;
+    const [recaptchaToken, setRecaptchaToken] = useState('');
+    const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
 
     return (
         <div className="marketing-card relative overflow-hidden">
@@ -53,6 +64,10 @@ export default function ContactForm() {
                 <Form
                     {...store.form()}
                     resetOnSuccess
+                    onSuccess={() => {
+                        setRecaptchaToken('');
+                        recaptchaRef.current?.reset();
+                    }}
                     className="mt-8 flex flex-col gap-5"
                 >
                     {({ processing, errors }) => (
@@ -201,6 +216,26 @@ export default function ContactForm() {
                                 <InputError message={errors.message} />
                             </div>
 
+                            {recaptcha.enabled && recaptcha.siteKey ? (
+                                <div className="grid gap-2">
+                                    <RecaptchaField
+                                        ref={recaptchaRef}
+                                        siteKey={recaptcha.siteKey}
+                                        language={recaptcha.language}
+                                        onChange={setRecaptchaToken}
+                                        onExpired={() => setRecaptchaToken('')}
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="g-recaptcha-response"
+                                        value={recaptchaToken}
+                                    />
+                                    <InputError
+                                        message={errors['g-recaptcha-response']}
+                                    />
+                                </div>
+                            ) : null}
+
                             <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                                 <p className="text-xs text-super-securite-muted">
                                     Vos informations restent confidentielles et
@@ -208,7 +243,10 @@ export default function ContactForm() {
                                 </p>
                                 <button
                                     type="submit"
-                                    disabled={processing}
+                                    disabled={
+                                        processing ||
+                                        (recaptcha.enabled && !recaptchaToken)
+                                    }
                                     className="marketing-cta-primary marketing-magnetic group inline-flex w-full items-center justify-center gap-2 sm:w-auto"
                                 >
                                     {processing ? (

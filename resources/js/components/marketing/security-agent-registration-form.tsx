@@ -1,8 +1,11 @@
 import { Form, usePage } from '@inertiajs/react';
 import { CheckCircle2, Send } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import CommuneSearchSelect from '@/components/marketing/commune-search-select';
 import InputError from '@/components/input-error';
+import RecaptchaField, {
+    type RecaptchaFieldHandle,
+} from '@/components/marketing/recaptcha-field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
@@ -17,14 +20,22 @@ type PageProps = {
     availabilityOptions: AvailabilityOption[];
     postOptions: PostOption[];
     flash: { success?: string | null };
+    recaptcha: {
+        enabled: boolean;
+        siteKey: string | null;
+        language: string;
+    };
 };
 
 const fieldClasses =
     'border-super-securite-border bg-super-securite-surface-elevated text-super-securite-heading placeholder:text-super-securite-muted focus-visible:border-super-securite-accent focus-visible:ring-super-securite-accent/30';
 
 export default function SecurityAgentRegistrationForm() {
-    const { availabilityOptions, postOptions } = usePage<PageProps>().props;
+    const { availabilityOptions, postOptions, recaptcha } =
+        usePage<PageProps>().props;
     const [communeId, setCommuneId] = useState('');
+    const [recaptchaToken, setRecaptchaToken] = useState('');
+    const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
 
     return (
         <div className="marketing-card relative overflow-hidden">
@@ -59,7 +70,11 @@ export default function SecurityAgentRegistrationForm() {
                         'address_detail',
                         'consent',
                     ]}
-                    onSuccess={() => setCommuneId('')}
+                    onSuccess={() => {
+                        setCommuneId('');
+                        setRecaptchaToken('');
+                        recaptchaRef.current?.reset();
+                    }}
                     className="mt-8 flex flex-col gap-5"
                 >
                     {({ processing, errors }) => (
@@ -281,6 +296,26 @@ export default function SecurityAgentRegistrationForm() {
                             </label>
                             <InputError message={errors.consent} />
 
+                            {recaptcha.enabled && recaptcha.siteKey ? (
+                                <div className="grid gap-2">
+                                    <RecaptchaField
+                                        ref={recaptchaRef}
+                                        siteKey={recaptcha.siteKey}
+                                        language={recaptcha.language}
+                                        onChange={setRecaptchaToken}
+                                        onExpired={() => setRecaptchaToken('')}
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="g-recaptcha-response"
+                                        value={recaptchaToken}
+                                    />
+                                    <InputError
+                                        message={errors['g-recaptcha-response']}
+                                    />
+                                </div>
+                            ) : null}
+
                             <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                                 <p className="text-xs text-super-securite-muted">
                                     Vos données restent confidentielles et ne
@@ -288,7 +323,10 @@ export default function SecurityAgentRegistrationForm() {
                                 </p>
                                 <button
                                     type="submit"
-                                    disabled={processing}
+                                    disabled={
+                                        processing ||
+                                        (recaptcha.enabled && !recaptchaToken)
+                                    }
                                     className="marketing-cta-primary marketing-magnetic group inline-flex w-full items-center justify-center gap-2 sm:w-auto"
                                 >
                                     {processing ? (

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\SecurityAgentPost;
+use App\Rules\Recaptcha;
 use App\Support\GuineaLocationValidator;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -35,6 +36,10 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'address_detail' => ['nullable', 'string', 'max:500'],
             'consent' => ['accepted'],
             'website' => ['nullable', 'max:0'],
+            'g-recaptcha-response' => [
+                Rule::requiredIf(fn (): bool => (bool) config('recaptcha.enabled')),
+                new Recaptcha,
+            ],
         ];
     }
 
@@ -55,6 +60,7 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'email.email' => 'L\'adresse e-mail n\'est pas valide.',
             'consent.accepted' => 'Vous devez accepter le traitement de vos données.',
             'post.required' => 'Le poste est obligatoire.',
+            'g-recaptcha-response' => 'La vérification anti-robot est requise.',
         ];
     }
 
@@ -76,6 +82,7 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'commune_id' => 'commune',
             'address_detail' => 'adresse complémentaire',
             'consent' => 'consentement',
+            'g-recaptcha-response' => 'vérification anti-robot',
         ];
     }
 }

@@ -133,6 +133,11 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],
+            'recaptcha' => [
+                'enabled' => (bool) config('recaptcha.enabled'),
+                'siteKey' => config('recaptcha.enabled') ? config('recaptcha.site_key') : null,
+                'language' => config('recaptcha.language'),
+            ],
             'tracking' => [
                 'visitor_uuid' => $request->cookie('super_securite_vid'),
             ],

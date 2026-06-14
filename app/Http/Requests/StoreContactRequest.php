@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Recaptcha;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreContactRequest extends FormRequest
 {
@@ -29,6 +31,10 @@ class StoreContactRequest extends FormRequest
             'company' => ['nullable', 'string', 'max:255'],
             'project_type' => ['nullable', 'string', 'max:100'],
             'message' => ['required', 'string', 'max:5000'],
+            'g-recaptcha-response' => [
+                Rule::requiredIf(fn (): bool => (bool) config('recaptcha.enabled')),
+                new Recaptcha,
+            ],
         ];
     }
 
@@ -43,6 +49,7 @@ class StoreContactRequest extends FormRequest
             'email.email' => 'L\'adresse e-mail n\'est pas valide.',
             'phone.required' => 'Le numéro de téléphone est obligatoire.',
             'message.required' => 'Veuillez décrire votre projet.',
+            'g-recaptcha-response' => 'La vérification anti-robot est requise.',
         ];
     }
 
@@ -58,6 +65,7 @@ class StoreContactRequest extends FormRequest
             'company' => 'entreprise',
             'project_type' => 'type de projet',
             'message' => 'message',
+            'g-recaptcha-response' => 'vérification anti-robot',
         ];
     }
 }

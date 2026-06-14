@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageContro
 use App\Http\Controllers\Admin\SecurityAgentApplicationController as AdminSecurityAgentApplicationController;
 use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Marketing\ArticleController as MarketingArticleController;
 use App\Http\Controllers\Marketing\GalleryController as MarketingGalleryController;
