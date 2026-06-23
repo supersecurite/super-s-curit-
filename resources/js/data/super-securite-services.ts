@@ -34,6 +34,7 @@ export type SuperSecuriteServiceHero = {
     imageAlt: string;
     underline: MarketingPageHeroUnderline;
     stats: readonly MarketingPageHeroStat[];
+    imageClassName?: string;
 };
 
 export type SuperSecuriteServiceDefinition = {
@@ -221,6 +222,7 @@ const serviceMeta: Record<
             image: `/${serviceImages.residence}`,
             imageAlt: 'Sécurité des résidences — Super Sécurité Guinée',
             underline: 'slide',
+            imageClassName: 'object-top',
             stats: [
                 { label: 'Résidences', value: 'Villas & immeubles' },
                 { label: 'Surveillance', value: 'Jour et nuit' },

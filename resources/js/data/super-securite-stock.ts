@@ -11,11 +11,12 @@ export const superSecuriteStock = {
         welcome: '/images/super-securite/IMG_9007-scaled.jpg',
         welcome2: '/images/super-securite/IMG_9008-scaled.jpg',
         whyUsBannerTransparent: '/images/super-securite/securite-installation-convoyeur-minier.jpeg',
+        whyUsBannerTransparent2: '/images/super-securite/agents.jpeg',
         services: {
             entreprise:
                 'images/super-securite/agents-super-securite-ronde-site-exterieur.jpeg',
             residence:
-                'images/super-securite/agents-securite-equipe.jpeg',
+                'images/super-securite/formation-extincteur-instruction.jpeg',
             chantiers:
                 'images/super-securite/chantier-structure-beton-echafaudage-equipe.jpeg',
             'zones-minieres':

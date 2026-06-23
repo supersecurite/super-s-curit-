@@ -31,6 +31,15 @@ export default function ServicePageSections({
             ? toGalleryFigures(serviceGalleryImages)
             : [...content.gallery];
 
+    // Ensure the first image (spotlight) is different from the hero image
+    const heroImageSrc = content.hero.image;
+    const nonHeroIndex = figures.findIndex((fig) => fig.src !== heroImageSrc);
+    if (nonHeroIndex > 0 && nonHeroIndex < figures.length) {
+        const temp = figures[0];
+        figures[0] = figures[nonHeroIndex];
+        figures[nonHeroIndex] = temp;
+    }
+
     const spotlight = figures[0];
     const galleryImages =
         figures.length > 1 ? figures.slice(1) : figures;

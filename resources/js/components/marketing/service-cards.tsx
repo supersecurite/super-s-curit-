@@ -58,7 +58,7 @@ export default function ServiceCards() {
                                             />
                                         </div>
                                         <div className="flex flex-1 flex-col p-6 md:p-8">
-                                            <div className="mb-5 inline-flex size-12 p-0">
+                                            <div className="mb-1 inline-flex size-12 p-0">
                                                 <Icon
                                                     className="size-6 text-super-securite-accent"
                                                     strokeWidth={1.8}

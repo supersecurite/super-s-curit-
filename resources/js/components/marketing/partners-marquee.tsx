@@ -1,8 +1,13 @@
 import Reveal from '@/components/marketing/reveal';
 import { superSecuritePartners } from '@/data/super-securite-partners';
 
-export default function PartnersMarquee() {
-    const items = [...superSecuritePartners, ...superSecuritePartners];
+type PartnersMarqueeProps = {
+    partners?: { name: string; logo: string }[];
+};
+
+export default function PartnersMarquee({ partners = [] }: PartnersMarqueeProps) {
+    const activePartners = partners.length > 0 ? partners : superSecuritePartners;
+    const items = [...activePartners, ...activePartners];
 
     return (
         <section

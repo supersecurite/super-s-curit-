@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, FolderGit2, Images, LayoutGrid, Newspaper, Shield, UserPlus, Users } from 'lucide-react';
+import { BarChart3, BookOpen, FolderGit2, Handshake, Images, LayoutGrid, Newspaper, Shield, UserPlus, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -19,6 +19,7 @@ import { index as articlesIndex } from '@/routes/articles';
 import { index as conseilsIndex } from '@/routes/conseils';
 import { index as candidaturesAgentsIndex } from '@/routes/candidatures-agents';
 import { index as usersIndex } from '@/routes/users';
+import { index as partnersIndex } from '@/routes/partners';
 import type { Auth, NavItem } from '@/types';
 
 function buildMainNavItems(isAdmin: boolean): NavItem[] {
@@ -60,6 +61,11 @@ function buildMainNavItems(isAdmin: boolean): NavItem[] {
             title: 'Utilisateurs',
             href: usersIndex.url(),
             icon: Users,
+        });
+        items.push({
+            title: 'Partenaires',
+            href: partnersIndex.url(),
+            icon: Handshake,
         });
     }
 

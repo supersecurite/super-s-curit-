@@ -18,10 +18,11 @@ const PartnersMarquee = lazy(
 type HomePageProps = {
     featuredArticles: MarketingContentPreview[];
     featuredSecurityTips: MarketingContentPreview[];
+    partners?: { name: string; logo: string }[];
 };
 
 export default function MarketingHome() {
-    const { featuredArticles = [], featuredSecurityTips = [] } =
+    const { featuredArticles = [], featuredSecurityTips = [], partners = [] } =
         usePage<HomePageProps>().props;
 
     return (
@@ -40,7 +41,7 @@ export default function MarketingHome() {
 
             <Suspense fallback={null}>
                 <div className="marketing-below-fold">
-                    <PartnersMarquee />
+                    <PartnersMarquee partners={partners} />
                 </div>
             </Suspense>
 

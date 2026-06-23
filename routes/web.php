@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
+use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\SecurityAgentApplicationController as AdminSecurityAgentApplicationController;
 use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
+use Inertia\Inertia;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
@@ -36,7 +38,18 @@ Route::get('/sitemap.xml', SitemapController::class)
         AddLinkHeadersForPreloadedAssets::class,
     ]);
 
-Route::inertia('/', 'marketing/home')->name('home');
+Route::get('/', function () {
+    $partners = \App\Models\Partner::query()
+        ->published()
+        ->ordered()
+        ->get()
+        ->map(fn (\App\Models\Partner $partner) => $partner->toPublicArray())
+        ->all();
+
+    return Inertia::render('marketing/home', [
+        'partners' => $partners,
+    ]);
+})->name('home');
 Route::get('/entreprise', [ServiceController::class, 'show'])->name('services.entreprise');
 Route::get('/residence', [ServiceController::class, 'show'])->name('services.residence');
 Route::get('/chantiers', [ServiceController::class, 'show'])->name('services.chantiers');
@@ -74,6 +87,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('candidatures-agents', AdminSecurityAgentApplicationController::class)->only(['index', 'show', 'update']);
+        Route::resource('partners', AdminPartnerController::class);
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
     });
 });

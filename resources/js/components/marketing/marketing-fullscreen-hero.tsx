@@ -16,6 +16,7 @@ type MarketingFullscreenHeroProps = Pick<
 > & {
     label?: string;
     className?: string;
+    imageClassName?: string;
     children?: ReactNode;
     headingLevel?: 'h1' | 'h2';
 };
@@ -31,6 +32,7 @@ export default function MarketingFullscreenHero({
     imageAlt,
     stats,
     className,
+    imageClassName,
     children,
     headingLevel = 'h1',
 }: MarketingFullscreenHeroProps) {
@@ -52,7 +54,10 @@ export default function MarketingFullscreenHero({
                     fetchPriority="high"
                     loading="eager"
                     decoding="async"
-                    className="absolute inset-0 size-full max-w-full object-cover"
+                    className={cn(
+                        'absolute inset-0 size-full max-w-full object-cover',
+                        imageClassName,
+                    )}
                 />
 
                 <div

@@ -180,7 +180,7 @@ export default function WhyUsSection({
             {showCinematicHero ? (
                 <div className="relative mx-auto flex min-h-[100dvh] w-full max-w-[1920px] items-end overflow-hidden lg:items-center">
                     <img
-                        src={superSecuriteStock.home.whyUsBannerTransparent}
+                        src={superSecuriteStock.home.whyUsBannerTransparent2}
                         alt="Super Sécurité — équipes et sites sécurisés"
                         width={1920}
                         height={1080}
@@ -205,7 +205,7 @@ export default function WhyUsSection({
                     <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-[calc(var(--marketing-header-height,5.5rem)+3.5rem)] pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
                         <div className="max-w-2xl min-w-0">
                             <Reveal delay={80}>
-                                <p className="marketing-label mb-3 flex items-center gap-2 text-white/80 before:block before:h-px before:w-6 before:bg-super-securite-accent">
+                                <p className="marketing-label mb-3 flex items-center gap-2 before:block before:h-px before:w-6 before:bg-super-securite-accent">
                                     {superSecuriteWhyUsModern.sectionLabel}
                                 </p>
                             </Reveal>

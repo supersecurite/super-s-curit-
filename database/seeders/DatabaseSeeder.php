@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             ArticleSeeder::class,
             SecurityTipSeeder::class,
             GalleryImageSeeder::class,
+            PartnerSeeder::class,
         ]);
     }
 }
