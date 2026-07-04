@@ -6,16 +6,17 @@ import {
 } from '@/data/super-securite-service-pages';
 import type { SuperSecuriteServiceId } from '@/data/super-securite-services';
 
-import type { GalleryImagePublic } from '@/types/gallery';
+import type { GalleryImagePublic, GalleryVideoPublic } from '@/types/gallery';
 
 type PageProps = {
     pageFaqs: { question: string; answer: string }[];
     serviceId: SuperSecuriteServiceId;
     galleryImages: GalleryImagePublic[];
+    galleryVideos: GalleryVideoPublic[];
 };
 
 export default function ServicePage() {
-    const { serviceId, pageFaqs, galleryImages } =
+    const { serviceId, pageFaqs, galleryImages, galleryVideos } =
         usePage<PageProps>().props;
     const content = superSecuriteServicePages[serviceId];
     const Layout = servicePageLayouts[serviceId];
@@ -27,6 +28,7 @@ export default function ServicePage() {
                 content={content}
                 faqs={pageFaqs}
                 serviceGalleryImages={galleryImages}
+                serviceGalleryVideos={galleryVideos}
             />
         </>
     );

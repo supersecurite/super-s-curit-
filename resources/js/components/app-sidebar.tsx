@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, FolderGit2, Handshake, Images, LayoutGrid, Newspaper, Shield, UserPlus, Users } from 'lucide-react';
+import { BarChart3, BookOpen, FolderGit2, Handshake, Images, LayoutGrid, Newspaper, Shield, UserPlus, Users, Video } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as galleryImagesIndex } from '@/routes/gallery-images';
+import { index as galleryVideosIndex } from '@/routes/gallery-videos';
 import { index as analyticsIndex } from '@/routes/analytics';
 import { index as articlesIndex } from '@/routes/articles';
 import { index as conseilsIndex } from '@/routes/conseils';
@@ -43,6 +44,11 @@ function buildMainNavItems(isAdmin: boolean): NavItem[] {
             title: 'Galerie',
             href: galleryImagesIndex.url(),
             icon: Images,
+        },
+        {
+            title: 'Vidéos galerie',
+            href: galleryVideosIndex.url(),
+            icon: Video,
         },
     ];
 

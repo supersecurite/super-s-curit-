@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils';
 import type { SuperSecuriteServiceGalleryImage } from '@/data/super-securite-services';
 import type { GalleryImagePublic } from '@/types/gallery';
 import VideoGallery from '@/components/marketing/video-gallery';
-import { superSecuriteVideos } from '@/data/super-securite-videos';
 
 function toGalleryFigures(
     images: readonly GalleryImagePublic[],
@@ -25,6 +24,7 @@ export default function ServicePageSections({
     content,
     faqs,
     serviceGalleryImages = [],
+    serviceGalleryVideos = [],
 }: ServicePageLayoutProps) {
     const figures = (
         serviceGalleryImages.length > 0
@@ -45,10 +45,7 @@ export default function ServicePageSections({
     const galleryImages =
         figures.length > 1 ? figures.slice(1) : figures;
 
-    const serviceVideos = [
-        ...superSecuriteVideos.filter((video) => video.serviceId === content.hero.id),
-        ...superSecuriteVideos.filter((video) => video.serviceId === 'general'),
-    ].slice(0, 3);
+    const serviceVideos = serviceGalleryVideos;
 
     return (
         <>

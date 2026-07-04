@@ -17,3 +17,16 @@ export type GalleryServiceOption = {
     label: string;
     path: string;
 };
+
+export type GalleryVideoPublic = {
+    id: number;
+    service_id: string | null;
+    service_label: string;
+    title: string;
+    description: string | null;
+    youtube_url: string;
+    youtube_id: string | null;
+    thumbnail_url: string | null;
+    embed_url: string | null;
+    sort_order: number;
+};

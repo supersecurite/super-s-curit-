@@ -2,6 +2,7 @@
 
 use App\Enums\ServiceId;
 use App\Models\GalleryImage;
+use App\Models\GalleryVideo;
 use Database\Seeders\GalleryImageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -64,12 +65,22 @@ test('service page receives gallery images from database', function () {
         'is_published' => true,
     ]);
 
+    GalleryVideo::factory()->count(2)->create([
+        'service_id' => ServiceId::Entreprise,
+        'is_published' => true,
+    ]);
+
+    GalleryVideo::factory()->general()->count(2)->create([
+        'is_published' => true,
+    ]);
+
     $this->get(route('services.entreprise'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('marketing/service-page')
             ->where('serviceId', 'entreprise')
             ->has('galleryImages', 2)
+            ->has('galleryVideos', 3)
         );
 });
 

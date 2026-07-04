@@ -7,26 +7,34 @@ import { useGalleryLightbox } from '@/components/marketing/gallery-lightbox';
 import VideoGallery from '@/components/marketing/video-gallery';
 import SeoHead from '@/components/marketing/seo-head';
 import { marketingPageHeroes } from '@/data/marketing-page-heroes';
-import { superSecuriteVideos } from '@/data/super-securite-videos';
 import { index as galerieIndex } from '@/routes/galerie';
 import { cn } from '@/lib/utils';
 import type {
     GalleryImagePublic,
     GalleryServiceOption,
+    GalleryVideoPublic,
 } from '@/types/gallery';
 
 type PageProps = {
     images: GalleryImagePublic[];
+    videos: GalleryVideoPublic[];
     services: GalleryServiceOption[];
     countsByService: Record<string, number>;
+    countsVideosByService: Record<string, number>;
     filters: {
         service: string;
     };
 };
 
 export default function MarketingGalleryIndex() {
-    const { images, services, countsByService, filters } =
-        usePage<PageProps>().props;
+    const {
+        images,
+        videos,
+        services,
+        countsByService,
+        countsVideosByService,
+        filters,
+    } = usePage<PageProps>().props;
 
     const [slideIndex, setSlideIndex] = useState(0);
     const [activeTab, setActiveTab] = useState<'photos' | 'videos'>('photos');
@@ -45,21 +53,10 @@ export default function MarketingGalleryIndex() {
         return () => clearInterval(interval);
     }, [images.length]);
 
-    const filteredVideos = superSecuriteVideos.filter((video) => {
-        if (filters.service === 'all') {
-            return true;
-        }
-        return video.serviceId === filters.service;
-    });
-
-    const videoCountsByService = {
-        all: superSecuriteVideos.length,
-        general: superSecuriteVideos.filter((v) => v.serviceId === 'general').length,
-        entreprise: superSecuriteVideos.filter((v) => v.serviceId === 'entreprise').length,
-        residence: superSecuriteVideos.filter((v) => v.serviceId === 'residence').length,
-        chantiers: superSecuriteVideos.filter((v) => v.serviceId === 'chantiers').length,
-        'zones-minieres': superSecuriteVideos.filter((v) => v.serviceId === 'zones-minieres').length,
-    };
+    const totalVideoCount = Object.values(countsVideosByService).reduce(
+        (sum, count) => sum + count,
+        0,
+    );
 
     const lightboxImages = images.map((image) => ({
         src: image.src,
@@ -159,7 +156,7 @@ export default function MarketingGalleryIndex() {
                                 )}
                             >
                                 <Video className="size-4" />
-                                Vidéos ({filteredVideos.length})
+                                Vidéos ({videos.length})
                             </button>
                         </div>
                     </div>
@@ -175,8 +172,8 @@ export default function MarketingGalleryIndex() {
                                     </>
                                 ) : (
                                     <>
-                                        {filteredVideos.length} vidéo{filteredVideos.length > 1 ? 's' : ''}{' '}
-                                        affichée{filteredVideos.length > 1 ? 's' : ''} (sur {superSecuriteVideos.length})
+                                        {videos.length} vidéo{videos.length > 1 ? 's' : ''}{' '}
+                                        affichée{videos.length > 1 ? 's' : ''} (sur {totalVideoCount})
                                     </>
                                 )}
                             </p>
@@ -191,7 +188,7 @@ export default function MarketingGalleryIndex() {
                                     : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
                                     }`}
                             >
-                                Tous ({activeTab === 'photos' ? totalCount : superSecuriteVideos.length})
+                                Tous ({activeTab === 'photos' ? totalCount : totalVideoCount})
                             </button>
                             <button
                                 type="button"
@@ -202,7 +199,7 @@ export default function MarketingGalleryIndex() {
                                     }`}
                             >
                                 Galerie générale (
-                                {activeTab === 'photos' ? (countsByService.general ?? 0) : videoCountsByService.general})
+                                {activeTab === 'photos' ? (countsByService.general ?? 0) : (countsVideosByService.general ?? 0)})
                             </button>
                             {services.map((service) => (
                                 <button
@@ -217,7 +214,7 @@ export default function MarketingGalleryIndex() {
                                         }`}
                                 >
                                     {service.label} (
-                                    {activeTab === 'photos' ? (countsByService[service.value] ?? 0) : (videoCountsByService[service.value as keyof typeof videoCountsByService] ?? 0)})
+                                    {activeTab === 'photos' ? (countsByService[service.value] ?? 0) : (countsVideosByService[service.value] ?? 0)})
                                 </button>
                             ))}
                         </div>
@@ -238,7 +235,7 @@ export default function MarketingGalleryIndex() {
                             </div>
                         )
                     ) : (
-                        <VideoGallery videos={filteredVideos} />
+                        <VideoGallery videos={videos} />
                     )}
                 </div>
             </section>
