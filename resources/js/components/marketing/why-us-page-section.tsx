@@ -3,7 +3,6 @@ import {
     superSecuriteWhyUsDetails,
     superSecuriteWhyUsModern,
 } from '@/data/super-securite-content';
-import MarketingYoutubeEmbed from '@/components/marketing/marketing-youtube-embed';
 import type { GalleryVideoPublic } from '@/types/gallery';
 import { cn } from '@/lib/utils';
 
@@ -56,10 +55,22 @@ export default function WhyUsPageSection({ featuredVideo }: WhyUsPageSectionProp
                     </Reveal>
                 </div>
             
-                {featuredVideo ? (
-                        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-20">
-                            <MarketingYoutubeEmbed video={featuredVideo} />
+                {featuredVideo?.embed_url ? (
+                    <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
+                        <div className="overflow-hidden rounded-2xl border border-super-securite-border/40 bg-slate-950 shadow-lg shadow-slate-900/10">
+                            <div className="relative aspect-video w-full">
+                                <iframe
+                                    src={featuredVideo.embed_url}
+                                    title={featuredVideo.title}
+                                    loading="lazy"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                    className="absolute inset-0 size-full border-0"
+                                />
+                            </div>
                         </div>
+                    </div>
                 ) : null}
             </div>
 
