@@ -114,18 +114,30 @@ test('youtube url parser accepts common formats', function () {
         ->and(YoutubeUrl::parseId('https://youtu.be/dQw4w9WgXcQ'))->toBe('dQw4w9WgXcQ')
         ->and(YoutubeUrl::parseId('https://www.youtube.com/embed/dQw4w9WgXcQ'))->toBe('dQw4w9WgXcQ')
         ->and(YoutubeUrl::parseId('https://www.youtube.com/shorts/dQw4w9WgXcQ'))->toBe('dQw4w9WgXcQ')
-        ->and(YoutubeUrl::parseId('https://youtube.com/shorts/gQp4od9l7U8?si=4ZxBhBrcS1kY1t11'))->toBe('gQp4od9l7U8');
+        ->and(YoutubeUrl::parseId('https://youtube.com/shorts/gQp4od9l7U8?si=4ZxBhBrcS1kY1t11'))->toBe('gQp4od9l7U8')
+        ->and(YoutubeUrl::parseId('https://www.youtube.com/watch?v=pHDNrHLb1P4'))->toBe('pHDNrHLb1P4');
 });
 
-test('about page displays featured youtube video after sync', function () {
-    $this->seed(SyncGalleryVideosSeeder::class);
+test('youtube embed uses nocookie domain and detects shorts', function () {
+    expect(YoutubeUrl::isShort('https://youtube.com/shorts/gQp4od9l7U8'))->toBeTrue()
+        ->and(YoutubeUrl::isShort('https://www.youtube.com/watch?v=pHDNrHLb1P4'))->toBeFalse();
 
+    $shortEmbed = YoutubeUrl::embedUrl('gQp4od9l7U8', false, true);
+    $watchEmbed = YoutubeUrl::embedUrl('pHDNrHLb1P4');
+
+    expect($shortEmbed)->toStartWith('https://www.youtube-nocookie.com/embed/gQp4od9l7U8')
+        ->and($shortEmbed)->toContain('playlist=gQp4od9l7U8')
+        ->and($watchEmbed)->toStartWith('https://www.youtube-nocookie.com/embed/pHDNrHLb1P4');
+});
+
+test('about page displays configured youtube video', function () {
     $this->get(route('about'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('marketing/about')
-            ->where('featuredVideo.youtube_id', 'D_Wo8Y_tV9E')
-            ->where('featuredVideo.embed_url', fn ($url) => str_contains($url, 'D_Wo8Y_tV9E'))
+            ->where('featuredVideo.youtube_id', 'pHDNrHLb1P4')
+            ->where('featuredVideo.is_short', false)
+            ->where('featuredVideo.embed_url', fn ($url) => str_contains($url, 'youtube-nocookie.com/embed/pHDNrHLb1P4'))
         );
 });
 

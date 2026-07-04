@@ -28,5 +28,6 @@ export type GalleryVideoPublic = {
     youtube_id: string | null;
     thumbnail_url: string | null;
     embed_url: string | null;
+    is_short: boolean;
     sort_order: number;
 };

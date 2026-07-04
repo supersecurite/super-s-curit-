@@ -90,7 +90,14 @@ class GalleryVideo extends Model
     {
         $videoId = $this->youtube_id;
 
-        return $videoId !== null ? YoutubeUrl::embedUrl($videoId) : null;
+        return $videoId !== null
+            ? YoutubeUrl::embedUrl($videoId, false, YoutubeUrl::isShort($this->youtube_url))
+            : null;
+    }
+
+    public function getIsShortAttribute(): bool
+    {
+        return YoutubeUrl::isShort($this->youtube_url);
     }
 
     /**
@@ -108,6 +115,7 @@ class GalleryVideo extends Model
             'youtube_id' => $this->youtube_id,
             'thumbnail_url' => $this->thumbnail_url,
             'embed_url' => $this->embed_url,
+            'is_short' => $this->is_short,
             'sort_order' => $this->sort_order,
         ];
     }

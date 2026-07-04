@@ -40,4 +40,9 @@ return [
 
     'hours_long' => env('SUPER_SECURITE_HOURS_LONG', '24h/24 et 7j/7'),
 
+    'about_youtube_url' => env(
+        'SUPER_SECURITE_ABOUT_YOUTUBE_URL',
+        'https://www.youtube.com/watch?v=pHDNrHLb1P4',
+    ),
+
 ];

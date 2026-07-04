@@ -6,6 +6,7 @@ export default function ServicePageLayout({
     content,
     faqs,
     serviceGalleryImages,
+    serviceGalleryVideos,
 }: ServicePageLayoutProps) {
     return (
         <>
@@ -14,6 +15,7 @@ export default function ServicePageLayout({
                 content={content}
                 faqs={faqs}
                 serviceGalleryImages={serviceGalleryImages}
+                serviceGalleryVideos={serviceGalleryVideos}
             />
         </>
     );

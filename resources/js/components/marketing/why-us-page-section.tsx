@@ -3,6 +3,8 @@ import {
     superSecuriteWhyUsDetails,
     superSecuriteWhyUsModern,
 } from '@/data/super-securite-content';
+import MarketingYoutubeEmbed from '@/components/marketing/marketing-youtube-embed';
+import type { GalleryVideoPublic } from '@/types/gallery';
 import { cn } from '@/lib/utils';
 
 type WhyUsDetailImageProps = {
@@ -32,7 +34,11 @@ function WhyUsDetailImage({ src, alt, contain = false }: WhyUsDetailImageProps) 
     );
 }
 
-export default function WhyUsPageSection() {
+type WhyUsPageSectionProps = {
+    featuredVideo: GalleryVideoPublic | null;
+};
+
+export default function WhyUsPageSection({ featuredVideo }: WhyUsPageSectionProps) {
     return (
         <section id="pourquoi" className="border-t border-super-securite-border">
             <div className="marketing-section-white py-14 md:py-20">
@@ -49,6 +55,12 @@ export default function WhyUsPageSection() {
                         </p>
                     </Reveal>
                 </div>
+            
+                {featuredVideo ? (
+                        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-20">
+                            <MarketingYoutubeEmbed video={featuredVideo} />
+                        </div>
+                ) : null}
             </div>
 
             <div>

@@ -4,6 +4,7 @@ use App\Enums\ServiceId;
 use App\Models\GalleryImage;
 use App\Models\GalleryVideo;
 use Database\Seeders\GalleryImageSeeder;
+use Database\Seeders\SyncGalleryVideosSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -80,7 +81,20 @@ test('service page receives gallery images from database', function () {
             ->component('marketing/service-page')
             ->where('serviceId', 'entreprise')
             ->has('galleryImages', 2)
-            ->has('galleryVideos', 3)
+            ->has('galleryVideos', 4)
+        );
+});
+
+test('service page includes general gallery videos for all services', function () {
+    $this->seed(SyncGalleryVideosSeeder::class);
+
+    $this->get(route('services.chantiers'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/service-page')
+            ->where('serviceId', 'chantiers')
+            ->has('galleryVideos', 4)
+            ->where('galleryVideos.0.youtube_id', 'gQp4od9l7U8')
         );
 });
 

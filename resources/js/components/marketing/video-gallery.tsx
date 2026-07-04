@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Play, X, Video } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import YoutubePlayer from '@/components/marketing/youtube-player';
 import type { GalleryVideoPublic } from '@/types/gallery';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +24,10 @@ function VideoCard({ video, onSelect }: VideoCardProps) {
                         src={video.thumbnail_url}
                         alt={video.title}
                         loading="lazy"
-                        className="size-full object-cover transition-transform duration-500 group-hover:scale-102"
+                        className={cn(
+                            'size-full transition-transform duration-500 group-hover:scale-102',
+                            video.is_short ? 'object-cover object-center' : 'object-cover',
+                        )}
                     />
                 ) : (
                     <div className="flex size-full items-center justify-center bg-slate-900">
@@ -95,7 +99,7 @@ export default function VideoGallery({ videos, className }: VideoGalleryProps) {
             </div>
 
             <AnimatePresence>
-                {selectedVideo?.embed_url ? (
+                {selectedVideo?.youtube_id ? (
                     <motion.div
                         className="fixed inset-0 z-[250] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
                         initial={{ opacity: 0 }}
@@ -104,7 +108,12 @@ export default function VideoGallery({ videos, className }: VideoGalleryProps) {
                         onClick={() => setSelectedVideo(null)}
                     >
                         <motion.div
-                            className="relative aspect-video w-full max-w-4xl overflow-hidden rounded-xl bg-slate-950 shadow-2xl"
+                            className={cn(
+                                'relative w-full overflow-hidden rounded-xl bg-slate-950 shadow-2xl',
+                                selectedVideo.is_short
+                                    ? 'max-w-[min(100%,360px)]'
+                                    : 'max-w-4xl',
+                            )}
                             initial={{ scale: 0.95, y: 15 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.95, y: 15 }}
@@ -115,24 +124,18 @@ export default function VideoGallery({ videos, className }: VideoGalleryProps) {
                             }}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <iframe
-                                src={selectedVideo.embed_url}
-                                title={selectedVideo.title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                                className="size-full border-0"
-                            />
+                            <YoutubePlayer video={selectedVideo} autoplay />
 
                             <button
                                 type="button"
-                                className="absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/80"
+                                className="absolute top-3 right-3 z-10 flex size-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/80"
                                 onClick={() => setSelectedVideo(null)}
                                 aria-label="Fermer la vidéo"
                             >
                                 <X className="size-5" />
                             </button>
 
-                            <div className="pointer-events-none absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
+                            <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
                                 <h3 className="font-heading text-base font-semibold sm:text-lg">
                                     {selectedVideo.title}
                                 </h3>

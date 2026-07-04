@@ -40,9 +40,9 @@ class ServiceController extends Controller
                     ->ordered()
                     ->get(),
             )
-            ->take(3)
-            ->map(fn (GalleryVideo $video) => $video->toPublicArray())
+            ->unique('id')
             ->values()
+            ->map(fn (GalleryVideo $video) => $video->toPublicArray())
             ->all();
 
         return Inertia::render('marketing/service-page', [

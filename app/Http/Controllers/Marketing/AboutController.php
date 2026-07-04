@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
-use App\Models\GalleryVideo;
+use App\Support\YoutubeUrl;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -11,18 +11,14 @@ class AboutController extends Controller
 {
     public function __invoke(): Response
     {
-        $featuredVideo = GalleryVideo::query()
-            ->published()
-            ->ordered()
-            ->get()
-            ->first(fn (GalleryVideo $video): bool => $video->youtube_id === 'D_Wo8Y_tV9E')
-            ?? GalleryVideo::query()
-                ->published()
-                ->where('youtube_url', 'like', '%D_Wo8Y_tV9E%')
-                ->first();
+        $featuredVideo = YoutubeUrl::toPublicArray(
+            youtubeUrl: (string) config('super-securite.about_youtube_url'),
+            title: 'Super Sécurité en action',
+            description: 'Découvrez notre équipe et notre engagement sur le terrain à Conakry et en région.',
+        );
 
         return Inertia::render('marketing/about', [
-            'featuredVideo' => $featuredVideo?->toPublicArray(),
+            'featuredVideo' => $featuredVideo,
         ]);
     }
 }
