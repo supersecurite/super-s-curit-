@@ -165,7 +165,7 @@ export const superSecuriteWhyUsDetails: readonly SuperSecuriteWhyUsDetail[] = [
         title: 'Des agents rigoureusement sélectionnés et formés',
         description:
             'La qualité de nos services repose sur la compétence de nos agents. Chaque collaborateur est recruté selon des critères stricts de moralité, de discipline et de professionnalisme. Nos agents bénéficient d’une formation adaptée aux réalités du terrain, notamment en matière de contrôle d’accès, de surveillance, de prévention des incidents, de gestion des visiteurs et de relation client. Cette préparation leur permet d’assurer efficacement la sécurité des personnes et des biens qui nous sont confiés.',
-        image: superSecuriteStock.home.services.entreprise,
+        image: superSecuriteStock.home.entreprise_1,
         imageAlt: 'Agent de sécurité Super Sécurité en poste',
     },
     {

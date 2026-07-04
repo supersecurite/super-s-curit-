@@ -201,7 +201,7 @@ return [
     ],
     [
         'service_id' => null,
-        'image' => '/images/super-securite/contact.jpg',
+        'image' => '/images/super-securite/contact.jpeg',
         'alt' => 'Présence Super Sécurité en Guinée',
         'caption' => 'Proximité et réactivité au quotidien',
         'sort_order' => 2,

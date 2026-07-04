@@ -91,7 +91,7 @@ export default function WhyUsPageSection({ featuredVideo }: WhyUsPageSectionProp
                                             )}
                                         >
                                             <div className="flex items-start gap-5 md:gap-6">
-                                                <span className="shrink-0 font-mono text-2xl font-bold leading-none tracking-tight text-super-securite-accent/40 md:text-3xl">
+                                                <span className="shrink-0 font-mono text-2xl font-bold leading-none tracking-tight text-super-securite-accent md:text-3xl">
                                                     {String(index + 1).padStart(
                                                         2,
                                                         '0',

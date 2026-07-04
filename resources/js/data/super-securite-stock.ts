@@ -10,6 +10,7 @@ export const superSecuriteStock = {
     home: {
         welcome: '/images/super-securite/IMG_9007-scaled.jpg',
         welcome2: '/images/super-securite/IMG_9008-scaled.jpg',
+        entreprise_1: '/images/super-securite/IMG_9665.jpg',
         whyUsBannerTransparent: '/images/super-securite/securite-installation-convoyeur-minier.jpeg',
         whyUsBannerTransparent2: '/images/super-securite/agents.jpeg',
         services: {
@@ -45,6 +46,6 @@ export const superSecuriteStock = {
 
     contact: {
         heroSide: '/images/super-securite/hero/collaboration.jpg',
-        sidePanel: '/images/super-securite/contact.jpg',
+        sidePanel: '/images/super-securite/contact.jpeg',
     },
 } as const;
