@@ -10,6 +10,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Marketing\AboutController as MarketingAboutController;
+use App\Http\Controllers\Marketing\ArticleController as MarketingArticleController;
 use App\Http\Controllers\Marketing\GalleryController as MarketingGalleryController;
 use App\Http\Controllers\Marketing\SecurityAgentApplicationController as MarketingSecurityAgentApplicationController;
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
