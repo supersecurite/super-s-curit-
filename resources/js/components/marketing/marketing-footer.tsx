@@ -7,7 +7,7 @@ import { contact } from '@/routes';
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { superSecuriteServices } from '@/data/super-securite-content';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
-import { FacebookIcon, InstagramIcon, TwitterIcon, Youtube } from 'lucide-react';
+import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, Youtube } from 'lucide-react';
 
 type SharedPageProps = {
     superSecurite: SuperSecuriteConfig;
@@ -164,6 +164,19 @@ export default function MarketingFooter() {
                                     >
                                         <InstagramIcon className="h-4 w-4 text-pink-500" />
                                         Instagram
+                                    </a>
+                                </li>
+                            )}
+                            {superSecurite.social.linkedin && (
+                                <li>
+                                    <a
+                                        href={superSecurite.social.linkedin}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
+                                    >
+                                        <LinkedinIcon className="h-4 w-4 text-blue-500" />
+                                        Linkedin
                                     </a>
                                 </li>
                             )}

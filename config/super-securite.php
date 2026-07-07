@@ -26,7 +26,7 @@ return [
         'twitter' => env('SUPER_SECURITE_TWITTER_URL'),
         'youtube' => env('SUPER_SECURITE_YOUTUBE_URL'),
         'instagram' => env('SUPER_SECURITE_INSTAGRAM_URL', 'https://www.instagram.com/supersecurite'),
-        'linkedin' => env('SUPER_SECURITE_LINKEDIN_URL'),
+        'linkedin' => env('SUPER_SECURITE_LINKEDIN_URL', 'https://www.linkedin.com/company/super-s%C3%A9curit%C3%A9/?viewAsMember=false'),
         'github' => env('SUPER_SECURITE_GITHUB_URL'),
     ],
 
