@@ -45,10 +45,12 @@ type StatusOption = { value: string; label: string };
 type PageProps = {
     application: ApplicationDetail;
     statusOptions: StatusOption[];
+    canUpdate: boolean;
 };
 
 export default function CandidaturesAgentsShow() {
-    const { application, statusOptions } = usePage<PageProps>().props;
+    const { application, statusOptions, canUpdate } =
+        usePage<PageProps>().props;
 
     const form = useForm({
         status: application.status,
@@ -210,78 +212,98 @@ export default function CandidaturesAgentsShow() {
                         )}
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    {canUpdate ? (
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="app-panel space-y-4 p-6">
+                                <h2 className="font-heading text-lg font-semibold">
+                                    Suivi interne
+                                </h2>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="status">Statut</Label>
+                                    <select
+                                        id="status"
+                                        value={form.data.status}
+                                        onChange={(e) =>
+                                            form.setData('status', e.target.value)
+                                        }
+                                        className="border-input bg-background h-9 w-full rounded-md border px-3 text-sm"
+                                    >
+                                        {statusOptions.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <InputError message={form.errors.status} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="internal_notes">
+                                        Notes internes
+                                    </Label>
+                                    <textarea
+                                        id="internal_notes"
+                                        rows={6}
+                                        value={form.data.internal_notes}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                'internal_notes',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="border-input bg-background min-h-[120px] w-full rounded-md border px-3 py-2 text-sm"
+                                        placeholder="Commentaires RH, rappels, entretien..."
+                                    />
+                                    <InputError
+                                        message={form.errors.internal_notes}
+                                    />
+                                </div>
+
+                                {application.reviewed_by ? (
+                                    <p className="text-muted-foreground text-xs">
+                                        Dernière mise à jour par{' '}
+                                        {application.reviewed_by.name}
+                                        {application.contacted_at_formatted
+                                            ? ` — contacté le ${application.contacted_at_formatted}`
+                                            : ''}
+                                    </p>
+                                ) : null}
+
+                                <Button
+                                    type="submit"
+                                    disabled={form.processing}
+                                    className="w-full"
+                                >
+                                    <Save className="size-4" />
+                                    {form.processing
+                                        ? 'Enregistrement...'
+                                        : 'Enregistrer'}
+                                </Button>
+                            </div>
+                        </form>
+                    ) : (
                         <div className="app-panel space-y-4 p-6">
                             <h2 className="font-heading text-lg font-semibold">
                                 Suivi interne
                             </h2>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="status">Statut</Label>
-                                <select
-                                    id="status"
-                                    value={form.data.status}
-                                    onChange={(e) =>
-                                        form.setData('status', e.target.value)
-                                    }
-                                    className="border-input bg-background h-9 w-full rounded-md border px-3 text-sm"
-                                >
-                                    {statusOptions.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                <InputError message={form.errors.status} />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="internal_notes">
-                                    Notes internes
-                                </Label>
-                                <textarea
-                                    id="internal_notes"
-                                    rows={6}
-                                    value={form.data.internal_notes}
-                                    onChange={(e) =>
-                                        form.setData(
-                                            'internal_notes',
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="border-input bg-background min-h-[120px] w-full rounded-md border px-3 py-2 text-sm"
-                                    placeholder="Commentaires RH, rappels, entretien..."
-                                />
-                                <InputError
-                                    message={form.errors.internal_notes}
-                                />
-                            </div>
-
-                            {application.reviewed_by ? (
-                                <p className="text-muted-foreground text-xs">
-                                    Dernière mise à jour par{' '}
-                                    {application.reviewed_by.name}
-                                    {application.contacted_at_formatted
-                                        ? ` — contacté le ${application.contacted_at_formatted}`
-                                        : ''}
-                                </p>
+                            <p className="text-muted-foreground text-sm">
+                                Vous n&apos;avez pas l&apos;autorisation de
+                                modifier cette candidature.
+                            </p>
+                            {application.internal_notes ? (
+                                <div className="grid gap-2">
+                                    <Label>Notes internes</Label>
+                                    <p className="text-muted-foreground whitespace-pre-wrap text-sm">
+                                        {application.internal_notes}
+                                    </p>
+                                </div>
                             ) : null}
-
-                            <Button
-                                type="submit"
-                                disabled={form.processing}
-                                className="w-full"
-                            >
-                                <Save className="size-4" />
-                                {form.processing
-                                    ? 'Enregistrement...'
-                                    : 'Enregistrer'}
-                            </Button>
                         </div>
-                    </form>
+                    )}
                 </div>
             </div>
         </>

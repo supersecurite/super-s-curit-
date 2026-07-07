@@ -109,6 +109,26 @@ test('admin cannot delete themselves', function () {
     expect(User::query()->find($admin->id))->not->toBeNull();
 });
 
+test('user edit page supports tab query parameter', function () {
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->create();
+
+    $this->actingAs($admin)
+        ->get(route('users.edit', ['user' => $target, 'tab' => 'permissions']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('users/edit')
+            ->where('tab', 'permissions')
+        );
+
+    $this->actingAs($admin)
+        ->get(route('users.edit', ['user' => $target, 'tab' => 'invalid']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('tab', 'profile')
+        );
+});
+
 test('user routes use uuid instead of numeric id', function () {
     $admin = User::factory()->admin()->create();
     $target = User::factory()->create();

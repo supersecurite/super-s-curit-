@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ArticleStatus;
+use App\Enums\BackofficePermission;
 use App\Enums\SecurityAgentApplicationStatus;
 use App\Models\Article;
 use App\Models\SecurityAgentApplication;
@@ -28,11 +29,11 @@ class DashboardController extends Controller
             'overview' => [
                 'greeting' => $this->greeting($user->name),
                 'role_label' => $user->role->label(),
-                'is_admin' => $user->isAdmin(),
+                'is_admin' => $user->hasBackofficePermission(BackofficePermission::AnalyticsView),
             ],
         ];
 
-        if ($user->isAdmin()) {
+        if ($user->hasBackofficePermission(BackofficePermission::AnalyticsView)) {
             $from = now()->subDays(6)->startOfDay();
             $to = now()->endOfDay();
 

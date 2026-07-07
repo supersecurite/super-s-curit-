@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\BackofficePermission;
 use App\Enums\UserRole;
 use App\Models\User;
 
@@ -9,22 +10,22 @@ class UserPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->canAccessFeature('users');
     }
 
     public function view(User $user, User $model): bool
     {
-        return $user->isAdmin();
+        return $user->canAccessFeature('users');
     }
 
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->hasBackofficePermission(BackofficePermission::UsersCreate);
     }
 
     public function update(User $user, User $model): bool
     {
-        if (! $user->isAdmin()) {
+        if (! $user->hasBackofficePermission(BackofficePermission::UsersUpdate)) {
             return false;
         }
 
@@ -37,7 +38,7 @@ class UserPolicy
 
     public function delete(User $user, User $model): bool
     {
-        if (! $user->isAdmin()) {
+        if (! $user->hasBackofficePermission(BackofficePermission::UsersDelete)) {
             return false;
         }
 

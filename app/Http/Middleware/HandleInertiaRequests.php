@@ -59,15 +59,17 @@ class HandleInertiaRequests extends Middleware
             'pageFaqs' => $pageFaqs,
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user() ? $this->formatAuthUser($request->user()) : null,
+                'user' => $request->user() ? $this->formatAuthUser(
+                    $request->user()->loadMissing('backofficePermissionRecords'),
+                ) : null,
             ],
-            'articlesPendingCount' => $request->user()?->isAdmin()
+            'articlesPendingCount' => $request->user()?->canApproveArticles()
                 ? Article::query()->where('status', ArticleStatus::PendingApproval)->count()
                 : 0,
-            'securityTipsPendingCount' => $request->user()?->isAdmin()
+            'securityTipsPendingCount' => $request->user()?->canApproveConseils()
                 ? SecurityTip::query()->where('status', ArticleStatus::PendingApproval)->count()
                 : 0,
-            'securityAgentApplicationsPendingCount' => $request->user()?->isAdmin()
+            'securityAgentApplicationsPendingCount' => $request->user()?->canAccessFeature('agent_applications')
                 ? SecurityAgentApplication::query()->where('status', SecurityAgentApplicationStatus::Pending)->count()
                 : 0,
             'featuredArticles' => Article::query()

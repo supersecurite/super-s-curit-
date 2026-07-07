@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BackofficePermission;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -41,6 +42,8 @@ class UpdateUserRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:50'],
             'role' => ['required', Rule::in($allowedRoles)],
             'password' => ['nullable', 'string', Password::defaults(), 'confirmed'],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['required', 'string', Rule::enum(BackofficePermission::class), Rule::in($this->allowedPermissionValues())],
         ];
     }
 
@@ -86,5 +89,19 @@ class UpdateUserRequest extends FormRequest
         }
 
         return [UserRole::Admin->value, UserRole::User->value];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function allowedPermissionValues(): array
+    {
+        $actor = $this->user();
+
+        if ($actor?->isSuperAdmin()) {
+            return BackofficePermission::values();
+        }
+
+        return $actor?->backofficePermissionValues() ?? [];
     }
 }

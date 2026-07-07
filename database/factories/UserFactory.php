@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\BackofficePermission;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -55,7 +56,24 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'role' => UserRole::Admin,
-        ]);
+        ])->afterCreating(function (User $user): void {
+            $user->syncBackofficePermissions(BackofficePermission::cases());
+        });
+    }
+
+    /**
+     * @param  list<BackofficePermission|string>  $permissions
+     */
+    public function withBackofficePermissions(array $permissions): static
+    {
+        return $this->afterCreating(function (User $user) use ($permissions): void {
+            $user->syncBackofficePermissions($permissions);
+        });
+    }
+
+    public function contributor(): static
+    {
+        return $this->withBackofficePermissions(BackofficePermission::contributorDefaults());
     }
 
     public function withTwoFactor(): static

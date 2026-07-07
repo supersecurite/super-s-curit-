@@ -77,21 +77,41 @@ Route::post('/analytics/duration', [AnalyticsController::class, 'updateDuration'
 Route::get('/analytics/duration', fn () => redirect()->route('analytics.index'));
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('dashboard', DashboardController::class)
+        ->middleware('backoffice.permission:dashboard')
+        ->name('dashboard');
 
-    Route::resource('gallery-images', AdminGalleryImageController::class);
-    Route::resource('gallery-videos', AdminGalleryVideoController::class);
+    Route::middleware('backoffice.permission:gallery_images')->group(function () {
+        Route::resource('gallery-images', AdminGalleryImageController::class);
+    });
 
-    Route::resource('articles', AdminArticleController::class)
-        ->parameters(['articles' => 'article:slug']);
+    Route::middleware('backoffice.permission:gallery_videos')->group(function () {
+        Route::resource('gallery-videos', AdminGalleryVideoController::class);
+    });
 
-    Route::resource('conseils', AdminSecurityTipController::class)
-        ->parameters(['conseils' => 'conseil:slug']);
+    Route::middleware('backoffice.permission:articles')->group(function () {
+        Route::resource('articles', AdminArticleController::class)
+            ->parameters(['articles' => 'article:slug']);
+    });
 
-    Route::middleware('admin')->group(function () {
+    Route::middleware('backoffice.permission:conseils')->group(function () {
+        Route::resource('conseils', AdminSecurityTipController::class)
+            ->parameters(['conseils' => 'conseil:slug']);
+    });
+
+    Route::middleware('backoffice.permission:users')->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
+    });
+
+    Route::middleware('backoffice.permission:agent_applications')->group(function () {
         Route::resource('candidatures-agents', AdminSecurityAgentApplicationController::class)->only(['index', 'show', 'update']);
+    });
+
+    Route::middleware('backoffice.permission:partners')->group(function () {
         Route::resource('partners', AdminPartnerController::class);
+    });
+
+    Route::middleware('backoffice.permission:analytics')->group(function () {
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
     });
 });

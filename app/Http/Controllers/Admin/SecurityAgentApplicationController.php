@@ -86,7 +86,7 @@ class SecurityAgentApplicationController extends Controller
         ]);
     }
 
-    public function show(SecurityAgentApplication $candidaturesAgent): Response
+    public function show(Request $request, SecurityAgentApplication $candidaturesAgent): Response
     {
         $this->authorize('view', $candidaturesAgent);
 
@@ -95,6 +95,7 @@ class SecurityAgentApplicationController extends Controller
         return Inertia::render('candidatures-agents/show', [
             'application' => $candidaturesAgent->toAdminArray(),
             'statusOptions' => SecurityAgentApplicationStatus::options(),
+            'canUpdate' => $request->user()?->can('update', $candidaturesAgent) ?? false,
         ]);
     }
 

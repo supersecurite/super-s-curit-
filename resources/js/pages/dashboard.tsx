@@ -16,12 +16,21 @@ import {
 import TrafficChart, {
     type ChartPoint,
 } from '@/components/analytics/traffic-chart';
+import { useBackofficePermission } from '@/hooks/use-backoffice-permission';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { index as analyticsIndex } from '@/routes/analytics';
-import { index as articlesIndex, show as articleShow } from '@/routes/articles';
+import {
+    create as articleCreate,
+    index as articlesIndex,
+    show as articleShow,
+} from '@/routes/articles';
 import { index as candidaturesIndex, show as candidatureShow } from '@/routes/candidatures-agents';
-import { index as conseilsIndex, show as conseilShow } from '@/routes/conseils';
+import {
+    create as conseilCreate,
+    index as conseilsIndex,
+    show as conseilShow,
+} from '@/routes/conseils';
 import { dashboard } from '@/routes';
 import { edit as profileEdit } from '@/routes/profile';
 import { index as usersIndex } from '@/routes/users';
@@ -304,6 +313,11 @@ function UserDashboard({
     recentArticles: RecentContentItem[];
     recentTips: RecentContentItem[];
 }) {
+    const { has, canAccessFeature } = useBackofficePermission();
+    const canCreateArticle = has('articles.create');
+    const canCreateConseil = has('conseils.create');
+    const canViewArticles = canAccessFeature('articles');
+    const canViewConseils = canAccessFeature('conseils');
     const pendingTotal =
         stats.articles.pending +
         stats.tips.pending +
@@ -332,85 +346,105 @@ function UserDashboard({
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        <Button asChild size="sm" variant="outline">
-                            <Link href={articlesIndex.url()}>
-                                Mes actualités
-                            </Link>
-                        </Button>
-                        <Button asChild size="sm" variant="outline">
-                            <Link href={conseilsIndex.url()}>
-                                Mes conseils
-                            </Link>
-                        </Button>
+                        {canViewArticles ? (
+                            <Button asChild size="sm" variant="outline">
+                                <Link href={articlesIndex.url()}>
+                                    Mes actualités
+                                </Link>
+                            </Button>
+                        ) : null}
+                        {canViewConseils ? (
+                            <Button asChild size="sm" variant="outline">
+                                <Link href={conseilsIndex.url()}>
+                                    Mes conseils
+                                </Link>
+                            </Button>
+                        ) : null}
                     </div>
                 </div>
             ) : null}
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <StatCard
-                    icon={Newspaper}
-                    label="Mes actualités"
-                    value={stats.articles.total}
-                    hint={`${stats.articles.published} publiée${stats.articles.published > 1 ? 's' : ''} · ${stats.articles.pending} en attente`}
-                    href={articlesIndex.url()}
-                />
-                <StatCard
-                    icon={Eye}
-                    label="Vues actualités"
-                    value={stats.articles.views.toLocaleString('fr-FR')}
-                    hint={
-                        stats.articles.published > 0
-                            ? 'Sur vos articles publiés'
-                            : 'Aucun article publié'
-                    }
-                    href={articlesIndex.url()}
-                />
-                <StatCard
-                    icon={Lightbulb}
-                    label="Mes conseils"
-                    value={stats.tips.total}
-                    hint={`${stats.tips.published} publié${stats.tips.published > 1 ? 's' : ''} · ${stats.tips.pending} en attente`}
-                    href={conseilsIndex.url()}
-                />
-                <StatCard
-                    icon={Eye}
-                    label="Vues conseils"
-                    value={stats.tips.views.toLocaleString('fr-FR')}
-                    hint={
-                        stats.tips.published > 0
-                            ? 'Sur vos conseils publiés'
-                            : 'Aucun conseil publié'
-                    }
-                    href={conseilsIndex.url()}
-                />
+                {canViewArticles ? (
+                    <>
+                        <StatCard
+                            icon={Newspaper}
+                            label="Mes actualités"
+                            value={stats.articles.total}
+                            hint={`${stats.articles.published} publiée${stats.articles.published > 1 ? 's' : ''} · ${stats.articles.pending} en attente`}
+                            href={articlesIndex.url()}
+                        />
+                        <StatCard
+                            icon={Eye}
+                            label="Vues actualités"
+                            value={stats.articles.views.toLocaleString('fr-FR')}
+                            hint={
+                                stats.articles.published > 0
+                                    ? 'Sur vos articles publiés'
+                                    : 'Aucun article publié'
+                            }
+                            href={articlesIndex.url()}
+                        />
+                    </>
+                ) : null}
+                {canViewConseils ? (
+                    <>
+                        <StatCard
+                            icon={Lightbulb}
+                            label="Mes conseils"
+                            value={stats.tips.total}
+                            hint={`${stats.tips.published} publié${stats.tips.published > 1 ? 's' : ''} · ${stats.tips.pending} en attente`}
+                            href={conseilsIndex.url()}
+                        />
+                        <StatCard
+                            icon={Eye}
+                            label="Vues conseils"
+                            value={stats.tips.views.toLocaleString('fr-FR')}
+                            hint={
+                                stats.tips.published > 0
+                                    ? 'Sur vos conseils publiés'
+                                    : 'Aucun conseil publié'
+                            }
+                            href={conseilsIndex.url()}
+                        />
+                    </>
+                ) : null}
             </div>
 
             <div className="grid gap-4 xl:grid-cols-2">
-                <RecentContentPanel
-                    title="Dernières actualités"
-                    description="Vos 5 articles les plus récents"
-                    items={recentArticles}
-                    indexHref={articlesIndex.url()}
-                    showHref={(slug) => articleShow.url(slug)}
-                    emptyMessage="Vous n'avez pas encore rédigé d'actualité."
-                />
-                <RecentContentPanel
-                    title="Derniers conseils"
-                    description="Vos 5 conseils les plus récents"
-                    items={recentTips}
-                    indexHref={conseilsIndex.url()}
-                    showHref={(slug) => conseilShow.url(slug)}
-                    emptyMessage="Vous n'avez pas encore rédigé de conseil."
-                />
+                {canViewArticles ? (
+                    <RecentContentPanel
+                        title="Dernières actualités"
+                        description="Vos 5 articles les plus récents"
+                        items={recentArticles}
+                        indexHref={articlesIndex.url()}
+                        showHref={(slug) => articleShow.url(slug)}
+                        emptyMessage="Vous n'avez pas encore rédigé d'actualité."
+                    />
+                ) : null}
+                {canViewConseils ? (
+                    <RecentContentPanel
+                        title="Derniers conseils"
+                        description="Vos 5 conseils les plus récents"
+                        items={recentTips}
+                        indexHref={conseilsIndex.url()}
+                        showHref={(slug) => conseilShow.url(slug)}
+                        emptyMessage="Vous n'avez pas encore rédigé de conseil."
+                    />
+                ) : null}
             </div>
 
             <div className="flex flex-wrap gap-3">
-                <Button asChild>
-                    <Link href={articlesIndex.url()}>Nouvelle actualité</Link>
-                </Button>
-                <Button asChild variant="outline">
-                    <Link href={conseilsIndex.url()}>Nouveau conseil</Link>
-                </Button>
+                {canCreateArticle ? (
+                    <Button asChild>
+                        <Link href={articleCreate.url()}>Nouvelle actualité</Link>
+                    </Button>
+                ) : null}
+                {canCreateConseil ? (
+                    <Button asChild variant="outline">
+                        <Link href={conseilCreate.url()}>Nouveau conseil</Link>
+                    </Button>
+                ) : null}
                 <Button asChild variant="outline">
                     <Link href={profileEdit.url()}>Mon profil</Link>
                 </Button>
@@ -428,6 +462,12 @@ function AdminDashboard({
     trafficChart: ChartPoint[];
     recentApplications: RecentApplication[];
 }) {
+    const { has, canAccessFeature } = useBackofficePermission();
+    const canViewAnalytics = has('analytics.view');
+    const canViewUsers = canAccessFeature('users');
+    const canViewApplications = canAccessFeature('agent_applications');
+    const canViewArticles = canAccessFeature('articles');
+    const canViewConseils = canAccessFeature('conseils');
     const pendingTotal =
         stats.content.articles_pending +
         stats.content.tips_pending +
@@ -447,7 +487,7 @@ function AdminDashboard({
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        {stats.applications.pending > 0 ? (
+                        {stats.applications.pending > 0 && canViewApplications ? (
                             <Button asChild size="sm" variant="outline">
                                 <Link href={candidaturesIndex.url()}>
                                     {stats.applications.pending} candidature
@@ -455,7 +495,7 @@ function AdminDashboard({
                                 </Link>
                             </Button>
                         ) : null}
-                        {stats.content.articles_pending > 0 ? (
+                        {stats.content.articles_pending > 0 && canViewArticles ? (
                             <Button asChild size="sm" variant="outline">
                                 <Link href={articlesIndex.url()}>
                                     {stats.content.articles_pending} actualité
@@ -463,7 +503,7 @@ function AdminDashboard({
                                 </Link>
                             </Button>
                         ) : null}
-                        {stats.content.tips_pending > 0 ? (
+                        {stats.content.tips_pending > 0 && canViewConseils ? (
                             <Button asChild size="sm" variant="outline">
                                 <Link href={conseilsIndex.url()}>
                                     {stats.content.tips_pending} conseil
@@ -476,65 +516,75 @@ function AdminDashboard({
             ) : null}
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <StatCard
-                    icon={MousePointerClick}
-                    label="Pages vues (7 j)"
-                    value={stats.visits.views.toLocaleString('fr-FR')}
-                    change={stats.visits.views_change}
-                    hint={`${stats.visits.visitors.toLocaleString('fr-FR')} visiteurs uniques`}
-                    href={analyticsIndex.url()}
-                />
-                <StatCard
-                    icon={UserPlus}
-                    label="Candidatures en attente"
-                    value={stats.applications.pending}
-                    hint={`${stats.applications.this_week} cette semaine · ${stats.applications.total} au total`}
-                    href={candidaturesIndex.url()}
-                />
-                <StatCard
-                    icon={Newspaper}
-                    label="Actualités publiées"
-                    value={stats.content.articles_published}
-                    hint={
-                        stats.content.articles_pending > 0
-                            ? `${stats.content.articles_pending} en attente de validation`
-                            : 'Aucune en attente'
-                    }
-                    href={articlesIndex.url()}
-                />
-                <StatCard
-                    icon={Lightbulb}
-                    label="Conseils publiés"
-                    value={stats.content.tips_published}
-                    hint={
-                        stats.content.tips_pending > 0
-                            ? `${stats.content.tips_pending} en attente de validation`
-                            : 'Aucun en attente'
-                    }
-                    href={conseilsIndex.url()}
-                />
+                {canViewAnalytics ? (
+                    <StatCard
+                        icon={MousePointerClick}
+                        label="Pages vues (7 j)"
+                        value={stats.visits.views.toLocaleString('fr-FR')}
+                        change={stats.visits.views_change}
+                        hint={`${stats.visits.visitors.toLocaleString('fr-FR')} visiteurs uniques`}
+                        href={analyticsIndex.url()}
+                    />
+                ) : null}
+                {canViewApplications ? (
+                    <StatCard
+                        icon={UserPlus}
+                        label="Candidatures en attente"
+                        value={stats.applications.pending}
+                        hint={`${stats.applications.this_week} cette semaine · ${stats.applications.total} au total`}
+                        href={candidaturesIndex.url()}
+                    />
+                ) : null}
+                {canViewArticles ? (
+                    <StatCard
+                        icon={Newspaper}
+                        label="Actualités publiées"
+                        value={stats.content.articles_published}
+                        hint={
+                            stats.content.articles_pending > 0
+                                ? `${stats.content.articles_pending} en attente de validation`
+                                : 'Aucune en attente'
+                        }
+                        href={articlesIndex.url()}
+                    />
+                ) : null}
+                {canViewConseils ? (
+                    <StatCard
+                        icon={Lightbulb}
+                        label="Conseils publiés"
+                        value={stats.content.tips_published}
+                        hint={
+                            stats.content.tips_pending > 0
+                                ? `${stats.content.tips_pending} en attente de validation`
+                                : 'Aucun en attente'
+                        }
+                        href={conseilsIndex.url()}
+                    />
+                ) : null}
             </div>
 
             <div className="grid gap-4 xl:grid-cols-3">
-                <div className="app-panel p-5 xl:col-span-2">
-                    <div className="mb-4 flex items-center justify-between gap-3">
-                        <div>
-                            <h2 className="font-heading text-lg font-semibold">
-                                Trafic des 7 derniers jours
-                            </h2>
-                            <p className="text-muted-foreground text-sm">
-                                Pages vues et visiteurs uniques
-                            </p>
+                {canViewAnalytics ? (
+                    <div className="app-panel p-5 xl:col-span-2">
+                        <div className="mb-4 flex items-center justify-between gap-3">
+                            <div>
+                                <h2 className="font-heading text-lg font-semibold">
+                                    Trafic des 7 derniers jours
+                                </h2>
+                                <p className="text-muted-foreground text-sm">
+                                    Pages vues et visiteurs uniques
+                                </p>
+                            </div>
+                            <Button asChild variant="outline" size="sm">
+                                <Link href={analyticsIndex.url()}>
+                                    <BarChart3 className="size-4" />
+                                    Analytics
+                                </Link>
+                            </Button>
                         </div>
-                        <Button asChild variant="outline" size="sm">
-                            <Link href={analyticsIndex.url()}>
-                                <BarChart3 className="size-4" />
-                                Analytics
-                            </Link>
-                        </Button>
+                        <TrafficChart data={trafficChart} height={260} />
                     </div>
-                    <TrafficChart data={trafficChart} height={260} />
-                </div>
+                ) : null}
 
                 <div className="app-panel p-5">
                     <h2 className="font-heading text-lg font-semibold">
@@ -547,12 +597,16 @@ function AdminDashboard({
                                 Utilisateurs
                             </dt>
                             <dd className="font-heading font-semibold">
-                                <Link
-                                    href={usersIndex.url()}
-                                    className="hover:text-super-securite-accent"
-                                >
-                                    {stats.users}
-                                </Link>
+                                {canViewUsers ? (
+                                    <Link
+                                        href={usersIndex.url()}
+                                        className="hover:text-super-securite-accent"
+                                    >
+                                        {stats.users}
+                                    </Link>
+                                ) : (
+                                    stats.users
+                                )}
                             </dd>
                         </div>
                         <div className="flex items-center justify-between gap-3 border-b border-border pb-4">
@@ -577,100 +631,102 @@ function AdminDashboard({
                 </div>
             </div>
 
-            <div className="app-panel overflow-hidden">
-                <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
-                    <div>
-                        <h2 className="font-heading text-lg font-semibold">
-                            Dernières candidatures
-                        </h2>
-                        <p className="text-muted-foreground text-sm">
-                            Les 5 demandes les plus récentes
-                        </p>
+            {canViewApplications ? (
+                <div className="app-panel overflow-hidden">
+                    <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
+                        <div>
+                            <h2 className="font-heading text-lg font-semibold">
+                                Dernières candidatures
+                            </h2>
+                            <p className="text-muted-foreground text-sm">
+                                Les 5 demandes les plus récentes
+                            </p>
+                        </div>
+                        <Button asChild variant="outline" size="sm">
+                            <Link href={candidaturesIndex.url()}>
+                                Voir tout
+                                <ArrowRight className="size-4" />
+                            </Link>
+                        </Button>
                     </div>
-                    <Button asChild variant="outline" size="sm">
-                        <Link href={candidaturesIndex.url()}>
-                            Voir tout
-                            <ArrowRight className="size-4" />
-                        </Link>
-                    </Button>
-                </div>
 
-                {recentApplications.length === 0 ? (
-                    <p className="text-muted-foreground px-5 py-8 text-sm">
-                        Aucune candidature pour le moment.
-                    </p>
-                ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full min-w-[720px] text-sm">
-                            <thead className="bg-muted/40 text-muted-foreground">
-                                <tr>
-                                    <th className="px-5 py-3 text-left font-medium">
-                                        Candidat
-                                    </th>
-                                    <th className="px-5 py-3 text-left font-medium">
-                                        Poste
-                                    </th>
-                                    <th className="px-5 py-3 text-left font-medium">
-                                        Téléphone
-                                    </th>
-                                    <th className="px-5 py-3 text-left font-medium">
-                                        Statut
-                                    </th>
-                                    <th className="px-5 py-3 text-left font-medium">
-                                        Reçue le
-                                    </th>
-                                    <th className="px-5 py-3 text-right font-medium">
-                                        Action
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {recentApplications.map((application) => (
-                                    <tr
-                                        key={application.uuid}
-                                        className="border-t border-border hover:bg-muted/30"
-                                    >
-                                        <td className="px-5 py-3 font-medium">
-                                            {application.full_name}
-                                        </td>
-                                        <td className="text-muted-foreground px-5 py-3">
-                                            {application.post_label ?? '—'}
-                                        </td>
-                                        <td className="text-muted-foreground px-5 py-3">
-                                            {application.phone}
-                                        </td>
-                                        <td className="px-5 py-3">
-                                            <Badge
-                                                variant={applicationBadgeVariant(
-                                                    application.status,
-                                                )}
-                                            >
-                                                {application.status_label}
-                                            </Badge>
-                                        </td>
-                                        <td className="text-muted-foreground px-5 py-3">
-                                            {application.created_at_formatted ??
-                                                '—'}
-                                        </td>
-                                        <td className="px-5 py-3 text-right">
-                                            <Button asChild size="sm" variant="ghost">
-                                                <Link
-                                                    href={candidatureShow.url(
-                                                        application.uuid,
+                    {recentApplications.length === 0 ? (
+                        <p className="text-muted-foreground px-5 py-8 text-sm">
+                            Aucune candidature pour le moment.
+                        </p>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[720px] text-sm">
+                                <thead className="bg-muted/40 text-muted-foreground">
+                                    <tr>
+                                        <th className="px-5 py-3 text-left font-medium">
+                                            Candidat
+                                        </th>
+                                        <th className="px-5 py-3 text-left font-medium">
+                                            Poste
+                                        </th>
+                                        <th className="px-5 py-3 text-left font-medium">
+                                            Téléphone
+                                        </th>
+                                        <th className="px-5 py-3 text-left font-medium">
+                                            Statut
+                                        </th>
+                                        <th className="px-5 py-3 text-left font-medium">
+                                            Reçue le
+                                        </th>
+                                        <th className="px-5 py-3 text-right font-medium">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {recentApplications.map((application) => (
+                                        <tr
+                                            key={application.uuid}
+                                            className="border-t border-border hover:bg-muted/30"
+                                        >
+                                            <td className="px-5 py-3 font-medium">
+                                                {application.full_name}
+                                            </td>
+                                            <td className="text-muted-foreground px-5 py-3">
+                                                {application.post_label ?? '—'}
+                                            </td>
+                                            <td className="text-muted-foreground px-5 py-3">
+                                                {application.phone}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                <Badge
+                                                    variant={applicationBadgeVariant(
+                                                        application.status,
                                                     )}
                                                 >
-                                                    <Eye className="size-4" />
-                                                    Voir
-                                                </Link>
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </div>
+                                                    {application.status_label}
+                                                </Badge>
+                                            </td>
+                                            <td className="text-muted-foreground px-5 py-3">
+                                                {application.created_at_formatted ??
+                                                    '—'}
+                                            </td>
+                                            <td className="px-5 py-3 text-right">
+                                                <Button asChild size="sm" variant="ghost">
+                                                    <Link
+                                                        href={candidatureShow.url(
+                                                            application.uuid,
+                                                        )}
+                                                    >
+                                                        <Eye className="size-4" />
+                                                        Voir
+                                                    </Link>
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            ) : null}
         </div>
     );
 }

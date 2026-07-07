@@ -13,16 +13,24 @@ test('guests are redirected to the login page', function () {
     $response->assertRedirect(route('login'));
 });
 
-test('authenticated users can visit the dashboard', function () {
-    $user = User::factory()->create();
+test('authenticated users with dashboard permission can visit the dashboard', function () {
+    $user = User::factory()->contributor()->create();
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));
     $response->assertOk();
 });
 
-test('regular users receive personal content statistics', function () {
+test('users without dashboard permission cannot visit the dashboard', function () {
     $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertForbidden();
+});
+
+test('regular users receive personal content statistics', function () {
+    $user = User::factory()->contributor()->create();
     Article::factory()->count(2)->pendingApproval()->create([
         'created_by_id' => $user->id,
     ]);

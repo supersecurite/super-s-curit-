@@ -1,13 +1,17 @@
 import { Head, usePage } from '@inertiajs/react';
-import UserForm, { type RoleOption } from '@/components/users/user-form';
+import UserForm, {
+    type PermissionGroup,
+    type RoleOption,
+} from '@/components/users/user-form';
 import { create, index, store } from '@/routes/users';
 
 type PageProps = {
     roles: RoleOption[];
+    permissionGroups: PermissionGroup[];
 };
 
 export default function UsersCreate() {
-    const { roles } = usePage<PageProps>().props;
+    const { roles, permissionGroups } = usePage<PageProps>().props;
 
     return (
         <>
@@ -25,6 +29,7 @@ export default function UsersCreate() {
 
                 <UserForm
                     roles={roles}
+                    permissionGroups={permissionGroups}
                     formDefinition={store.form()}
                     submitLabel="Créer l'utilisateur"
                     cancelHref={index.url()}

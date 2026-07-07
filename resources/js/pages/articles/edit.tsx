@@ -10,12 +10,13 @@ type PageProps = {
     article: ArticleFormData;
     statusOptions: StatusOption[];
     canApprove: boolean;
+    canFeature: boolean;
     publicUrl: string | null;
     errors: Record<string, string>;
 };
 
 export default function ArticlesEdit() {
-    const { article, statusOptions, canApprove, publicUrl, errors } =
+    const { article, statusOptions, canApprove, canFeature, publicUrl, errors } =
         usePage<PageProps>().props;
 
     return (
@@ -45,6 +46,7 @@ export default function ArticlesEdit() {
                     article={article}
                     statusOptions={statusOptions}
                     canApprove={canApprove}
+                    canFeature={canFeature}
                     submitUrl={update.url(article.slug)}
                     method="put"
                     submitLabel="Enregistrer"

@@ -7,6 +7,10 @@ export type User = {
     role: 'super_admin' | 'admin' | 'user';
     role_label: string;
     is_admin: boolean;
+    permissions: string[];
+    can_approve_content: boolean;
+    can_approve_articles: boolean;
+    can_approve_conseils: boolean;
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;

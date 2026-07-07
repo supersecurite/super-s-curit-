@@ -31,6 +31,7 @@ type SecurityTipFormProps = {
     securityTip?: SecurityTipFormData;
     statusOptions?: StatusOption[];
     canApprove?: boolean;
+    canFeature?: boolean;
     submitUrl: string;
     method?: 'post' | 'put';
     submitLabel: string;
@@ -42,6 +43,7 @@ export default function SecurityTipForm({
     securityTip,
     statusOptions = [],
     canApprove = false,
+    canFeature = false,
     submitUrl,
     method = 'post',
     submitLabel,
@@ -104,8 +106,10 @@ export default function SecurityTipForm({
         payload.append('excerpt', formData.excerpt);
         payload.append('content', formData.content);
         payload.append('category', formData.category);
-        if (canApprove) {
+        if (canFeature) {
             payload.append('featured', formData.featured ? '1' : '0');
+        }
+        if (canApprove) {
             payload.append('published_at', formData.published_at);
         }
 
@@ -280,7 +284,7 @@ export default function SecurityTipForm({
                         </div>
                     </div>
 
-                    {canApprove ? (
+                    {canFeature ? (
                         <div className="app-panel space-y-4 p-6">
                             <div className="flex items-center gap-2">
                                 <Checkbox

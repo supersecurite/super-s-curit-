@@ -4,8 +4,8 @@ namespace App\Support;
 
 class VisitTracking
 {
-    /** Paths to never track (prefix match). */
-    private const EXCLUDED_PREFIXES = [
+    /** Technical / infrastructure paths (prefix match). */
+    private const SYSTEM_EXCLUDED_PREFIXES = [
         'robots.txt',
         'sitemap.xml',
         'analytics/duration',
@@ -14,8 +14,23 @@ class VisitTracking
         'up',
         'health',
         'livewire',
+    ];
+
+    /**
+     * Backoffice paths — never counted in public visit analytics.
+     *
+     * @see routes/web.php authenticated admin routes
+     * @see routes/settings.php
+     */
+    private const BACKOFFICE_PREFIXES = [
         'dashboard',
+        'articles',
+        'conseils',
+        'gallery-images',
+        'gallery-videos',
+        'partners',
         'users',
+        'candidatures-agents',
         'analytics',
         'settings',
     ];
@@ -36,7 +51,7 @@ class VisitTracking
     {
         $path = ltrim($path, '/');
 
-        foreach (self::EXCLUDED_PREFIXES as $excluded) {
+        foreach ([...self::SYSTEM_EXCLUDED_PREFIXES, ...self::BACKOFFICE_PREFIXES] as $excluded) {
             if ($path === $excluded || str_starts_with($path, $excluded.'/')) {
                 return true;
             }

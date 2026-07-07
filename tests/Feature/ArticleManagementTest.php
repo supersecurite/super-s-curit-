@@ -13,8 +13,16 @@ test('guests cannot access article management', function () {
     $this->get(route('articles.index'))->assertRedirect(route('login'));
 });
 
-test('regular users cannot access article management', function () {
+test('regular users without articles permission cannot access article management', function () {
     $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('articles.index'))
+        ->assertForbidden();
+});
+
+test('contributors can access article management', function () {
+    $user = User::factory()->contributor()->create();
 
     $this->actingAs($user)
         ->get(route('articles.index'))
@@ -27,8 +35,8 @@ test('regular users cannot access article management', function () {
 });
 
 test('regular users see all articles but only manage their own', function () {
-    $user = User::factory()->create();
-    $other = User::factory()->create();
+    $user = User::factory()->contributor()->create();
+    $other = User::factory()->contributor()->create();
     Article::factory()->create(['created_by_id' => $other->id, 'title' => 'Article tiers']);
     Article::factory()->pendingApproval()->create([
         'created_by_id' => $user->id,
@@ -54,7 +62,7 @@ test('regular users see all articles but only manage their own', function () {
 });
 
 test('regular users can create articles pending approval', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
 
     $this->actingAs($user)
         ->post(route('articles.store'), [
@@ -88,9 +96,9 @@ test('regular users can create articles pending approval', function () {
 });
 
 test('regular users cannot edit another users article', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->pendingApproval()->create([
-        'created_by_id' => User::factory()->create()->id,
+        'created_by_id' => User::factory()->contributor()->create()->id,
     ]);
 
     $this->actingAs($user)
@@ -99,10 +107,10 @@ test('regular users cannot edit another users article', function () {
 });
 
 test('authenticated users can view article details by slug', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->pendingApproval()->create([
         'title' => 'Article détail',
-        'created_by_id' => User::factory()->create()->id,
+        'created_by_id' => User::factory()->contributor()->create()->id,
     ]);
 
     $this->actingAs($user)
@@ -118,7 +126,7 @@ test('authenticated users can view article details by slug', function () {
 });
 
 test('published articles expose public preview url on detail page', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->published()->create();
 
     $this->actingAs($user)
@@ -130,7 +138,7 @@ test('published articles expose public preview url on detail page', function () 
 });
 
 test('published articles expose public url on edit page', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->published()->create([
         'created_by_id' => $user->id,
     ]);
@@ -145,7 +153,7 @@ test('published articles expose public url on edit page', function () {
 });
 
 test('draft articles do not expose public url on edit page', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->pendingApproval()->create([
         'created_by_id' => $user->id,
     ]);
@@ -166,7 +174,7 @@ test('guests cannot view back-office article details', function () {
 });
 
 test('regular users cannot publish articles by forging status', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->pendingApproval()->create([
         'created_by_id' => $user->id,
     ]);
@@ -185,7 +193,7 @@ test('regular users cannot publish articles by forging status', function () {
 });
 
 test('regular users can resubmit rejected articles for approval', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->rejected()->create([
         'created_by_id' => $user->id,
     ]);
@@ -206,7 +214,7 @@ test('regular users can resubmit rejected articles for approval', function () {
 });
 
 test('regular users cannot delete published articles', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $article = Article::factory()->published()->create([
         'created_by_id' => $user->id,
     ]);
@@ -217,7 +225,7 @@ test('regular users cannot delete published articles', function () {
 });
 
 test('regular users cannot access pending approval tab', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     Article::factory()->pendingApproval()->create(['created_by_id' => $user->id]);
 
     $this->actingAs($user)

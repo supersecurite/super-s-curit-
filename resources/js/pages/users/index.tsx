@@ -12,6 +12,8 @@ type UserRow = {
     phone: string | null;
     role: string;
     role_label: string;
+    can_update: boolean;
+    can_delete: boolean;
 };
 
 type PaginatedUsers = {
@@ -25,6 +27,7 @@ type PaginatedUsers = {
 
 type PageProps = {
     users: PaginatedUsers;
+    canCreate: boolean;
 };
 
 function roleBadgeVariant(role: string): 'default' | 'secondary' | 'outline' {
@@ -40,7 +43,7 @@ function roleBadgeVariant(role: string): 'default' | 'secondary' | 'outline' {
 }
 
 export default function UsersIndex() {
-    const { users } = usePage<PageProps>().props;
+    const { users, canCreate } = usePage<PageProps>().props;
 
     const handleDelete = (user: UserRow) => {
         if (
@@ -69,12 +72,14 @@ export default function UsersIndex() {
                             Gérez les comptes et les rôles d&apos;accès.
                         </p>
                     </div>
-                    <Button asChild>
-                        <Link href={create.url()}>
-                            <Plus className="size-4" aria-hidden />
-                            Nouvel utilisateur
-                        </Link>
-                    </Button>
+                    {canCreate ? (
+                        <Button asChild>
+                            <Link href={create.url()}>
+                                <Plus className="size-4" aria-hidden />
+                                Nouvel utilisateur
+                            </Link>
+                        </Button>
+                    ) : null}
                 </div>
 
                 <div className="app-panel overflow-hidden">
@@ -131,37 +136,41 @@ export default function UsersIndex() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="icon"
-                                                        asChild
-                                                    >
-                                                        <Link
-                                                            href={edit.url(
-                                                                user.uuid,
-                                                            )}
-                                                            aria-label={`Modifier ${user.name}`}
+                                                    {user.can_update ? (
+                                                        <Button
+                                                            variant="outline"
+                                                            size="icon"
+                                                            asChild
                                                         >
-                                                            <Pencil
+                                                            <Link
+                                                                href={edit.url(
+                                                                    user.uuid,
+                                                                )}
+                                                                aria-label={`Modifier ${user.name}`}
+                                                            >
+                                                                <Pencil
+                                                                    className="size-4"
+                                                                    aria-hidden
+                                                                />
+                                                            </Link>
+                                                        </Button>
+                                                    ) : null}
+                                                    {user.can_delete ? (
+                                                        <Button
+                                                            variant="outline"
+                                                            size="icon"
+                                                            className="text-destructive hover:text-destructive"
+                                                            onClick={() =>
+                                                                handleDelete(user)
+                                                            }
+                                                            aria-label={`Supprimer ${user.name}`}
+                                                        >
+                                                            <Trash2
                                                                 className="size-4"
                                                                 aria-hidden
                                                             />
-                                                        </Link>
-                                                    </Button>
-                                                    <Button
-                                                        variant="outline"
-                                                        size="icon"
-                                                        className="text-destructive hover:text-destructive"
-                                                        onClick={() =>
-                                                            handleDelete(user)
-                                                        }
-                                                        aria-label={`Supprimer ${user.name}`}
-                                                    >
-                                                        <Trash2
-                                                            className="size-4"
-                                                            aria-hidden
-                                                        />
-                                                    </Button>
+                                                        </Button>
+                                                    ) : null}
                                                 </div>
                                             </td>
                                         </tr>

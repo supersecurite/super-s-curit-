@@ -95,26 +95,39 @@ test('admin and app pages are not tracked', function () {
     $this->actingAs($admin)->get('/dashboard');
     $this->actingAs($admin)->get(route('analytics.index'));
     $this->actingAs($admin)->get(route('users.index'));
+    $this->actingAs($admin)->get(route('articles.index'));
+    $this->actingAs($admin)->get(route('conseils.index'));
+    $this->actingAs($admin)->get(route('gallery-images.index'));
+    $this->actingAs($admin)->get(route('gallery-videos.index'));
+    $this->actingAs($admin)->get(route('partners.index'));
+    $this->actingAs($admin)->get(route('candidatures-agents.index'));
     $this->actingAs($user)->get(route('profile.edit'));
 
     expect(Visit::query()->count())->toBe(0);
 });
 
-test('duration endpoint ignores admin paths', function () {
+test('duration endpoint ignores backoffice paths', function (string $path) {
     $visit = Visit::factory()->create([
-        'path' => '/dashboard',
+        'path' => $path,
         'is_bounce' => true,
         'duration_seconds' => null,
     ]);
 
     $this->postJson(route('analytics.duration'), [
         'visitor_uuid' => $visit->visitor_uuid,
-        'path' => '/dashboard',
+        'path' => $path,
         'duration' => 120,
     ])->assertOk();
 
     expect($visit->fresh()->duration_seconds)->toBeNull();
-});
+})->with([
+    '/dashboard',
+    '/articles',
+    '/conseils',
+    '/gallery-images',
+    '/partners',
+    '/candidatures-agents',
+]);
 
 test('geoip resolves country from cloudflare header', function () {
     $this->withHeaders(['CF-IPCountry' => 'GN'])->get('/');

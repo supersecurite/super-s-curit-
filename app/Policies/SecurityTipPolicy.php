@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\ArticleStatus;
+use App\Enums\BackofficePermission;
 use App\Models\SecurityTip;
 use App\Models\User;
 
@@ -10,36 +11,39 @@ class SecurityTipPolicy
 {
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->canAccessFeature('conseils');
     }
 
     public function view(User $user, SecurityTip $securityTip): bool
     {
-        return true;
+        return $user->canAccessFeature('conseils');
     }
 
     public function create(User $user): bool
     {
-        return true;
+        return $user->hasBackofficePermission(BackofficePermission::ConseilsCreate);
     }
 
     public function update(User $user, SecurityTip $securityTip): bool
     {
-        return $user->isAdmin() || $securityTip->created_by_id === $user->id;
+        return $user->hasBackofficePermission(BackofficePermission::ConseilsUpdateAny)
+            || ($user->hasBackofficePermission(BackofficePermission::ConseilsUpdate)
+                && $securityTip->created_by_id === $user->id);
     }
 
     public function delete(User $user, SecurityTip $securityTip): bool
     {
-        if ($user->isAdmin()) {
+        if ($user->hasBackofficePermission(BackofficePermission::ConseilsDeleteAny)) {
             return true;
         }
 
-        return $securityTip->created_by_id === $user->id
+        return $user->hasBackofficePermission(BackofficePermission::ConseilsDelete)
+            && $securityTip->created_by_id === $user->id
             && $securityTip->status !== ArticleStatus::Published;
     }
 
     public function approve(User $user, SecurityTip $securityTip): bool
     {
-        return $user->isAdmin();
+        return $user->canApproveConseils();
     }
 }

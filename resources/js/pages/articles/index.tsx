@@ -71,6 +71,7 @@ type PageProps = {
     tab: ArticleTab;
     canApprove: boolean;
     pendingCount: number;
+    canCreate: boolean;
     categories: string[];
     statuses: StatusOption[];
 };
@@ -96,7 +97,7 @@ function statusBadgeVariant(
 }
 
 export default function ArticlesIndex() {
-    const { articles, filters, tab, canApprove, pendingCount, categories, statuses } =
+    const { articles, filters, tab, canApprove, pendingCount, categories, statuses, canCreate } =
         usePage<PageProps>().props;
 
     const applyFilters = (updates: Record<string, string | undefined>) => {
@@ -158,12 +159,14 @@ export default function ArticlesIndex() {
                                 : 'Consultez toutes les actualités et gérez vos propres articles.'}
                         </p>
                     </div>
-                    <Button asChild>
-                        <Link href={create.url()}>
-                            <Plus className="size-4" aria-hidden />
-                            Nouvelle actualité
-                        </Link>
-                    </Button>
+                    {canCreate ? (
+                        <Button asChild>
+                            <Link href={create.url()}>
+                                <Plus className="size-4" aria-hidden />
+                                Nouvelle actualité
+                            </Link>
+                        </Button>
+                    ) : null}
                 </div>
 
                 {canApprove ? (

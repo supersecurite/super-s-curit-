@@ -26,10 +26,10 @@ class SecurityTipController extends Controller
 
         /** @var User $user */
         $user = $request->user();
-        $isAdmin = $user->isAdmin();
+        $canApprove = $user->canApproveConseils();
 
         $tab = $request->string('tab', 'all')->toString();
-        if (! $isAdmin || ! in_array($tab, ['all', 'pending'], true)) {
+        if (! $canApprove || ! in_array($tab, ['all', 'pending'], true)) {
             $tab = 'all';
         }
 
@@ -70,10 +70,11 @@ class SecurityTipController extends Controller
                 ->through(fn (SecurityTip $securityTip) => $this->formatSecurityTip($securityTip, $user)),
             'filters' => $request->only(['search', 'category', 'status', 'sort_by', 'sort_direction', 'tab']),
             'tab' => $tab,
-            'canApprove' => $isAdmin,
-            'pendingCount' => $isAdmin
+            'canApprove' => $canApprove,
+            'pendingCount' => $canApprove
                 ? SecurityTip::query()->where('status', ArticleStatus::PendingApproval)->count()
                 : 0,
+            'canCreate' => $user->can('create', SecurityTip::class),
             'categories' => SecurityTip::query()
                 ->whereNotNull('category')
                 ->distinct()
@@ -90,7 +91,8 @@ class SecurityTipController extends Controller
         $this->authorize('create', SecurityTip::class);
 
         return Inertia::render('conseils/create', [
-            'canApprove' => $request->user()?->isAdmin() ?? false,
+            'canApprove' => $request->user()?->canApproveConseils() ?? false,
+            'canFeature' => $request->user()?->canFeatureConseils() ?? false,
         ]);
     }
 
@@ -98,8 +100,9 @@ class SecurityTipController extends Controller
     {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
-        $isAdmin = $request->user()->isAdmin();
-        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
+        $canApprove = $request->user()->canApproveConseils();
+        $canFeature = $request->user()->canFeatureConseils();
+        $featured = $canFeature && (bool) ($validated['featured'] ?? false);
 
         $this->ensureFeaturedLimit($featured, status: $status);
 
@@ -115,7 +118,7 @@ class SecurityTipController extends Controller
         $validated['tags'] = $validated['tags'] ?? [];
         $validated['created_by_id'] = $request->user()->id;
 
-        if (! $isAdmin) {
+        if (! $canApprove) {
             unset($validated['published_at']);
         }
 
@@ -139,7 +142,7 @@ class SecurityTipController extends Controller
 
         return Inertia::render('conseils/show', [
             'securityTip' => $this->formatSecurityTip($conseil, $user, includeContent: true),
-            'canApprove' => $user->isAdmin(),
+            'canApprove' => $user->canApproveConseils(),
             'publicUrl' => $conseil->isPublished()
                 ? route('conseils-securite.show', $conseil)
                 : null,
@@ -150,12 +153,14 @@ class SecurityTipController extends Controller
     {
         $this->authorize('update', $conseil);
 
-        $isAdmin = $request->user()->isAdmin();
+        $user = $request->user();
+        $canApprove = $user->canApproveConseils();
 
         return Inertia::render('conseils/edit', [
-            'securityTip' => $this->formatSecurityTip($conseil, $request->user(), includeContent: true),
-            'statusOptions' => $this->statusOptionsFor($conseil, $isAdmin),
-            'canApprove' => $isAdmin,
+            'securityTip' => $this->formatSecurityTip($conseil, $user, includeContent: true),
+            'statusOptions' => $this->statusOptionsFor($conseil, $canApprove),
+            'canApprove' => $canApprove,
+            'canFeature' => $user->canFeatureConseils(),
             'publicUrl' => $conseil->isPublished()
                 ? route('conseils-securite.show', $conseil)
                 : null,
@@ -166,9 +171,10 @@ class SecurityTipController extends Controller
     {
         $validated = $request->validated();
         $user = $request->user();
-        $isAdmin = $user->isAdmin();
-        $status = $this->resolveStatusForUpdate($conseil, ArticleStatus::from($validated['status']), $isAdmin);
-        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
+        $canApprove = $user->canApproveConseils();
+        $canFeature = $user->canFeatureConseils();
+        $status = $this->resolveStatusForUpdate($conseil, ArticleStatus::from($validated['status']), $canApprove);
+        $featured = $canFeature && (bool) ($validated['featured'] ?? false);
 
         if ($conseil->status !== $status && in_array($status, [ArticleStatus::Published, ArticleStatus::Rejected], true)) {
             $this->authorize('approve', $conseil);
@@ -191,7 +197,7 @@ class SecurityTipController extends Controller
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
 
-        if (! $isAdmin) {
+        if (! $canApprove) {
             unset($validated['published_at']);
         }
 
@@ -235,9 +241,9 @@ class SecurityTipController extends Controller
     /**
      * @return list<array{value: string, label: string}>
      */
-    private function statusOptionsFor(SecurityTip $securityTip, bool $isAdmin): array
+    private function statusOptionsFor(SecurityTip $securityTip, bool $canApprove): array
     {
-        if ($isAdmin) {
+        if ($canApprove) {
             return ArticleStatus::options();
         }
 
@@ -263,9 +269,9 @@ class SecurityTipController extends Controller
         return ArticleStatus::authorOptions();
     }
 
-    private function resolveStatusForUpdate(SecurityTip $securityTip, ArticleStatus $requested, bool $isAdmin): ArticleStatus
+    private function resolveStatusForUpdate(SecurityTip $securityTip, ArticleStatus $requested, bool $canApprove): ArticleStatus
     {
-        if ($isAdmin) {
+        if ($canApprove) {
             return $requested;
         }
 

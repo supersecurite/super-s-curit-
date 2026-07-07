@@ -1,5 +1,15 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, BookOpen, FolderGit2, Handshake, Images, LayoutGrid, Newspaper, Shield, UserPlus, Users, Video } from 'lucide-react';
+import {
+    BarChart3,
+    Handshake,
+    Images,
+    LayoutGrid,
+    Newspaper,
+    Shield,
+    UserPlus,
+    Users,
+    Video,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -23,73 +33,97 @@ import { index as usersIndex } from '@/routes/users';
 import { index as partnersIndex } from '@/routes/partners';
 import type { Auth, NavItem } from '@/types';
 
-function buildMainNavItems(isAdmin: boolean): NavItem[] {
-    const items: NavItem[] = [
-        {
+function hasFeatureAccess(permissions: string[], feature: string): boolean {
+    return permissions.some((permission) =>
+        permission.startsWith(`${feature}.`),
+    );
+}
+
+const NAV_PERMISSION_MAP: Array<{
+    permission: string;
+    item: Omit<NavItem, 'badge'>;
+}> = [
+    {
+        permission: 'dashboard',
+        item: {
             title: 'Dashboard',
             href: dashboard(),
             icon: LayoutGrid,
         },
-        {
+    },
+    {
+        permission: 'articles',
+        item: {
             title: 'Actualités',
             href: articlesIndex.url(),
             icon: Newspaper,
         },
-        {
+    },
+    {
+        permission: 'conseils',
+        item: {
             title: 'Conseils',
             href: conseilsIndex.url(),
             icon: Shield,
         },
-        {
+    },
+    {
+        permission: 'gallery_images',
+        item: {
             title: 'Galerie',
             href: galleryImagesIndex.url(),
             icon: Images,
         },
-        {
+    },
+    {
+        permission: 'gallery_videos',
+        item: {
             title: 'Vidéos galerie',
             href: galleryVideosIndex.url(),
             icon: Video,
         },
-    ];
-
-    if (isAdmin) {
-        items.push({
+    },
+    {
+        permission: 'analytics',
+        item: {
             title: 'Analytics',
             href: analyticsIndex.url(),
             icon: BarChart3,
-        });
-        items.push({
+        },
+    },
+    {
+        permission: 'agent_applications',
+        item: {
             title: 'Candidatures agents',
             href: candidaturesAgentsIndex.url(),
             icon: UserPlus,
-        });
-        items.push({
+        },
+    },
+    {
+        permission: 'users',
+        item: {
             title: 'Utilisateurs',
             href: usersIndex.url(),
             icon: Users,
-        });
-        items.push({
+        },
+    },
+    {
+        permission: 'partners',
+        item: {
             title: 'Partenaires',
             href: partnersIndex.url(),
             icon: Handshake,
-        });
-    }
+        },
+    },
+];
 
-    return items;
+function buildMainNavItems(permissions: string[]): NavItem[] {
+    return NAV_PERMISSION_MAP.filter(({ permission }) =>
+        hasFeatureAccess(permissions, permission),
+    ).map(({ item }) => item);
 }
 
-const footerNavItems: NavItem[] = [
-    // {
-    //     title: 'Repository',
-    //     href: 'https://github.com/laravel/react-starter-kit',
-    //     icon: FolderGit2,
-    // },
-    // {
-    //     title: 'Documentation',
-    //     href: 'https://laravel.com/docs/starter-kits#react',
-    //     icon: BookOpen,
-    // },
-];
+const footerNavItems: NavItem[] = [];
 
 type SidebarPageProps = {
     auth: Auth;
@@ -105,20 +139,26 @@ export function AppSidebar() {
         securityTipsPendingCount = 0,
         securityAgentApplicationsPendingCount = 0,
     } = usePage<SidebarPageProps>().props;
-    const mainNavItems = buildMainNavItems(auth.user?.is_admin ?? false).map(
-        (item) => {
-            if (item.title === 'Actualités' && (auth.user?.is_admin ?? false)) {
-                return { ...item, badge: articlesPendingCount };
-            }
-            if (item.title === 'Conseils' && (auth.user?.is_admin ?? false)) {
-                return { ...item, badge: securityTipsPendingCount };
-            }
-            if (item.title === 'Candidatures agents') {
-                return { ...item, badge: securityAgentApplicationsPendingCount };
-            }
-            return item;
-        },
-    );
+
+    const permissions = auth.user?.permissions ?? [];
+    const canApproveArticles = auth.user?.can_approve_articles ?? false;
+    const canApproveConseils = auth.user?.can_approve_conseils ?? false;
+
+    const mainNavItems = buildMainNavItems(permissions).map((item) => {
+        if (item.title === 'Actualités' && canApproveArticles) {
+            return { ...item, badge: articlesPendingCount };
+        }
+        if (item.title === 'Conseils' && canApproveConseils) {
+            return { ...item, badge: securityTipsPendingCount };
+        }
+        if (item.title === 'Candidatures agents') {
+            return {
+                ...item,
+                badge: securityAgentApplicationsPendingCount,
+            };
+        }
+        return item;
+    });
 
     return (
         <Sidebar collapsible="icon" variant="inset">

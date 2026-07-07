@@ -13,8 +13,16 @@ test('guests cannot access security tip management', function () {
     $this->get(route('conseils.index'))->assertRedirect(route('login'));
 });
 
-test('regular users can access security tip management', function () {
+test('regular users without conseils permission cannot access security tip management', function () {
     $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('conseils.index'))
+        ->assertForbidden();
+});
+
+test('contributors can access security tip management', function () {
+    $user = User::factory()->contributor()->create();
 
     $this->actingAs($user)
         ->get(route('conseils.index'))
@@ -27,8 +35,8 @@ test('regular users can access security tip management', function () {
 });
 
 test('regular users see all security tips but only manage their own', function () {
-    $user = User::factory()->create();
-    $other = User::factory()->create();
+    $user = User::factory()->contributor()->create();
+    $other = User::factory()->contributor()->create();
     SecurityTip::factory()->create([
         'created_by_id' => $other->id,
         'title' => 'Conseil tiers',
@@ -57,7 +65,7 @@ test('regular users see all security tips but only manage their own', function (
 });
 
 test('regular users can create security tips pending approval', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
 
     $this->actingAs($user)
         ->post(route('conseils.store'), [
@@ -91,9 +99,9 @@ test('regular users can create security tips pending approval', function () {
 });
 
 test('regular users cannot edit another users security tip', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $securityTip = SecurityTip::factory()->pendingApproval()->create([
-        'created_by_id' => User::factory()->create()->id,
+        'created_by_id' => User::factory()->contributor()->create()->id,
     ]);
 
     $this->actingAs($user)
@@ -102,10 +110,10 @@ test('regular users cannot edit another users security tip', function () {
 });
 
 test('authenticated users can view security tip details by slug', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $securityTip = SecurityTip::factory()->pendingApproval()->create([
         'title' => 'Conseil détail',
-        'created_by_id' => User::factory()->create()->id,
+        'created_by_id' => User::factory()->contributor()->create()->id,
     ]);
 
     $this->actingAs($user)
@@ -121,7 +129,7 @@ test('authenticated users can view security tip details by slug', function () {
 });
 
 test('published security tips expose public preview url on detail page', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $securityTip = SecurityTip::factory()->published()->create();
 
     $this->actingAs($user)
@@ -140,7 +148,7 @@ test('guests cannot view back-office security tip details', function () {
 });
 
 test('regular users cannot publish security tips by forging status', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $securityTip = SecurityTip::factory()->pendingApproval()->create([
         'created_by_id' => $user->id,
     ]);
@@ -159,7 +167,7 @@ test('regular users cannot publish security tips by forging status', function ()
 });
 
 test('regular users can resubmit rejected security tips for approval', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $securityTip = SecurityTip::factory()->rejected()->create([
         'created_by_id' => $user->id,
     ]);
@@ -180,7 +188,7 @@ test('regular users can resubmit rejected security tips for approval', function 
 });
 
 test('regular users cannot delete published security tips', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     $securityTip = SecurityTip::factory()->published()->create([
         'created_by_id' => $user->id,
     ]);
@@ -191,7 +199,7 @@ test('regular users cannot delete published security tips', function () {
 });
 
 test('regular users cannot access pending approval tab', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->contributor()->create();
     SecurityTip::factory()->pendingApproval()->create(['created_by_id' => $user->id]);
 
     $this->actingAs($user)

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\BackofficePermission;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -35,7 +36,7 @@ class RoleUserSeeder extends Seeder
         ];
 
         foreach ($accounts as $account) {
-            User::query()->updateOrCreate(
+            $user = User::query()->updateOrCreate(
                 ['email' => $account['email']],
                 [
                     'name' => $account['name'],
@@ -45,6 +46,14 @@ class RoleUserSeeder extends Seeder
                     'email_verified_at' => now(),
                 ],
             );
+
+            if ($account['role'] === UserRole::Admin) {
+                $user->syncBackofficePermissions(BackofficePermission::cases());
+            }
+
+            if ($account['role'] === UserRole::User) {
+                $user->syncBackofficePermissions(BackofficePermission::contributorDefaults());
+            }
         }
     }
 }

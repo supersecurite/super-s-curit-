@@ -3,11 +3,13 @@ import ArticleForm from '@/components/articles/article-form';
 import { create, index, store } from '@/routes/articles';
 
 type PageProps = {
+    canApprove: boolean;
+    canFeature: boolean;
     errors: Record<string, string>;
 };
 
 export default function ArticlesCreate() {
-    const { errors } = usePage<PageProps>().props;
+    const { canApprove, canFeature, errors } = usePage<PageProps>().props;
 
     return (
         <>
@@ -25,6 +27,8 @@ export default function ArticlesCreate() {
                 </div>
 
                 <ArticleForm
+                    canApprove={canApprove}
+                    canFeature={canFeature}
                     submitUrl={store.url()}
                     submitLabel="Créer l'actualité"
                     cancelHref={index.url()}

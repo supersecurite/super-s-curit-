@@ -71,6 +71,7 @@ type PageProps = {
     tab: SecurityTipTab;
     canApprove: boolean;
     pendingCount: number;
+    canCreate: boolean;
     categories: string[];
     statuses: StatusOption[];
 };
@@ -104,6 +105,7 @@ export default function ConseilsIndex() {
         pendingCount,
         categories,
         statuses,
+        canCreate,
     } = usePage<PageProps>().props;
 
     const applyFilters = (updates: Record<string, string | undefined>) => {
@@ -165,12 +167,14 @@ export default function ConseilsIndex() {
                                 : 'Consultez tous les conseils et gérez vos propres contenus.'}
                         </p>
                     </div>
-                    <Button asChild>
-                        <Link href={create.url()}>
-                            <Plus className="size-4" aria-hidden />
-                            Nouveau conseil
-                        </Link>
-                    </Button>
+                    {canCreate ? (
+                        <Button asChild>
+                            <Link href={create.url()}>
+                                <Plus className="size-4" aria-hidden />
+                                Nouveau conseil
+                            </Link>
+                        </Button>
+                    ) : null}
                 </div>
 
                 {canApprove ? (

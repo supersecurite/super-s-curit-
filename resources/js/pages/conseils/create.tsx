@@ -4,11 +4,12 @@ import { create, index, store } from '@/routes/conseils';
 
 type PageProps = {
     canApprove: boolean;
+    canFeature: boolean;
     errors: Record<string, string>;
 };
 
 export default function ConseilsCreate() {
-    const { canApprove, errors } = usePage<PageProps>().props;
+    const { canApprove, canFeature, errors } = usePage<PageProps>().props;
 
     return (
         <>
@@ -27,6 +28,7 @@ export default function ConseilsCreate() {
 
                 <SecurityTipForm
                     canApprove={canApprove}
+                    canFeature={canFeature}
                     submitUrl={store.url()}
                     submitLabel="Créer le conseil"
                     cancelHref={index.url()}

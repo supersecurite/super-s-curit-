@@ -26,10 +26,10 @@ class ArticleController extends Controller
 
         /** @var User $user */
         $user = $request->user();
-        $isAdmin = $user->isAdmin();
+        $canApprove = $user->canApproveArticles();
 
         $tab = $request->string('tab', 'all')->toString();
-        if (! $isAdmin || ! in_array($tab, ['all', 'pending'], true)) {
+        if (! $canApprove || ! in_array($tab, ['all', 'pending'], true)) {
             $tab = 'all';
         }
 
@@ -70,10 +70,11 @@ class ArticleController extends Controller
                 ->through(fn (Article $article) => $this->formatArticle($article, $user)),
             'filters' => $request->only(['search', 'category', 'status', 'sort_by', 'sort_direction', 'tab']),
             'tab' => $tab,
-            'canApprove' => $isAdmin,
-            'pendingCount' => $isAdmin
+            'canApprove' => $canApprove,
+            'pendingCount' => $canApprove
                 ? Article::query()->where('status', ArticleStatus::PendingApproval)->count()
                 : 0,
+            'canCreate' => $user->can('create', Article::class),
             'categories' => Article::query()
                 ->whereNotNull('category')
                 ->distinct()
@@ -90,7 +91,8 @@ class ArticleController extends Controller
         $this->authorize('create', Article::class);
 
         return Inertia::render('articles/create', [
-            'canApprove' => $request->user()?->isAdmin() ?? false,
+            'canApprove' => $request->user()?->canApproveArticles() ?? false,
+            'canFeature' => $request->user()?->canFeatureArticles() ?? false,
         ]);
     }
 
@@ -98,8 +100,9 @@ class ArticleController extends Controller
     {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
-        $isAdmin = $request->user()->isAdmin();
-        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
+        $canApprove = $request->user()->canApproveArticles();
+        $canFeature = $request->user()->canFeatureArticles();
+        $featured = $canFeature && (bool) ($validated['featured'] ?? false);
 
         $this->ensureFeaturedLimit($featured, status: $status);
 
@@ -115,7 +118,7 @@ class ArticleController extends Controller
         $validated['tags'] = $validated['tags'] ?? [];
         $validated['created_by_id'] = $request->user()->id;
 
-        if (! $isAdmin) {
+        if (! $canApprove) {
             unset($validated['published_at']);
         }
 
@@ -139,7 +142,7 @@ class ArticleController extends Controller
 
         return Inertia::render('articles/show', [
             'article' => $this->formatArticle($article, $user, includeContent: true),
-            'canApprove' => $user->isAdmin(),
+            'canApprove' => $user->canApproveArticles(),
             'publicUrl' => $article->isPublished()
                 ? route('actualites.show', $article)
                 : null,
@@ -150,12 +153,14 @@ class ArticleController extends Controller
     {
         $this->authorize('update', $article);
 
-        $isAdmin = $request->user()->isAdmin();
+        $user = $request->user();
+        $canApprove = $user->canApproveArticles();
 
         return Inertia::render('articles/edit', [
-            'article' => $this->formatArticle($article, $request->user(), includeContent: true),
-            'statusOptions' => $this->statusOptionsFor($article, $isAdmin),
-            'canApprove' => $isAdmin,
+            'article' => $this->formatArticle($article, $user, includeContent: true),
+            'statusOptions' => $this->statusOptionsFor($article, $canApprove),
+            'canApprove' => $canApprove,
+            'canFeature' => $user->canFeatureArticles(),
             'publicUrl' => $article->isPublished()
                 ? route('actualites.show', $article)
                 : null,
@@ -166,9 +171,10 @@ class ArticleController extends Controller
     {
         $validated = $request->validated();
         $user = $request->user();
-        $isAdmin = $user->isAdmin();
-        $status = $this->resolveStatusForUpdate($article, ArticleStatus::from($validated['status']), $isAdmin);
-        $featured = $isAdmin && (bool) ($validated['featured'] ?? false);
+        $canApprove = $user->canApproveArticles();
+        $canFeature = $user->canFeatureArticles();
+        $status = $this->resolveStatusForUpdate($article, ArticleStatus::from($validated['status']), $canApprove);
+        $featured = $canFeature && (bool) ($validated['featured'] ?? false);
 
         if ($article->status !== $status && in_array($status, [ArticleStatus::Published, ArticleStatus::Rejected], true)) {
             $this->authorize('approve', $article);
@@ -191,7 +197,7 @@ class ArticleController extends Controller
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
 
-        if (! $isAdmin) {
+        if (! $canApprove) {
             unset($validated['published_at']);
         }
 
@@ -235,9 +241,9 @@ class ArticleController extends Controller
     /**
      * @return list<array{value: string, label: string}>
      */
-    private function statusOptionsFor(Article $article, bool $isAdmin): array
+    private function statusOptionsFor(Article $article, bool $canApprove): array
     {
-        if ($isAdmin) {
+        if ($canApprove) {
             return ArticleStatus::options();
         }
 
@@ -263,9 +269,9 @@ class ArticleController extends Controller
         return ArticleStatus::authorOptions();
     }
 
-    private function resolveStatusForUpdate(Article $article, ArticleStatus $requested, bool $isAdmin): ArticleStatus
+    private function resolveStatusForUpdate(Article $article, ArticleStatus $requested, bool $canApprove): ArticleStatus
     {
-        if ($isAdmin) {
+        if ($canApprove) {
             return $requested;
         }
 

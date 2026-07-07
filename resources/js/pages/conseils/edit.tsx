@@ -10,12 +10,13 @@ type PageProps = {
     securityTip: SecurityTipFormData & { id: number };
     statusOptions: StatusOption[];
     canApprove: boolean;
+    canFeature: boolean;
     publicUrl: string | null;
     errors: Record<string, string>;
 };
 
 export default function ConseilsEdit() {
-    const { securityTip, statusOptions, canApprove, publicUrl, errors } =
+    const { securityTip, statusOptions, canApprove, canFeature, publicUrl, errors } =
         usePage<PageProps>().props;
 
     return (
@@ -45,6 +46,7 @@ export default function ConseilsEdit() {
                     securityTip={securityTip}
                     statusOptions={statusOptions}
                     canApprove={canApprove}
+                    canFeature={canFeature}
                     submitUrl={update.url(securityTip.slug)}
                     method="put"
                     submitLabel="Enregistrer"
