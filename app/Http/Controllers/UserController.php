@@ -56,7 +56,16 @@ class UserController extends Controller
             'email_verified_at' => now(),
         ]);
 
-        if ($user->role !== UserRole::SuperAdmin) {
+        if ($user->role === UserRole::SuperAdmin) {
+            // Super admin : aucune permission stockée.
+        } elseif ($user->role === UserRole::Commercial) {
+            $permissions = $request->validated('permissions') ?? [];
+            $user->syncBackofficePermissions(
+                $permissions !== []
+                    ? $permissions
+                    : BackofficePermission::commercialDefaults(),
+            );
+        } else {
             $user->syncBackofficePermissions($request->validated('permissions') ?? []);
         }
 
@@ -98,10 +107,17 @@ class UserController extends Controller
 
         $user->save();
 
-        if ($user->role !== UserRole::SuperAdmin) {
-            $user->syncBackofficePermissions($request->validated('permissions') ?? []);
-        } else {
+        if ($user->role === UserRole::SuperAdmin) {
             $user->syncBackofficePermissions([]);
+        } elseif ($user->role === UserRole::Commercial) {
+            $permissions = $request->validated('permissions') ?? [];
+            $user->syncBackofficePermissions(
+                $permissions !== []
+                    ? $permissions
+                    : BackofficePermission::commercialDefaults(),
+            );
+        } else {
+            $user->syncBackofficePermissions($request->validated('permissions') ?? []);
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Utilisateur mis à jour avec succès.']);

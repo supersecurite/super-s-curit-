@@ -30,26 +30,26 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Galerie vidéos | Contenu | ✅ Complet | `docs/features/galerie.md` |
 | Partenaires | Contenu | ✅ Complet | `docs/features/partenaires.md` |
 | Candidatures agents | RH | ✅ Complet | `docs/features/candidatures-agents.md` |
-| Utilisateurs & permissions | Acteurs | ✅ Complet | Tabs édition, permissions UI — `docs/features/utilisateurs-roles.md` |
+| Utilisateurs & permissions | Acteurs | ✅ Complet | Rôle commercial + perms marketing — `docs/features/utilisateurs-roles.md` |
 | Site marketing public | Public | ✅ Complet | `docs/features/site-public.md` |
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
-| Rôle commercial | Acteurs | 🔲 À construire | [ADR-0001](decisions/0001-role-commercial.md) |
-| Marketing — clients & listes | Marketing | 🔲 À construire | `docs/features/marketing-clients.md` |
-| Marketing — campagnes e-mail / WhatsApp | Marketing | 🔲 À construire | [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) · `docs/features/marketing-campagnes.md` |
+| Rôle commercial | Acteurs | ✅ Complet | [ADR-0001](decisions/0001-role-commercial.md) |
+| Marketing — clients & listes | Marketing | 🔲 À construire | Permissions prêtes — `docs/features/marketing-clients.md` |
+| Marketing — campagnes e-mail / WhatsApp | Marketing | 🔲 À construire | Permissions prêtes — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) · `docs/features/marketing-campagnes.md` |
 
 Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
 
 ## 3. Prochaine livraison — dette / consolidation
 
-1. **Phase 0 docs** (cette livraison) : infrastructure `docs/` + rules + ADR marketing — soldée une fois ce fichier et les fiches présentes.
-2. Vérifier qu’aucune nouvelle route backoffice n’échappe à `VisitTracking::BACKOFFICE_PREFIXES`.
+1. **Phase 2** : CRM clients + listes + import CSV (`marketing_clients.*`).
+2. Vérifier qu’aucune nouvelle route backoffice n’échappe à `VisitTracking::BACKOFFICE_PREFIXES` (préfixes marketing déjà réservés).
 3. Surveiller la dette TypeScript globale (`tsc`) hors fichiers récemment corrigés.
 
 ## 4. Modules à construire (roadmap produit)
 
 ### 4.1 Rôle `commercial`
 
-Voir [ADR-0001](decisions/0001-role-commercial.md). Permissions marketing par défaut ; assignable par admin / super_admin.
+✅ Livré (Phase 1) — [ADR-0001](decisions/0001-role-commercial.md). Permissions `marketing_clients.*` / `marketing_campaigns.*` + `dashboard.view`.
 
 ### 4.2 Clients & listes (CRM léger)
 
@@ -62,9 +62,9 @@ CRUD contacts, listes / audiences, import CSV. Fiche : `docs/features/marketing-
 - Accusés de réception et de lecture en V1.
 - Voir [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md).
 
-Ordre d’implémentation suggéré :
+Ordre d’implémentation :
 
-1. Rôle commercial + permissions `marketing.*`
+1. ~~Rôle commercial + permissions `marketing_*`~~ ✅
 2. Clients + listes + import CSV
 3. Campagnes e-mail + file d’attente + tracking ouverture
 4. WhatsApp Meta + webhooks + UI accusés
@@ -89,3 +89,4 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 | Date | Entrée |
 |---|---|
 | 2026-08-31 | Phase 0 : ROADMAP, features, ADR, rules Cursor, AGENTS hub |
+| 2026-08-31 | Phase 1 : rôle `commercial`, permissions marketing_*, seeder, tests |

@@ -76,6 +76,15 @@ class UserFactory extends Factory
         return $this->withBackofficePermissions(BackofficePermission::contributorDefaults());
     }
 
+    public function commercial(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRole::Commercial,
+        ])->afterCreating(function (User $user): void {
+            $user->syncBackofficePermissions(BackofficePermission::commercialDefaults());
+        });
+    }
+
     public function withTwoFactor(): static
     {
         return $this->state(fn (array $attributes) => [

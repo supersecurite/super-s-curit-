@@ -4,7 +4,7 @@ export type User = {
     name: string;
     email: string;
     phone: string | null;
-    role: 'super_admin' | 'admin' | 'user';
+    role: 'super_admin' | 'admin' | 'commercial' | 'user';
     role_label: string;
     is_admin: boolean;
     permissions: string[];

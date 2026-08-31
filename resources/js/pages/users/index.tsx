@@ -35,7 +35,7 @@ function roleBadgeVariant(role: string): 'default' | 'secondary' | 'outline' {
         return 'default';
     }
 
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'commercial') {
         return 'secondary';
     }
 

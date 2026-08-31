@@ -4,6 +4,7 @@ use App\Enums\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+use App\Enums\BackofficePermission;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -156,4 +157,58 @@ test('super admin can delete another user', function () {
         ->assertRedirect(route('users.index'));
 
     expect(User::query()->find($target->id))->toBeNull();
+});
+
+test('admins can create a commercial user with marketing defaults', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->post(route('users.store'), [
+            'name' => 'Commercial Demo',
+            'email' => 'commercial-demo@example.com',
+            'role' => UserRole::Commercial->value,
+            'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
+        ])
+        ->assertRedirect(route('users.index'));
+
+    $created = User::query()->where('email', 'commercial-demo@example.com')->firstOrFail();
+
+    expect($created->role)->toBe(UserRole::Commercial)
+        ->and($created->isCommercial())->toBeTrue()
+        ->and($created->isAdmin())->toBeFalse()
+        ->and($created->hasBackofficePermission(BackofficePermission::DashboardView))->toBeTrue()
+        ->and($created->hasBackofficePermission(BackofficePermission::MarketingClientsView))->toBeTrue()
+        ->and($created->hasBackofficePermission(BackofficePermission::MarketingCampaignsSend))->toBeTrue()
+        ->and($created->hasBackofficePermission(BackofficePermission::ArticlesView))->toBeFalse()
+        ->and($created->hasBackofficePermission(BackofficePermission::UsersView))->toBeFalse();
+});
+
+test('commercial role appears in admin role options on create', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->get(route('users.create'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('users/create')
+            ->where('roles', fn ($roles) => collect($roles)->contains('value', UserRole::Commercial->value)
+                && ! collect($roles)->contains('value', UserRole::SuperAdmin->value))
+        );
+});
+
+test('commercial user cannot access user management', function () {
+    $commercial = User::factory()->commercial()->create();
+
+    $this->actingAs($commercial)
+        ->get(route('users.index'))
+        ->assertForbidden();
+});
+
+test('commercial user can access dashboard', function () {
+    $commercial = User::factory()->commercial()->create();
+
+    $this->actingAs($commercial)
+        ->get(route('dashboard'))
+        ->assertOk();
 });

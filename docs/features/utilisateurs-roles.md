@@ -1,6 +1,6 @@
 # Utilisateurs & rôles
 
-**Statut :** ✅ Complet (rôle `commercial` prévu — 🔲)
+**Statut :** ✅ Complet
 
 ## Vue d’ensemble
 
@@ -8,21 +8,25 @@ Gestion des comptes backoffice : CRUD, rôles, permissions granulaires par featu
 
 ## Acteurs & rôles
 
-| Rôle | Comportement actuel |
+| Rôle | Comportement |
 |---|---|
 | `super_admin` | Toutes permissions ; gère les autres super admins |
 | `admin` | Permissions assignables (souvent toutes via seeder/factory) |
+| `commercial` | Defaults marketing (`commercialDefaults()`) + dashboard — [ADR-0001](../decisions/0001-role-commercial.md) |
 | `user` | Contributeur selon permissions |
-| `commercial` | **Non implémenté** — [ADR-0001](../decisions/0001-role-commercial.md) |
 
 Permissions `users.view|create|update|delete`.
+
+`isAdmin()` = super_admin \| admin uniquement.
 
 ## Fonctionnement
 
 - Index : boutons créer / éditer / supprimer selon `canCreate` / `can_update` / `can_delete`.
-- Formulaire permissions : panneau groupé (recherche, tout activer, cartes par feature).
+- Formulaire permissions : panneau groupé (recherche, tout activer, cartes par feature) — inclut `marketing_clients` et `marketing_campaigns`.
+- Création / update d’un commercial **sans** permissions explicites → application de `BackofficePermission::commercialDefaults()`.
 - Sync : `User::syncBackofficePermissions()`.
 - Routes `users` en `uuid`.
+- Seeder : compte `commercial@supersecurite.com` (env `SEED_COMMERCIAL_*`).
 
 ## Fichiers clés
 
@@ -36,5 +40,5 @@ Permissions `users.view|create|update|delete`.
 
 ## Limites & dette
 
-- Rôle commercial à ajouter (ADR-0001) sans casser les policies existantes.
+- Modules marketing (clients / campagnes) pas encore implémentés — les permissions existent déjà pour la Phase 2+.
 - Un admin ne peut pas assigner `super_admin` (validation request).

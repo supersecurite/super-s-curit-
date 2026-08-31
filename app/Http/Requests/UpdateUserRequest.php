@@ -88,7 +88,7 @@ class UpdateUserRequest extends FormRequest
             return [UserRole::SuperAdmin->value];
         }
 
-        return [UserRole::Admin->value, UserRole::User->value];
+        return [UserRole::Admin->value, UserRole::Commercial->value, UserRole::User->value];
     }
 
     /**

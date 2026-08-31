@@ -33,6 +33,13 @@ class RoleUserSeeder extends Seeder
                 'phone' => env('SEED_USER_PHONE'),
                 'role' => UserRole::User,
             ],
+            [
+                'name' => 'Commercial',
+                'email' => env('SEED_COMMERCIAL_EMAIL', 'commercial@supersecurite.com'),
+                'password' => env('SEED_COMMERCIAL_PASSWORD', 'password'),
+                'phone' => env('SEED_COMMERCIAL_PHONE'),
+                'role' => UserRole::Commercial,
+            ],
         ];
 
         foreach ($accounts as $account) {
@@ -53,6 +60,10 @@ class RoleUserSeeder extends Seeder
 
             if ($account['role'] === UserRole::User) {
                 $user->syncBackofficePermissions(BackofficePermission::contributorDefaults());
+            }
+
+            if ($account['role'] === UserRole::Commercial) {
+                $user->syncBackofficePermissions(BackofficePermission::commercialDefaults());
             }
         }
     }

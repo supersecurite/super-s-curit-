@@ -49,6 +49,18 @@ enum BackofficePermission: string
     case PartnersUpdate = 'partners.update';
     case PartnersDelete = 'partners.delete';
 
+    case MarketingClientsView = 'marketing_clients.view';
+    case MarketingClientsCreate = 'marketing_clients.create';
+    case MarketingClientsUpdate = 'marketing_clients.update';
+    case MarketingClientsDelete = 'marketing_clients.delete';
+    case MarketingClientsImport = 'marketing_clients.import';
+
+    case MarketingCampaignsView = 'marketing_campaigns.view';
+    case MarketingCampaignsCreate = 'marketing_campaigns.create';
+    case MarketingCampaignsUpdate = 'marketing_campaigns.update';
+    case MarketingCampaignsDelete = 'marketing_campaigns.delete';
+    case MarketingCampaignsSend = 'marketing_campaigns.send';
+
     public function feature(): string
     {
         return explode('.', $this->value, 2)[0];
@@ -71,6 +83,8 @@ enum BackofficePermission: string
             'agent_applications' => 'Candidatures agents',
             'users' => 'Utilisateurs',
             'partners' => 'Partenaires',
+            'marketing_clients' => 'Marketing — clients',
+            'marketing_campaigns' => 'Marketing — campagnes',
             default => $this->feature(),
         };
     }
@@ -83,28 +97,36 @@ enum BackofficePermission: string
             self::ArticlesView, self::ConseilsView,
             self::GalleryImagesView, self::GalleryVideosView,
             self::AnalyticsView, self::AgentApplicationsView,
-            self::UsersView, self::PartnersView => 'Consulter',
+            self::UsersView, self::PartnersView,
+            self::MarketingClientsView, self::MarketingCampaignsView => 'Consulter',
 
             self::ArticlesCreate, self::ConseilsCreate,
             self::GalleryImagesCreate, self::GalleryVideosCreate,
-            self::UsersCreate, self::PartnersCreate => 'Créer',
+            self::UsersCreate, self::PartnersCreate,
+            self::MarketingClientsCreate, self::MarketingCampaignsCreate => 'Créer',
 
             self::ArticlesUpdate, self::ConseilsUpdate,
             self::GalleryImagesUpdate, self::GalleryVideosUpdate,
             self::UsersUpdate, self::PartnersUpdate,
-            self::AgentApplicationsUpdate => 'Modifier',
+            self::AgentApplicationsUpdate,
+            self::MarketingClientsUpdate, self::MarketingCampaignsUpdate => 'Modifier',
 
             self::ArticlesUpdateAny, self::ConseilsUpdateAny => 'Modifier tout le contenu',
 
             self::ArticlesDelete, self::ConseilsDelete,
             self::GalleryImagesDelete, self::GalleryVideosDelete,
-            self::UsersDelete, self::PartnersDelete => 'Supprimer le sien',
+            self::UsersDelete, self::PartnersDelete,
+            self::MarketingClientsDelete, self::MarketingCampaignsDelete => 'Supprimer',
 
             self::ArticlesDeleteAny, self::ConseilsDeleteAny => 'Supprimer tout le contenu',
 
             self::ArticlesApprove, self::ConseilsApprove => 'Approuver et publier',
 
             self::ArticlesFeature, self::ConseilsFeature => 'Mettre en avant',
+
+            self::MarketingClientsImport => 'Importer',
+
+            self::MarketingCampaignsSend => 'Envoyer',
         };
     }
 
@@ -155,6 +177,18 @@ enum BackofficePermission: string
             self::PartnersCreate => 'Ajouter de nouveaux partenaires.',
             self::PartnersUpdate => 'Modifier les partenaires existants.',
             self::PartnersDelete => 'Supprimer des partenaires.',
+
+            self::MarketingClientsView => 'Voir les contacts et listes marketing.',
+            self::MarketingClientsCreate => 'Créer des contacts marketing.',
+            self::MarketingClientsUpdate => 'Modifier les contacts marketing.',
+            self::MarketingClientsDelete => 'Supprimer des contacts marketing.',
+            self::MarketingClientsImport => 'Importer des contacts (CSV).',
+
+            self::MarketingCampaignsView => 'Voir les campagnes e-mail et WhatsApp.',
+            self::MarketingCampaignsCreate => 'Créer des campagnes marketing.',
+            self::MarketingCampaignsUpdate => 'Modifier les campagnes marketing.',
+            self::MarketingCampaignsDelete => 'Supprimer des campagnes marketing.',
+            self::MarketingCampaignsSend => 'Lancer l\'envoi d\'une campagne.',
         };
     }
 
@@ -220,6 +254,12 @@ enum BackofficePermission: string
             'agent_applications' => self::forFeature('agent_applications'),
             'users' => self::forFeature('users'),
             'partners' => self::forFeature('partners'),
+            'marketing_clients' => self::forFeature('marketing_clients'),
+            'marketing_campaigns' => self::forFeature('marketing_campaigns'),
+            'marketing' => [
+                ...self::forFeature('marketing_clients'),
+                ...self::forFeature('marketing_campaigns'),
+            ],
             'content_approval' => [
                 self::ArticlesApprove,
                 self::ArticlesFeature,
@@ -249,6 +289,20 @@ enum BackofficePermission: string
             self::ConseilsCreate,
             self::ConseilsUpdate,
             self::ConseilsDelete,
+        ];
+    }
+
+    /**
+     * Permissions par défaut du rôle commercial (ADR-0001).
+     *
+     * @return list<self>
+     */
+    public static function commercialDefaults(): array
+    {
+        return [
+            self::DashboardView,
+            ...self::forFeature('marketing_clients'),
+            ...self::forFeature('marketing_campaigns'),
         ];
     }
 }

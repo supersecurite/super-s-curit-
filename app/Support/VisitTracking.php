@@ -33,6 +33,9 @@ class VisitTracking
         'candidatures-agents',
         'analytics',
         'settings',
+        'marketing-clients',
+        'marketing-campaigns',
+        'marketing',
     ];
 
     /** Auth pages (Fortify) — excluded from analytics. */

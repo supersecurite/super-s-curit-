@@ -41,7 +41,7 @@ Les guidelines Laravel Boost (section du bas) restent la référence pour la sta
 - PHP 8.4 · Laravel 13 · Inertia React v3 · Fortify · Wayfinder · Pest 4 · Tailwind 4
 - Site public marketing + backoffice authentifié (Herd : `super-securite.test`)
 - Permissions backoffice : `app/Enums/BackofficePermission.php`
-- Rôles : `app/Enums/UserRole.php` (`super_admin`, `admin`, `user` — `commercial` prévu, ADR-0001)
+- Rôles : `app/Enums/UserRole.php` (`super_admin`, `admin`, `commercial`, `user` — ADR-0001)
 
 ---
 

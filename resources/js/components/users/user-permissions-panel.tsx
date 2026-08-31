@@ -6,6 +6,7 @@ import {
     Images,
     LayoutGrid,
     Lightbulb,
+    Megaphone,
     Newspaper,
     Search,
     Users,
@@ -41,6 +42,8 @@ const FEATURE_ICONS: Record<string, typeof LayoutGrid> = {
     agent_applications: Briefcase,
     users: Users,
     partners: Handshake,
+    marketing_clients: Users,
+    marketing_campaigns: Megaphone,
 };
 
 type UserPermissionsPanelProps = {

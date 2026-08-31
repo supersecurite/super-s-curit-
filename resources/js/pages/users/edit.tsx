@@ -66,7 +66,7 @@ function roleBadgeVariant(
         return 'default';
     }
 
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'commercial') {
         return 'secondary';
     }
 

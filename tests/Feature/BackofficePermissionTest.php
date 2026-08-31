@@ -72,18 +72,18 @@ test('admin can update user permissions', function () {
     $target = User::factory()->contributor()->create();
 
     $this->actingAs($admin)
+        ->from(route('users.edit', $target))
         ->put(route('users.update', $target), [
             'name' => $target->name,
             'email' => $target->email,
             'role' => UserRole::User->value,
             'permissions' => [BackofficePermission::PartnersView->value],
         ])
-        ->assertRedirect(route('users.index'));
+        ->assertRedirect(route('users.edit', $target));
 
     expect($target->fresh()->hasBackofficePermission(BackofficePermission::PartnersView))->toBeTrue()
         ->and($target->fresh()->hasBackofficePermission(BackofficePermission::ArticlesView))->toBeFalse();
 });
-
 test('super admin always has all permissions', function () {
     $superAdmin = User::factory()->superAdmin()->create();
 
@@ -124,7 +124,7 @@ test('legacy stored permissions are resolved without enum errors', function () {
     $user->backofficePermissionRecords()->create(['permission' => 'analytics']);
     $user->backofficePermissionRecords()->create(['permission' => 'articles']);
 
-    expect(fn () => $user->fresh()->canAccessFeature('analytics'))->not->toThrow(\ValueError::class)
+    expect(fn () => $user->fresh()->canAccessFeature('analytics'))->not->toThrow(ValueError::class)
         ->and($user->fresh()->canAccessFeature('analytics'))->toBeTrue()
         ->and($user->fresh()->hasBackofficePermission(BackofficePermission::AnalyticsView))->toBeTrue();
 
@@ -147,4 +147,25 @@ test('legacy permissions expand to granular permissions', function () {
 
     expect($expanded)->toContain('articles.view', 'articles.create', 'articles.approve')
         ->and($approval)->toBe(['articles', 'conseils']);
+});
+
+test('commercial defaults include marketing permissions only', function () {
+    $defaults = collect(BackofficePermission::commercialDefaults())
+        ->map(fn (BackofficePermission $permission) => $permission->value)
+        ->all();
+
+    expect($defaults)->toContain(
+        'dashboard.view',
+        'marketing_clients.view',
+        'marketing_clients.import',
+        'marketing_campaigns.send',
+    )->and($defaults)->not->toContain('articles.view', 'users.view');
+});
+
+test('commercial factory user can access marketing features conceptually', function () {
+    $commercial = User::factory()->commercial()->create();
+
+    expect($commercial->canAccessFeature('marketing_clients'))->toBeTrue()
+        ->and($commercial->canAccessFeature('marketing_campaigns'))->toBeTrue()
+        ->and($commercial->canAccessFeature('articles'))->toBeFalse();
 });

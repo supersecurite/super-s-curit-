@@ -48,6 +48,11 @@ class User extends Authenticatable implements PasskeyUser
         return $this->role === UserRole::SuperAdmin;
     }
 
+    public function isCommercial(): bool
+    {
+        return $this->role === UserRole::Commercial;
+    }
+
     /**
      * @return HasMany<UserBackofficePermission, $this>
      */

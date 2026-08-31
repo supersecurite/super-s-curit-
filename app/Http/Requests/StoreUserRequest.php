@@ -73,7 +73,7 @@ class StoreUserRequest extends FormRequest
             return UserRole::values();
         }
 
-        return [UserRole::Admin->value, UserRole::User->value];
+        return [UserRole::Admin->value, UserRole::Commercial->value, UserRole::User->value];
     }
 
     /**
