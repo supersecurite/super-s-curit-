@@ -1,3 +1,50 @@
+# Super Sécurité — Guide agents
+
+Ce fichier est le **point d’entrée** pour les agents IA. Lis dans l’ordre indiqué avant de modifier le code.
+
+Les guidelines Laravel Boost (section du bas) restent la référence pour la stack Laravel / Inertia / Pest. Les règles projet ci-dessous ont priorité sur les ambiguïtés métier Super Sécurité.
+
+## Ordre de lecture (obligatoire)
+
+1. `.cursor/rules/feature-workflow.mdc` — comment livrer une feature
+2. `.cursor/rules/domain-invariants.mdc` — invariants métier non négociables
+3. `.cursor/rules/code-documentation.mdc` — documentation dans le code
+4. `docs/ROADMAP.md` — état des modules, dette, prochaines livraisons
+5. `docs/features/<module>.md` — comportement **réel** du module touché
+6. `docs/decisions/` — ADR si une décision d’architecture s’applique
+7. Guidelines Laravel Boost (ci-dessous) — stack et conventions techniques
+
+## Règles d’or
+
+1. **Ne devine pas le métier** — lis la fiche feature + le code existant avant d’écrire.
+2. **Tranche verticale** — migration → modèle → policy → (service) → contrôleur → route → page Inertia → tests, pour un comportement utilisateur testable.
+3. **Permissions granulaires** — format `feature.action` via `BackofficePermission` ; UI et policies doivent masquer / refuser sans autorisation.
+4. **Pas de tracking backoffice** — les chemins admin / auth / settings sont exclus de `VisitTracking`.
+5. **DoD docs** — toute tranche met à jour `docs/features/<module>.md` + `docs/ROADMAP.md` (+ ADR si choix non trivial).
+6. **Tests Pest** — `php artisan test --compact` sur le périmètre touché ; Pint sur le PHP modifié.
+
+## Où trouver quoi
+
+| Besoin | Fichier |
+|---|---|
+| Comment livrer | `.cursor/rules/feature-workflow.mdc` |
+| Invariants (rôles, tracking, routes) | `.cursor/rules/domain-invariants.mdc` |
+| PHPDoc / TSDoc | `.cursor/rules/code-documentation.mdc` |
+| Priorités produit | `docs/ROADMAP.md` |
+| Comportement d’un module | `docs/features/*.md` |
+| Décisions figées | `docs/decisions/` |
+| Setup humain | `CONTRIBUTING.md` |
+| Stack Laravel Boost | Section ci-dessous |
+
+## Stack projet (résumé)
+
+- PHP 8.4 · Laravel 13 · Inertia React v3 · Fortify · Wayfinder · Pest 4 · Tailwind 4
+- Site public marketing + backoffice authentifié (Herd : `super-securite.test`)
+- Permissions backoffice : `app/Enums/BackofficePermission.php`
+- Rôles : `app/Enums/UserRole.php` (`super_admin`, `admin`, `user` — `commercial` prévu, ADR-0001)
+
+---
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
@@ -54,7 +101,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 ## Documentation Files
 
-- You must only create documentation files if explicitly requested by the user.
+- Project documentation lives under `docs/` and is maintained with each feature tranche (see `.cursor/rules/feature-workflow.mdc`). Do not invent parallel doc trees.
 
 ## Replies
 
@@ -114,6 +161,13 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 # Deployment
 
 - Laravel can be deployed using [Laravel Cloud](https://cloud.laravel.com/), which is the fastest way to deploy and scale production Laravel applications.
+
+=== herd rules ===
+
+# Laravel Herd
+
+- The application is served by Laravel Herd at `https?://[kebab-case-project-dir].test`. Use the `get-absolute-url` tool to generate valid URLs. Never run commands to serve the site. It is always available.
+- Use the `herd` CLI to manage services, PHP versions, and sites (e.g. `herd sites`, `herd services:start <service>`, `herd php:list`). Run `herd list` to discover all available commands.
 
 === tests rules ===
 
