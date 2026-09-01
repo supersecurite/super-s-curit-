@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('provider_message_id')->nullable();
             $table->timestamps();
 
-            $table->unique(['marketing_campaign_id', 'marketing_contact_id']);
+            $table->unique(['marketing_campaign_id', 'marketing_contact_id'], 'mkt_campaign_send_contact_unique');
         });
     }
 
