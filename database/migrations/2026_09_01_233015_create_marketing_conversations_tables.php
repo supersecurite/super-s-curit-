@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('marketing_conversations', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->foreignId('marketing_contact_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('marketing_contact_id')
+                ->constrained(indexName: 'mkt_conv_contact_fk')
+                ->cascadeOnDelete();
             $table->uuid('reply_token')->unique();
             $table->string('subject')->nullable();
             $table->unsignedInteger('unread_inbound_count')->default(0);
@@ -27,9 +29,17 @@ return new class extends Migration
         Schema::create('marketing_conversation_messages', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->foreignId('marketing_conversation_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('marketing_campaign_send_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('marketing_conversation_id')
+                ->constrained(indexName: 'mkt_conv_msg_conv_fk')
+                ->cascadeOnDelete();
+            $table->foreignId('marketing_campaign_send_id')
+                ->nullable()
+                ->constrained(indexName: 'mkt_conv_msg_send_fk')
+                ->nullOnDelete();
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained(indexName: 'mkt_conv_msg_user_fk')
+                ->nullOnDelete();
             $table->string('direction');
             $table->string('from_email');
             $table->string('to_email');
