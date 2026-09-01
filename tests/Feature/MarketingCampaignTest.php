@@ -2,6 +2,7 @@
 
 use App\Enums\MarketingCampaignSendStatus;
 use App\Enums\MarketingCampaignStatus;
+use App\Events\Marketing\MarketingCampaignProgressUpdated;
 use App\Jobs\SendMarketingCampaignEmailJob;
 use App\Jobs\SyncMarketingCampaignCompletionJob;
 use App\Mail\MarketingCampaignMailable;
@@ -10,9 +11,11 @@ use App\Models\MarketingCampaignSend;
 use App\Models\MarketingContact;
 use App\Models\MarketingList;
 use App\Models\User;
+use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use Database\Seeders\RoleUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Attributes\DebounceFor;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 
@@ -115,7 +118,7 @@ test('launch fails when no eligible contacts in list', function () {
         ->assertSessionHasErrors('marketing_list_id');
 });
 
-test('send job marks campaign email as delivered', function () {
+test('send job marks campaign email as received', function () {
     Mail::fake();
     Queue::fake();
     $this->seed(RoleUserSeeder::class);
@@ -128,7 +131,7 @@ test('send job marks campaign email as delivered', function () {
 
     $send->refresh();
 
-    expect($send->status)->toBe(MarketingCampaignSendStatus::Delivered)
+    expect($send->status)->toBe(MarketingCampaignSendStatus::Received)
         ->and($send->sent_at)->not->toBeNull()
         ->and($send->delivered_at)->not->toBeNull();
 
@@ -149,8 +152,8 @@ test('sync marketing campaign completion job is debounced', function () {
         ->and($job->debounceId())->toBe('42');
 });
 
-test('open pixel marks delivered send as read', function () {
-    $send = MarketingCampaignSend::factory()->delivered()->create();
+test('open pixel marks received send as read', function () {
+    $send = MarketingCampaignSend::factory()->received()->create();
 
     $this->get(route('marketing-campaigns.open', $send->open_token))
         ->assertSuccessful()
@@ -160,6 +163,25 @@ test('open pixel marks delivered send as read', function () {
 
     expect($send->status)->toBe(MarketingCampaignSendStatus::Read)
         ->and($send->read_at)->not->toBeNull();
+});
+
+test('campaign stats expose received count separately from read', function () {
+    $campaign = MarketingCampaign::factory()->launched()->create();
+
+    MarketingCampaignSend::factory()->received()->create([
+        'marketing_campaign_id' => $campaign->id,
+    ]);
+
+    MarketingCampaignSend::factory()->received()->create([
+        'marketing_campaign_id' => $campaign->id,
+        'status' => MarketingCampaignSendStatus::Read,
+        'read_at' => now(),
+    ]);
+
+    $stats = $campaign->fresh()->sendStats();
+
+    expect($stats['received'])->toBe(1)
+        ->and($stats['read'])->toBe(1);
 });
 
 test('cannot update launched campaign', function () {
@@ -189,7 +211,85 @@ test('commercial can view campaign show page with stats', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->has('campaign.name')
-            ->has('campaign.stats'));
+            ->has('campaign.stats')
+            ->where('broadcasting.enabled', false));
+});
+
+test('broadcast progress is skipped when broadcasting driver is log', function () {
+    config(['broadcasting.default' => 'log']);
+
+    Event::fake([MarketingCampaignProgressUpdated::class]);
+
+    $campaign = MarketingCampaign::factory()->create();
+
+    BroadcastMarketingCampaignProgress::dispatch($campaign);
+
+    Event::assertNotDispatched(MarketingCampaignProgressUpdated::class);
+});
+
+test('broadcast progress dispatches event when reverb is configured', function () {
+    config(['broadcasting.default' => 'reverb']);
+
+    Event::fake([MarketingCampaignProgressUpdated::class]);
+
+    $campaign = MarketingCampaign::factory()->create();
+    $send = MarketingCampaignSend::factory()->create([
+        'marketing_campaign_id' => $campaign->id,
+    ]);
+
+    BroadcastMarketingCampaignProgress::dispatch($campaign, $send);
+
+    Event::assertDispatched(MarketingCampaignProgressUpdated::class, function (MarketingCampaignProgressUpdated $event) use ($campaign, $send) {
+        return $event->campaign->is($campaign)
+            && $event->send?->is($send);
+    });
+});
+
+test('send job broadcasts campaign progress when reverb is configured', function () {
+    config(['broadcasting.default' => 'reverb']);
+
+    Mail::fake();
+    Queue::fake();
+    Event::fake([MarketingCampaignProgressUpdated::class]);
+
+    $send = MarketingCampaignSend::factory()->create([
+        'status' => MarketingCampaignSendStatus::Queued,
+    ]);
+
+    (new SendMarketingCampaignEmailJob($send))->handle();
+
+    Event::assertDispatched(MarketingCampaignProgressUpdated::class);
+});
+
+test('open pixel broadcasts read progress when reverb is configured', function () {
+    config(['broadcasting.default' => 'reverb']);
+
+    Event::fake([MarketingCampaignProgressUpdated::class]);
+
+    $send = MarketingCampaignSend::factory()->received()->create();
+
+    $this->get(route('marketing-campaigns.open', $send->open_token))
+        ->assertSuccessful();
+
+    Event::assertDispatched(MarketingCampaignProgressUpdated::class);
+});
+
+test('commercial can access marketing campaign broadcast channel via policy', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $campaign = MarketingCampaign::factory()->create();
+
+    expect($commercial->can('view', $campaign))->toBeTrue();
+});
+
+test('contributor without marketing campaigns permission cannot access broadcast channel', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $user = User::query()->where('email', 'user@supersecurite.com')->firstOrFail();
+    $campaign = MarketingCampaign::factory()->create();
+
+    expect($user->can('view', $campaign))->toBeFalse();
 });
 
 test('commercial can preview list audience for campaign form', function () {

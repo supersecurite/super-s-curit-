@@ -52,6 +52,10 @@ class MarketingErrorRenderer
             return false;
         }
 
+        if (str_starts_with($request->path(), 'broadcasting/')) {
+            return false;
+        }
+
         if (app()->environment('local') && $response->getStatusCode() >= 500) {
             return false;
         }

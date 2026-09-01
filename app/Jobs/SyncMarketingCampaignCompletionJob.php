@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\Marketing\SyncMarketingCampaignCompletion;
 use App\Models\MarketingCampaign;
+use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\DebounceFor;
@@ -36,5 +37,7 @@ class SyncMarketingCampaignCompletionJob implements ShouldQueue
         }
 
         $syncCompletion->handle($campaign);
+
+        BroadcastMarketingCampaignProgress::dispatch($campaign->refresh());
     }
 }

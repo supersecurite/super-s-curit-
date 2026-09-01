@@ -8,6 +8,7 @@ use App\Enums\MarketingCampaignStatus;
 use App\Jobs\SendMarketingCampaignEmailJob;
 use App\Models\MarketingCampaign;
 use App\Models\MarketingCampaignSend;
+use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use App\Support\Marketing\RenderMarketingMessageTemplate;
 use App\Support\Marketing\ResolveMarketingCampaignRecipient;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +74,10 @@ class LaunchMarketingCampaign extends Action
             }
         });
 
-        return $campaign->refresh();
+        $campaign = $campaign->refresh();
+
+        BroadcastMarketingCampaignProgress::dispatch($campaign);
+
+        return $campaign;
     }
 }

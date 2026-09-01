@@ -18,7 +18,8 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
 npm run dev
-# ou: composer run dev
+# ou stack complète (queue + Reverb WebSocket + Vite) :
+# composer run dev
 ```
 
 ## 3. Commandes utiles
@@ -28,7 +29,9 @@ npm run dev
 | `php artisan test --compact` | Suite Pest |
 | `php artisan test --compact --filter=…` | Filtre |
 | `vendor/bin/pint --dirty` | Formatage PHP |
-| `npm run build` / `npm run dev` | Frontend |
+| `composer run dev` | Queue + Reverb (WebSocket) + Vite — Herd sert déjà le site |
+| `php artisan reverb:start` | WebSocket seul (si queue/Vite déjà lancés) |
+| `npm run build` / `npm run dev` | Frontend seul (Vite) |
 | `php artisan route:list` | Routes |
 
 ## 4. Workflow d’implémentation

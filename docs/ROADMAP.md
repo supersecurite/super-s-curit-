@@ -37,7 +37,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
 | **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` |
 | **Journal d'accès backoffice** | Support | ✅ Complet | `docs/features/access-logs.md` — monitoring sans Nightwatch |
-| **Lot 2 — Campagnes e-mail** | Marketing | ⚠️ En cours | Modèles ✅ · campagnes/envois ✅ · bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
+| **Lot 2 — Campagnes e-mail** | Marketing | ⚠️ En cours | Modèles ✅ · campagnes/envois ✅ · temps réel Reverb ✅ · bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
 | **Lot 3 — Campagnes WhatsApp** | Marketing | 🔲 À construire | CDC §8 — `docs/features/marketing-campagnes.md` |
 
 Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
@@ -48,6 +48,7 @@ Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
 
 - ✅ Modèles de messages e-mail (variables dynamiques) — `/marketing-templates`
 - ✅ Campagnes e-mail (CRUD brouillon, lancement queue, statuts, pixel ouverture) — `/marketing-campaigns`
+- ✅ Suivi temps réel fiche campagne (Laravel Reverb + Echo)
 - Bounces e-mail (webhook provider)
 - Permissions `marketing_campaigns.*` · UI backoffice · tests Feature
 
@@ -87,7 +88,7 @@ Fiche : `docs/features/marketing-clients.md`
 | Campagnes individuelles / groupées | Jobs queue Laravel |
 | Historique et statuts | Table envois, statuts `queued` → `sent` → `delivered` / `failed` / `bounced` |
 | Suivi réception / ouverture (si provider le permet) | Pixel ouverture, bounces — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
-| Tableau de bord (partie e-mail) | Compteurs campagne |
+| Tableau de bord (partie e-mail) | Compteurs campagne + mise à jour temps réel (Reverb) |
 
 Fiche : `docs/features/marketing-campagnes.md`
 

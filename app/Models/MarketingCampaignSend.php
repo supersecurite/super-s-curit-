@@ -103,6 +103,8 @@ class MarketingCampaignSend extends Model
             'sent_at_formatted' => $this->sent_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
             'delivered_at' => $this->delivered_at?->toIso8601String(),
             'delivered_at_formatted' => $this->delivered_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
+            'received_at' => $this->delivered_at?->toIso8601String(),
+            'received_at_formatted' => $this->delivered_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
             'read_at' => $this->read_at?->toIso8601String(),
             'read_at_formatted' => $this->read_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
             'failed_at' => $this->failed_at?->toIso8601String(),

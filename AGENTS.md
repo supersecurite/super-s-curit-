@@ -66,6 +66,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v13
 - laravel/prompts (PROMPTS) - v0
+- laravel/reverb (REVERB) - v1
 - laravel/wayfinder (WAYFINDER) - v0
 - laravel/boost (BOOST) - v2
 - laravel/mcp (MCP) - v0
@@ -106,7 +107,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 ## Documentation Files
 
-- Project documentation lives under `docs/` and is maintained with each feature tranche (see `.cursor/rules/feature-workflow.mdc`). Do not invent parallel doc trees.
+- You must only create documentation files if explicitly requested by the user.
 
 ## Replies
 

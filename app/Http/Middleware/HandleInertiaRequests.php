@@ -11,6 +11,7 @@ use App\Models\SecurityTip;
 use App\Models\User;
 use App\Seo\SeoPageRegistry;
 use App\Services\AccessLogs\AccessLogFilterOptions;
+use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use App\Support\SuperSecuriteSharedData;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -153,6 +154,9 @@ class HandleInertiaRequests extends Middleware
             ],
             'accessLogFilterUsers' => fn () => $this->accessLogFilterUsers($request),
             'accessLogFilterOptions' => fn () => $this->accessLogFilterOptions($request),
+            'broadcasting' => [
+                'enabled' => BroadcastMarketingCampaignProgress::isEnabled(),
+            ],
         ];
     }
 

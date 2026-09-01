@@ -128,6 +128,7 @@ class MarketingCampaign extends Model
             'total' => 0,
             'queued' => 0,
             'sent' => 0,
+            'received' => 0,
             'delivered' => 0,
             'read' => 0,
             'failed' => 0,
@@ -139,6 +140,9 @@ class MarketingCampaign extends Model
             $stats[$status->value] = $value;
             $stats['total'] += $value;
         }
+
+        $stats['received'] += $stats['delivered'];
+        $stats['delivered'] = 0;
 
         return $stats;
     }

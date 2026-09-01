@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Enums\MarketingCampaignSendStatus;
 use App\Mail\MarketingCampaignMailable;
 use App\Models\MarketingCampaignSend;
+use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
@@ -32,7 +33,7 @@ class SendMarketingCampaignEmailJob implements ShouldQueue
             $now = now();
 
             $send->update([
-                'status' => MarketingCampaignSendStatus::Delivered,
+                'status' => MarketingCampaignSendStatus::Received,
                 'sent_at' => $now,
                 'delivered_at' => $now,
             ]);
@@ -45,6 +46,7 @@ class SendMarketingCampaignEmailJob implements ShouldQueue
         }
 
         if ($send->campaign !== null) {
+            BroadcastMarketingCampaignProgress::dispatch($send->campaign, $send->fresh(['contact']));
             SyncMarketingCampaignCompletionJob::dispatch($send->campaign);
         }
     }

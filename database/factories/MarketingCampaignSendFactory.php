@@ -34,8 +34,13 @@ class MarketingCampaignSendFactory extends Factory
 
     public function delivered(): static
     {
+        return $this->received();
+    }
+
+    public function received(): static
+    {
         return $this->state(fn (array $attributes) => [
-            'status' => MarketingCampaignSendStatus::Delivered,
+            'status' => MarketingCampaignSendStatus::Received,
             'sent_at' => now(),
             'delivered_at' => now(),
         ]);

@@ -18,13 +18,13 @@ type SharedTracking = {
  */
 export function useVisitTracker() {
     const { tracking } = usePage<SharedTracking>().props;
-    const startedAt = useRef<number>(Date.now());
-    const path = useRef<string>(window.location.pathname);
-    const visitorUuid = useRef<string | null>(
-        tracking?.visitor_uuid ?? readCookie(VISITOR_COOKIE),
-    );
+    const startedAt = useRef<number>(0);
+    const path = useRef<string>('/');
+    const visitorUuid = useRef<string | null>(tracking?.visitor_uuid ?? null);
 
     useEffect(() => {
+        startedAt.current = Date.now();
+        path.current = window.location.pathname;
         visitorUuid.current =
             tracking?.visitor_uuid ?? readCookie(VISITOR_COOKIE) ?? visitorUuid.current;
     }, [tracking?.visitor_uuid]);

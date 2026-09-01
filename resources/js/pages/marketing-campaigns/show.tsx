@@ -1,6 +1,6 @@
 import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
-import { ArrowLeft, Megaphone, Pencil, Send } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, Megaphone, Pencil, Radio, Send } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import {
     BackofficeIndexPanel,
     IndexTablePagination,
@@ -9,16 +9,25 @@ import {
 } from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
+import {
+    MarketingSendReceiptIndicator,
+    marketingSendReceiptAriaLabel,
+} from '@/components/marketing-campaigns/marketing-send-receipt-indicator';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { withIndexTableQuery } from '@/lib/index-table-query';
+import { isBroadcastingConfigured } from '@/lib/echo';
+import {
+    useMarketingCampaignRealtime,
+    type CampaignProgressPayload,
+} from '@/hooks/use-marketing-campaign-realtime';
 import { destroy, edit, index, launch, show } from '@/routes/marketing-campaigns';
 
 type CampaignStats = {
     total: number;
     queued: number;
     sent: number;
-    delivered: number;
+    received: number;
     read: number;
     failed: number;
     bounced: number;
@@ -46,6 +55,7 @@ type SendRow = {
     status: string;
     status_label: string;
     sent_at_formatted: string | null;
+    received_at_formatted: string | null;
     delivered_at_formatted: string | null;
     read_at_formatted: string | null;
     failed_at_formatted: string | null;
@@ -65,10 +75,14 @@ type PageProps = {
     canUpdate: boolean;
     canDelete: boolean;
     canSend: boolean;
+    broadcasting: {
+        enabled: boolean;
+    };
 };
 
 function statusVariant(status: string): 'default' | 'secondary' | 'outline' | 'destructive' {
     switch (status) {
+        case 'received':
         case 'delivered':
         case 'read':
         case 'completed':
@@ -86,8 +100,41 @@ function statusVariant(status: string): 'default' | 'secondary' | 'outline' | 'd
 }
 
 export default function MarketingCampaignsShow() {
-    const { campaign, sends, canUpdate, canDelete, canSend } = usePage<PageProps>().props;
+    const { campaign, sends, canUpdate, canDelete, canSend, broadcasting } =
+        usePage<PageProps>().props;
     const [launching, setLaunching] = useState(false);
+    const [liveCampaign, setLiveCampaign] = useState(campaign);
+    const [liveSends, setLiveSends] = useState(sends);
+
+    const realtimeEnabled =
+        broadcasting.enabled &&
+        isBroadcastingConfigured() &&
+        ['sending', 'queued'].includes(liveCampaign.status);
+
+    const handleProgress = useCallback((payload: CampaignProgressPayload) => {
+        setLiveCampaign((previous) => ({
+            ...previous,
+            ...payload.campaign,
+            stats: payload.campaign.stats,
+        }));
+
+        if (payload.send === null) {
+            return;
+        }
+
+        const send = payload.send;
+
+        setLiveSends((previous) => ({
+            ...previous,
+            data: previous.data.some((row) => row.uuid === send.uuid)
+                ? previous.data.map((row) =>
+                      row.uuid === send.uuid ? send : row,
+                  )
+                : [send, ...previous.data],
+        }));
+    }, []);
+
+    useMarketingCampaignRealtime(campaign.uuid, realtimeEnabled, handleProgress);
 
     setLayoutProps({
         breadcrumbs: [
@@ -123,7 +170,13 @@ export default function MarketingCampaignsShow() {
             id: 'status',
             header: 'Statut',
             cell: (send) => (
-                <Badge variant={statusVariant(send.status)}>{send.status_label}</Badge>
+                <div
+                    className="flex items-center gap-2"
+                    aria-label={marketingSendReceiptAriaLabel(send.status)}
+                >
+                    <MarketingSendReceiptIndicator status={send.status} />
+                    <Badge variant={statusVariant(send.status)}>{send.status_label}</Badge>
+                </div>
             ),
         },
         {
@@ -132,8 +185,14 @@ export default function MarketingCampaignsShow() {
             cell: (send) => send.sent_at_formatted ?? '—',
         },
         {
+            id: 'received_at',
+            header: 'Reçu',
+            cell: (send) =>
+                send.received_at_formatted ?? send.delivered_at_formatted ?? '—',
+        },
+        {
             id: 'read_at',
-            header: 'Ouvert',
+            header: 'Lu',
             cell: (send) => send.read_at_formatted ?? '—',
         },
         {
@@ -144,11 +203,11 @@ export default function MarketingCampaignsShow() {
     ];
 
     const statCards = [
-        { label: 'Total', value: campaign.stats.total },
-        { label: 'En file', value: campaign.stats.queued },
-        { label: 'Livrés', value: campaign.stats.delivered },
-        { label: 'Ouverts', value: campaign.stats.read },
-        { label: 'Échecs', value: campaign.stats.failed + campaign.stats.bounced },
+        { label: 'Total', value: liveCampaign.stats.total },
+        { label: 'En file', value: liveCampaign.stats.queued },
+        { label: 'Reçus', value: liveCampaign.stats.received },
+        { label: 'Lus', value: liveCampaign.stats.read },
+        { label: 'Échecs', value: liveCampaign.stats.failed + liveCampaign.stats.bounced },
     ];
 
     return (
@@ -170,11 +229,17 @@ export default function MarketingCampaignsShow() {
                             {campaign.name}
                         </h1>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
-                            <Badge variant={statusVariant(campaign.status)}>
-                                {campaign.status_label}
+                            <Badge variant={statusVariant(liveCampaign.status)}>
+                                {liveCampaign.status_label}
                             </Badge>
-                            {campaign.list ? (
-                                <Badge variant="outline">Liste : {campaign.list.name}</Badge>
+                            {realtimeEnabled ? (
+                                <Badge variant="outline" className="gap-1">
+                                    <Radio className="size-3 animate-pulse" aria-hidden />
+                                    Temps réel
+                                </Badge>
+                            ) : null}
+                            {liveCampaign.list ? (
+                                <Badge variant="outline">Liste : {liveCampaign.list.name}</Badge>
                             ) : null}
                         </div>
                     </div>
@@ -207,7 +272,7 @@ export default function MarketingCampaignsShow() {
                     </div>
                 </div>
 
-                {campaign.stats.total > 0 ? (
+                {liveCampaign.stats.total > 0 ? (
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                         {statCards.map((stat) => (
                             <div key={stat.label} className="app-panel p-4">
@@ -244,11 +309,11 @@ export default function MarketingCampaignsShow() {
                             </div>
                             <div>
                                 <dt className="text-muted-foreground">Lancée le</dt>
-                                <dd>{campaign.launched_at_formatted ?? '—'}</dd>
+                                <dd>{liveCampaign.launched_at_formatted ?? '—'}</dd>
                             </div>
                             <div>
                                 <dt className="text-muted-foreground">Terminée le</dt>
-                                <dd>{campaign.completed_at_formatted ?? '—'}</dd>
+                                <dd>{liveCampaign.completed_at_formatted ?? '—'}</dd>
                             </div>
                         </dl>
                     </section>
@@ -259,18 +324,18 @@ export default function MarketingCampaignsShow() {
                     </section>
                 </div>
 
-                {campaign.stats.total > 0 ? (
+                {liveCampaign.stats.total > 0 ? (
                     <div className="space-y-3">
                         <h2 className="font-semibold">Destinataires</h2>
                         <BackofficeIndexPanel>
                             <ResponsiveDataTable<SendRow>
-                                rows={sends.data}
+                                rows={liveSends.data}
                                 columns={sendColumns}
                                 getRowKey={(send) => send.uuid}
                                 emptyMessage="Aucun envoi enregistré."
                             />
                             <IndexTablePagination
-                                paginated={sends}
+                                paginated={liveSends}
                                 itemLabel="envois"
                                 buildPageUrl={buildPageUrl}
                             />
