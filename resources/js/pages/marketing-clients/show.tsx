@@ -1,10 +1,26 @@
 import { Head, Link, setLayoutProps, usePage } from '@inertiajs/react';
-import { ArrowLeft, Contact, Mail, Phone, Pencil, Tag } from 'lucide-react';
+import { ArrowLeft, Building2, Contact, Mail, MapPin, Phone, Pencil, Tag, Users } from 'lucide-react';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import { CompanyChannelsDisplay } from '@/components/marketing-clients/company-channels-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { destroy, edit, index, show } from '@/routes/marketing-clients';
 import { show as showList } from '@/routes/marketing-lists';
+import type { MarketingCompanyChannel } from '@/types/marketing-company-contact';
+
+type CampaignChannelEntry = {
+    value: string;
+    label: string | null;
+    person_name: string | null;
+    scope: string;
+};
+
+type CampaignChannels = {
+    emails: CampaignChannelEntry[];
+    phones: CampaignChannelEntry[];
+    whatsapp: CampaignChannelEntry[];
+    cc_emails: string[];
+};
 
 type ContactData = {
     uuid: string;
@@ -13,6 +29,12 @@ type ContactData = {
     last_name: string | null;
     email: string | null;
     phone: string | null;
+    is_company: boolean;
+    company_name: string | null;
+    company_role: string | null;
+    company_contacts: MarketingCompanyChannel[];
+    campaign_channels: CampaignChannels;
+    address: string | null;
     tags: string[];
     marketing_consent: boolean;
     notes: string | null;
@@ -62,6 +84,9 @@ export default function MarketingClientsShow() {
                             {contact.full_name}
                         </h1>
                         <div className="mt-2 flex flex-wrap gap-2">
+                            <Badge variant={contact.is_company ? 'default' : 'secondary'}>
+                                {contact.is_company ? 'Entreprise' : 'Particulier'}
+                            </Badge>
                             <Badge variant={contact.marketing_consent ? 'default' : 'outline'}>
                                 {contact.marketing_consent
                                     ? 'Consentement accordé'
@@ -127,10 +152,60 @@ export default function MarketingClientsShow() {
                                     </dd>
                                 </div>
                             </div>
+                            {!contact.is_company ? (
+                                <div className="flex items-start gap-3">
+                                    <MapPin className="text-muted-foreground mt-0.5 size-4 shrink-0" />
+                                    <div>
+                                        <dt className="text-muted-foreground">Adresse</dt>
+                                        <dd className="whitespace-pre-wrap">
+                                            {contact.address ?? '—'}
+                                        </dd>
+                                    </div>
+                                </div>
+                            ) : null}
                         </dl>
                     </section>
 
-                    <section className="app-panel space-y-4 p-4">
+                    {contact.is_company ? (
+                        <section className="app-panel space-y-4 p-4">
+                            <h2 className="font-semibold">Entreprise</h2>
+                            <dl className="space-y-3 text-sm">
+                                <div className="flex items-start gap-3">
+                                    <Building2 className="text-muted-foreground mt-0.5 size-4 shrink-0" />
+                                    <div>
+                                        <dt className="text-muted-foreground">Nom</dt>
+                                        <dd>{contact.company_name ?? '—'}</dd>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Users className="text-muted-foreground mt-0.5 size-4 shrink-0" />
+                                    <div className="min-w-0 flex-1">
+                                        <dt className="text-muted-foreground mb-2">
+                                            Canaux entreprise
+                                        </dt>
+                                        <dd>
+                                            <CompanyChannelsDisplay
+                                                companyRole={contact.company_role}
+                                                channels={contact.company_contacts}
+                                                campaignChannels={contact.campaign_channels}
+                                            />
+                                        </dd>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <MapPin className="text-muted-foreground mt-0.5 size-4 shrink-0" />
+                                    <div>
+                                        <dt className="text-muted-foreground">Adresse</dt>
+                                        <dd className="whitespace-pre-wrap">
+                                            {contact.address ?? '—'}
+                                        </dd>
+                                    </div>
+                                </div>
+                            </dl>
+                        </section>
+                    ) : null}
+
+                    <section className="app-panel space-y-4 p-4 lg:col-span-2">
                         <h2 className="font-semibold">Listes de diffusion</h2>
                         {lists.length > 0 ? (
                             <ul className="space-y-2">

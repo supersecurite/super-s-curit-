@@ -1,10 +1,10 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { Upload } from 'lucide-react';
+import { Download, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { importMethod as importPage, index } from '@/routes/marketing-clients';
-import { store as importStore } from '@/routes/marketing-clients/import';
+import { store as importStore, template as importTemplate } from '@/routes/marketing-clients/import';
 
 type ImportReport = {
     added: number;
@@ -34,8 +34,24 @@ export default function MarketingClientsImport() {
                         Importer des contacts
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Fichier CSV avec colonnes : prenom, nom, email, telephone, consentement.
+                        Téléchargez le modèle CSV, remplissez-le puis importez-le ci-dessous.
                     </p>
+                </div>
+
+                <div className="max-w-xl rounded-xl border bg-card p-6">
+                    <h2 className="mb-2 text-sm font-semibold">Modèle CSV</h2>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                        Colonnes : prenom, nom, email, telephone, entreprise,
+                        role_entreprise, contacts_entreprise (JSON plat :
+                        type/value/label), adresse, consentement (oui/non).
+                        Au moins un e-mail ou un téléphone E.164 (+224…) par ligne.
+                    </p>
+                    <Button variant="outline" asChild>
+                        <a href={importTemplate.url()} download>
+                            <Download className="size-4" aria-hidden />
+                            Télécharger le modèle
+                        </a>
+                    </Button>
                 </div>
 
                 <Form

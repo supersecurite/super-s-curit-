@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\MarketingContact;
+use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +20,18 @@ class StoreMarketingContactRequest extends FormRequest
             $tags = array_values(array_filter(array_map('trim', explode(',', (string) $this->input('tags')))));
 
             $this->merge(['tags' => $tags]);
+        }
+
+        MarketingCompanyContactRules::prepareForValidation($this);
+
+        $this->merge(['is_company' => $this->boolean('is_company')]);
+
+        if (! $this->boolean('is_company')) {
+            $this->merge([
+                'company_name' => null,
+                'company_role' => null,
+                'company_contacts' => [],
+            ]);
         }
     }
 
@@ -45,7 +58,11 @@ class StoreMarketingContactRequest extends FormRequest
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],
             'marketing_consent' => ['sometimes', 'boolean'],
+            'is_company' => ['sometimes', 'boolean'],
             'notes' => ['nullable', 'string', 'max:5000'],
+            'company_name' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:5000'],
+            ...MarketingCompanyContactRules::rules(),
         ];
     }
 
@@ -55,6 +72,8 @@ class StoreMarketingContactRequest extends FormRequest
             if (! $this->filled('email') && ! $this->filled('phone')) {
                 $validator->errors()->add('email', 'Au moins un e-mail ou un téléphone est requis.');
             }
+
+            MarketingCompanyContactRules::validateChannelValues($validator, $this->input('company_contacts'));
         });
     }
 
@@ -67,6 +86,7 @@ class StoreMarketingContactRequest extends FormRequest
             'email.unique' => 'Un contact avec cet e-mail existe déjà.',
             'phone.unique' => 'Un contact avec ce téléphone existe déjà.',
             'phone.regex' => 'Le téléphone doit être au format E.164 (ex. +224612345678).',
+            ...MarketingCompanyContactRules::messages(),
         ];
     }
 }

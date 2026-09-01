@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\Marketing\MarketingCompanyContactRules;
+use App\Support\Marketing\ResolveMarketingContactChannels;
 use Database\Factories\MarketingContactFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +20,11 @@ use Illuminate\Support\Str;
     'last_name',
     'email',
     'phone',
+    'is_company',
+    'company_name',
+    'company_role',
+    'company_contacts',
+    'address',
     'tags',
     'marketing_consent',
     'notes',
@@ -48,6 +55,8 @@ class MarketingContact extends Model
     {
         return [
             'tags' => 'array',
+            'company_contacts' => 'array',
+            'is_company' => 'boolean',
             'marketing_consent' => 'boolean',
         ];
     }
@@ -66,6 +75,21 @@ class MarketingContact extends Model
     }
 
     /**
+     * Canaux campagne (e-mail, téléphone, WhatsApp) du contact principal et de l'entreprise.
+     *
+     * @return array{
+     *     emails: list<array{value: string, label: string|null, person_name: string|null, scope: string}>,
+     *     phones: list<array{value: string, label: string|null, person_name: string|null, scope: string}>,
+     *     whatsapp: list<array{value: string, label: string|null, person_name: string|null, scope: string}>,
+     *     cc_emails: list<string>
+     * }
+     */
+    public function campaignChannels(): array
+    {
+        return ResolveMarketingContactChannels::forCampaign($this);
+    }
+
+    /**
      * @param  Builder<MarketingContact>  $query
      * @return Builder<MarketingContact>
      */
@@ -80,7 +104,11 @@ class MarketingContact extends Model
                 ->where('first_name', 'like', "%{$search}%")
                 ->orWhere('last_name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
-                ->orWhere('phone', 'like', "%{$search}%");
+                ->orWhere('phone', 'like', "%{$search}%")
+                ->orWhere('company_name', 'like', "%{$search}%")
+                ->orWhere('company_role', 'like', "%{$search}%")
+                ->orWhere('company_contacts', 'like', "%{$search}%")
+                ->orWhere('address', 'like', "%{$search}%");
         });
     }
 
@@ -97,6 +125,12 @@ class MarketingContact extends Model
             'full_name' => $this->full_name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'is_company' => $this->is_company,
+            'company_name' => $this->company_name,
+            'company_role' => $this->company_role,
+            'company_contacts' => MarketingCompanyContactRules::normalize($this->company_contacts),
+            'campaign_channels' => $this->campaignChannels(),
+            'address' => $this->address,
             'tags' => $this->tags ?? [],
             'marketing_consent' => $this->marketing_consent,
             'notes' => $this->notes,

@@ -13,9 +13,9 @@ CRM léger pour le module marketing : contacts clients (e-mail, téléphone What
 
 ## Fonctionnement
 
-1. **Contacts** (`/marketing-clients`) — CRUD : prénom, nom, e-mail, téléphone E.164, tags (virgules), consentement marketing, notes.
+1. **Contacts** (`/marketing-clients`) — CRUD : type **particulier / entreprise** (`is_company`), prénom, nom, e-mail, téléphone E.164 (interlocuteur principal), nom de l'entreprise, **rôle de l'interlocuteur** (`company_role`), **canaux entreprise JSON plats** (`company_contacts` : `{ type, value, label }` pour `email` / `phone` / `whatsapp`), adresse, tags, consentement, notes. Le formulaire masque les champs entreprise si `is_company` est faux. Résolution campagne via `MarketingContact::campaignChannels()` et `ResolveMarketingContactChannels` (destinataires, CC e-mail entreprise).
 2. **Listes** (`/marketing-lists`) — fiche détail (contacts, actions) + page d’édition des infos séparée.
-3. **Import CSV** (`/marketing-clients/import`) — colonnes reconnues : `prenom`, `nom`, `email`, `telephone`, `consentement` ; rapport ajouts / doublons / erreurs.
+3. **Import CSV** (`/marketing-clients/import`) — colonnes reconnues : `prenom`, `nom`, `email`, `telephone`, `entreprise`, `role_entreprise`, `contacts_entreprise` (**JSON plat**), `adresse`, `consentement` ; modèle téléchargeable ; rapport ajouts / doublons / erreurs. Format legacy imbriqué (interlocuteurs + `channels`) accepté à l'import et normalisé.
 4. **UI** — max 3 actions principales par page ; confirmations (suppression, ajout/retrait contact) en modales.
 5. **Déduplication** — unicité e-mail et téléphone en base ; doublons ignorés à l’import.
 
@@ -45,6 +45,7 @@ Toasts : `Inertia::flash('toast', …)` sur toutes les mutations.
 | Actions | `app/Actions/Marketing/` |
 | Policies | `app/Policies/MarketingContactPolicy.php`, `MarketingListPolicy.php` |
 | Import (technique) | `app/Services/Marketing/MarketingContactImportService.php` |
+| Canaux campagne | `app/Support/Marketing/ResolveMarketingContactChannels.php`, `MarketingCompanyContactRules.php`, `app/Enums/MarketingCompanyContactChannel.php` |
 | Contrôleurs | `app/Http/Controllers/Admin/MarketingContactController.php`, `MarketingListController.php` |
 | Pages | `resources/js/pages/marketing-clients/`, `marketing-lists/` |
 | Tests | `tests/Feature/MarketingContactTest.php`, `MarketingListTest.php` |

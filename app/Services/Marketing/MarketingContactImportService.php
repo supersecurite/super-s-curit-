@@ -4,6 +4,8 @@ namespace App\Services\Marketing;
 
 use App\DataTransferObjects\MarketingContactImportResult;
 use App\Models\MarketingContact;
+use App\Support\Marketing\CompanyContactLegacyConverter;
+use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -13,7 +15,9 @@ class MarketingContactImportService
     /**
      * Importe des contacts depuis un fichier CSV (séparateur auto-détecté , ou ;).
      *
-     * Colonnes reconnues : prenom/first_name, nom/last_name, email, telephone/phone/tel.
+     * Colonnes reconnues : prenom/first_name, nom/last_name, email, telephone/phone/tel,
+     * entreprise/company_name, role_entreprise/company_role, contacts_entreprise/company_contacts
+     * (JSON plat), adresse/address.
      * Les doublons (e-mail ou téléphone déjà présents) sont ignorés et rapportés.
      */
     public function import(UploadedFile $file): MarketingContactImportResult
@@ -65,11 +69,19 @@ class MarketingContactImportService
                 'last_name' => ['nullable', 'string', 'max:255'],
                 'email' => ['nullable', 'email', 'max:255'],
                 'phone' => ['nullable', 'string', 'regex:/^\+[1-9]\d{1,14}$/'],
+                'company_name' => ['nullable', 'string', 'max:255'],
+                'address' => ['nullable', 'string', 'max:5000'],
                 'marketing_consent' => ['sometimes', 'boolean'],
+                ...MarketingCompanyContactRules::rules(),
             ], [
                 'email.email' => 'Adresse e-mail invalide.',
                 'phone.regex' => 'Le téléphone doit être au format E.164 (ex. +224612345678).',
+                ...MarketingCompanyContactRules::messages(),
             ]);
+
+            $validator->after(function ($validation) use ($data): void {
+                MarketingCompanyContactRules::validateChannelValues($validation, $data['company_contacts'] ?? []);
+            });
 
             if ($validator->fails()) {
                 $result->errors[] = [
@@ -81,6 +93,7 @@ class MarketingContactImportService
             }
 
             $validated = $validator->validated();
+            $validated['company_contacts'] = MarketingCompanyContactRules::normalize($validated['company_contacts'] ?? []);
 
             if (empty($validated['email']) && empty($validated['phone'])) {
                 $result->errors[] = [
@@ -104,11 +117,22 @@ class MarketingContactImportService
                 continue;
             }
 
+            $isCompany = filled($validated['company_name'] ?? null)
+                || filled($validated['company_role'] ?? null)
+                || ($validated['company_contacts'] ?? []) !== [];
+
             MarketingContact::query()->create([
                 'first_name' => $validated['first_name'] ?? null,
                 'last_name' => $validated['last_name'] ?? null,
                 'email' => $validated['email'] ?? null,
                 'phone' => $validated['phone'] ?? null,
+                'is_company' => $isCompany,
+                'company_name' => $isCompany ? ($validated['company_name'] ?? null) : null,
+                'company_role' => $isCompany ? ($validated['company_role'] ?? null) : null,
+                'company_contacts' => $isCompany && ($validated['company_contacts'] ?? []) !== []
+                    ? $validated['company_contacts']
+                    : null,
+                'address' => $validated['address'] ?? null,
                 'marketing_consent' => (bool) ($validated['marketing_consent'] ?? false),
             ]);
 
@@ -118,6 +142,53 @@ class MarketingContactImportService
         fclose($handle);
 
         return $result;
+    }
+
+    /** @var list<string> */
+    public const TEMPLATE_HEADERS = [
+        'prenom',
+        'nom',
+        'email',
+        'telephone',
+        'entreprise',
+        'role_entreprise',
+        'contacts_entreprise',
+        'adresse',
+        'consentement',
+    ];
+
+    /**
+     * Contenu CSV du modèle d'import (UTF-8 avec BOM pour Excel).
+     */
+    public function templateCsv(): string
+    {
+        $handle = fopen('php://temp', 'r+');
+
+        if ($handle === false) {
+            return '';
+        }
+
+        fputcsv($handle, self::TEMPLATE_HEADERS);
+        fputcsv($handle, [
+            'Aissata',
+            'Diallo',
+            'aissata@example.com',
+            '+224612345678',
+            'Super Sécurité Guinée',
+            'Directrice commerciale',
+            json_encode([
+                ['type' => 'email', 'value' => 'compta@example.com', 'label' => 'Compta'],
+                ['type' => 'whatsapp', 'value' => '+224600000002', 'label' => null],
+            ], JSON_UNESCAPED_UNICODE),
+            'Immeuble Kaloum, Conakry',
+            'oui',
+        ]);
+
+        rewind($handle);
+        $csv = stream_get_contents($handle) ?: '';
+        fclose($handle);
+
+        return "\xEF\xBB\xBF".$csv;
     }
 
     /**
@@ -142,6 +213,10 @@ class MarketingContactImportService
                 in_array($normalized, ['email', 'e_mail', 'mail'], true) => $map['email'] = $index,
                 in_array($normalized, ['telephone', 'phone', 'tel', 'mobile'], true) => $map['phone'] = $index,
                 in_array($normalized, ['consentement', 'marketing_consent', 'consent'], true) => $map['marketing_consent'] = $index,
+                in_array($normalized, ['entreprise', 'societe', 'company', 'company_name', 'nom_entreprise'], true) => $map['company_name'] = $index,
+                in_array($normalized, ['role_entreprise', 'role', 'company_role', 'fonction'], true) => $map['company_role'] = $index,
+                in_array($normalized, ['contacts_entreprise', 'company_contacts', 'contacts_societe'], true) => $map['company_contacts'] = $index,
+                in_array($normalized, ['adresse', 'address'], true) => $map['address'] = $index,
                 default => null,
             };
         }
@@ -161,6 +236,10 @@ class MarketingContactImportService
             'last_name' => null,
             'email' => null,
             'phone' => null,
+            'company_name' => null,
+            'company_role' => null,
+            'company_contacts' => [],
+            'address' => null,
             'marketing_consent' => false,
         ];
 
@@ -179,6 +258,18 @@ class MarketingContactImportService
 
             if ($field === 'phone') {
                 $data[$field] = str_starts_with($value, '+') ? $value : '+'.$value;
+
+                continue;
+            }
+
+            if ($field === 'company_contacts') {
+                $decoded = json_decode($value, true);
+
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $data[$field] = $decoded;
+                } else {
+                    $data[$field] = CompanyContactLegacyConverter::convert($value);
+                }
 
                 continue;
             }

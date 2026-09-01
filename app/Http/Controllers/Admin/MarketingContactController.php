@@ -12,11 +12,14 @@ use App\Http\Requests\StoreMarketingContactRequest;
 use App\Http\Requests\UpdateMarketingContactRequest;
 use App\Models\MarketingContact;
 use App\Models\MarketingList;
+use App\Services\Marketing\MarketingContactImportService;
 use App\Support\IndexTableSort;
+use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MarketingContactController extends Controller
 {
@@ -26,7 +29,7 @@ class MarketingContactController extends Controller
 
         $sort = IndexTableSort::resolve(
             $request,
-            ['full_name', 'email', 'phone', 'marketing_consent', 'lists_count', 'created_at'],
+            ['full_name', 'email', 'phone', 'company_name', 'marketing_consent', 'lists_count', 'created_at'],
             'created_at',
             'desc',
         );
@@ -72,7 +75,17 @@ class MarketingContactController extends Controller
     {
         $validated = $request->validated();
         $validated['marketing_consent'] = $request->boolean('marketing_consent');
+        $validated['is_company'] = $request->boolean('is_company');
         $validated['tags'] = $validated['tags'] ?? [];
+
+        if ($validated['is_company']) {
+            $companyContacts = MarketingCompanyContactRules::normalize($validated['company_contacts'] ?? []);
+            $validated['company_contacts'] = $companyContacts === [] ? null : $companyContacts;
+        } else {
+            $validated['company_name'] = null;
+            $validated['company_role'] = null;
+            $validated['company_contacts'] = null;
+        }
 
         $action->handle($validated);
 
@@ -116,7 +129,17 @@ class MarketingContactController extends Controller
     ): RedirectResponse {
         $validated = $request->validated();
         $validated['marketing_consent'] = $request->boolean('marketing_consent');
+        $validated['is_company'] = $request->boolean('is_company');
         $validated['tags'] = $validated['tags'] ?? [];
+
+        if ($validated['is_company']) {
+            $companyContacts = MarketingCompanyContactRules::normalize($validated['company_contacts'] ?? []);
+            $validated['company_contacts'] = $companyContacts === [] ? null : $companyContacts;
+        } else {
+            $validated['company_name'] = null;
+            $validated['company_role'] = null;
+            $validated['company_contacts'] = null;
+        }
 
         $action->handle($marketingClient, $validated);
 
@@ -143,6 +166,21 @@ class MarketingContactController extends Controller
         return Inertia::render('marketing-clients/import', [
             'importReport' => session('importReport'),
         ]);
+    }
+
+    public function downloadImportTemplate(MarketingContactImportService $importService): StreamedResponse
+    {
+        $this->authorize('import', MarketingContact::class);
+
+        return response()->streamDownload(
+            static function () use ($importService): void {
+                echo $importService->templateCsv();
+            },
+            'modele-import-contacts.csv',
+            [
+                'Content-Type' => 'text/csv; charset=UTF-8',
+            ],
+        );
     }
 
     public function import(

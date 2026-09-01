@@ -121,6 +121,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('backoffice.permission:marketing_clients')->group(function () {
         Route::get('marketing-clients/import', [AdminMarketingContactController::class, 'importForm'])
             ->name('marketing-clients.import');
+        Route::get('marketing-clients/import/modele', [AdminMarketingContactController::class, 'downloadImportTemplate'])
+            ->name('marketing-clients.import.template');
         Route::post('marketing-clients/import', [AdminMarketingContactController::class, 'import'])
             ->name('marketing-clients.import.store');
         Route::resource('marketing-clients', AdminMarketingContactController::class);

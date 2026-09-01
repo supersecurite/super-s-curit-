@@ -30,6 +30,7 @@ type ContactRow = {
     full_name: string;
     email: string | null;
     phone: string | null;
+    company_name: string | null;
     tags: string[];
     marketing_consent: boolean;
     lists_count: number;
@@ -134,6 +135,15 @@ export default function MarketingClientsIndex() {
                 mobileRole: 'meta',
                 className: 'text-muted-foreground',
                 cell: (contact) => contact.phone ?? '—',
+            },
+            {
+                id: 'company',
+                header: 'Entreprise',
+                sortKey: 'company_name',
+                sortable: true,
+                mobileRole: 'subtitle',
+                className: 'text-muted-foreground',
+                cell: (contact) => contact.company_name ?? '—',
             },
             {
                 id: 'tags',
