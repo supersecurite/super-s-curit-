@@ -1,5 +1,9 @@
 import { router } from '@inertiajs/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import CampaignListAudiencePanel, {
+    type ListAudiencePayload,
+} from '@/components/marketing-campaigns/campaign-list-audience-panel';
+import CampaignTemplatePreviewPanel from '@/components/marketing-campaigns/campaign-template-preview-panel';
 import InputError from '@/components/input-error';
 import MarketingTemplateEditor from '@/components/marketing-templates/marketing-template-editor';
 import TemplateSubjectInput from '@/components/marketing-templates/template-subject-input';
@@ -17,6 +21,7 @@ import {
     DEFAULT_MARKETING_TEMPLATE_BODY,
     DEFAULT_MARKETING_TEMPLATE_SUBJECT,
 } from '@/lib/marketing-template-variables';
+import { listAudience } from '@/routes/marketing-campaigns';
 
 type ListOption = {
     id: number;
@@ -89,6 +94,19 @@ export default function MarketingCampaignForm({
         body: resolveInitialBody(campaign),
     });
     const [processing, setProcessing] = useState(false);
+    const [audience, setAudience] = useState<ListAudiencePayload | null>(null);
+    const [audienceLoading, setAudienceLoading] = useState(false);
+    const [audienceError, setAudienceError] = useState<string | null>(null);
+
+    const selectedList = useMemo(
+        () => lists.find((list) => list.id === formData.marketing_list_id) ?? null,
+        [formData.marketing_list_id, lists],
+    );
+
+    const selectedTemplate = useMemo(
+        () => templates.find((template) => template.id === formData.marketing_message_template_id) ?? null,
+        [formData.marketing_message_template_id, templates],
+    );
 
     const updateField = useCallback(
         (field: keyof typeof formData, value: string | number | null) => {
@@ -122,6 +140,53 @@ export default function MarketingCampaignForm({
         [templates, updateField],
     );
 
+    useEffect(() => {
+        if (selectedList === null) {
+            setAudience(null);
+            setAudienceError(null);
+            setAudienceLoading(false);
+
+            return;
+        }
+
+        const controller = new AbortController();
+
+        setAudienceLoading(true);
+        setAudienceError(null);
+
+        fetch(listAudience.url(selectedList.uuid), {
+            headers: { Accept: 'application/json' },
+            signal: controller.signal,
+        })
+            .then(async (response) => {
+                if (! response.ok) {
+                    throw new Error('Impossible de charger les contacts de la liste.');
+                }
+
+                return response.json() as Promise<ListAudiencePayload>;
+            })
+            .then((payload) => {
+                setAudience(payload);
+            })
+            .catch((error: unknown) => {
+                if (error instanceof DOMException && error.name === 'AbortError') {
+                    return;
+                }
+
+                setAudience(null);
+                setAudienceError(
+                    error instanceof Error
+                        ? error.message
+                        : 'Impossible de charger les contacts de la liste.',
+                );
+            })
+            .finally(() => {
+                setAudienceLoading(false);
+            });
+
+        return () => controller.abort();
+    }, [selectedList]);
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setProcessing(true);
@@ -142,93 +207,120 @@ export default function MarketingCampaignForm({
         );
     };
 
+    const editorKey = `campaign-body-${campaign?.uuid ?? 'new'}-${formData.marketing_message_template_id ?? 'none'}`;
+
     return (
-        <form onSubmit={handleSubmit} className="app-panel max-w-3xl space-y-6 p-4">
-            <div className="space-y-2">
-                <Label htmlFor="name">Nom de la campagne</Label>
-                <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(event) => updateField('name', event.target.value)}
-                    required
-                />
-                <InputError message={errors.name} />
-            </div>
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:items-start">
+            <form onSubmit={handleSubmit} className="app-panel space-y-6 p-4 xl:max-w-none">
+                <div className="space-y-2">
+                    <Label htmlFor="name">Nom de la campagne</Label>
+                    <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(event) => updateField('name', event.target.value)}
+                        required
+                    />
+                    <InputError message={errors.name} />
+                </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="marketing_list_id">Liste de diffusion</Label>
-                <Select
-                    value={formData.marketing_list_id?.toString() ?? ''}
-                    onValueChange={(value) => updateField('marketing_list_id', Number(value))}
-                    required
-                >
-                    <SelectTrigger id="marketing_list_id">
-                        <SelectValue placeholder="Choisir une liste" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {lists.map((list) => (
-                            <SelectItem key={list.id} value={list.id.toString()}>
-                                {list.name} ({list.contacts_count} contact
-                                {list.contacts_count > 1 ? 's' : ''})
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <InputError message={errors.marketing_list_id} />
-            </div>
+                <div className="space-y-2">
+                    <Label htmlFor="marketing_list_id">Liste de diffusion</Label>
+                    <Select
+                        value={formData.marketing_list_id?.toString() ?? ''}
+                        onValueChange={(value) => updateField('marketing_list_id', Number(value))}
+                        required
+                    >
+                        <SelectTrigger id="marketing_list_id">
+                            <SelectValue placeholder="Choisir une liste" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {lists.map((list) => (
+                                <SelectItem key={list.id} value={list.id.toString()}>
+                                    {list.name} ({list.contacts_count} contact
+                                    {list.contacts_count > 1 ? 's' : ''})
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.marketing_list_id} />
+                </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="marketing_message_template_id">Modèle (optionnel)</Label>
-                <Select
-                    value={formData.marketing_message_template_id?.toString() ?? 'none'}
-                    onValueChange={applyTemplate}
-                >
-                    <SelectTrigger id="marketing_message_template_id">
-                        <SelectValue placeholder="Sans modèle" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="none">Sans modèle</SelectItem>
-                        {templates.map((template) => (
-                            <SelectItem key={template.id} value={template.id.toString()}>
-                                {template.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <InputError message={errors.marketing_message_template_id} />
-            </div>
+                <div className="space-y-2">
+                    <Label htmlFor="marketing_message_template_id">Modèle (optionnel)</Label>
+                    <Select
+                        value={formData.marketing_message_template_id?.toString() ?? 'none'}
+                        onValueChange={applyTemplate}
+                    >
+                        <SelectTrigger id="marketing_message_template_id">
+                            <SelectValue placeholder="Sans modèle" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="none">Sans modèle</SelectItem>
+                            {templates.map((template) => (
+                                <SelectItem key={template.id} value={template.id.toString()}>
+                                    {template.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.marketing_message_template_id} />
+                </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="subject">Objet</Label>
-                <TemplateSubjectInput
-                    id="subject"
-                    value={formData.subject}
-                    onChange={(value) => updateField('subject', value)}
-                    variables={variables}
-                />
-                <InputError message={errors.subject} />
-            </div>
+                <div className="space-y-2">
+                    <Label htmlFor="subject">Objet</Label>
+                    <TemplateSubjectInput
+                        id="subject"
+                        value={formData.subject}
+                        onChange={(value) => updateField('subject', value)}
+                        variables={variables}
+                    />
+                    <InputError message={errors.subject} />
+                </div>
 
-            <div className="space-y-2">
-                <Label>Message</Label>
-                <MarketingTemplateEditor
-                    key={campaign?.uuid ?? 'new-campaign'}
-                    initialContent={campaign?.body?.trim() ? campaign.body : ''}
-                    fallbackPlainContent={campaign?.body?.trim() ? '' : formData.body}
-                    onChange={(content) => updateField('body', content)}
-                    variables={variables}
-                />
-                <InputError message={errors.body} />
-            </div>
+                <div className="space-y-2">
+                    <Label>Message</Label>
+                    <MarketingTemplateEditor
+                        key={editorKey}
+                        initialContent={formData.body?.trim() ? formData.body : ''}
+                        fallbackPlainContent={formData.body?.trim() ? '' : formData.body}
+                        onChange={(content) => updateField('body', content)}
+                        variables={variables}
+                    />
+                    <InputError message={errors.body} />
+                </div>
 
-            <div className="flex flex-wrap gap-2">
-                <Button type="submit" disabled={processing}>
-                    {submitLabel}
-                </Button>
-                <Button type="button" variant="outline" asChild>
-                    <a href={cancelHref}>Annuler</a>
-                </Button>
-            </div>
-        </form>
+                <div className="flex flex-wrap gap-2">
+                    <Button type="submit" disabled={processing}>
+                        {submitLabel}
+                    </Button>
+                    <Button type="button" variant="outline" asChild>
+                        <a href={cancelHref}>Annuler</a>
+                    </Button>
+                </div>
+            </form>
+
+            <aside className="space-y-4 xl:sticky xl:top-4">
+                {selectedList !== null ? (
+                    <CampaignListAudiencePanel
+                        audience={audience}
+                        loading={audienceLoading}
+                        error={audienceError}
+                    />
+                ) : null}
+
+                {selectedTemplate !== null ? (
+                    <CampaignTemplatePreviewPanel template={selectedTemplate} />
+                ) : null}
+
+                {selectedList === null && selectedTemplate === null ? (
+                    <section className="app-panel p-4">
+                        <p className="text-muted-foreground text-sm">
+                            Sélectionnez une liste pour voir l&apos;audience, ou un modèle pour
+                            prévisualiser le message.
+                        </p>
+                    </section>
+                ) : null}
+            </aside>
+        </div>
     );
 }

@@ -191,3 +191,33 @@ test('commercial can view campaign show page with stats', function () {
             ->has('campaign.name')
             ->has('campaign.stats'));
 });
+
+test('commercial can preview list audience for campaign form', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $list = MarketingList::factory()->create();
+
+    $eligible = MarketingContact::factory()->create([
+        'email' => 'eligible@example.com',
+        'marketing_consent' => true,
+    ]);
+
+    $ineligible = MarketingContact::factory()->create([
+        'email' => null,
+        'phone' => null,
+        'is_company' => false,
+        'company_contacts' => null,
+        'marketing_consent' => true,
+    ]);
+
+    $list->contacts()->attach([$eligible->id, $ineligible->id]);
+
+    $this->actingAs($commercial)
+        ->getJson(route('marketing-campaigns.list-audience', $list))
+        ->assertOk()
+        ->assertJsonPath('stats.total', 2)
+        ->assertJsonPath('stats.eligible', 1)
+        ->assertJsonPath('stats.ineligible', 1)
+        ->assertJsonCount(2, 'contacts');
+});

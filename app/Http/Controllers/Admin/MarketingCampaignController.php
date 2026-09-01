@@ -14,6 +14,8 @@ use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Support\IndexTableSort;
 use App\Support\Marketing\RenderMarketingMessageTemplate;
+use App\Support\Marketing\ResolveMarketingCampaignRecipient;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -165,6 +167,44 @@ class MarketingCampaignController extends Controller
         ]);
 
         return to_route('marketing-campaigns.show', $marketingCampaign);
+    }
+
+    /**
+     * Aperçu audience d'une liste pour le formulaire campagne (contacts + éligibilité envoi).
+     */
+    public function listAudience(MarketingList $marketingList): JsonResponse
+    {
+        $this->authorize('create', MarketingCampaign::class);
+
+        $contacts = $marketingList->contacts()
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get()
+            ->map(fn ($contact) => [
+                'uuid' => $contact->uuid,
+                'full_name' => $contact->full_name,
+                'email' => $contact->email,
+                'marketing_consent' => $contact->marketing_consent,
+                'is_eligible' => ResolveMarketingCampaignRecipient::isEligible($contact),
+            ])
+            ->values()
+            ->all();
+
+        $eligibleCount = collect($contacts)->where('is_eligible', true)->count();
+
+        return response()->json([
+            'list' => [
+                'uuid' => $marketingList->uuid,
+                'name' => $marketingList->name,
+                'contacts_count' => count($contacts),
+            ],
+            'contacts' => $contacts,
+            'stats' => [
+                'total' => count($contacts),
+                'eligible' => $eligibleCount,
+                'ineligible' => count($contacts) - $eligibleCount,
+            ],
+        ]);
     }
 
     /**
