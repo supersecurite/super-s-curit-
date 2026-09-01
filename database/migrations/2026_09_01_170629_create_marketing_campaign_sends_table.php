@@ -11,28 +11,42 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('marketing_campaign_sends', function (Blueprint $table) {
-            $table->id();
-            $table->uuid()->unique();
-            $table->foreignId('marketing_campaign_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('marketing_contact_id')->constrained()->cascadeOnDelete();
-            $table->string('recipient_email');
-            $table->string('recipient_name')->nullable();
-            $table->string('status')->default('queued');
-            $table->string('subject');
-            $table->longText('body_html');
-            $table->uuid('open_token')->unique();
-            $table->timestamp('queued_at')->nullable();
-            $table->timestamp('sent_at')->nullable();
-            $table->timestamp('delivered_at')->nullable();
-            $table->timestamp('read_at')->nullable();
-            $table->timestamp('failed_at')->nullable();
-            $table->text('failure_reason')->nullable();
-            $table->string('provider_message_id')->nullable();
-            $table->timestamps();
+        if (! Schema::hasTable('marketing_campaign_sends')) {
+            Schema::create('marketing_campaign_sends', function (Blueprint $table) {
+                $table->id();
+                $table->uuid()->unique();
+                $table->foreignId('marketing_campaign_id')->constrained()->cascadeOnDelete();
+                $table->foreignId('marketing_contact_id')->constrained()->cascadeOnDelete();
+                $table->string('recipient_email');
+                $table->string('recipient_name')->nullable();
+                $table->string('status')->default('queued');
+                $table->string('subject');
+                $table->longText('body_html');
+                $table->uuid('open_token')->unique();
+                $table->timestamp('queued_at')->nullable();
+                $table->timestamp('sent_at')->nullable();
+                $table->timestamp('delivered_at')->nullable();
+                $table->timestamp('read_at')->nullable();
+                $table->timestamp('failed_at')->nullable();
+                $table->text('failure_reason')->nullable();
+                $table->string('provider_message_id')->nullable();
+                $table->timestamps();
 
-            $table->unique(['marketing_campaign_id', 'marketing_contact_id'], 'mkt_campaign_send_contact_unique');
-        });
+                // Nom explicite : l'index auto-généré dépasse la limite MySQL (64 car.).
+                $table->unique(['marketing_campaign_id', 'marketing_contact_id'], 'mkt_campaign_send_contact_unique');
+            });
+
+            return;
+        }
+
+        // Reprise prod : table créée lors d'une migration précédente interrompue.
+        Schema::whenTableDoesntHaveIndex(
+            'marketing_campaign_sends',
+            'mkt_campaign_send_contact_unique',
+            function (Blueprint $table): void {
+                $table->unique(['marketing_campaign_id', 'marketing_contact_id'], 'mkt_campaign_send_contact_unique');
+            },
+        );
     }
 
     /**
