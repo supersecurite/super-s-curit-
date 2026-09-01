@@ -1,9 +1,20 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { List, Pencil, Plus, Search } from 'lucide-react';
+import { useMemo } from 'react';
+import {
+    BackofficeFiltersBar,
+    BackofficeIndexPanel,
+    IndexTablePagination,
+    ResponsiveDataTable,
+    type ResponsiveColumn,
+} from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
     create,
     destroy,
@@ -30,26 +41,103 @@ type PaginatedLists = {
 
 type PageProps = {
     lists: PaginatedLists;
-    filters: { search?: string };
+    filters: TableSortState & { search?: string };
     canCreate: boolean;
 };
 
 export default function MarketingListsIndex() {
     const { lists, filters, canCreate } = usePage<PageProps>().props;
 
-    const applyFilters = (updates: Record<string, string | undefined>) => {
+    const applyFilters = (updates: Partial<TableSortState & { search?: string; page?: number }>) => {
         const next = { ...filters, ...updates };
         Object.keys(next).forEach((key) => {
-            if (next[key as keyof typeof next] === undefined) {
+            if (next[key as keyof typeof next] === undefined || next[key as keyof typeof next] === '') {
                 delete next[key as keyof typeof next];
             }
         });
         router.get(index.url(), next, { preserveState: true, replace: true });
     };
 
+    const handleSort = useIndexTableSort(filters, applyFilters);
+
     const debouncedSearch = useDebouncedCallback((search: string) => {
-        applyFilters({ search: search || undefined });
+        applyFilters({ search: search || undefined, page: 1 });
     });
+
+    const buildPageUrl = (page: number) =>
+        index.url({ query: withIndexTableQuery(filters, page) });
+
+    const columns = useMemo((): ResponsiveColumn<ListRow>[] => {
+        const renderActions = (list: ListRow) => (
+            <>
+                <Button variant="outline" size="sm" asChild>
+                    <Link href={show.url(list.uuid)}>Voir</Link>
+                </Button>
+                {list.can_update ? (
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href={edit.url(list.uuid)}>
+                            <Pencil className="size-4" aria-hidden />
+                            Modifier
+                        </Link>
+                    </Button>
+                ) : null}
+                {list.can_delete ? (
+                    <ConfirmDeleteDialog
+                        title="Supprimer cette liste ?"
+                        description={`La liste « ${list.name} » sera supprimée.`}
+                        deleteUrl={destroy.url(list.uuid)}
+                        triggerSize="sm"
+                        triggerVariant="outline"
+                        triggerClassName="text-destructive hover:text-destructive"
+                        aria-label={`Supprimer ${list.name}`}
+                    />
+                ) : null}
+            </>
+        );
+
+        return [
+            {
+                id: 'name',
+                header: 'Nom',
+                sortKey: 'name',
+                sortable: true,
+                mobileRole: 'title',
+                cell: (list) => (
+                    <Link
+                        href={show.url(list.uuid)}
+                        className="hover:text-primary hover:underline"
+                    >
+                        {list.name}
+                    </Link>
+                ),
+            },
+            {
+                id: 'description',
+                header: 'Description',
+                sortKey: 'description',
+                sortable: true,
+                mobileRole: 'subtitle',
+                className: 'text-muted-foreground',
+                cell: (list) => list.description ?? '—',
+            },
+            {
+                id: 'contacts',
+                header: 'Contacts',
+                sortKey: 'contacts_count',
+                sortable: true,
+                mobileRole: 'meta',
+                cell: (list) => list.contacts_count,
+            },
+            {
+                id: 'actions',
+                header: 'Actions',
+                mobileRole: 'actions',
+                headerClassName: 'text-right',
+                className: 'text-right',
+                cell: renderActions,
+            },
+        ];
+    }, []);
 
     return (
         <>
@@ -76,151 +164,42 @@ export default function MarketingListsIndex() {
                     ) : null}
                 </div>
 
-                <div className="relative max-w-md">
-                    <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-                    <Input
-                        type="search"
-                        placeholder="Rechercher une liste..."
-                        defaultValue={filters.search ?? ''}
-                        onChange={(event) =>
-                            debouncedSearch(event.target.value)
-                        }
-                        className="pl-9"
+                <BackofficeFiltersBar>
+                    <div className="relative min-w-0 flex-1 lg:min-w-[240px]">
+                        <Label htmlFor="lists-search" className="sr-only">
+                            Recherche
+                        </Label>
+                        <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                        <Input
+                            id="lists-search"
+                            type="search"
+                            placeholder="Rechercher une liste…"
+                            defaultValue={filters.search ?? ''}
+                            onChange={(event) =>
+                                debouncedSearch(event.target.value)
+                            }
+                            className="pl-9"
+                        />
+                    </div>
+                </BackofficeFiltersBar>
+
+                <BackofficeIndexPanel>
+                    <ResponsiveDataTable
+                        rows={lists.data}
+                        columns={columns}
+                        getRowKey={(list) => list.uuid}
+                        emptyMessage="Aucune liste pour le moment."
+                        minWidth="640px"
+                        sort={filters}
+                        onSort={handleSort}
                     />
-                </div>
+                </BackofficeIndexPanel>
 
-                <div className="app-panel overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full min-w-[640px] text-left text-sm">
-                            <thead className="bg-muted/50 border-b text-xs uppercase tracking-wide text-muted-foreground">
-                                <tr>
-                                    <th className="px-4 py-3 font-medium">Nom</th>
-                                    <th className="px-4 py-3 font-medium">Description</th>
-                                    <th className="px-4 py-3 font-medium">Contacts</th>
-                                    <th className="px-4 py-3 text-right font-medium">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {lists.data.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={4}
-                                            className="text-muted-foreground px-4 py-8 text-center"
-                                        >
-                                            Aucune liste pour le moment.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    lists.data.map((list) => (
-                                        <tr
-                                            key={list.uuid}
-                                            className="border-b last:border-b-0"
-                                        >
-                                            <td className="px-4 py-3 font-medium">
-                                                <Link
-                                                    href={show.url(list.uuid)}
-                                                    className="hover:text-primary hover:underline"
-                                                >
-                                                    {list.name}
-                                                </Link>
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-3">
-                                                {list.description ?? '—'}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                {list.contacts_count}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        asChild
-                                                    >
-                                                        <Link href={show.url(list.uuid)}>
-                                                            Voir
-                                                        </Link>
-                                                    </Button>
-                                                    {list.can_update ? (
-                                                        <Button
-                                                            variant="outline"
-                                                            size="icon"
-                                                            asChild
-                                                        >
-                                                            <Link
-                                                                href={edit.url(list.uuid)}
-                                                                aria-label={`Modifier ${list.name}`}
-                                                            >
-                                                                <Pencil
-                                                                    className="size-4"
-                                                                    aria-hidden
-                                                                />
-                                                            </Link>
-                                                        </Button>
-                                                    ) : null}
-                                                    {list.can_delete ? (
-                                                        <ConfirmDeleteDialog
-                                                            title="Supprimer cette liste ?"
-                                                            description={`La liste « ${list.name} » sera supprimée.`}
-                                                            deleteUrl={destroy.url(list.uuid)}
-                                                            triggerSize="icon"
-                                                            triggerVariant="outline"
-                                                            triggerClassName="text-destructive hover:text-destructive"
-                                                            aria-label={`Supprimer ${list.name}`}
-                                                        />
-                                                    ) : null}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {lists.last_page > 1 && (
-                    <div className="text-muted-foreground flex flex-wrap items-center justify-between gap-4 text-sm">
-                        <span>
-                            Page {lists.current_page} sur {lists.last_page} (
-                            {lists.total} listes)
-                        </span>
-                        <div className="flex gap-2">
-                            {lists.current_page > 1 && (
-                                <Button variant="outline" size="sm" asChild>
-                                    <Link
-                                        href={index.url({
-                                            query: {
-                                                page: lists.current_page - 1,
-                                                ...(filters.search
-                                                    ? { search: filters.search }
-                                                    : {}),
-                                            },
-                                        })}
-                                    >
-                                        Précédent
-                                    </Link>
-                                </Button>
-                            )}
-                            {lists.current_page < lists.last_page && (
-                                <Button variant="outline" size="sm" asChild>
-                                    <Link
-                                        href={index.url({
-                                            query: {
-                                                page: lists.current_page + 1,
-                                                ...(filters.search
-                                                    ? { search: filters.search }
-                                                    : {}),
-                                            },
-                                        })}
-                                    >
-                                        Suivant
-                                    </Link>
-                                </Button>
-                            )}
-                        </div>
-                    </div>
-                )}
+                <IndexTablePagination
+                    paginated={lists}
+                    itemLabel="liste(s)"
+                    buildPageUrl={buildPageUrl}
+                />
             </div>
         </>
     );

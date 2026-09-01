@@ -4,6 +4,14 @@ return [
 
     'email' => env('SUPER_SECURITE_CONTACT_EMAIL', 'contact@supersecurite.com'),
 
+    'company_legal_name' => env('SUPER_SECURITE_COMPANY_LEGAL_NAME', 'Super Sécurité sarl'),
+
+    'share_capital' => env('SUPER_SECURITE_SHARE_CAPITAL', '10 000 000 GNF'),
+
+    'website' => env('SUPER_SECURITE_WEBSITE', 'www.supersecurite.com'),
+
+    'website_url' => env('SUPER_SECURITE_WEBSITE_URL', 'https://www.supersecurite.com'),
+
     'phone' => env('SUPER_SECURITE_CONTACT_PHONE', '+224 612 13 13 14'),
 
     'phone_secondary' => env('SUPER_SECURITE_CONTACT_PHONE_SECONDARY', '+224 612 13 13 15'),
@@ -32,7 +40,16 @@ return [
 
     'mail_to' => env('SUPER_SECURITE_MAIL_TO', env('SUPER_SECURITE_CONTACT_EMAIL', 'contact@supersecurite.com')),
 
-    'rccm' => env('SUPER_SECURITE_RCCM'),
+    'rccm' => env('SUPER_SECURITE_RCCM', 'GN.TCC.2022.14296'),
+
+    'mail' => [
+        'logo_url' => env('SUPER_SECURITE_MAIL_LOGO_URL'),
+        'address_short' => env('SUPER_SECURITE_MAIL_ADDRESS_SHORT', 'Lambanyi (en face CIS Média)'),
+        'header_bg' => env('SUPER_SECURITE_MAIL_HEADER_BG', '#2d2d2d'),
+        'footer_bg' => env('SUPER_SECURITE_MAIL_FOOTER_BG', '#2d2d2d'),
+        'accent_color' => env('SUPER_SECURITE_MAIL_ACCENT_COLOR', '#c41e3a'),
+        'legal_footer' => env('SUPER_SECURITE_MAIL_LEGAL_FOOTER'),
+    ],
 
     'zone_label' => env('SUPER_SECURITE_ZONE_LABEL', 'Conakry et région'),
 
@@ -53,6 +70,10 @@ return [
     'inactivity_lock' => [
         'enabled' => env('SUPER_SECURITE_INACTIVITY_LOCK_ENABLED', true),
         'timeout_minutes' => (int) env('SUPER_SECURITE_INACTIVITY_LOCK_MINUTES', 15),
+    ],
+
+    'access_logs' => [
+        'retention_days' => (int) env('ACCESS_LOGS_RETENTION_DAYS', 365),
     ],
 
 ];

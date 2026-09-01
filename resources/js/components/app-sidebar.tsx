@@ -4,6 +4,7 @@ import {
     Contact,
     Globe,
     Handshake,
+    History,
     Images,
     LayoutGrid,
     List,
@@ -39,6 +40,7 @@ import { index as usersIndex } from '@/routes/users';
 import { index as partnersIndex } from '@/routes/partners';
 import { index as marketingClientsIndex } from '@/routes/marketing-clients';
 import { index as marketingListsIndex } from '@/routes/marketing-lists';
+import { index as accessLogsIndex } from '@/routes/access-logs';
 import type { Auth, NavGroup, NavItem } from '@/types';
 
 function hasFeatureAccess(permissions: string[], feature: string): boolean {
@@ -270,16 +272,28 @@ function buildNavGroups(
         });
     }
 
-    if (hasFeatureAccess(permissions, 'analytics')) {
+    if (hasFeatureAccess(permissions, 'analytics') || hasFeatureAccess(permissions, 'access_logs')) {
+        const insightItems: NavItem[] = [];
+
+        if (hasFeatureAccess(permissions, 'analytics')) {
+            insightItems.push({
+                title: 'Analytics',
+                href: analyticsIndex.url(),
+                icon: BarChart3,
+            });
+        }
+
+        if (hasFeatureAccess(permissions, 'access_logs')) {
+            insightItems.push({
+                title: 'Journal d\'accès',
+                href: accessLogsIndex.url(),
+                icon: History,
+            });
+        }
+
         groups.push({
             title: 'Insights',
-            items: [
-                {
-                    title: 'Analytics',
-                    href: analyticsIndex.url(),
-                    icon: BarChart3,
-                },
-            ],
+            items: insightItems,
         });
     }
 

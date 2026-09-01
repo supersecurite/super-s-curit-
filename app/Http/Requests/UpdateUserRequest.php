@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -41,7 +40,6 @@ class UpdateUserRequest extends FormRequest
             ],
             'phone' => ['nullable', 'string', 'max:50'],
             'role' => ['required', Rule::in($allowedRoles)],
-            'password' => ['nullable', 'string', Password::defaults(), 'confirmed'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['required', 'string', Rule::enum(BackofficePermission::class), Rule::in($this->allowedPermissionValues())],
         ];
@@ -57,7 +55,6 @@ class UpdateUserRequest extends FormRequest
             'email.required' => 'L\'adresse e-mail est obligatoire.',
             'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
             'role.required' => 'Le rôle est obligatoire.',
-            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
         ];
     }
 
@@ -71,7 +68,6 @@ class UpdateUserRequest extends FormRequest
             'email' => 'e-mail',
             'phone' => 'téléphone',
             'role' => 'rôle',
-            'password' => 'mot de passe',
         ];
     }
 

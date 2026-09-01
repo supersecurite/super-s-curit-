@@ -36,6 +36,8 @@ enum BackofficePermission: string
 
     case AnalyticsView = 'analytics.view';
 
+    case AccessLogsView = 'access_logs.view';
+
     case AgentApplicationsView = 'agent_applications.view';
     case AgentApplicationsUpdate = 'agent_applications.update';
 
@@ -80,6 +82,7 @@ enum BackofficePermission: string
             'gallery_images' => 'Galerie photos',
             'gallery_videos' => 'Galerie vidéos',
             'analytics' => 'Analytics',
+            'access_logs' => 'Journal d\'accès',
             'agent_applications' => 'Candidatures agents',
             'users' => 'Utilisateurs',
             'partners' => 'Partenaires',
@@ -96,7 +99,7 @@ enum BackofficePermission: string
 
             self::ArticlesView, self::ConseilsView,
             self::GalleryImagesView, self::GalleryVideosView,
-            self::AnalyticsView, self::AgentApplicationsView,
+            self::AnalyticsView, self::AccessLogsView, self::AgentApplicationsView,
             self::UsersView, self::PartnersView,
             self::MarketingClientsView, self::MarketingCampaignsView => 'Consulter',
 
@@ -164,6 +167,8 @@ enum BackofficePermission: string
             self::GalleryVideosDelete => 'Supprimer des vidéos de la galerie.',
 
             self::AnalyticsView => 'Consulter les statistiques de visites.',
+
+            self::AccessLogsView => 'Consulter le journal d\'accès et l\'historique des actions backoffice.',
 
             self::AgentApplicationsView => 'Voir les candidatures agents.',
             self::AgentApplicationsUpdate => 'Traiter et mettre à jour les candidatures.',
@@ -251,6 +256,7 @@ enum BackofficePermission: string
             'gallery_images' => self::forFeature('gallery_images'),
             'gallery_videos' => self::forFeature('gallery_videos'),
             'analytics' => [self::AnalyticsView],
+            'access_logs' => [self::AccessLogsView],
             'agent_applications' => self::forFeature('agent_applications'),
             'users' => self::forFeature('users'),
             'partners' => self::forFeature('partners'),

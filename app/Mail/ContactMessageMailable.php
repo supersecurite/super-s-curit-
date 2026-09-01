@@ -30,7 +30,7 @@ class ContactMessageMailable extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.contact-message',
+            view: 'emails.contact-message',
         );
     }
 }

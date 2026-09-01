@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Seo\SeoPageRegistry;
 use App\Seo\StructuredDataBuilder;
+use App\Support\Mail\EmailBranding;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -32,12 +33,20 @@ class AppServiceProvider extends ServiceProvider
 
         $this->configureDefaults();
         $this->configureSeoViews();
+        $this->configureEmailViews();
         $this->configureFrontendAssets();
     }
 
     protected function configureFrontendAssets(): void
     {
         Vite::prefetch(concurrency: 2, event: 'click');
+    }
+
+    protected function configureEmailViews(): void
+    {
+        View::composer('emails.*', function ($view): void {
+            $view->with('branding', EmailBranding::data());
+        });
     }
 
     protected function configureSeoViews(): void

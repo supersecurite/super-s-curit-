@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, setLayoutProps } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
@@ -11,12 +11,25 @@ type Props = {
     token: string;
     email: string;
     passwordRules: string;
+    welcome?: boolean;
 };
 
-export default function ResetPassword({ token, email, passwordRules }: Props) {
+export default function ResetPassword({
+    token,
+    email,
+    passwordRules,
+    welcome = false,
+}: Props) {
+    setLayoutProps({
+        title: welcome ? 'Choisir votre mot de passe' : 'Réinitialiser le mot de passe',
+        description: welcome
+            ? 'Bienvenue ! Définissez le mot de passe de votre compte.'
+            : 'Saisissez votre nouveau mot de passe ci-dessous',
+    });
+
     return (
         <>
-            <Head title="Réinitialiser le mot de passe" />
+            <Head title={welcome ? 'Choisir votre mot de passe' : 'Réinitialiser le mot de passe'} />
 
             <Form
                 {...update.form()}
@@ -81,7 +94,9 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            Réinitialiser le mot de passe
+                            {welcome
+                                ? 'Enregistrer mon mot de passe'
+                                : 'Réinitialiser le mot de passe'}
                         </Button>
                     </div>
                 )}

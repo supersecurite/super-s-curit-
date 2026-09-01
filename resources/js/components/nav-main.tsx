@@ -30,6 +30,7 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { useHydrated } from '@/hooks/use-hydrated';
 import { cn } from '@/lib/utils';
 import { showNavigationLoader } from '@/lib/navigation-loader';
 import type { NavGroup, NavItem } from '@/types';
@@ -161,7 +162,8 @@ function NestedNavChild({
 }) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
     const childActive = itemIsActive(item, isCurrentOrParentUrl);
-    const [open, setOpen] = useState(childActive);
+    const hydrated = useHydrated();
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (childActive) {
@@ -170,6 +172,36 @@ function NestedNavChild({
     }, [childActive]);
 
     if (item.children?.length) {
+        if (!hydrated) {
+            return (
+                <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                        isActive={childActive}
+                        className="cursor-default"
+                    >
+                        <span>{item.title}</span>
+                        <ChevronRight
+                            className={cn(
+                                'ml-auto size-3.5 transition-transform duration-200',
+                                childActive && 'rotate-90',
+                            )}
+                        />
+                    </SidebarMenuSubButton>
+                    {childActive ? (
+                        <SidebarMenuSub className="mr-0 ml-3.5 border-l border-sidebar-border px-0 py-0.5 translate-x-px">
+                            {item.children.map((child) => (
+                                <NestedNavChild
+                                    key={child.title}
+                                    item={child}
+                                    onNavigate={onNavigate}
+                                />
+                            ))}
+                        </SidebarMenuSub>
+                    ) : null}
+                </SidebarMenuSubItem>
+            );
+        }
+
         return (
             <SidebarMenuSubItem>
                 <Collapsible
@@ -235,7 +267,8 @@ function NavSubmenuItem({
     const { isCurrentOrParentUrl } = useCurrentUrl();
     const { state, isMobile } = useSidebar();
     const childActive = itemIsActive(item, isCurrentOrParentUrl);
-    const [open, setOpen] = useState(childActive);
+    const hydrated = useHydrated();
+    const [open, setOpen] = useState(false);
     const isCollapsed = state === 'collapsed' && !isMobile;
 
     useEffect(() => {
@@ -270,6 +303,37 @@ function NavSubmenuItem({
                         />
                     </DropdownMenuContent>
                 </DropdownMenu>
+            </SidebarMenuItem>
+        );
+    }
+
+    if (!hydrated) {
+        return (
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                    tooltip={{ children: item.title }}
+                    isActive={childActive}
+                >
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                    <ChevronRight
+                        className={cn(
+                            'ml-auto size-4 transition-transform duration-200',
+                            childActive && 'rotate-90',
+                        )}
+                    />
+                </SidebarMenuButton>
+                {childActive ? (
+                    <SidebarMenuSub>
+                        {item.children?.map((child) => (
+                            <NestedNavChild
+                                key={child.title}
+                                item={child}
+                                onNavigate={onNavigate}
+                            />
+                        ))}
+                    </SidebarMenuSub>
+                ) : null}
             </SidebarMenuItem>
         );
     }

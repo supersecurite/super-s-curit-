@@ -4,11 +4,13 @@ namespace App\Http\Middleware;
 
 use App\Enums\ArticleStatus;
 use App\Enums\SecurityAgentApplicationStatus;
+use App\Models\AccessLog;
 use App\Models\Article;
 use App\Models\SecurityAgentApplication;
 use App\Models\SecurityTip;
 use App\Models\User;
 use App\Seo\SeoPageRegistry;
+use App\Services\AccessLogs\AccessLogFilterOptions;
 use App\Support\SuperSecuriteSharedData;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -149,7 +151,49 @@ class HandleInertiaRequests extends Middleware
             'tracking' => [
                 'visitor_uuid' => $request->cookie('super_securite_vid'),
             ],
+            'accessLogFilterUsers' => fn () => $this->accessLogFilterUsers($request),
+            'accessLogFilterOptions' => fn () => $this->accessLogFilterOptions($request),
         ];
+    }
+
+    /**
+     * @return array<int, array{uuid: string, name: string, email: string}>
+     */
+    private function accessLogFilterUsers(Request $request): array
+    {
+        $user = $request->user();
+
+        if ($user === null || ! $user->can('viewAny', AccessLog::class)) {
+            return [];
+        }
+
+        return User::query()
+            ->orderBy('name')
+            ->limit(80)
+            ->get(['uuid', 'name', 'email'])
+            ->all();
+    }
+
+    /**
+     * @return array{
+     *     countries: list<array{code: string, label: string}>,
+     *     browsers: list<string>,
+     *     methods: list<string>
+     * }
+     */
+    private function accessLogFilterOptions(Request $request): array
+    {
+        $user = $request->user();
+
+        if ($user === null || ! $user->can('viewAny', AccessLog::class)) {
+            return [
+                'countries' => [],
+                'browsers' => [],
+                'methods' => [],
+            ];
+        }
+
+        return app(AccessLogFilterOptions::class)->handle();
     }
 
     private function shouldSharePageMeta(Request $request): bool

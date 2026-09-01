@@ -4,6 +4,7 @@ import { AppPageBreadcrumbs } from '@/components/app-page-breadcrumbs';
 import { AppShell } from '@/components/app-shell';
 import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
+import { BackofficePageShell } from '@/components/backoffice-page-shell';
 import type { AppLayoutProps } from '@/types';
 
 export default function AppSidebarLayout({
@@ -35,7 +36,9 @@ export default function AppSidebarLayout({
                     />
                     <AppSidebarHeader />
                     <AppPageBreadcrumbs breadcrumbs={breadcrumbs} />
-                    <div className="flex flex-1 flex-col">{children}</div>
+                    <div className="flex min-h-0 flex-1 flex-col">
+                        <BackofficePageShell>{children}</BackofficePageShell>
+                    </div>
                 </AppContent>
             </AppShell>
         </div>

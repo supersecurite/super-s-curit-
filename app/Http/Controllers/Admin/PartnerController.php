@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePartnerRequest;
 use App\Http\Requests\UpdatePartnerRequest;
 use App\Models\Partner;
+use App\Support\IndexTableSort;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,8 +30,19 @@ class PartnerController extends Controller
             $query->where('is_published', $request->string('status')->toString() === 'published');
         }
 
+        $sort = IndexTableSort::resolve(
+            $request,
+            ['name', 'sort_order', 'updated_at', 'is_published'],
+            'sort_order',
+        );
+
+        $query->orderBy($sort['column'], $sort['direction']);
+
+        if ($sort['column'] !== 'sort_order') {
+            $query->orderBy('sort_order')->orderBy('id');
+        }
+
         $partners = $query
-            ->ordered()
             ->paginate(20)
             ->withQueryString()
             ->through(fn (Partner $partner) => [
@@ -41,7 +53,10 @@ class PartnerController extends Controller
 
         return Inertia::render('partners/index', [
             'partners' => $partners,
-            'filters' => $request->only(['search', 'status']),
+            'filters' => [
+                ...$request->only(['search', 'status']),
+                ...IndexTableSort::filters($request),
+            ],
             'canCreate' => $request->user()?->can('create', Partner::class) ?? false,
         ]);
     }

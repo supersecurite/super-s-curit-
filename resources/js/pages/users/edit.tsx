@@ -55,7 +55,7 @@ const tabs: {
         value: 'security',
         label: 'Sécurité',
         icon: KeyRound,
-        description: 'Mot de passe',
+        description: 'E-mails et mot de passe',
     },
 ];
 
@@ -261,6 +261,7 @@ export default function UsersEdit() {
                     roles={roles}
                     permissionGroups={permissionGroups}
                     user={user}
+                    userUuid={user.uuid}
                     formDefinition={update.form(user.uuid)}
                     submitLabel="Enregistrer"
                     cancelHref={index.url()}

@@ -26,16 +26,19 @@ Permissions `users.view|create|update|delete`.
 - Création / update d’un commercial **sans** permissions explicites → application de `BackofficePermission::commercialDefaults()`.
 - Sync : `User::syncBackofficePermissions()`.
 - Routes `users` en `uuid`.
+- **Mot de passe** : l'admin ne saisit jamais le mot de passe d'un autre utilisateur. À la création, un e-mail de bienvenue avec lien de définition (15 min) est envoyé automatiquement. En édition (onglet Sécurité) : renvoi bienvenue ou lien de réinitialisation (15 min).
 - Seeder : compte `commercial@supersecurite.com` (env `SEED_COMMERCIAL_*`).
 
 ## Fichiers clés
 
 - `app/Http/Controllers/UserController.php`
+- `app/Actions/Users/CreateUser.php`, `SendWelcomeSetPassword.php`, `SendPasswordResetLink.php`
+- `app/Notifications/WelcomeSetPasswordNotification.php`, `AdminPasswordResetNotification.php`
 - `app/Enums/UserRole.php`, `BackofficePermission.php`
 - `app/Models/User.php`, `UserBackofficePermission.php`
 - `app/Policies/UserPolicy.php`
 - `resources/js/pages/users/`
-- `resources/js/components/users/user-form.tsx`, `user-permissions-panel.tsx`
+- `resources/js/components/users/user-form.tsx`, `user-permissions-panel.tsx`, `user-security-actions.tsx`
 - `tests/Feature/UserManagementTest.php`, `BackofficePermissionTest.php`
 
 ## Limites & dette

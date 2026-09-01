@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Users\CreateUser;
+use App\Actions\Users\SendPasswordResetLink;
+use App\Actions\Users\SendWelcomeSetPassword;
 use App\Enums\BackofficePermission;
 use App\Enums\UserRole;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Support\IndexTableSort;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,10 +22,12 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
+        $sort = IndexTableSort::resolve($request, ['name', 'email', 'phone', 'role'], 'name');
+
         return Inertia::render('users/index', [
             'users' => User::query()
                 ->with('backofficePermissionRecords')
-                ->orderBy('name')
+                ->orderBy($sort['column'], $sort['direction'])
                 ->paginate(15)
                 ->withQueryString()
                 ->through(function (User $user) use ($request) {
@@ -32,6 +38,7 @@ class UserController extends Controller
                     ];
                 }),
             'canCreate' => $request->user()?->can('create', User::class) ?? false,
+            'filters' => IndexTableSort::filters($request),
         ]);
     }
 
@@ -45,16 +52,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(StoreUserRequest $request): RedirectResponse
+    public function store(StoreUserRequest $request, CreateUser $action): RedirectResponse
     {
-        $user = User::create([
-            'name' => $request->validated('name'),
-            'email' => $request->validated('email'),
-            'phone' => $request->validated('phone'),
-            'role' => $request->validated('role'),
-            'password' => $request->validated('password'),
-            'email_verified_at' => now(),
-        ]);
+        $user = $action->handle($request->safe()->only(['name', 'email', 'phone', 'role']));
 
         if ($user->role === UserRole::SuperAdmin) {
             // Super admin : aucune permission stockée.
@@ -69,7 +69,10 @@ class UserController extends Controller
             $user->syncBackofficePermissions($request->validated('permissions') ?? []);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Utilisateur créé avec succès.']);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => 'Utilisateur créé. Un e-mail de bienvenue a été envoyé (lien valable 15 min).',
+        ]);
 
         return to_route('users.index');
     }
@@ -96,10 +99,6 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $user->fill($request->safe()->only(['name', 'email', 'phone', 'role']));
-
-        if ($request->filled('password')) {
-            $user->password = $request->validated('password');
-        }
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -134,6 +133,34 @@ class UserController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Utilisateur supprimé avec succès.']);
 
         return to_route('users.index');
+    }
+
+    public function sendWelcome(User $user, SendWelcomeSetPassword $action): RedirectResponse
+    {
+        $this->authorize('update', $user);
+
+        $action->handle($user);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => 'E-mail de bienvenue renvoyé (lien valable 15 min).',
+        ]);
+
+        return back();
+    }
+
+    public function sendPasswordReset(User $user, SendPasswordResetLink $action): RedirectResponse
+    {
+        $this->authorize('update', $user);
+
+        $action->handle($user);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => 'Lien de réinitialisation envoyé (valable 15 min).',
+        ]);
+
+        return back();
     }
 
     /**

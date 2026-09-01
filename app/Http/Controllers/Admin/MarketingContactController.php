@@ -12,6 +12,7 @@ use App\Http\Requests\StoreMarketingContactRequest;
 use App\Http\Requests\UpdateMarketingContactRequest;
 use App\Models\MarketingContact;
 use App\Models\MarketingList;
+use App\Support\IndexTableSort;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,10 +24,24 @@ class MarketingContactController extends Controller
     {
         $this->authorize('viewAny', MarketingContact::class);
 
-        $contacts = MarketingContact::query()
-            ->withCount('lists')
-            ->search($request->string('search')->toString() ?: null)
-            ->latest()
+        $sort = IndexTableSort::resolve(
+            $request,
+            ['full_name', 'email', 'phone', 'marketing_consent', 'lists_count', 'created_at'],
+            'created_at',
+            'desc',
+        );
+
+        $query = MarketingContact::query()->withCount('lists')->search($request->string('search')->toString() ?: null);
+
+        match ($sort['column']) {
+            'full_name' => $query
+                ->orderBy('last_name', $sort['direction'])
+                ->orderBy('first_name', $sort['direction']),
+            'lists_count' => $query->orderBy('lists_count', $sort['direction']),
+            default => $query->orderBy($sort['column'], $sort['direction']),
+        };
+
+        $contacts = $query
             ->paginate(20)
             ->withQueryString()
             ->through(fn (MarketingContact $contact) => [
@@ -37,7 +52,10 @@ class MarketingContactController extends Controller
 
         return Inertia::render('marketing-clients/index', [
             'contacts' => $contacts,
-            'filters' => $request->only(['search']),
+            'filters' => [
+                ...$request->only(['search']),
+                ...IndexTableSort::filters($request),
+            ],
             'canCreate' => $request->user()?->can('create', MarketingContact::class) ?? false,
             'canImport' => $request->user()?->can('import', MarketingContact::class) ?? false,
         ]);

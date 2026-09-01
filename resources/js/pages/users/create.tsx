@@ -23,7 +23,9 @@ export default function UsersCreate() {
                         Nouvel utilisateur
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Créez un compte et attribuez un rôle d&apos;accès.
+                        Créez un compte et attribuez un rôle. Un e-mail de
+                        bienvenue avec lien de mot de passe (15 min) sera envoyé
+                        automatiquement.
                     </p>
                 </div>
 

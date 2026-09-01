@@ -12,6 +12,7 @@ use App\Http\Requests\StoreMarketingListRequest;
 use App\Http\Requests\UpdateMarketingListRequest;
 use App\Models\MarketingContact;
 use App\Models\MarketingList;
+use App\Support\IndexTableSort;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,10 +24,23 @@ class MarketingListController extends Controller
     {
         $this->authorize('viewAny', MarketingList::class);
 
-        $lists = MarketingList::query()
+        $sort = IndexTableSort::resolve(
+            $request,
+            ['name', 'description', 'contacts_count', 'created_at'],
+            'name',
+        );
+
+        $query = MarketingList::query()
             ->withCount('contacts')
-            ->search($request->string('search')->toString() ?: null)
-            ->orderBy('name')
+            ->search($request->string('search')->toString() ?: null);
+
+        if ($sort['column'] === 'contacts_count') {
+            $query->orderBy('contacts_count', $sort['direction']);
+        } else {
+            $query->orderBy($sort['column'], $sort['direction']);
+        }
+
+        $lists = $query
             ->paginate(20)
             ->withQueryString()
             ->through(fn (MarketingList $list) => [
@@ -37,7 +51,10 @@ class MarketingListController extends Controller
 
         return Inertia::render('marketing-lists/index', [
             'lists' => $lists,
-            'filters' => $request->only(['search']),
+            'filters' => [
+                ...$request->only(['search']),
+                ...IndexTableSort::filters($request),
+            ],
             'canCreate' => $request->user()?->can('create', MarketingList::class) ?? false,
         ]);
     }

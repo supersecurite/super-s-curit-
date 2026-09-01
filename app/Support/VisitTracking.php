@@ -36,6 +36,7 @@ class VisitTracking
         'marketing-clients',
         'marketing-lists',
         'marketing-campaigns',
+        'access-logs',
         'marketing',
     ];
 
@@ -63,6 +64,28 @@ class VisitTracking
 
         foreach (self::AUTH_PATH_PREFIXES as $authPath) {
             if ($path === $authPath || str_starts_with($path, $authPath.'/')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Chemins backoffice + paramètres compte — seuls éligibles au journal d'accès.
+     *
+     * Exclut le site marketing public (/, /actualites, /contact, …) même si l'utilisateur est connecté.
+     */
+    public static function isAccessLogPath(string $path): bool
+    {
+        $path = ltrim($path, '/');
+
+        if ($path === 'settings' || str_starts_with($path, 'settings/')) {
+            return true;
+        }
+
+        foreach (self::BACKOFFICE_PREFIXES as $prefix) {
+            if ($path === $prefix || str_starts_with($path, $prefix.'/')) {
                 return true;
             }
         }

@@ -4,6 +4,7 @@ use App\Http\Exceptions\MarketingErrorRenderer;
 use App\Http\Middleware\EnsureUserHasBackofficePermission;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\RecordAccessLog;
 use App\Http\Middleware\TrackVisit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -34,6 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
+            RecordAccessLog::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccessLogController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
@@ -102,6 +103,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('backoffice.permission:users')->group(function () {
+        Route::post('users/{user}/send-welcome', [UserController::class, 'sendWelcome'])
+            ->name('users.send-welcome');
+        Route::post('users/{user}/send-password-reset', [UserController::class, 'sendPasswordReset'])
+            ->name('users.send-password-reset');
         Route::resource('users', UserController::class)->except(['show']);
     });
 
@@ -128,6 +133,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('backoffice.permission:analytics')->group(function () {
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    });
+
+    Route::middleware('backoffice.permission:access_logs')->group(function () {
+        Route::get('access-logs/feed', [AccessLogController::class, 'feed'])->name('access-logs.feed');
+        Route::get('access-logs', [AccessLogController::class, 'index'])->name('access-logs.index');
     });
 });
 

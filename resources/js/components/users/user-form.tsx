@@ -4,6 +4,7 @@ import InputError from '@/components/input-error';
 import UserPermissionsPanel, {
     type PermissionGroup,
 } from '@/components/users/user-permissions-panel';
+import UserSecurityActions from '@/components/users/user-security-actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,6 +34,7 @@ type UserFormProps = {
     roles: RoleOption[];
     permissionGroups: PermissionGroup[];
     user?: UserFormData;
+    userUuid?: string;
     formDefinition: RouteFormDefinition<'post'>;
     submitLabel: string;
     cancelHref: string;
@@ -56,6 +58,7 @@ export default function UserForm({
     roles,
     permissionGroups,
     user,
+    userUuid,
     formDefinition,
     submitLabel,
     cancelHref,
@@ -179,45 +182,21 @@ export default function UserForm({
                                 </h2>
                                 <p className="text-muted-foreground mt-1 text-sm">
                                     {user
-                                        ? 'Définissez un nouveau mot de passe uniquement si nécessaire.'
-                                        : 'Choisissez un mot de passe initial pour ce compte.'}
+                                        ? 'Le mot de passe est géré par l\'utilisateur via un lien sécurisé envoyé par e-mail.'
+                                        : 'Un e-mail de bienvenue sera envoyé automatiquement avec un lien pour choisir le mot de passe (valable 15 minutes).'}
                                 </p>
                             </div>
 
-                            <div className="grid max-w-xl gap-6">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password">
-                                        Mot de passe{' '}
-                                        {user ? (
-                                            <span className="text-muted-foreground font-normal">
-                                                (laisser vide pour ne pas
-                                                changer)
-                                            </span>
-                                        ) : null}
-                                    </Label>
-                                    <Input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        autoComplete="new-password"
-                                        required={!user}
-                                    />
-                                    <InputError message={errors.password} />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password_confirmation">
-                                        Confirmer le mot de passe
-                                    </Label>
-                                    <Input
-                                        id="password_confirmation"
-                                        name="password_confirmation"
-                                        type="password"
-                                        autoComplete="new-password"
-                                        required={!user}
-                                    />
-                                </div>
-                            </div>
+                            {user && userUuid ? (
+                                <UserSecurityActions userUuid={userUuid} />
+                            ) : (
+                                <p className="text-muted-foreground rounded-lg border border-dashed px-4 py-3 text-sm">
+                                    Vous ne pouvez pas définir le mot de passe à la
+                                    place de l&apos;utilisateur. Après la création,
+                                    renvoyez un e-mail depuis l&apos;onglet Sécurité
+                                    si besoin.
+                                </p>
+                            )}
                         </div>
                     </div>
 

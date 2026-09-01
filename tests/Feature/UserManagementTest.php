@@ -1,12 +1,15 @@
 <?php
 
+use App\Enums\BackofficePermission;
 use App\Enums\UserRole;
+use App\Models\User;
+use App\Notifications\AdminPasswordResetNotification;
+use App\Notifications\WelcomeSetPasswordNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
+use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
-use App\Enums\BackofficePermission;
-use App\Models\User;
-use Inertia\Testing\AssertableInertia as Assert;
 
 test('guests cannot access user management', function () {
     $this->get(route('users.index'))->assertRedirect(route('login'));
@@ -33,7 +36,25 @@ test('admins can list users', function () {
         );
 });
 
-test('admins can create users without super admin role', function () {
+test('users index supports column sorting', function () {
+    $admin = User::factory()->admin()->create(['name' => 'Zzz Admin']);
+
+    User::factory()->create(['name' => 'Zoe Zulu', 'email' => 'zoe@example.com']);
+    User::factory()->create(['name' => 'Alice Alpha', 'email' => 'alice@example.com']);
+
+    $this->actingAs($admin)
+        ->get(route('users.index', ['sort_by' => 'name', 'sort_direction' => 'asc']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.sort_by', 'name')
+            ->where('filters.sort_direction', 'asc')
+            ->where('users.data.0.name', 'Alice Alpha')
+        );
+});
+
+test('admins can create users without password and welcome email is sent', function () {
+    Notification::fake();
+
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
@@ -42,8 +63,6 @@ test('admins can create users without super admin role', function () {
             'email' => 'nouveau-admin@example.com',
             'phone' => '+224 600 00 00 00',
             'role' => UserRole::Admin->value,
-            'password' => 'Password123!',
-            'password_confirmation' => 'Password123!',
         ])
         ->assertRedirect(route('users.index'));
 
@@ -52,6 +71,8 @@ test('admins can create users without super admin role', function () {
     expect($created)->not->toBeNull()
         ->and($created->role)->toBe(UserRole::Admin)
         ->and($created->uuid)->not->toBeEmpty();
+
+    Notification::assertSentTo($created, WelcomeSetPasswordNotification::class);
 });
 
 test('admins cannot assign super admin role', function () {
@@ -62,13 +83,13 @@ test('admins cannot assign super admin role', function () {
             'name' => 'Tentative Super Admin',
             'email' => 'tentative-super@example.com',
             'role' => UserRole::SuperAdmin->value,
-            'password' => 'Password123!',
-            'password_confirmation' => 'Password123!',
         ])
         ->assertSessionHasErrors('role');
 });
 
 test('super admin can create another super admin', function () {
+    Notification::fake();
+
     $superAdmin = User::factory()->superAdmin()->create();
 
     $this->actingAs($superAdmin)
@@ -76,8 +97,6 @@ test('super admin can create another super admin', function () {
             'name' => 'Autre Super Admin',
             'email' => 'autre-super@example.com',
             'role' => UserRole::SuperAdmin->value,
-            'password' => 'Password123!',
-            'password_confirmation' => 'Password123!',
         ])
         ->assertRedirect(route('users.index'));
 
@@ -94,10 +113,38 @@ test('admin cannot update a super admin', function () {
             'name' => 'Nom modifié',
             'email' => $superAdmin->email,
             'role' => UserRole::SuperAdmin->value,
-            'password' => '',
-            'password_confirmation' => '',
         ])
         ->assertForbidden();
+});
+
+test('admin can resend welcome email to a user', function () {
+    Notification::fake();
+
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->create();
+
+    $this->actingAs($admin)
+        ->post(route('users.send-welcome', $target))
+        ->assertRedirect();
+
+    Notification::assertSentTo($target, WelcomeSetPasswordNotification::class);
+});
+
+test('admin can send password reset link to a user', function () {
+    Notification::fake();
+
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->create();
+
+    $this->actingAs($admin)
+        ->post(route('users.send-password-reset', $target))
+        ->assertRedirect();
+
+    Notification::assertSentTo($target, AdminPasswordResetNotification::class);
+});
+
+test('password reset tokens expire after fifteen minutes', function () {
+    expect((int) config('auth.passwords.users.expire'))->toBe(15);
 });
 
 test('admin cannot delete themselves', function () {
@@ -160,6 +207,8 @@ test('super admin can delete another user', function () {
 });
 
 test('admins can create a commercial user with marketing defaults', function () {
+    Notification::fake();
+
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
@@ -167,8 +216,6 @@ test('admins can create a commercial user with marketing defaults', function () 
             'name' => 'Commercial Demo',
             'email' => 'commercial-demo@example.com',
             'role' => UserRole::Commercial->value,
-            'password' => 'Password123!',
-            'password_confirmation' => 'Password123!',
         ])
         ->assertRedirect(route('users.index'));
 

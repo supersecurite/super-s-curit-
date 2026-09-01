@@ -1,10 +1,21 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Contact, Plus, Search, Upload, Pencil } from 'lucide-react';
+import { useMemo } from 'react';
+import {
+    BackofficeFiltersBar,
+    BackofficeIndexPanel,
+    IndexTablePagination,
+    ResponsiveDataTable,
+    type ResponsiveColumn,
+} from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
     create,
     destroy,
@@ -35,7 +46,7 @@ type PaginatedContacts = {
 
 type PageProps = {
     contacts: PaginatedContacts;
-    filters: { search?: string };
+    filters: TableSortState & { search?: string };
     canCreate: boolean;
     canImport: boolean;
 };
@@ -44,19 +55,137 @@ export default function MarketingClientsIndex() {
     const { contacts, filters, canCreate, canImport } =
         usePage<PageProps>().props;
 
-    const applyFilters = (updates: Record<string, string | undefined>) => {
+    const applyFilters = (updates: Partial<TableSortState & { search?: string; page?: number }>) => {
         const next = { ...filters, ...updates };
         Object.keys(next).forEach((key) => {
-            if (next[key as keyof typeof next] === undefined) {
+            if (next[key as keyof typeof next] === undefined || next[key as keyof typeof next] === '') {
                 delete next[key as keyof typeof next];
             }
         });
         router.get(index.url(), next, { preserveState: true, replace: true });
     };
 
+    const handleSort = useIndexTableSort(filters, applyFilters);
+
     const debouncedSearch = useDebouncedCallback((search: string) => {
-        applyFilters({ search: search || undefined });
+        applyFilters({ search: search || undefined, page: 1 });
     });
+
+    const buildPageUrl = (page: number) =>
+        index.url({ query: withIndexTableQuery(filters, page) });
+
+    const columns = useMemo((): ResponsiveColumn<ContactRow>[] => {
+        const renderActions = (contact: ContactRow) => (
+            <>
+                <Button variant="outline" size="sm" asChild>
+                    <Link href={show.url(contact.uuid)}>Voir</Link>
+                </Button>
+                {contact.can_update ? (
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href={edit.url(contact.uuid)}>
+                            <Pencil className="size-4" aria-hidden />
+                            Modifier
+                        </Link>
+                    </Button>
+                ) : null}
+                {contact.can_delete ? (
+                    <ConfirmDeleteDialog
+                        title="Supprimer ce contact ?"
+                        description={`Le contact « ${contact.full_name} » sera définitivement supprimé.`}
+                        deleteUrl={destroy.url(contact.uuid)}
+                        triggerSize="sm"
+                        triggerVariant="outline"
+                        triggerClassName="text-destructive hover:text-destructive"
+                        aria-label={`Supprimer ${contact.full_name}`}
+                    />
+                ) : null}
+            </>
+        );
+
+        return [
+            {
+                id: 'name',
+                header: 'Nom',
+                sortKey: 'full_name',
+                sortable: true,
+                mobileRole: 'title',
+                cell: (contact) => (
+                    <Link
+                        href={show.url(contact.uuid)}
+                        className="hover:text-primary hover:underline"
+                    >
+                        {contact.full_name}
+                    </Link>
+                ),
+            },
+            {
+                id: 'email',
+                header: 'E-mail',
+                sortKey: 'email',
+                sortable: true,
+                mobileRole: 'meta',
+                cell: (contact) => contact.email ?? '—',
+            },
+            {
+                id: 'phone',
+                header: 'Téléphone',
+                sortKey: 'phone',
+                sortable: true,
+                mobileRole: 'meta',
+                className: 'text-muted-foreground',
+                cell: (contact) => contact.phone ?? '—',
+            },
+            {
+                id: 'tags',
+                header: 'Tags',
+                mobileRole: 'meta',
+                cell: (contact) =>
+                    contact.tags.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                            {contact.tags.map((tag) => (
+                                <Badge key={tag} variant="outline">
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
+                    ) : (
+                        '—'
+                    ),
+            },
+            {
+                id: 'consent',
+                header: 'Consentement',
+                sortKey: 'marketing_consent',
+                sortable: true,
+                mobileRole: 'meta',
+                cell: (contact) => (
+                    <Badge
+                        variant={
+                            contact.marketing_consent ? 'default' : 'outline'
+                        }
+                    >
+                        {contact.marketing_consent ? 'Oui' : 'Non'}
+                    </Badge>
+                ),
+            },
+            {
+                id: 'lists',
+                header: 'Listes',
+                sortKey: 'lists_count',
+                sortable: true,
+                mobileRole: 'meta',
+                cell: (contact) => contact.lists_count,
+            },
+            {
+                id: 'actions',
+                header: 'Actions',
+                mobileRole: 'actions',
+                headerClassName: 'text-right',
+                className: 'text-right',
+                cell: renderActions,
+            },
+        ];
+    }, []);
 
     return (
         <>
@@ -93,190 +222,42 @@ export default function MarketingClientsIndex() {
                     </div>
                 </div>
 
-                <div className="relative max-w-md">
-                    <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-                    <Input
-                        type="search"
-                        placeholder="Rechercher par nom, e-mail ou téléphone..."
-                        defaultValue={filters.search ?? ''}
-                        onChange={(event) =>
-                            debouncedSearch(event.target.value)
-                        }
-                        className="pl-9"
+                <BackofficeFiltersBar>
+                    <div className="relative min-w-0 flex-1 lg:min-w-[240px]">
+                        <Label htmlFor="contacts-search" className="sr-only">
+                            Recherche
+                        </Label>
+                        <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                        <Input
+                            id="contacts-search"
+                            type="search"
+                            placeholder="Rechercher par nom, e-mail ou téléphone…"
+                            defaultValue={filters.search ?? ''}
+                            onChange={(event) =>
+                                debouncedSearch(event.target.value)
+                            }
+                            className="pl-9"
+                        />
+                    </div>
+                </BackofficeFiltersBar>
+
+                <BackofficeIndexPanel>
+                    <ResponsiveDataTable
+                        rows={contacts.data}
+                        columns={columns}
+                        getRowKey={(contact) => contact.uuid}
+                        emptyMessage="Aucun contact pour le moment."
+                        minWidth="860px"
+                        sort={filters}
+                        onSort={handleSort}
                     />
-                </div>
+                </BackofficeIndexPanel>
 
-                <div className="app-panel overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full min-w-[720px] text-left text-sm">
-                            <thead className="bg-muted/50 border-b text-xs uppercase tracking-wide text-muted-foreground">
-                                <tr>
-                                    <th className="px-4 py-3 font-medium">Nom</th>
-                                    <th className="px-4 py-3 font-medium">E-mail</th>
-                                    <th className="px-4 py-3 font-medium">Téléphone</th>
-                                    <th className="px-4 py-3 font-medium">Tags</th>
-                                    <th className="px-4 py-3 font-medium">Consentement</th>
-                                    <th className="px-4 py-3 font-medium">Listes</th>
-                                    <th className="px-4 py-3 text-right font-medium">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {contacts.data.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={7}
-                                            className="text-muted-foreground px-4 py-8 text-center"
-                                        >
-                                            Aucun contact pour le moment.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    contacts.data.map((contact) => (
-                                        <tr
-                                            key={contact.uuid}
-                                            className="border-b last:border-b-0"
-                                        >
-                                            <td className="px-4 py-3 font-medium">
-                                                <Link
-                                                    href={show.url(contact.uuid)}
-                                                    className="hover:text-primary hover:underline"
-                                                >
-                                                    {contact.full_name}
-                                                </Link>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                {contact.email ?? '—'}
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-3">
-                                                {contact.phone ?? '—'}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-wrap gap-1">
-                                                    {contact.tags.length > 0 ? (
-                                                        contact.tags.map((tag) => (
-                                                            <Badge
-                                                                key={tag}
-                                                                variant="outline"
-                                                            >
-                                                                {tag}
-                                                            </Badge>
-                                                        ))
-                                                    ) : (
-                                                        <span className="text-muted-foreground">
-                                                            —
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <Badge
-                                                    variant={
-                                                        contact.marketing_consent
-                                                            ? 'default'
-                                                            : 'outline'
-                                                    }
-                                                >
-                                                    {contact.marketing_consent
-                                                        ? 'Oui'
-                                                        : 'Non'}
-                                                </Badge>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                {contact.lists_count}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        asChild
-                                                    >
-                                                        <Link href={show.url(contact.uuid)}>
-                                                            Voir
-                                                        </Link>
-                                                    </Button>
-                                                    {contact.can_update ? (
-                                                        <Button
-                                                            variant="outline"
-                                                            size="icon"
-                                                            asChild
-                                                        >
-                                                            <Link
-                                                                href={edit.url(
-                                                                    contact.uuid,
-                                                                )}
-                                                                aria-label={`Modifier ${contact.full_name}`}
-                                                            >
-                                                                <Pencil
-                                                                    className="size-4"
-                                                                    aria-hidden
-                                                                />
-                                                            </Link>
-                                                        </Button>
-                                                    ) : null}
-                                                    {contact.can_delete ? (
-                                                        <ConfirmDeleteDialog
-                                                            title="Supprimer ce contact ?"
-                                                            description={`Le contact « ${contact.full_name} » sera définitivement supprimé.`}
-                                                            deleteUrl={destroy.url(contact.uuid)}
-                                                            triggerSize="icon"
-                                                            triggerVariant="outline"
-                                                            triggerClassName="text-destructive hover:text-destructive"
-                                                            aria-label={`Supprimer ${contact.full_name}`}
-                                                        />
-                                                    ) : null}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {contacts.last_page > 1 && (
-                    <div className="text-muted-foreground flex flex-wrap items-center justify-between gap-4 text-sm">
-                        <span>
-                            Page {contacts.current_page} sur {contacts.last_page} (
-                            {contacts.total} contacts)
-                        </span>
-                        <div className="flex gap-2">
-                            {contacts.current_page > 1 && (
-                                <Button variant="outline" size="sm" asChild>
-                                    <Link
-                                        href={index.url({
-                                            query: {
-                                                page: contacts.current_page - 1,
-                                                ...(filters.search
-                                                    ? { search: filters.search }
-                                                    : {}),
-                                            },
-                                        })}
-                                    >
-                                        Précédent
-                                    </Link>
-                                </Button>
-                            )}
-                            {contacts.current_page < contacts.last_page && (
-                                <Button variant="outline" size="sm" asChild>
-                                    <Link
-                                        href={index.url({
-                                            query: {
-                                                page: contacts.current_page + 1,
-                                                ...(filters.search
-                                                    ? { search: filters.search }
-                                                    : {}),
-                                            },
-                                        })}
-                                    >
-                                        Suivant
-                                    </Link>
-                                </Button>
-                            )}
-                        </div>
-                    </div>
-                )}
+                <IndexTablePagination
+                    paginated={contacts}
+                    itemLabel="contact(s)"
+                    buildPageUrl={buildPageUrl}
+                />
             </div>
         </>
     );

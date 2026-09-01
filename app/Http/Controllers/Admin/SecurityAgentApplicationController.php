@@ -7,6 +7,7 @@ use App\Enums\SecurityAgentPost;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateSecurityAgentApplicationRequest;
 use App\Models\SecurityAgentApplication;
+use App\Support\IndexTableSort;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -63,21 +64,49 @@ class SecurityAgentApplicationController extends Controller
             });
         }
 
-        $query->orderByDesc('created_at');
+        $sort = IndexTableSort::resolve(
+            $request,
+            [
+                'full_name',
+                'post',
+                'phone',
+                'email',
+                'location',
+                'status',
+                'experience_years',
+                'availability',
+                'created_at',
+            ],
+            'created_at',
+            'desc',
+        );
+
+        match ($sort['column']) {
+            'full_name' => $query
+                ->orderBy('last_name', $sort['direction'])
+                ->orderBy('first_name', $sort['direction']),
+            'location' => $query
+                ->orderBy('region_name', $sort['direction'])
+                ->orderBy('commune_name', $sort['direction']),
+            default => $query->orderBy($sort['column'], $sort['direction']),
+        };
 
         return Inertia::render('candidatures-agents/index', [
             'applications' => $query
                 ->paginate(15)
                 ->withQueryString()
                 ->through(fn (SecurityAgentApplication $application) => $application->toAdminArray()),
-            'filters' => $request->only([
-                'search',
-                'status',
-                'post',
-                'region_id',
-                'prefecture_id',
-                'commune_id',
-            ]),
+            'filters' => [
+                ...$request->only([
+                    'search',
+                    'status',
+                    'post',
+                    'region_id',
+                    'prefecture_id',
+                    'commune_id',
+                ]),
+                ...IndexTableSort::filters($request),
+            ],
             'pendingCount' => SecurityAgentApplication::query()
                 ->where('status', SecurityAgentApplicationStatus::Pending)
                 ->count(),

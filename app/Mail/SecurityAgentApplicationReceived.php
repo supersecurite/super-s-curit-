@@ -36,7 +36,7 @@ class SecurityAgentApplicationReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.security-agent-application-received',
+            view: 'emails.security-agent-application-received',
         );
     }
 }
