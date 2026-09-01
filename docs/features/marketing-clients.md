@@ -1,6 +1,6 @@
 # Marketing — clients & listes
 
-**Statut :** 🔲 Placeholder
+**Statut :** 🔲 À construire — **Lot 1** du [cahier des charges client](../CAHIER%20DES%20CHARGES.md)
 
 ## Vue d’ensemble
 
@@ -23,5 +23,5 @@ Aucun backend encore. À créer sous une future arborescence `Marketing/` (contr
 
 ## Limites & dette
 
-- Spécification détaillée à figer au démarrage de la Phase 2 (voir `docs/ROADMAP.md` §4).
+- Spécification alignée CDC §5.1 — voir [ROADMAP.md](../ROADMAP.md) §4.1.
 - Consentement RGPD / opt-out à traiter avant envois en masse.

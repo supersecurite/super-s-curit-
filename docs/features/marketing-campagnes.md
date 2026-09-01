@@ -1,6 +1,6 @@
 # Marketing — campagnes e-mail & WhatsApp
 
-**Statut :** 🔲 Placeholder
+**Statut :** 🔲 À construire — **Lots 2 et 3** du [cahier des charges client](../CAHIER%20DES%20CHARGES.md)
 
 ## Vue d’ensemble
 
