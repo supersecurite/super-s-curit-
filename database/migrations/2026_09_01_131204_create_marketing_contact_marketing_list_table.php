@@ -14,7 +14,8 @@ return new class extends Migration
             $table->foreignId('marketing_list_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['marketing_contact_id', 'marketing_list_id']);
+            // Nom explicite : l'index auto-généré dépasse la limite MySQL (64 car.).
+            $table->unique(['marketing_contact_id', 'marketing_list_id'], 'mkt_contact_list_unique');
         });
     }
 
