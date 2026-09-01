@@ -1,6 +1,12 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { Badge } from '@/components/ui/badge';
 import {
     Collapsible,
@@ -34,6 +40,49 @@ import { useHydrated } from '@/hooks/use-hydrated';
 import { cn } from '@/lib/utils';
 import { showNavigationLoader } from '@/lib/navigation-loader';
 import type { NavGroup, NavItem } from '@/types';
+
+type NavMenuAccordionContextValue = {
+    expandedKey: string | null;
+    setExpandedKey: (key: string | null) => void;
+};
+
+const NavMenuAccordionContext =
+    createContext<NavMenuAccordionContextValue | null>(null);
+
+function useNavMenuAccordion(): NavMenuAccordionContextValue {
+    const context = useContext(NavMenuAccordionContext);
+
+    if (!context) {
+        throw new Error('useNavMenuAccordion must be used within NavMain');
+    }
+
+    return context;
+}
+
+function navItemKey(groupTitle: string, itemTitle: string): string {
+    return `${groupTitle}/${itemTitle}`;
+}
+
+function findActiveMenuKey(
+    groups: NavGroup[],
+    isCurrentOrParentUrl: (
+        href: NonNullable<NavItem['href']>,
+        current?: string,
+    ) => boolean,
+): string | null {
+    for (const group of groups) {
+        for (const item of group.items) {
+            if (
+                item.children?.length &&
+                itemIsActive(item, isCurrentOrParentUrl)
+            ) {
+                return navItemKey(group.title, item.title);
+            }
+        }
+    }
+
+    return null;
+}
 
 function handleNavClick(onNavigate?: () => void): void {
     showNavigationLoader();
@@ -161,15 +210,15 @@ function NestedNavChild({
     onNavigate?: () => void;
 }) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
+    const page = usePage();
     const childActive = itemIsActive(item, isCurrentOrParentUrl);
     const hydrated = useHydrated();
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(childActive);
 
+    // Replie à chaque navigation si aucun enfant n'est actif (ex. menu ouvert manuellement).
     useEffect(() => {
-        if (childActive) {
-            setOpen(true);
-        }
-    }, [childActive]);
+        setOpen(childActive);
+    }, [childActive, page.url]);
 
     if (item.children?.length) {
         if (!hydrated) {
@@ -259,28 +308,29 @@ function NestedNavChild({
 
 function NavSubmenuItem({
     item,
+    menuKey,
     onNavigate,
 }: {
     item: NavItem;
+    menuKey: string;
     onNavigate?: () => void;
 }) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
     const { state, isMobile } = useSidebar();
     const childActive = itemIsActive(item, isCurrentOrParentUrl);
     const hydrated = useHydrated();
-    const [open, setOpen] = useState(false);
+    const { expandedKey, setExpandedKey } = useNavMenuAccordion();
     const isCollapsed = state === 'collapsed' && !isMobile;
+    const open = expandedKey === menuKey;
 
-    useEffect(() => {
-        if (childActive) {
-            setOpen(true);
-        }
-    }, [childActive]);
+    const handleOpenChange = (next: boolean): void => {
+        setExpandedKey(next ? menuKey : null);
+    };
 
     if (isCollapsed) {
         return (
             <SidebarMenuItem>
-                <DropdownMenu>
+                <DropdownMenu open={open} onOpenChange={handleOpenChange}>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton isActive={childActive}>
                             {item.icon && <item.icon />}
@@ -342,7 +392,7 @@ function NavSubmenuItem({
         <Collapsible
             asChild
             open={open}
-            onOpenChange={setOpen}
+            onOpenChange={handleOpenChange}
             className="group/collapsible"
         >
             <SidebarMenuItem>
@@ -389,8 +439,27 @@ export function NavMain({
               ? [{ title: 'Plateforme', items }]
               : [];
 
+    const { isCurrentOrParentUrl } = useCurrentUrl();
+    const page = usePage();
+
+    const activeMenuKey = useMemo(
+        () => findActiveMenuKey(resolvedGroups, isCurrentOrParentUrl),
+        [resolvedGroups, isCurrentOrParentUrl, page.url],
+    );
+
+    const [expandedKey, setExpandedKey] = useState<string | null>(activeMenuKey);
+
+    useEffect(() => {
+        setExpandedKey(activeMenuKey);
+    }, [page.url, activeMenuKey]);
+
+    const accordionValue = useMemo(
+        () => ({ expandedKey, setExpandedKey }),
+        [expandedKey],
+    );
+
     return (
-        <>
+        <NavMenuAccordionContext.Provider value={accordionValue}>
             {resolvedGroups.map((group) => (
                 <SidebarGroup key={group.title} className="px-2 py-0">
                     <SidebarGroupLabel className="text-[11px] tracking-wide uppercase">
@@ -402,6 +471,7 @@ export function NavMain({
                                 <NavSubmenuItem
                                     key={item.title}
                                     item={item}
+                                    menuKey={navItemKey(group.title, item.title)}
                                     onNavigate={onNavigate}
                                 />
                             ) : (
@@ -415,6 +485,6 @@ export function NavMain({
                     </SidebarMenu>
                 </SidebarGroup>
             ))}
-        </>
+        </NavMenuAccordionContext.Provider>
     );
 }
