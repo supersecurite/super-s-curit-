@@ -37,7 +37,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
 | **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` |
 | **Journal d'accès backoffice** | Support | ✅ Complet | `docs/features/access-logs.md` — monitoring sans Nightwatch |
-| **Lot 2 — Campagnes e-mail** | Marketing | 🔲 À construire | CDC §7 + modèles §6 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
+| **Lot 2 — Campagnes e-mail** | Marketing | ⚠️ En cours | Modèles ✅ · campagnes/envois ✅ · bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
 | **Lot 3 — Campagnes WhatsApp** | Marketing | 🔲 À construire | CDC §8 — `docs/features/marketing-campagnes.md` |
 
 Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
@@ -46,10 +46,9 @@ Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
 
 **Lot 2 — Campagnes e-mail** (deuxième lot du [cahier des charges client](CAHIER%20DES%20CHARGES.md)) :
 
-- Modèles de messages e-mail (variables dynamiques)
-- Campagnes individuelles / groupées (queue Laravel)
-- Historique et statuts d’envoi
-- Tableau de bord e-mail
+- ✅ Modèles de messages e-mail (variables dynamiques) — `/marketing-templates`
+- ✅ Campagnes e-mail (CRUD brouillon, lancement queue, statuts, pixel ouverture) — `/marketing-campaigns`
+- Bounces e-mail (webhook provider)
 - Permissions `marketing_campaigns.*` · UI backoffice · tests Feature
 
 Dette transverse à surveiller :
@@ -84,7 +83,7 @@ Fiche : `docs/features/marketing-clients.md`
 
 | Périmètre CDC | Livrable technique |
 |---|---|
-| Modèles de messages (e-mail, variables dynamiques) | CRUD modèles |
+| Modèles de messages (e-mail, variables dynamiques) | ✅ CRUD `/marketing-templates` |
 | Campagnes individuelles / groupées | Jobs queue Laravel |
 | Historique et statuts | Table envois, statuts `queued` → `sent` → `delivered` / `failed` / `bounced` |
 | Suivi réception / ouverture (si provider le permet) | Pixel ouverture, bounces — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |

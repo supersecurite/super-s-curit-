@@ -35,6 +35,7 @@ class VisitTracking
         'settings',
         'marketing-clients',
         'marketing-lists',
+        'marketing-templates',
         'marketing-campaigns',
         'access-logs',
         'marketing',

@@ -26,9 +26,6 @@ export type UseCurrentUrlReturn = {
     whenCurrentUrl: WhenCurrentUrlFn;
 };
 
-const UUID_SEGMENT =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 const NAV_DISCRIMINATOR_KEYS = ['tab'] as const;
 
 function resolveUrl(urlString: string, origin: string): URL | null {
@@ -136,13 +133,7 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
             return !bareHrefBlockedByDiscriminator(compareParams);
         }
 
-        if (!comparePath.startsWith(`${hrefPath}/`)) {
-            return false;
-        }
-
-        const rest = comparePath.slice(hrefPath.length + 1);
-
-        return rest.split('/').some((segment) => UUID_SEGMENT.test(segment));
+        return comparePath.startsWith(`${hrefPath}/`);
     };
 
     const isCurrentOrParentUrl: IsCurrentOrParentUrlFn = (

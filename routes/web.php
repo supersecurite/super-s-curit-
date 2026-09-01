@@ -4,8 +4,10 @@ use App\Http\Controllers\Admin\AccessLogController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
+use App\Http\Controllers\Admin\MarketingCampaignController as AdminMarketingCampaignController;
 use App\Http\Controllers\Admin\MarketingContactController as AdminMarketingContactController;
 use App\Http\Controllers\Admin\MarketingListController as AdminMarketingListController;
+use App\Http\Controllers\Admin\MarketingMessageTemplateController as AdminMarketingMessageTemplateController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\SecurityAgentApplicationController as AdminSecurityAgentApplicationController;
 use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Marketing\GalleryController as MarketingGalleryControll
 use App\Http\Controllers\Marketing\SecurityAgentApplicationController as MarketingSecurityAgentApplicationController;
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
 use App\Http\Controllers\Marketing\ServiceController;
+use App\Http\Controllers\MarketingCampaignOpenController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UserController;
@@ -38,6 +41,14 @@ Route::get('/robots.txt', RobotsController::class)
 
 Route::get('/sitemap.xml', SitemapController::class)
     ->name('sitemap')
+    ->withoutMiddleware([
+        TrackVisit::class,
+        HandleInertiaRequests::class,
+        AddLinkHeadersForPreloadedAssets::class,
+    ]);
+
+Route::get('c/o/{openToken}', [MarketingCampaignOpenController::class, 'track'])
+    ->name('marketing-campaigns.open')
     ->withoutMiddleware([
         TrackVisit::class,
         HandleInertiaRequests::class,
@@ -116,6 +127,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('backoffice.permission:partners')->group(function () {
         Route::resource('partners', AdminPartnerController::class);
+    });
+
+    Route::middleware('backoffice.permission:marketing_campaigns')->group(function () {
+        Route::resource('marketing-templates', AdminMarketingMessageTemplateController::class);
+        Route::post('marketing-campaigns/{marketing_campaign}/launch', [AdminMarketingCampaignController::class, 'launch'])
+            ->name('marketing-campaigns.launch');
+        Route::resource('marketing-campaigns', AdminMarketingCampaignController::class);
     });
 
     Route::middleware('backoffice.permission:marketing_clients')->group(function () {

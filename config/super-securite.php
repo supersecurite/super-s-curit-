@@ -45,9 +45,9 @@ return [
     'mail' => [
         'logo_url' => env('SUPER_SECURITE_MAIL_LOGO_URL'),
         'address_short' => env('SUPER_SECURITE_MAIL_ADDRESS_SHORT', 'Lambanyi (en face CIS Média)'),
-        'header_bg' => env('SUPER_SECURITE_MAIL_HEADER_BG', '#2d2d2d'),
-        'footer_bg' => env('SUPER_SECURITE_MAIL_FOOTER_BG', '#2d2d2d'),
-        'accent_color' => env('SUPER_SECURITE_MAIL_ACCENT_COLOR', '#c41e3a'),
+        'header_bg' => env('SUPER_SECURITE_MAIL_HEADER_BG', '#c4161d'),
+        'footer_bg' => env('SUPER_SECURITE_MAIL_FOOTER_BG', '#7a0e14'),
+        'accent_color' => env('SUPER_SECURITE_MAIL_ACCENT_COLOR', '#ed1c24'),
         'legal_footer' => env('SUPER_SECURITE_MAIL_LEGAL_FOOTER'),
     ],
 

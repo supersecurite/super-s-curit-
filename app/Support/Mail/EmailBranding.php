@@ -31,9 +31,12 @@ final class EmailBranding
             'website' => $websiteLabel,
             'website_url' => $websiteUrl !== '' ? $websiteUrl : 'https://'.$websiteLabel,
             'logo_url' => self::logoUrl(),
-            'header_bg' => (string) config('super-securite.mail.header_bg', '#2d2d2d'),
-            'footer_bg' => (string) config('super-securite.mail.footer_bg', '#2d2d2d'),
-            'accent_color' => (string) config('super-securite.mail.accent_color', '#c41e3a'),
+            'header_bg' => (string) config('super-securite.mail.header_bg', '#c4161d'),
+            'footer_bg' => (string) config('super-securite.mail.footer_bg', '#7a0e14'),
+            'accent_color' => (string) config('super-securite.mail.accent_color', '#ed1c24'),
+            'header_text' => '#ffffff',
+            'header_muted' => '#fecaca',
+            'footer_text' => '#fecaca',
             'legal_footer' => self::legalFooterText(),
         ];
     }

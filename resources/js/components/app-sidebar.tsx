@@ -2,12 +2,14 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
     Contact,
+    FileText,
     Globe,
     Handshake,
     History,
     Images,
     LayoutGrid,
     List,
+    Megaphone,
     Newspaper,
     Shield,
     UserPlus,
@@ -40,6 +42,8 @@ import { index as usersIndex } from '@/routes/users';
 import { index as partnersIndex } from '@/routes/partners';
 import { index as marketingClientsIndex } from '@/routes/marketing-clients';
 import { index as marketingListsIndex } from '@/routes/marketing-lists';
+import { index as marketingCampaignsIndex } from '@/routes/marketing-campaigns';
+import { index as marketingTemplatesIndex } from '@/routes/marketing-templates';
 import { index as accessLogsIndex } from '@/routes/access-logs';
 import type { Auth, NavGroup, NavItem } from '@/types';
 
@@ -247,27 +251,31 @@ function buildNavGroups(
         });
     }
 
-    if (marketingChildren.length > 1) {
-        groups.push({
-            title: 'Marketing',
-            items: [
-                {
-                    title: 'Marketing',
-                    icon: Contact,
-                    children: marketingChildren,
-                },
-            ],
+    if (hasFeatureAccess(permissions, 'marketing_campaigns')) {
+        marketingChildren.push({
+            title: 'Modèles',
+            href: marketingTemplatesIndex.url(),
         });
-    } else if (marketingChildren.length === 1) {
-        const [item] = marketingChildren;
+        marketingChildren.push({
+            title: 'Campagnes',
+            href: marketingCampaignsIndex.url(),
+        });
+    }
 
+    if (marketingChildren.length > 0) {
         groups.push({
             title: 'Marketing',
             items: [
-                {
-                    ...item,
-                    icon: item.title === 'Contacts' ? Contact : List,
-                },
+                marketingChildren.length > 1
+                    ? {
+                          title: 'Marketing',
+                          icon: Contact,
+                          children: marketingChildren,
+                      }
+                    : {
+                          ...marketingChildren[0],
+                          icon: marketingChildren[0].title === 'Modèles' ? FileText : Contact,
+                      },
             ],
         });
     }

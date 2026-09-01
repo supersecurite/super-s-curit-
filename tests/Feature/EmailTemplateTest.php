@@ -60,7 +60,9 @@ test('transactional email layout renders header and footer branding', function (
 
     expect($html)
         ->toContain('logo-white.jpeg')
-        ->toContain('Tél&nbsp;: +224 612 13 13 14 / +224 612 13 13 15')
+        ->toContain('background-color:#c4161d')
+        ->toContain('background-color:#7a0e14')
+        ->toContain('Tél</span>&nbsp;&nbsp;+224 612 13 13 14 / +224 612 13 13 15')
         ->toContain('contact@supersecurite.com')
         ->toContain('Lambanyi (en face CIS Média)')
         ->toContain('Super Sécurité sarl')

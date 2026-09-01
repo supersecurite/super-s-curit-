@@ -25,6 +25,8 @@ type ContentRendererProps = {
     className?: string;
 };
 
+const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+
 function validateAndParseContent(rawContent: string | null | undefined) {
     if (!rawContent) {
         return null;
@@ -128,6 +130,17 @@ function renderNodeChildren(children: LexicalNode[] | undefined): ReactNode {
             return <span key={index}>{renderTextContent(child)}</span>;
         }
 
+        if (child.type === 'template-variable') {
+            return (
+                <span
+                    key={index}
+                    className="rounded bg-primary/15 px-1.5 py-0.5 font-mono text-sm font-semibold text-primary"
+                >
+                    {child.text}
+                </span>
+            );
+        }
+
         if (child.type === 'linebreak' || child.type === 'break') {
             return <br key={index} />;
         }
@@ -175,9 +188,25 @@ export default function ContentRenderer({
     if ('isPlainText' in parsedContent && parsedContent.isPlainText) {
         return (
             <div className={`whitespace-pre-wrap ${className}`}>
-                {parsedContent.content.split('\n').map((line, index) => (
+                {(parsedContent.content ?? '').split('\n').map((line, index) => (
                     <p key={index} className="mb-2 leading-relaxed last:mb-0">
-                        {line || <br />}
+                        {line.split(/(\{\{[a-z_]+\}\})/g).filter(Boolean).map((part, partIndex) => {
+                            const match = part.match(/^\{\{([a-z_]+)\}\}$/);
+
+                            if (match) {
+                                return (
+                                    <span
+                                        key={`${index}-${partIndex}`}
+                                        className="rounded bg-primary/15 px-1.5 py-0.5 font-mono text-sm font-semibold text-primary"
+                                    >
+                                        {part}
+                                    </span>
+                                );
+                            }
+
+                            return <span key={`${index}-${partIndex}`}>{part}</span>;
+                        })}
+                        {!line ? <br /> : null}
                     </p>
                 ))}
             </div>
@@ -209,7 +238,7 @@ export default function ContentRenderer({
                         Math.max(parseInt(node.tag.replace('h', ''), 10) || 1, 1),
                         6,
                     );
-                    const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+                    const Tag = HEADING_TAGS[level - 1];
                     const classes = [
                         'font-heading font-bold text-super-securite-heading first:mt-0',
                         level === 1 ? 'mb-4 mt-6 text-3xl' : '',

@@ -9,11 +9,12 @@ Les guidelines Laravel Boost (section du bas) restent la référence pour la sta
 1. `.cursor/rules/feature-workflow.mdc` — comment livrer une feature
 2. `.cursor/rules/clean-architecture.mdc` — Actions, contrôleurs minces, toasts Inertia
 3. `.cursor/rules/domain-invariants.mdc` — invariants métier non négociables
-4. `.cursor/rules/code-documentation.mdc` — documentation dans le code
-5. `docs/ROADMAP.md` — état des modules, dette, prochaines livraisons
-6. `docs/features/<module>.md` — comportement **réel** du module touché
-7. `docs/decisions/` — ADR si une décision d’architecture s’applique
-8. Guidelines Laravel Boost (ci-dessous) — stack et conventions techniques
+4. `.cursor/rules/queue-debounce.mdc` — debounce jobs queue Laravel 13
+5. `.cursor/rules/code-documentation.mdc` — documentation dans le code
+6. `docs/ROADMAP.md` — état des modules, dette, prochaines livraisons
+7. `docs/features/<module>.md` — comportement **réel** du module touché
+8. `docs/decisions/` — ADR si une décision d’architecture s’applique
+9. Guidelines Laravel Boost (ci-dessous) — stack et conventions techniques
 
 ## Règles d’or
 
@@ -32,6 +33,7 @@ Les guidelines Laravel Boost (section du bas) restent la référence pour la sta
 | Comment livrer | `.cursor/rules/feature-workflow.mdc` |
 | Actions & architecture | `.cursor/rules/clean-architecture.mdc` |
 | Invariants (rôles, tracking, routes) | `.cursor/rules/domain-invariants.mdc` |
+| Debounce jobs queue | `.cursor/rules/queue-debounce.mdc` |
 | PHPDoc / TSDoc | `.cursor/rules/code-documentation.mdc` |
 | Priorités produit | `docs/ROADMAP.md` |
 | Comportement d’un module | `docs/features/*.md` |
