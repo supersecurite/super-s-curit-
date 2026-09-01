@@ -7,6 +7,7 @@ import UserPermissionsPanel, {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { cn } from '@/lib/utils';
 import type { RouteFormDefinition } from '@/wayfinder';
 
@@ -128,27 +129,16 @@ export default function UserForm({
 
                                 <div className="grid gap-2 sm:col-span-2">
                                     <Label htmlFor="role">Rôle</Label>
-                                    <select
+                                    <SearchableSelect
                                         id="role"
                                         name="role"
+                                        options={roles}
                                         value={selectedRole}
-                                        onChange={(event) =>
-                                            setSelectedRole(event.target.value)
-                                        }
-                                        className={cn(
-                                            'border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
-                                        )}
+                                        onChange={setSelectedRole}
+                                        placeholder="Sélectionner un rôle"
+                                        searchPlaceholder="Rechercher un rôle..."
                                         required
-                                    >
-                                        {roles.map((role) => (
-                                            <option
-                                                key={role.value}
-                                                value={role.value}
-                                            >
-                                                {role.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
                                     <InputError message={errors.role} />
                                 </div>
                             </div>

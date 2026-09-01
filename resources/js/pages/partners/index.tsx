@@ -3,6 +3,7 @@ import { Handshake, Plus, Search, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import {
     create,
@@ -95,22 +96,21 @@ export default function PartnersIndex() {
                             className="pl-9"
                         />
                     </div>
-                    <select
-                        defaultValue={filters.status ?? 'all'}
-                        onChange={(event) =>
+                    <SearchableSelect
+                        options={[
+                            { value: 'all', label: 'Tous les statuts' },
+                            { value: 'published', label: 'Actifs' },
+                            { value: 'draft', label: 'Inactifs' },
+                        ]}
+                        value={filters.status ?? 'all'}
+                        onChange={(status) =>
                             applyFilters({
-                                status:
-                                    event.target.value === 'all'
-                                        ? undefined
-                                        : event.target.value,
+                                status: status === 'all' ? undefined : status,
                             })
                         }
-                        className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-                    >
-                        <option value="all">Tous les statuts</option>
-                        <option value="published">Actifs</option>
-                        <option value="draft">Inactifs</option>
-                    </select>
+                        placeholder="Statut"
+                        searchPlaceholder="Rechercher..."
+                    />
                 </div>
 
                 {partners.data.length > 0 ? (

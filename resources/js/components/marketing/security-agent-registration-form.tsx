@@ -8,10 +8,10 @@ import RecaptchaField, {
 } from '@/components/marketing/recaptcha-field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { store } from '@/routes/devenir-agent';
-import { cn } from '@/lib/utils';
 
 type AvailabilityOption = { value: string; label: string };
 type PostOption = { value: string; label: string };
@@ -160,28 +160,16 @@ export default function SecurityAgentRegistrationForm() {
                                             *
                                         </span>
                                     </Label>
-                                    <select
+                                    <SearchableSelect
                                         id="post"
                                         name="post"
+                                        options={postOptions}
+                                        placeholder="Sélectionner un poste..."
+                                        searchPlaceholder="Rechercher un poste..."
                                         required
-                                        defaultValue=""
-                                        className={cn(
-                                            fieldClasses,
-                                            'h-10 w-full rounded-md border px-3 text-sm',
-                                        )}
-                                    >
-                                        <option value="">
-                                            Sélectionner un poste...
-                                        </option>
-                                        {postOptions.map((option) => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        variant="underline"
+                                        triggerClassName={fieldClasses}
+                                    />
                                     <InputError message={errors.post} />
                                 </div>
                                 <div className="grid gap-2">
@@ -206,25 +194,15 @@ export default function SecurityAgentRegistrationForm() {
                                 <Label htmlFor="availability">
                                     Disponibilité
                                 </Label>
-                                <select
+                                <SearchableSelect
                                     id="availability"
                                     name="availability"
-                                    defaultValue=""
-                                    className={cn(
-                                        fieldClasses,
-                                        'h-10 w-full rounded-md border px-3 text-sm',
-                                    )}
-                                >
-                                    <option value="">Sélectionner...</option>
-                                    {availabilityOptions.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                    options={availabilityOptions}
+                                    placeholder="Sélectionner..."
+                                    searchPlaceholder="Rechercher..."
+                                    variant="underline"
+                                    triggerClassName={fieldClasses}
+                                />
                                 <InputError message={errors.availability} />
                             </div>
 

@@ -7,27 +7,30 @@ Les guidelines Laravel Boost (section du bas) restent la référence pour la sta
 ## Ordre de lecture (obligatoire)
 
 1. `.cursor/rules/feature-workflow.mdc` — comment livrer une feature
-2. `.cursor/rules/domain-invariants.mdc` — invariants métier non négociables
-3. `.cursor/rules/code-documentation.mdc` — documentation dans le code
-4. `docs/ROADMAP.md` — état des modules, dette, prochaines livraisons
-5. `docs/features/<module>.md` — comportement **réel** du module touché
-6. `docs/decisions/` — ADR si une décision d’architecture s’applique
-7. Guidelines Laravel Boost (ci-dessous) — stack et conventions techniques
+2. `.cursor/rules/clean-architecture.mdc` — Actions, contrôleurs minces, toasts Inertia
+3. `.cursor/rules/domain-invariants.mdc` — invariants métier non négociables
+4. `.cursor/rules/code-documentation.mdc` — documentation dans le code
+5. `docs/ROADMAP.md` — état des modules, dette, prochaines livraisons
+6. `docs/features/<module>.md` — comportement **réel** du module touché
+7. `docs/decisions/` — ADR si une décision d’architecture s’applique
+8. Guidelines Laravel Boost (ci-dessous) — stack et conventions techniques
 
 ## Règles d’or
 
 1. **Ne devine pas le métier** — lis la fiche feature + le code existant avant d’écrire.
-2. **Tranche verticale** — migration → modèle → policy → (service) → contrôleur → route → page Inertia → tests, pour un comportement utilisateur testable.
-3. **Permissions granulaires** — format `feature.action` via `BackofficePermission` ; UI et policies doivent masquer / refuser sans autorisation.
-4. **Pas de tracking backoffice** — les chemins admin / auth / settings sont exclus de `VisitTracking`.
-5. **DoD docs** — toute tranche met à jour `docs/features/<module>.md` + `docs/ROADMAP.md` (+ ADR si choix non trivial).
-6. **Tests Pest** — `php artisan test --compact` sur le périmètre touché ; Pint sur le PHP modifié.
+2. **Tranche verticale** — migration → modèle → policy → Action(s) → contrôleur → route → page Inertia → tests, pour un comportement utilisateur testable.
+3. **Actions obligatoires** — toute mutation backoffice passe par `app/Actions/` (ADR-0003) ; toasts via `Inertia::flash('toast', …)`.
+4. **Permissions granulaires** — format `feature.action` via `BackofficePermission` ; UI et policies doivent masquer / refuser sans autorisation.
+5. **Pas de tracking backoffice** — les chemins admin / auth / settings sont exclus de `VisitTracking`.
+6. **DoD docs** — toute tranche met à jour `docs/features/<module>.md` + `docs/ROADMAP.md` (+ ADR si choix non trivial).
+7. **Tests Pest** — `php artisan test --compact` sur le périmètre touché ; Pint sur le PHP modifié.
 
 ## Où trouver quoi
 
 | Besoin | Fichier |
 |---|---|
 | Comment livrer | `.cursor/rules/feature-workflow.mdc` |
+| Actions & architecture | `.cursor/rules/clean-architecture.mdc` |
 | Invariants (rôles, tracking, routes) | `.cursor/rules/domain-invariants.mdc` |
 | PHPDoc / TSDoc | `.cursor/rules/code-documentation.mdc` |
 | Priorités produit | `docs/ROADMAP.md` |

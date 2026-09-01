@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
+use App\Http\Controllers\Admin\MarketingContactController as AdminMarketingContactController;
+use App\Http\Controllers\Admin\MarketingListController as AdminMarketingListController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\SecurityAgentApplicationController as AdminSecurityAgentApplicationController;
 use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
@@ -109,6 +111,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('backoffice.permission:partners')->group(function () {
         Route::resource('partners', AdminPartnerController::class);
+    });
+
+    Route::middleware('backoffice.permission:marketing_clients')->group(function () {
+        Route::get('marketing-clients/import', [AdminMarketingContactController::class, 'importForm'])
+            ->name('marketing-clients.import');
+        Route::post('marketing-clients/import', [AdminMarketingContactController::class, 'import'])
+            ->name('marketing-clients.import.store');
+        Route::resource('marketing-clients', AdminMarketingContactController::class);
+        Route::resource('marketing-lists', AdminMarketingListController::class);
+        Route::post('marketing-lists/{marketing_list}/contacts', [AdminMarketingListController::class, 'attachContact'])
+            ->name('marketing-lists.contacts.attach');
+        Route::delete('marketing-lists/{marketing_list}/contacts/{marketing_client}', [AdminMarketingListController::class, 'detachContact'])
+            ->name('marketing-lists.contacts.detach');
     });
 
     Route::middleware('backoffice.permission:analytics')->group(function () {

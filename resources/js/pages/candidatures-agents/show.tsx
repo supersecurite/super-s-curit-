@@ -12,6 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import InputError from '@/components/input-error';
 import { index, show, update } from '@/routes/candidatures-agents';
 
@@ -231,23 +232,16 @@ export default function CandidaturesAgentsShow() {
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="status">Statut</Label>
-                                    <select
+                                    <SearchableSelect
                                         id="status"
+                                        options={statusOptions}
                                         value={form.data.status}
-                                        onChange={(e) =>
-                                            form.setData('status', e.target.value)
+                                        onChange={(status) =>
+                                            form.setData('status', status)
                                         }
-                                        className="border-input bg-background h-9 w-full rounded-md border px-3 text-sm"
-                                    >
-                                        {statusOptions.map((option) => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        placeholder="Sélectionner un statut"
+                                        searchPlaceholder="Rechercher..."
+                                    />
                                     <InputError message={form.errors.status} />
                                 </div>
 

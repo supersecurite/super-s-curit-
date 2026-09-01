@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import ContentShareButton from '@/components/content-share-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { cn } from '@/lib/utils';
 import { create, destroy, edit, index, show } from '@/routes/conseils';
@@ -225,35 +226,33 @@ export default function ConseilsIndex() {
                             onChange={(e) => debouncedSearch(e.target.value)}
                         />
                     </div>
-                    <select
-                        className="border-input bg-background h-9 rounded-md border px-3 text-sm"
-                        defaultValue={filters.category ?? 'all'}
-                        onChange={(e) =>
-                            applyFilters({ category: e.target.value })
-                        }
-                    >
-                        <option value="all">Toutes les catégories</option>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </select>
+                    <SearchableSelect
+                        options={[
+                            { value: 'all', label: 'Toutes les catégories' },
+                            ...categories.map((category) => ({
+                                value: category,
+                                label: category,
+                            })),
+                        ]}
+                        value={filters.category ?? 'all'}
+                        onChange={(category) => applyFilters({ category })}
+                        placeholder="Catégorie"
+                        searchPlaceholder="Rechercher une catégorie..."
+                    />
                     {tab === 'all' ? (
-                        <select
-                            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
-                            defaultValue={filters.status ?? 'all'}
-                            onChange={(e) =>
-                                applyFilters({ status: e.target.value })
-                            }
-                        >
-                            <option value="all">Tous les statuts</option>
-                            {statuses.map((status) => (
-                                <option key={status.value} value={status.value}>
-                                    {status.label}
-                                </option>
-                            ))}
-                        </select>
+                        <SearchableSelect
+                            options={[
+                                { value: 'all', label: 'Tous les statuts' },
+                                ...statuses.map((status) => ({
+                                    value: status.value,
+                                    label: status.label,
+                                })),
+                            ]}
+                            value={filters.status ?? 'all'}
+                            onChange={(status) => applyFilters({ status })}
+                            placeholder="Statut"
+                            searchPlaceholder="Rechercher un statut..."
+                        />
                     ) : null}
                 </div>
 

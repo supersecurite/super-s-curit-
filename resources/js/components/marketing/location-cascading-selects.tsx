@@ -6,7 +6,7 @@ import {
 } from '@/data/guinea-localisation';
 import InputError from '@/components/input-error';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 
 export type LocationValues = {
     region_id: string;
@@ -18,26 +18,33 @@ type LocationCascadingSelectsProps = {
     values: LocationValues;
     onChange: (values: LocationValues) => void;
     errors?: Record<string, string>;
-    fieldClassName?: string;
+    variant?: 'default' | 'underline';
 };
-
-const defaultFieldClasses =
-    'border-super-securite-border bg-super-securite-surface-elevated text-super-securite-heading focus:ring-super-securite-accent/30 h-10 w-full rounded-md border px-3 text-sm focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
 
 export default function LocationCascadingSelects({
     values,
     onChange,
     errors = {},
-    fieldClassName = defaultFieldClasses,
+    variant = 'default',
 }: LocationCascadingSelectsProps) {
-    const regions = useMemo(() => getAllRegions(), []);
+    const regions = useMemo(
+        () =>
+            getAllRegions().map((region) => ({
+                value: region.id,
+                label: region.nom,
+            })),
+        [],
+    );
 
     const prefectures = useMemo(() => {
         if (!values.region_id) {
             return [];
         }
 
-        return getPrefecturesForRegion(values.region_id);
+        return getPrefecturesForRegion(values.region_id).map((prefecture) => ({
+            value: prefecture.id,
+            label: prefecture.nom,
+        }));
     }, [values.region_id]);
 
     const communes = useMemo(() => {
@@ -45,7 +52,10 @@ export default function LocationCascadingSelects({
             return [];
         }
 
-        return getCommunesForPrefecture(values.prefecture_id);
+        return getCommunesForPrefecture(values.prefecture_id).map((commune) => ({
+            value: commune.id,
+            label: commune.nom,
+        }));
     }, [values.prefecture_id]);
 
     const handleRegionChange = (regionId: string) => {
@@ -67,83 +77,90 @@ export default function LocationCascadingSelects({
     return (
         <div className="grid gap-5 sm:grid-cols-2">
             <div className="grid gap-2">
-                <Label htmlFor="region_id" className="text-super-securite-heading">
-                    Région <span className="text-super-securite-accent">*</span>
+                <Label
+                    htmlFor="region_id"
+                    className={
+                        variant === 'underline'
+                            ? 'text-super-securite-heading'
+                            : undefined
+                    }
+                >
+                    Région{' '}
+                    <span className="text-super-securite-accent">*</span>
                 </Label>
-                <select
+                <SearchableSelect
                     id="region_id"
                     name="region_id"
-                    required
+                    options={regions}
                     value={values.region_id}
-                    onChange={(e) => handleRegionChange(e.target.value)}
-                    className={cn(fieldClassName)}
-                >
-                    <option value="">Sélectionner une région</option>
-                    {regions.map((region) => (
-                        <option key={region.id} value={region.id}>
-                            {region.nom}
-                        </option>
-                    ))}
-                </select>
+                    onChange={handleRegionChange}
+                    placeholder="Sélectionner une région"
+                    searchPlaceholder="Rechercher une région..."
+                    required
+                    variant={variant}
+                />
                 <InputError message={errors.region_id} />
             </div>
 
             <div className="grid gap-2">
                 <Label
                     htmlFor="prefecture_id"
-                    className="text-super-securite-heading"
+                    className={
+                        variant === 'underline'
+                            ? 'text-super-securite-heading'
+                            : undefined
+                    }
                 >
                     Préfecture{' '}
                     <span className="text-super-securite-accent">*</span>
                 </Label>
-                <select
+                <SearchableSelect
                     id="prefecture_id"
                     name="prefecture_id"
-                    required
+                    options={prefectures}
                     value={values.prefecture_id}
-                    onChange={(e) => handlePrefectureChange(e.target.value)}
+                    onChange={handlePrefectureChange}
+                    placeholder="Sélectionner une préfecture"
+                    searchPlaceholder="Rechercher une préfecture..."
                     disabled={!values.region_id}
-                    className={cn(fieldClassName)}
-                >
-                    <option value="">Sélectionner une préfecture</option>
-                    {prefectures.map((prefecture) => (
-                        <option key={prefecture.id} value={prefecture.id}>
-                            {prefecture.nom}
-                        </option>
-                    ))}
-                </select>
+                    required
+                    variant={variant}
+                />
                 <InputError message={errors.prefecture_id} />
             </div>
 
             <div className="grid gap-2 sm:col-span-2">
-                <Label htmlFor="commune_id" className="text-super-securite-heading">
+                <Label
+                    htmlFor="commune_id"
+                    className={
+                        variant === 'underline'
+                            ? 'text-super-securite-heading'
+                            : undefined
+                    }
+                >
                     Commune
                     {communes.length > 0 ? (
                         <span className="text-super-securite-accent"> *</span>
                     ) : null}
                 </Label>
-                <select
+                <SearchableSelect
                     id="commune_id"
                     name="commune_id"
+                    options={communes}
                     value={values.commune_id}
-                    onChange={(e) =>
-                        onChange({ ...values, commune_id: e.target.value })
+                    onChange={(communeId) =>
+                        onChange({ ...values, commune_id: communeId })
                     }
+                    placeholder={
+                        communes.length === 0
+                            ? 'Aucune commune disponible'
+                            : 'Sélectionner une commune'
+                    }
+                    searchPlaceholder="Rechercher une commune..."
                     disabled={!values.prefecture_id || communes.length === 0}
                     required={communes.length > 0}
-                    className={cn(fieldClassName)}
-                >
-                    <option value="">
-                        {communes.length === 0
-                            ? 'Aucune commune disponible'
-                            : 'Sélectionner une commune'}
-                    </option>
-                    {communes.map((commune) => (
-                        <option key={commune.id} value={commune.id}>
-                            {commune.nom}
-                        </option>
-                    ))}
-                </select>
+                    variant={variant}
+                />
                 <InputError message={errors.commune_id} />
             </div>
         </div>

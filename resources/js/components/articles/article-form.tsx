@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 
 export type StatusOption = {
     value: string;
@@ -181,27 +182,20 @@ export default function ArticleForm({
                         <div className="app-panel space-y-4 p-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="status">Statut</Label>
-                                <select
+                                <SearchableSelect
                                     id="status"
+                                    options={statusOptions}
                                     value={formData.status}
-                                    onChange={(e) =>
-                                        updateField('status', e.target.value)
+                                    onChange={(status) =>
+                                        updateField('status', status)
                                     }
+                                    placeholder="Sélectionner un statut"
+                                    searchPlaceholder="Rechercher..."
                                     disabled={
                                         !canApprove &&
                                         formData.status === 'published'
                                     }
-                                    className="border-input bg-background h-9 w-full rounded-md border px-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
-                                >
-                                    {statusOptions.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                />
                                 <p className="text-muted-foreground text-xs">
                                     {canApprove
                                         ? 'Modifiez le statut pour valider, refuser ou republier l\'article.'

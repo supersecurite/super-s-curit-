@@ -3,6 +3,7 @@ import { Eye, LayoutList, MapPin, Search, UserPlus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import LocationCascadingSelects, {
     type LocationValues,
 } from '@/components/marketing/location-cascading-selects';
@@ -137,44 +138,41 @@ export default function CandidaturesAgentsIndex() {
                                 onChange={(e) => debouncedSearch(e.target.value)}
                             />
                         </div>
-                        <select
-                            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
-                            defaultValue={filters.status ?? 'all'}
-                            onChange={(e) =>
+                        <SearchableSelect
+                            options={[
+                                { value: 'all', label: 'Tous les statuts' },
+                                ...statuses.map((status) => ({
+                                    value: status.value,
+                                    label: status.label,
+                                })),
+                            ]}
+                            value={filters.status ?? 'all'}
+                            onChange={(status) =>
                                 applyFilters({
                                     status:
-                                        e.target.value === 'all'
-                                            ? undefined
-                                            : e.target.value,
+                                        status === 'all' ? undefined : status,
                                 })
                             }
-                        >
-                            <option value="all">Tous les statuts</option>
-                            {statuses.map((status) => (
-                                <option key={status.value} value={status.value}>
-                                    {status.label}
-                                </option>
-                            ))}
-                        </select>
-                        <select
-                            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
-                            defaultValue={filters.post ?? 'all'}
-                            onChange={(e) =>
+                            placeholder="Statut"
+                            searchPlaceholder="Rechercher un statut..."
+                        />
+                        <SearchableSelect
+                            options={[
+                                { value: 'all', label: 'Tous les postes' },
+                                ...posts.map((post) => ({
+                                    value: post.value,
+                                    label: post.label,
+                                })),
+                            ]}
+                            value={filters.post ?? 'all'}
+                            onChange={(post) =>
                                 applyFilters({
-                                    post:
-                                        e.target.value === 'all'
-                                            ? undefined
-                                            : e.target.value,
+                                    post: post === 'all' ? undefined : post,
                                 })
                             }
-                        >
-                            <option value="all">Tous les postes</option>
-                            {posts.map((post) => (
-                                <option key={post.value} value={post.value}>
-                                    {post.label}
-                                </option>
-                            ))}
-                        </select>
+                            placeholder="Poste"
+                            searchPlaceholder="Rechercher un poste..."
+                        />
                     </div>
 
                     <div>
@@ -185,7 +183,6 @@ export default function CandidaturesAgentsIndex() {
                         <LocationCascadingSelects
                             values={location}
                             onChange={applyLocationFilters}
-                            fieldClassName="border-input bg-background h-9 w-full rounded-md border px-3 text-sm"
                         />
                     </div>
                 </div>

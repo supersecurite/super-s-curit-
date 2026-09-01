@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import { ArrowDownUp, Search } from 'lucide-react';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 
 export type MarketingContentFiltersState = {
     search?: string;
@@ -56,39 +57,43 @@ export default function MarketingContentFilters({
                 />
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
-                <select
-                    defaultValue={filters.category ?? 'all'}
-                    onChange={(e) =>
-                        applyFilters({ category: e.target.value })
+                <SearchableSelect
+                    className="min-w-[12rem]"
+                    options={[
+                        { value: 'all', label: 'Toutes les catégories' },
+                        ...categories.map((category) => ({
+                            value: category,
+                            label: category,
+                        })),
+                    ]}
+                    value={filters.category ?? 'all'}
+                    onChange={(category) =>
+                        applyFilters({
+                            category: category === 'all' ? undefined : category,
+                        })
                     }
-                    className="rounded-xl border border-super-securite-border bg-white/70 px-4 py-3 text-super-securite-heading focus:ring-2 focus:ring-super-securite-accent focus:outline-none"
-                >
-                    <option value="all">Toutes les catégories</option>
-                    {categories.map((category) => (
-                        <option key={category} value={category}>
-                            {category}
-                        </option>
-                    ))}
-                </select>
-                <div className="relative">
-                    <ArrowDownUp className="text-super-securite-muted pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2" />
-                    <select
-                        defaultValue={currentSortValue(filters)}
-                        onChange={(e) => {
-                            const [sort_by, sort_direction] =
-                                e.target.value.split(':');
+                    placeholder="Catégorie"
+                    searchPlaceholder="Rechercher..."
+                    triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 h-auto"
+                />
+                <div className="relative min-w-[12rem]">
+                    <ArrowDownUp className="text-super-securite-muted pointer-events-none absolute top-1/2 left-4 z-10 size-4 -translate-y-1/2" />
+                    <SearchableSelect
+                        className="pl-7"
+                        options={SORT_OPTIONS.map((option) => ({
+                            value: option.value,
+                            label: option.label,
+                        }))}
+                        value={currentSortValue(filters)}
+                        onChange={(value) => {
+                            const [sort_by, sort_direction] = value.split(':');
 
                             applyFilters({ sort_by, sort_direction });
                         }}
-                        aria-label="Trier par"
-                        className="w-full rounded-xl border border-super-securite-border bg-white/70 py-3 pr-4 pl-11 text-super-securite-heading focus:ring-2 focus:ring-super-securite-accent focus:outline-none sm:min-w-52"
-                    >
-                        {SORT_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
+                        placeholder="Trier par"
+                        searchPlaceholder="Rechercher..."
+                        triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 pl-11 h-auto"
+                    />
                 </div>
             </div>
         </div>

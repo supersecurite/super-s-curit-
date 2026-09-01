@@ -2,6 +2,7 @@ import { Form } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Textarea } from '@/components/ui/textarea';
 import type { GalleryServiceOption } from '@/types/gallery';
 
@@ -47,21 +48,23 @@ export default function GalleryImageForm({
             <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                     <Label htmlFor="service_id">Rattachement</Label>
-                    <select
+                    <SearchableSelect
                         id="service_id"
                         name="service_id"
-                        defaultValue={
-                            galleryImage?.service_id ?? 'general'
-                        }
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    >
-                        <option value="general">Galerie générale uniquement</option>
-                        {services.map((service) => (
-                            <option key={service.value} value={service.value}>
-                                {service.label}
-                            </option>
-                        ))}
-                    </select>
+                        options={[
+                            {
+                                value: 'general',
+                                label: 'Galerie générale uniquement',
+                            },
+                            ...services.map((service) => ({
+                                value: service.value,
+                                label: service.label,
+                            })),
+                        ]}
+                        defaultValue={galleryImage?.service_id ?? 'general'}
+                        placeholder="Sélectionner un rattachement"
+                        searchPlaceholder="Rechercher un service..."
+                    />
                     <p className="text-muted-foreground text-xs">
                         Laissez « Galerie générale » pour une image visible
                         uniquement sur la page /galerie.

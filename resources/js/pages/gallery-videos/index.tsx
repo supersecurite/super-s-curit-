@@ -3,6 +3,7 @@ import { Plus, Search, Trash2, Video } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import {
     create,
@@ -100,42 +101,39 @@ export default function GalleryVideosIndex() {
                             className="pl-9"
                         />
                     </div>
-                    <select
-                        defaultValue={filters.service ?? 'all'}
-                        onChange={(event) =>
+                    <SearchableSelect
+                        options={[
+                            { value: 'all', label: 'Tous les rattachements' },
+                            { value: 'general', label: 'Galerie générale' },
+                            ...services.map((service) => ({
+                                value: service.value,
+                                label: service.label,
+                            })),
+                        ]}
+                        value={filters.service ?? 'all'}
+                        onChange={(service) =>
                             applyFilters({
-                                service:
-                                    event.target.value === 'all'
-                                        ? undefined
-                                        : event.target.value,
+                                service: service === 'all' ? undefined : service,
                             })
                         }
-                        className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-                    >
-                        <option value="all">Tous les rattachements</option>
-                        <option value="general">Galerie générale</option>
-                        {services.map((service) => (
-                            <option key={service.value} value={service.value}>
-                                {service.label}
-                            </option>
-                        ))}
-                    </select>
-                    <select
-                        defaultValue={filters.status ?? 'all'}
-                        onChange={(event) =>
+                        placeholder="Rattachement"
+                        searchPlaceholder="Rechercher..."
+                    />
+                    <SearchableSelect
+                        options={[
+                            { value: 'all', label: 'Tous les statuts' },
+                            { value: 'published', label: 'Publiées' },
+                            { value: 'draft', label: 'Non publiées' },
+                        ]}
+                        value={filters.status ?? 'all'}
+                        onChange={(status) =>
                             applyFilters({
-                                status:
-                                    event.target.value === 'all'
-                                        ? undefined
-                                        : event.target.value,
+                                status: status === 'all' ? undefined : status,
                             })
                         }
-                        className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-                    >
-                        <option value="all">Tous les statuts</option>
-                        <option value="published">Publiées</option>
-                        <option value="draft">Non publiées</option>
-                    </select>
+                        placeholder="Statut"
+                        searchPlaceholder="Rechercher..."
+                    />
                 </div>
 
                 {galleryVideos.data.length > 0 ? (

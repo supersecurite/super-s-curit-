@@ -1,4 +1,6 @@
 import { createInertiaApp } from '@inertiajs/react';
+import type { Page } from '@inertiajs/core';
+import type { ReactElement } from 'react';
 import { AppChrome } from '@/components/app-chrome';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
@@ -19,20 +21,10 @@ function SettingsAppLayout({
     );
 }
 
-function initialPageComponent(): string {
-    const pageData = document.querySelector<HTMLScriptElement>(
-        'script[data-page="app"]',
-    )?.textContent;
+function initialPageName(app: ReactElement): string {
+    const props = app.props as { initialPage?: Page };
 
-    if (!pageData) {
-        return '';
-    }
-
-    try {
-        return (JSON.parse(pageData) as { component?: string }).component ?? '';
-    } catch {
-        return '';
-    }
+    return props.initialPage?.component ?? '';
 }
 
 createInertiaApp({
@@ -51,7 +43,7 @@ createInertiaApp({
         }
     },
     withApp(app) {
-        const page = initialPageComponent();
+        const page = initialPageName(app);
 
         if (page.startsWith('marketing/') || page.startsWith('errors/')) {
             return app;

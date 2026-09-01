@@ -1,17 +1,17 @@
 import { Form, usePage } from '@inertiajs/react';
-import { CheckCircle2, ChevronDown, Send } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { CheckCircle2, Send } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
 import InputError from '@/components/input-error';
 import RecaptchaField, {
     type RecaptchaFieldHandle,
 } from '@/components/marketing/recaptcha-field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { superSecuriteProjectTypes } from '@/data/super-securite-contact';
 import { store } from '@/routes/contact';
-import { cn } from '@/lib/utils';
 
 type SharedPageProps = {
     flash: { success?: string | null };
@@ -29,6 +29,14 @@ export default function ContactForm() {
     const { flash, recaptcha } = usePage<SharedPageProps>().props;
     const [recaptchaToken, setRecaptchaToken] = useState('');
     const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
+    const projectTypeOptions = useMemo(
+        () =>
+            superSecuriteProjectTypes.map((type) => ({
+                value: type,
+                label: type,
+            })),
+        [],
+    );
 
     return (
         <div className="marketing-card relative overflow-hidden">
@@ -168,30 +176,15 @@ export default function ContactForm() {
                                 >
                                     Type de projet
                                 </Label>
-                                <div className="relative">
-                                    <select
-                                        id="project_type"
-                                        name="project_type"
-                                        defaultValue=""
-                                        className={cn(
-                                            fieldClasses,
-                                            'h-9 w-full appearance-none rounded-md border bg-super-securite-surface-elevated px-3 pr-9 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none disabled:opacity-50',
-                                        )}
-                                    >
-                                        <option value="">
-                                            Sélectionner...
-                                        </option>
-                                        {superSecuriteProjectTypes.map((type) => (
-                                            <option key={type} value={type}>
-                                                {type}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown
-                                        className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-super-securite-muted"
-                                        aria-hidden
-                                    />
-                                </div>
+                                <SearchableSelect
+                                    id="project_type"
+                                    name="project_type"
+                                    options={projectTypeOptions}
+                                    placeholder="Sélectionner..."
+                                    searchPlaceholder="Rechercher un type..."
+                                    variant="underline"
+                                    triggerClassName={fieldClasses}
+                                />
                                 <InputError message={errors.project_type} />
                             </div>
 

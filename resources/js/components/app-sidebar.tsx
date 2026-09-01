@@ -1,10 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
+    Contact,
     Globe,
     Handshake,
     Images,
     LayoutGrid,
+    List,
     Newspaper,
     Shield,
     UserPlus,
@@ -35,6 +37,8 @@ import { index as conseilsIndex } from '@/routes/conseils';
 import { index as candidaturesAgentsIndex } from '@/routes/candidatures-agents';
 import { index as usersIndex } from '@/routes/users';
 import { index as partnersIndex } from '@/routes/partners';
+import { index as marketingClientsIndex } from '@/routes/marketing-clients';
+import { index as marketingListsIndex } from '@/routes/marketing-lists';
 import type { Auth, NavGroup, NavItem } from '@/types';
 
 function hasFeatureAccess(permissions: string[], feature: string): boolean {
@@ -223,6 +227,44 @@ function buildNavGroups(
                             : item.title === 'Partenaires'
                               ? Handshake
                               : UserPlus,
+                },
+            ],
+        });
+    }
+
+    const marketingChildren: NavItem[] = [];
+
+    if (hasFeatureAccess(permissions, 'marketing_clients')) {
+        marketingChildren.push({
+            title: 'Contacts',
+            href: marketingClientsIndex.url(),
+        });
+        marketingChildren.push({
+            title: 'Listes',
+            href: marketingListsIndex.url(),
+        });
+    }
+
+    if (marketingChildren.length > 1) {
+        groups.push({
+            title: 'Marketing',
+            items: [
+                {
+                    title: 'Marketing',
+                    icon: Contact,
+                    children: marketingChildren,
+                },
+            ],
+        });
+    } else if (marketingChildren.length === 1) {
+        const [item] = marketingChildren;
+
+        groups.push({
+            title: 'Marketing',
+            items: [
+                {
+                    ...item,
+                    icon: item.title === 'Contacts' ? Contact : List,
                 },
             ],
         });

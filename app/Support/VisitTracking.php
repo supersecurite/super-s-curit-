@@ -34,6 +34,7 @@ class VisitTracking
         'analytics',
         'settings',
         'marketing-clients',
+        'marketing-lists',
         'marketing-campaigns',
         'marketing',
     ];

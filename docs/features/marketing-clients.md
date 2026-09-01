@@ -1,27 +1,55 @@
 # Marketing — clients & listes
 
-**Statut :** 🔲 À construire — **Lot 1** du [cahier des charges client](../CAHIER%20DES%20CHARGES.md)
+**Statut :** ✅ Livré — **Lot 1** du [cahier des charges client](../CAHIER%20DES%20CHARGES.md)
 
 ## Vue d’ensemble
 
-CRM léger pour le futur module marketing : contacts clients (e-mail, téléphone WhatsApp) et listes / audiences, avec import CSV.
+CRM léger pour le module marketing : contacts clients (e-mail, téléphone WhatsApp) et listes / audiences, avec import CSV.
 
-## Acteurs & rôles (prévu)
+## Acteurs & rôles
 
-- Rôle `commercial` + admins avec permissions `marketing.*` — [ADR-0001](../decisions/0001-role-commercial.md).
+- Rôle `commercial` + admins avec permissions `marketing_clients.*` — [ADR-0001](../decisions/0001-role-commercial.md).
+- Permission dédiée à l’import : `marketing_clients.import`.
 
-## Fonctionnement (prévu)
+## Fonctionnement
 
-1. CRUD contact (nom, e-mail, téléphone E.164, tags optionnels, consentement).
-2. Listes : création, ajout / retrait de contacts.
-3. Import CSV (mapping colonnes, rapport d’erreurs).
-4. Déduplication e-mail / téléphone.
+1. **Contacts** (`/marketing-clients`) — CRUD : prénom, nom, e-mail, téléphone E.164, tags (virgules), consentement marketing, notes.
+2. **Listes** (`/marketing-lists`) — fiche détail (contacts, actions) + page d’édition des infos séparée.
+3. **Import CSV** (`/marketing-clients/import`) — colonnes reconnues : `prenom`, `nom`, `email`, `telephone`, `consentement` ; rapport ajouts / doublons / erreurs.
+4. **UI** — max 3 actions principales par page ; confirmations (suppression, ajout/retrait contact) en modales.
+5. **Déduplication** — unicité e-mail et téléphone en base ; doublons ignorés à l’import.
+
+## Architecture
+
+Mutations métier via **Actions** ([ADR-0003](../decisions/0003-actions-clean-architecture.md)) :
+
+| Action | Rôle |
+|---|---|
+| `CreateMarketingContact` | Création contact |
+| `UpdateMarketingContact` | Mise à jour contact |
+| `DeleteMarketingContact` | Suppression contact |
+| `ImportMarketingContacts` | Import CSV (délègue au service) |
+| `CreateMarketingList` | Création liste |
+| `UpdateMarketingList` | Mise à jour liste |
+| `DeleteMarketingList` | Suppression liste |
+| `AttachContactToMarketingList` | Ajout contact à une liste |
+| `DetachContactFromMarketingList` | Retrait contact d'une liste |
+
+Toasts : `Inertia::flash('toast', …)` sur toutes les mutations.
 
 ## Fichiers clés
 
-Aucun backend encore. À créer sous une future arborescence `Marketing/` (controllers, models `MarketingContact`, `MarketingList`, …).
+| Couche | Fichier |
+|---|---|
+| Modèles | `app/Models/MarketingContact.php`, `MarketingList.php` |
+| Actions | `app/Actions/Marketing/` |
+| Policies | `app/Policies/MarketingContactPolicy.php`, `MarketingListPolicy.php` |
+| Import (technique) | `app/Services/Marketing/MarketingContactImportService.php` |
+| Contrôleurs | `app/Http/Controllers/Admin/MarketingContactController.php`, `MarketingListController.php` |
+| Pages | `resources/js/pages/marketing-clients/`, `marketing-lists/` |
+| Tests | `tests/Feature/MarketingContactTest.php`, `MarketingListTest.php` |
 
 ## Limites & dette
 
-- Spécification alignée CDC §5.1 — voir [ROADMAP.md](../ROADMAP.md) §4.1.
-- Consentement RGPD / opt-out à traiter avant envois en masse.
+- Consentement RGPD / opt-out global à traiter avant envois en masse (Lots 2–3).
+- Pas de segmentation avancée ni de scoring — hors périmètre Lot 1.

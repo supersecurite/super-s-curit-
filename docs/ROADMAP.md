@@ -35,7 +35,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Rôle `commercial` + droits marketing | Acteurs | ✅ Complet | [ADR-0001](decisions/0001-role-commercial.md) — prérequis module communication |
 | Site marketing public | Public | ✅ Complet | `docs/features/site-public.md` |
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
-| **Lot 1 — Contacts & listes** | Marketing | 🔲 À construire | CDC §5.1 — `docs/features/marketing-clients.md` |
+| **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` |
 | **Lot 2 — Campagnes e-mail** | Marketing | 🔲 À construire | CDC §7 + modèles §6 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
 | **Lot 3 — Campagnes WhatsApp** | Marketing | 🔲 À construire | CDC §8 — `docs/features/marketing-campagnes.md` |
 
@@ -43,12 +43,13 @@ Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
 
 ## 3. Prochaine livraison
 
-**Lot 1 — Contacts et listes** (premier lot du [cahier des charges client](CAHIER%20DES%20CHARGES.md)) :
+**Lot 2 — Campagnes e-mail** (deuxième lot du [cahier des charges client](CAHIER%20DES%20CHARGES.md)) :
 
-- CRUD contacts (nom, prénom, e-mail, téléphone, consentement)
-- Listes de diffusion (ajout / retrait, cible campagne)
-- Import CSV + rapport (ajouts, ignorés, erreurs, doublons)
-- Permissions `marketing_clients.*` · UI backoffice · tests Feature
+- Modèles de messages e-mail (variables dynamiques)
+- Campagnes individuelles / groupées (queue Laravel)
+- Historique et statuts d’envoi
+- Tableau de bord e-mail
+- Permissions `marketing_campaigns.*` · UI backoffice · tests Feature
 
 Dette transverse à surveiller :
 
@@ -68,13 +69,13 @@ Aligné sur le **CDC client** (3 lots fonctionnels, recette globale, facturation
 | UI gestion utilisateurs (profil Commercial, panneau droits) | ✅ |
 | `dashboard.view` pour le commercial | ✅ |
 
-### 4.1 Lot 1 — Contacts et listes
+### 4.1 Lot 1 — Contacts et listes — ✅ livré
 
 | Périmètre CDC | Livrable technique |
 |---|---|
-| Fiches contact, recherche, filtres, doublons | Modèles, policies, CRUD backoffice |
-| Listes de diffusion | `MarketingList` + pivot contacts |
-| Import CSV + rapport | Service import, permission `marketing_clients.import` |
+| Fiches contact, recherche, filtres, doublons | `MarketingContact`, policies, Actions, CRUD `/marketing-clients` |
+| Listes de diffusion | `MarketingList` + pivot, Actions, CRUD `/marketing-lists` |
+| Import CSV + rapport | `ImportMarketingContacts` → `MarketingContactImportService`, `/marketing-clients/import` |
 
 Fiche : `docs/features/marketing-clients.md`
 
@@ -121,7 +122,8 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 |---|---|
 | Routes | `routes/web.php`, `routes/settings.php` |
 | Backoffice | `app/Http/Controllers/Admin/`, `UserController`, `DashboardController`, `AnalyticsController` |
-| Marketing (à créer) | `app/Http/Controllers/Admin/Marketing/` (prévu) |
+| Marketing (Lot 1) | `app/Actions/Marketing/`, contrôleurs `Admin/Marketing*` |
+| Marketing (Lots 2–3, à créer) | `app/Actions/Marketing/` (campagnes) |
 | Public | `app/Http/Controllers/Marketing/`, pages `resources/js/pages/marketing/` |
 | Permissions | `app/Enums/BackofficePermission.php`, `app/Models/User.php` |
 | Tracking | `app/Http/Middleware/TrackVisit.php`, `app/Support/VisitTracking.php` |
