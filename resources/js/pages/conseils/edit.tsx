@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import SecurityTipForm, {
     type SecurityTipFormData,
     type StatusOption,
@@ -18,6 +18,13 @@ type PageProps = {
 export default function ConseilsEdit() {
     const { securityTip, statusOptions, canApprove, canFeature, publicUrl, errors } =
         usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Conseils', href: index.url() },
+            { title: securityTip.title, href: edit.url(securityTip.slug) },
+        ],
+    });
 
     return (
         <>
@@ -57,10 +64,3 @@ export default function ConseilsEdit() {
         </>
     );
 }
-
-ConseilsEdit.layout = {
-    breadcrumbs: [
-        { title: 'Conseils', href: index.url() },
-        { title: 'Modifier', href: "#" },
-    ],
-};

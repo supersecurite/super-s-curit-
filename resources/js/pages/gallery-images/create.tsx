@@ -41,6 +41,6 @@ export default function GalleryImagesCreate() {
 GalleryImagesCreate.layout = {
     breadcrumbs: [
         { title: 'Galerie', href: index.url() },
-        { title: 'Nouvelle', href: create.url() },
+        { title: 'Nouvelle image', href: create.url() },
     ],
 };

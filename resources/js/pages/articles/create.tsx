@@ -42,6 +42,6 @@ export default function ArticlesCreate() {
 ArticlesCreate.layout = {
     breadcrumbs: [
         { title: 'Actualités', href: index.url() },
-        { title: 'Nouvelle', href: create.url() },
+        { title: 'Nouvelle actualité', href: create.url() },
     ],
 };

@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import PartnerForm from '@/components/partners/partner-form';
 import { edit, index, update } from '@/routes/partners';
 
@@ -19,6 +19,13 @@ type PageProps = {
 
 export default function PartnersEdit() {
     const { partner, errors } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Partenaires', href: index.url() },
+            { title: partner.name, href: edit.url(partner.uuid) },
+        ],
+    });
 
     return (
         <>
@@ -46,10 +53,3 @@ export default function PartnersEdit() {
         </>
     );
 }
-
-PartnersEdit.layout = {
-    breadcrumbs: [
-        { title: 'Partenaires', href: index.url() },
-        { title: 'Modifier', href: '#' },
-    ],
-};

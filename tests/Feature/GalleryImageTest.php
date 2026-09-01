@@ -74,13 +74,23 @@ test('admin can create general gallery image', function () {
 test('gallery image seeder creates published images for all services', function () {
     $this->seed(GalleryImageSeeder::class);
 
-    expect(GalleryImage::query()->count())->toBe(18)
-        ->and(GalleryImage::query()->published()->count())->toBe(18)
-        ->and(GalleryImage::query()->published()->general()->count())->toBe(2);
+    /** @var list<array<string, mixed>> $expected */
+    $expected = require database_path('seeders/data/gallery-images.php');
+
+    expect(GalleryImage::query()->count())->toBe(count($expected))
+        ->and(GalleryImage::query()->published()->count())->toBe(count($expected))
+        ->and(GalleryImage::query()->published()->general()->count())->toBe(
+            count(array_filter($expected, fn (array $image): bool => $image['service_id'] === null)),
+        );
 
     foreach (ServiceId::cases() as $service) {
         expect(
             GalleryImage::query()->published()->forService($service)->count(),
-        )->toBe(4);
+        )->toBe(
+            count(array_filter(
+                $expected,
+                fn (array $image): bool => $image['service_id'] === $service->value,
+            )),
+        );
     }
 });

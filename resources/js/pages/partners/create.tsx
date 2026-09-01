@@ -37,6 +37,6 @@ export default function PartnersCreate() {
 PartnersCreate.layout = {
     breadcrumbs: [
         { title: 'Partenaires', href: index.url() },
-        { title: 'Nouveau', href: create.url() },
+        { title: 'Nouveau partenaire', href: create.url() },
     ],
 };

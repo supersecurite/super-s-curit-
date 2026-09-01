@@ -33,7 +33,7 @@ export function NavUser({ variant = 'sidebar' }: NavUserProps) {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        className="h-auto p-2 text-white hover:bg-white/10 hover:text-white"
+                        className="h-auto p-2 hover:bg-accent hover:text-accent-foreground"
                     >
                         <UserInfo user={auth.user as User} />
                         <ChevronsUpDown className="ml-2 size-4" />

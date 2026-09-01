@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import ArticleForm, {
     type ArticleFormData,
     type StatusOption,
@@ -18,6 +18,13 @@ type PageProps = {
 export default function ArticlesEdit() {
     const { article, statusOptions, canApprove, canFeature, publicUrl, errors } =
         usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Actualités', href: index.url() },
+            { title: article.title, href: edit.url(article.slug) },
+        ],
+    });
 
     return (
         <>
@@ -57,10 +64,3 @@ export default function ArticlesEdit() {
         </>
     );
 }
-
-ArticlesEdit.layout = {
-    breadcrumbs: [
-        { title: 'Actualités', href: index.url() },
-        { title: 'Modifier', href: "#" },
-    ],
-};

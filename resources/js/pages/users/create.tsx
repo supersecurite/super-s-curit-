@@ -46,7 +46,7 @@ UsersCreate.layout = {
             href: index.url(),
         },
         {
-            title: 'Nouveau',
+            title: 'Nouvel utilisateur',
             href: create.url(),
         },
     ],

@@ -8,12 +8,16 @@ use Laravel\Fortify\Features;
 test('security page is displayed', function () {
     $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
 
-    Features::twoFactorAuthentication([
-        'confirm' => true,
-        'confirmPassword' => true,
-    ]);
-    Features::passkeys([
-        'confirmPassword' => true,
+    config([
+        'fortify.features' => [
+            Features::twoFactorAuthentication([
+                'confirm' => true,
+                'confirmPassword' => true,
+            ]),
+            Features::passkeys([
+                'confirmPassword' => true,
+            ]),
+        ],
     ]);
 
     $user = User::factory()->create();

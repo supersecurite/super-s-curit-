@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { AppContent } from '@/components/app-content';
+import { AppPageBreadcrumbs } from '@/components/app-page-breadcrumbs';
 import { AppShell } from '@/components/app-shell';
 import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
@@ -21,14 +22,19 @@ export default function AppSidebarLayout({
     }, []);
 
     return (
-        <div className="app-site">
+        <div className="app-site relative min-h-svh bg-background text-foreground">
             <AppShell variant="sidebar">
                 <AppSidebar />
                 <AppContent
                     variant="sidebar"
-                    className="overflow-x-hidden bg-background"
+                    className="flex min-h-0 flex-col overflow-x-hidden"
                 >
-                    <AppSidebarHeader breadcrumbs={breadcrumbs} />
+                    <div
+                        className="h-1.5 shrink-0 bg-gradient-to-r from-primary via-primary/80 to-primary/60 md:rounded-t-2xl"
+                        aria-hidden
+                    />
+                    <AppSidebarHeader />
+                    <AppPageBreadcrumbs breadcrumbs={breadcrumbs} />
                     <div className="flex flex-1 flex-col">{children}</div>
                 </AppContent>
             </AppShell>

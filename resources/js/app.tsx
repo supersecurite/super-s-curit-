@@ -59,7 +59,5 @@ createInertiaApp({
 
         return <AppChrome>{app}</AppChrome>;
     },
-    progress: {
-        color: '#4B5563',
-    },
+    progress: false,
 });

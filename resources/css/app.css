@@ -221,14 +221,14 @@ html.app-page {
     --border: var(--super-securite-border);
     --input: var(--super-securite-border);
     --ring: var(--super-securite-accent);
-    --sidebar: var(--super-securite-surface);
-    --sidebar-foreground: var(--super-securite-heading);
-    --sidebar-primary: var(--super-securite-accent);
-    --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: var(--super-securite-surface-elevated);
-    --sidebar-accent-foreground: var(--super-securite-heading);
-    --sidebar-border: var(--super-securite-border);
-    --sidebar-ring: var(--super-securite-accent);
+    --sidebar: var(--primary-700);
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #ffffff;
+    --sidebar-primary-foreground: var(--primary-800);
+    --sidebar-accent: rgb(255 255 255 / 0.12);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgb(255 255 255 / 0.15);
+    --sidebar-ring: rgb(255 255 255 / 0.3);
     color-scheme: light;
 }
 
@@ -238,6 +238,13 @@ html.app-page {
 }
 
 @layer components {
+    html.app-page [data-sidebar='menu-button'][data-active='true'],
+    html.app-page [data-sidebar='menu-sub-button'][data-active='true'] {
+        background: rgba(3, 0, 0, 0.664);
+        color: #ffffff;
+        box-shadow: inset 4px 0 0 #ffffff;
+    }
+
     .app-site {
         @apply min-h-svh bg-background font-sans text-foreground antialiased;
     }

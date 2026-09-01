@@ -1,6 +1,6 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import GalleryImageForm from '@/components/gallery-images/gallery-image-form';
-import { index, update } from '@/routes/gallery-images';
+import { edit, index, update } from '@/routes/gallery-images';
 import type { GalleryServiceOption } from '@/types/gallery';
 
 type GalleryImageData = {
@@ -21,6 +21,20 @@ type PageProps = {
 
 export default function GalleryImagesEdit() {
     const { errors, services, galleryImage } = usePage<PageProps>().props;
+    const imageLabel =
+        galleryImage.alt.trim() ||
+        galleryImage.caption?.trim() ||
+        `Image #${galleryImage.id}`;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Galerie', href: index.url() },
+            {
+                title: imageLabel,
+                href: edit.url(galleryImage.id),
+            },
+        ],
+    });
 
     return (
         <>
@@ -57,10 +71,3 @@ export default function GalleryImagesEdit() {
         </>
     );
 }
-
-GalleryImagesEdit.layout = {
-    breadcrumbs: [
-        { title: 'Galerie', href: index.url() },
-        { title: 'Modifier', href: '#' },
-    ],
-};

@@ -1,6 +1,6 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import GalleryVideoForm from '@/components/gallery-videos/gallery-video-form';
-import { index, update } from '@/routes/gallery-videos';
+import { edit, index, update } from '@/routes/gallery-videos';
 import type { GalleryServiceOption } from '@/types/gallery';
 
 type GalleryVideoData = {
@@ -22,6 +22,16 @@ type PageProps = {
 
 export default function GalleryVideosEdit() {
     const { galleryVideo, services, errors } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Vidéos galerie', href: index.url() },
+            {
+                title: galleryVideo.title,
+                href: edit.url(galleryVideo.id),
+            },
+        ],
+    });
 
     return (
         <>
@@ -50,10 +60,3 @@ export default function GalleryVideosEdit() {
         </>
     );
 }
-
-GalleryVideosEdit.layout = {
-    breadcrumbs: [
-        { title: 'Vidéos galerie', href: index.url() },
-        { title: 'Modifier', href: '#' },
-    ],
-};

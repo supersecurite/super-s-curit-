@@ -40,6 +40,6 @@ export default function GalleryVideosCreate() {
 GalleryVideosCreate.layout = {
     breadcrumbs: [
         { title: 'Vidéos galerie', href: index.url() },
-        { title: 'Nouvelle', href: create.url() },
+        { title: 'Nouvelle vidéo', href: create.url() },
     ],
 };

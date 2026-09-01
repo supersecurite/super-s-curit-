@@ -53,15 +53,21 @@ class HandleInertiaRequests extends Middleware
             $pageFaqs = $registry->faqsForPath($registry->canonicalPath($request));
         }
 
+        $user = $request->user();
+
         return [
             ...parent::share($request),
             'pageMeta' => $pageMeta,
             'pageFaqs' => $pageFaqs,
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user() ? $this->formatAuthUser(
-                    $request->user()->loadMissing('backofficePermissionRecords'),
+                'user' => $user ? $this->formatAuthUser(
+                    $user->loadMissing('backofficePermissionRecords'),
                 ) : null,
+            ],
+            'inactivityLock' => [
+                'enabled' => $user !== null && config('super-securite.inactivity_lock.enabled'),
+                'timeoutMs' => (int) config('super-securite.inactivity_lock.timeout_minutes') * 60 * 1000,
             ],
             'articlesPendingCount' => $request->user()?->canApproveArticles()
                 ? Article::query()->where('status', ArticleStatus::PendingApproval)->count()
@@ -72,7 +78,7 @@ class HandleInertiaRequests extends Middleware
             'securityAgentApplicationsPendingCount' => $request->user()?->canAccessFeature('agent_applications')
                 ? SecurityAgentApplication::query()->where('status', SecurityAgentApplicationStatus::Pending)->count()
                 : 0,
-            'featuredArticles' => Article::query()
+            'featuredArticles' => fn () => Article::query()
                 ->published()
                 ->where('featured', true)
                 ->orderByDesc('published_at')
@@ -81,7 +87,7 @@ class HandleInertiaRequests extends Middleware
                 ->map(fn (Article $article) => $article->toPublicArray())
                 ->values()
                 ->all(),
-            'featuredSecurityTips' => SecurityTip::query()
+            'featuredSecurityTips' => fn () => SecurityTip::query()
                 ->published()
                 ->where('featured', true)
                 ->orderByDesc('published_at')

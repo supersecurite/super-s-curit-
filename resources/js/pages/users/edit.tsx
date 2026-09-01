@@ -132,6 +132,16 @@ export default function UsersEdit() {
                 title: user.name,
                 href: edit.url(user.uuid, { query: { tab } }),
             },
+            ...(tab !== 'profile'
+                ? [
+                      {
+                          title:
+                              tabs.find((item) => item.value === tab)
+                                  ?.label ?? 'Profil',
+                          href: edit.url(user.uuid, { query: { tab } }),
+                      },
+                  ]
+                : []),
         ],
     });
 

@@ -45,4 +45,14 @@ return [
         'https://www.youtube.com/watch?v=pHDNrHLb1P4',
     ),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Verrouillage de session par inactivité
+    |--------------------------------------------------------------------------
+    */
+    'inactivity_lock' => [
+        'enabled' => env('SUPER_SECURITE_INACTIVITY_LOCK_ENABLED', true),
+        'timeout_minutes' => (int) env('SUPER_SECURITE_INACTIVITY_LOCK_MINUTES', 15),
+    ],
+
 ];

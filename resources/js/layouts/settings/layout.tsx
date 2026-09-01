@@ -4,12 +4,17 @@ import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { showNavigationLoader } from '@/lib/navigation-loader';
 import { cn, toUrl } from '@/lib/utils';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
+type SettingsNavItem = NavItem & {
+    href: NonNullable<NavItem['href']>;
+};
+
+const sidebarNavItems: SettingsNavItem[] = [
     {
         title: 'Profil',
         href: edit(),
@@ -48,7 +53,11 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     'bg-muted': isCurrentOrParentUrl(item.href),
                                 })}
                             >
-                                <Link href={item.href}>
+                                <Link
+                                    href={item.href}
+                                    prefetch
+                                    onClick={showNavigationLoader}
+                                >
                                     {item.icon && (
                                         <item.icon className="h-4 w-4" />
                                     )}

@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
+    Globe,
     Handshake,
     Images,
     LayoutGrid,
@@ -21,8 +22,11 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarSeparator,
+    useSidebar,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { showNavigationLoader } from '@/lib/navigation-loader';
+import { dashboard, home } from '@/routes';
 import { index as galleryImagesIndex } from '@/routes/gallery-images';
 import { index as galleryVideosIndex } from '@/routes/gallery-videos';
 import { index as analyticsIndex } from '@/routes/analytics';
@@ -31,7 +35,7 @@ import { index as conseilsIndex } from '@/routes/conseils';
 import { index as candidaturesAgentsIndex } from '@/routes/candidatures-agents';
 import { index as usersIndex } from '@/routes/users';
 import { index as partnersIndex } from '@/routes/partners';
-import type { Auth, NavItem } from '@/types';
+import type { Auth, NavGroup, NavItem } from '@/types';
 
 function hasFeatureAccess(permissions: string[], feature: string): boolean {
     return permissions.some((permission) =>
@@ -39,91 +43,13 @@ function hasFeatureAccess(permissions: string[], feature: string): boolean {
     );
 }
 
-const NAV_PERMISSION_MAP: Array<{
-    permission: string;
-    item: Omit<NavItem, 'badge'>;
-}> = [
+const footerNavItems: NavItem[] = [
     {
-        permission: 'dashboard',
-        item: {
-            title: 'Dashboard',
-            href: dashboard(),
-            icon: LayoutGrid,
-        },
-    },
-    {
-        permission: 'articles',
-        item: {
-            title: 'Actualités',
-            href: articlesIndex.url(),
-            icon: Newspaper,
-        },
-    },
-    {
-        permission: 'conseils',
-        item: {
-            title: 'Conseils',
-            href: conseilsIndex.url(),
-            icon: Shield,
-        },
-    },
-    {
-        permission: 'gallery_images',
-        item: {
-            title: 'Galerie',
-            href: galleryImagesIndex.url(),
-            icon: Images,
-        },
-    },
-    {
-        permission: 'gallery_videos',
-        item: {
-            title: 'Vidéos galerie',
-            href: galleryVideosIndex.url(),
-            icon: Video,
-        },
-    },
-    {
-        permission: 'analytics',
-        item: {
-            title: 'Analytics',
-            href: analyticsIndex.url(),
-            icon: BarChart3,
-        },
-    },
-    {
-        permission: 'agent_applications',
-        item: {
-            title: 'Candidatures agents',
-            href: candidaturesAgentsIndex.url(),
-            icon: UserPlus,
-        },
-    },
-    {
-        permission: 'users',
-        item: {
-            title: 'Utilisateurs',
-            href: usersIndex.url(),
-            icon: Users,
-        },
-    },
-    {
-        permission: 'partners',
-        item: {
-            title: 'Partenaires',
-            href: partnersIndex.url(),
-            icon: Handshake,
-        },
+        title: 'Site web',
+        href: home(),
+        icon: Globe,
     },
 ];
-
-function buildMainNavItems(permissions: string[]): NavItem[] {
-    return NAV_PERMISSION_MAP.filter(({ permission }) =>
-        hasFeatureAccess(permissions, permission),
-    ).map(({ item }) => item);
-}
-
-const footerNavItems: NavItem[] = [];
 
 type SidebarPageProps = {
     auth: Auth;
@@ -132,7 +58,194 @@ type SidebarPageProps = {
     securityAgentApplicationsPendingCount?: number;
 };
 
+type NavBadges = {
+    articles: number;
+    conseils: number;
+    candidatures: number;
+};
+
+function buildNavGroups(
+    permissions: string[],
+    badges: NavBadges,
+    canApprove: { articles: boolean; conseils: boolean },
+): NavGroup[] {
+    const groups: NavGroup[] = [];
+
+    if (hasFeatureAccess(permissions, 'dashboard')) {
+        groups.push({
+            title: 'Vue d\'ensemble',
+            items: [
+                {
+                    title: 'Dashboard',
+                    href: dashboard(),
+                    icon: LayoutGrid,
+                },
+            ],
+        });
+    }
+
+    const editorialChildren: NavItem[] = [];
+
+    if (hasFeatureAccess(permissions, 'articles')) {
+        editorialChildren.push({
+            title: 'Actualités',
+            href: articlesIndex.url(),
+            ...(canApprove.articles && badges.articles > 0
+                ? { badge: badges.articles }
+                : {}),
+        });
+    }
+
+    if (hasFeatureAccess(permissions, 'conseils')) {
+        editorialChildren.push({
+            title: 'Conseils',
+            href: conseilsIndex.url(),
+            ...(canApprove.conseils && badges.conseils > 0
+                ? { badge: badges.conseils }
+                : {}),
+        });
+    }
+
+    if (editorialChildren.length > 1) {
+        groups.push({
+            title: 'Contenu',
+            items: [
+                {
+                    title: 'Éditorial',
+                    icon: Newspaper,
+                    children: editorialChildren,
+                },
+            ],
+        });
+    } else if (editorialChildren.length === 1) {
+        const [item] = editorialChildren;
+
+        groups.push({
+            title: 'Contenu',
+            items: [
+                {
+                    ...item,
+                    icon: item.title === 'Actualités' ? Newspaper : Shield,
+                },
+            ],
+        });
+    }
+
+    const galleryChildren: NavItem[] = [];
+
+    if (hasFeatureAccess(permissions, 'gallery_images')) {
+        galleryChildren.push({
+            title: 'Photos',
+            href: galleryImagesIndex.url(),
+        });
+    }
+
+    if (hasFeatureAccess(permissions, 'gallery_videos')) {
+        galleryChildren.push({
+            title: 'Vidéos',
+            href: galleryVideosIndex.url(),
+        });
+    }
+
+    if (galleryChildren.length > 1) {
+        groups.push({
+            title: 'Médias',
+            items: [
+                {
+                    title: 'Galerie',
+                    icon: Images,
+                    children: galleryChildren,
+                },
+            ],
+        });
+    } else if (galleryChildren.length === 1) {
+        const [item] = galleryChildren;
+
+        groups.push({
+            title: 'Médias',
+            items: [
+                {
+                    ...item,
+                    icon: item.title === 'Photos' ? Images : Video,
+                },
+            ],
+        });
+    }
+
+    const adminChildren: NavItem[] = [];
+
+    if (hasFeatureAccess(permissions, 'users')) {
+        adminChildren.push({
+            title: 'Utilisateurs',
+            href: usersIndex.url(),
+        });
+    }
+
+    if (hasFeatureAccess(permissions, 'partners')) {
+        adminChildren.push({
+            title: 'Partenaires',
+            href: partnersIndex.url(),
+        });
+    }
+
+    if (hasFeatureAccess(permissions, 'agent_applications')) {
+        adminChildren.push({
+            title: 'Candidatures agents',
+            href: candidaturesAgentsIndex.url(),
+            ...(badges.candidatures > 0
+                ? { badge: badges.candidatures }
+                : {}),
+        });
+    }
+
+    if (adminChildren.length > 1) {
+        groups.push({
+            title: 'Administration',
+            items: [
+                {
+                    title: 'Gestion',
+                    icon: Users,
+                    children: adminChildren,
+                },
+            ],
+        });
+    } else if (adminChildren.length === 1) {
+        const [item] = adminChildren;
+
+        groups.push({
+            title: 'Administration',
+            items: [
+                {
+                    ...item,
+                    icon:
+                        item.title === 'Utilisateurs'
+                            ? Users
+                            : item.title === 'Partenaires'
+                              ? Handshake
+                              : UserPlus,
+                },
+            ],
+        });
+    }
+
+    if (hasFeatureAccess(permissions, 'analytics')) {
+        groups.push({
+            title: 'Insights',
+            items: [
+                {
+                    title: 'Analytics',
+                    href: analyticsIndex.url(),
+                    icon: BarChart3,
+                },
+            ],
+        });
+    }
+
+    return groups;
+}
+
 export function AppSidebar() {
+    const { isMobile, setOpenMobile } = useSidebar();
     const {
         auth,
         articlesPendingCount = 0,
@@ -144,29 +257,43 @@ export function AppSidebar() {
     const canApproveArticles = auth.user?.can_approve_articles ?? false;
     const canApproveConseils = auth.user?.can_approve_conseils ?? false;
 
-    const mainNavItems = buildMainNavItems(permissions).map((item) => {
-        if (item.title === 'Actualités' && canApproveArticles) {
-            return { ...item, badge: articlesPendingCount };
+    const navGroups = buildNavGroups(
+        permissions,
+        {
+            articles: articlesPendingCount,
+            conseils: securityTipsPendingCount,
+            candidatures: securityAgentApplicationsPendingCount,
+        },
+        {
+            articles: canApproveArticles,
+            conseils: canApproveConseils,
+        },
+    );
+
+    const closeMobile = () => {
+        if (isMobile) {
+            setOpenMobile(false);
         }
-        if (item.title === 'Conseils' && canApproveConseils) {
-            return { ...item, badge: securityTipsPendingCount };
-        }
-        if (item.title === 'Candidatures agents') {
-            return {
-                ...item,
-                badge: securityAgentApplicationsPendingCount,
-            };
-        }
-        return item;
-    });
+    };
 
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                        <SidebarMenuButton
+                            size="lg"
+                            asChild
+                            className="hover:bg-white/10 active:bg-white/15"
+                        >
+                            <Link
+                                href={dashboard()}
+                                prefetch
+                                onClick={() => {
+                                    showNavigationLoader();
+                                    closeMobile();
+                                }}
+                            >
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -174,8 +301,10 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
-                <NavMain items={mainNavItems} />
+            <SidebarSeparator className="mx-2" />
+
+            <SidebarContent className="pt-2">
+                <NavMain groups={navGroups} onNavigate={closeMobile} />
             </SidebarContent>
 
             <SidebarFooter>

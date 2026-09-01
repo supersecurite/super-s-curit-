@@ -42,6 +42,6 @@ export default function ConseilsCreate() {
 ConseilsCreate.layout = {
     breadcrumbs: [
         { title: 'Conseils', href: index.url() },
-        { title: 'Nouveau', href: create.url() },
+        { title: 'Nouveau conseil', href: create.url() },
     ],
 };

@@ -22,6 +22,11 @@ export type Auth = {
     user: User | null;
 };
 
+export type InactivityLockConfig = {
+    enabled: boolean;
+    timeoutMs: number;
+};
+
 /* @chisel-passkeys */
 export type Passkey = {
     id: number;

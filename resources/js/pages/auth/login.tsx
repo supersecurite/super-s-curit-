@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { primeNotificationSound } from '@/lib/notification-sound';
 // import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -86,6 +87,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
+                                onClick={() => primeNotificationSound()}
                             >
                                 {processing && <Spinner />}
                                 Se connecter

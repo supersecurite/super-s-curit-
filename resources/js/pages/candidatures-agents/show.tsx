@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, setLayoutProps, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     Briefcase,
@@ -55,6 +55,16 @@ export default function CandidaturesAgentsShow() {
     const form = useForm({
         status: application.status,
         internal_notes: application.internal_notes ?? '',
+    });
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Candidatures agents', href: index.url() },
+            {
+                title: application.full_name,
+                href: show.url(application.uuid),
+            },
+        ],
     });
 
     const handleSubmit = (event: React.FormEvent) => {
@@ -309,10 +319,3 @@ export default function CandidaturesAgentsShow() {
         </>
     );
 }
-
-CandidaturesAgentsShow.layout = {
-    breadcrumbs: [
-        { title: 'Candidatures agents', href: index.url() },
-        { title: 'Détail', href: show.url('') },
-    ],
-};
