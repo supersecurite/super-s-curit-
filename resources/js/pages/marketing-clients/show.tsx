@@ -1,10 +1,11 @@
-import { Head, Link, setLayoutProps, usePage } from '@inertiajs/react';
-import { ArrowLeft, Building2, Contact, Mail, MapPin, Phone, Pencil, Tag, Users } from 'lucide-react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
+import { ArrowLeft, Building2, Contact, Mail, MapPin, MessageSquare, Phone, Pencil, Tag, Users } from 'lucide-react';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import { CompanyChannelsDisplay } from '@/components/marketing-clients/company-channels-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { destroy, edit, index, show } from '@/routes/marketing-clients';
+import { show as showConversation, startFromContact } from '@/routes/marketing-conversations';
 import { show as showList } from '@/routes/marketing-lists';
 import type { MarketingCompanyChannel } from '@/types/marketing-company-contact';
 
@@ -51,12 +52,15 @@ type ListSummary = {
 type PageProps = {
     contact: ContactData;
     lists: ListSummary[];
+    conversationUuid: string | null;
     canUpdate: boolean;
     canDelete: boolean;
+    canReply: boolean;
 };
 
 export default function MarketingClientsShow() {
-    const { contact, lists, canUpdate, canDelete } = usePage<PageProps>().props;
+    const { contact, lists, conversationUuid, canUpdate, canDelete, canReply } =
+        usePage<PageProps>().props;
 
     setLayoutProps({
         breadcrumbs: [
@@ -96,6 +100,24 @@ export default function MarketingClientsShow() {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
+                        {conversationUuid ? (
+                            <Button variant="outline" asChild>
+                                <Link href={showConversation.url(conversationUuid)}>
+                                    <MessageSquare className="size-4" aria-hidden />
+                                    Conversation
+                                </Link>
+                            </Button>
+                        ) : canReply && contact.email ? (
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    router.post(startFromContact.url(contact.uuid))
+                                }
+                            >
+                                <MessageSquare className="size-4" aria-hidden />
+                                Démarrer une conversation
+                            </Button>
+                        ) : null}
                         {canUpdate ? (
                             <Button asChild>
                                 <Link href={edit.url(contact.uuid)}>

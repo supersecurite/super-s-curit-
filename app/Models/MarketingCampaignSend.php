@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
     'subject',
     'body_html',
     'open_token',
+    'reply_token',
     'queued_at',
     'sent_at',
     'delivered_at',
@@ -43,6 +44,10 @@ class MarketingCampaignSend extends Model
 
             if (empty($send->open_token)) {
                 $send->open_token = (string) Str::uuid();
+            }
+
+            if (empty($send->reply_token)) {
+                $send->reply_token = (string) Str::uuid();
             }
 
             if (empty($send->status)) {

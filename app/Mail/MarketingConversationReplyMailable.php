@@ -2,7 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\MarketingCampaignSend;
+use App\Models\MarketingConversation;
+use App\Models\MarketingConversationMessage;
 use App\Support\Marketing\MarketingReplyAddress;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -11,20 +12,21 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MarketingCampaignMailable extends Mailable
+class MarketingConversationReplyMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
     public function __construct(
-        public MarketingCampaignSend $send,
+        public MarketingConversation $conversation,
+        public MarketingConversationMessage $message,
     ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->send->subject,
+            subject: (string) $this->message->subject,
             replyTo: [
-                new Address(MarketingReplyAddress::forSend($this->send)),
+                new Address(MarketingReplyAddress::forConversation($this->conversation)),
             ],
         );
     }
@@ -32,7 +34,7 @@ class MarketingCampaignMailable extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.marketing-campaign',
+            view: 'emails.marketing-conversation-reply',
         );
     }
 }

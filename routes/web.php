@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageContro
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
 use App\Http\Controllers\Admin\MarketingCampaignController as AdminMarketingCampaignController;
 use App\Http\Controllers\Admin\MarketingContactController as AdminMarketingContactController;
+use App\Http\Controllers\Admin\MarketingConversationController as AdminMarketingConversationController;
 use App\Http\Controllers\Admin\MarketingListController as AdminMarketingListController;
 use App\Http\Controllers\Admin\MarketingMessageTemplateController as AdminMarketingMessageTemplateController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Marketing\SecurityAgentApplicationController as Marketi
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
 use App\Http\Controllers\Marketing\ServiceController;
 use App\Http\Controllers\MarketingCampaignOpenController;
+use App\Http\Controllers\MarketingInboundEmailWebhookController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UserController;
@@ -49,6 +51,14 @@ Route::get('/sitemap.xml', SitemapController::class)
 
 Route::get('c/o/{openToken}', [MarketingCampaignOpenController::class, 'track'])
     ->name('marketing-campaigns.open')
+    ->withoutMiddleware([
+        TrackVisit::class,
+        HandleInertiaRequests::class,
+        AddLinkHeadersForPreloadedAssets::class,
+    ]);
+
+Route::post('webhooks/marketing/inbound-email', MarketingInboundEmailWebhookController::class)
+    ->name('webhooks.marketing.inbound-email')
     ->withoutMiddleware([
         TrackVisit::class,
         HandleInertiaRequests::class,
@@ -151,6 +161,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('marketing-lists.contacts.attach');
         Route::delete('marketing-lists/{marketing_list}/contacts/{marketing_client}', [AdminMarketingListController::class, 'detachContact'])
             ->name('marketing-lists.contacts.detach');
+        Route::get('marketing-conversations', [AdminMarketingConversationController::class, 'index'])
+            ->name('marketing-conversations.index');
+        Route::get('marketing-conversations/{marketing_conversation}', [AdminMarketingConversationController::class, 'show'])
+            ->name('marketing-conversations.show');
+        Route::post('marketing-conversations/{marketing_conversation}/reply', [AdminMarketingConversationController::class, 'reply'])
+            ->name('marketing-conversations.reply');
+        Route::post('marketing-clients/{marketing_client}/conversation', [AdminMarketingConversationController::class, 'startFromContact'])
+            ->name('marketing-conversations.start-from-contact');
     });
 
     Route::middleware('backoffice.permission:analytics')->group(function () {
