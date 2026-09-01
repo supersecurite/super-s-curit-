@@ -16,6 +16,7 @@ use Database\Seeders\RoleUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Attributes\DebounceFor;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 
@@ -243,6 +244,32 @@ test('broadcast progress dispatches event when reverb is configured', function (
         return $event->campaign->is($campaign)
             && $event->send?->is($send);
     });
+});
+
+test('broadcast progress logs warning when reverb server is unreachable', function () {
+    config([
+        'broadcasting.default' => 'reverb',
+        'broadcasting.connections.reverb.key' => 'test-key',
+        'broadcasting.connections.reverb.secret' => 'test-secret',
+        'broadcasting.connections.reverb.app_id' => 'test-app',
+        'broadcasting.connections.reverb.options.host' => '127.0.0.1',
+        'broadcasting.connections.reverb.options.port' => 1,
+        'broadcasting.connections.reverb.options.scheme' => 'http',
+        'broadcasting.connections.reverb.options.useTLS' => false,
+    ]);
+
+    Log::spy();
+
+    $campaign = MarketingCampaign::factory()->create();
+
+    BroadcastMarketingCampaignProgress::dispatch($campaign);
+
+    Log::shouldHaveReceived('warning')
+        ->once()
+        ->withArgs(function (string $message, array $context) use ($campaign): bool {
+            return $message === 'Marketing campaign broadcast failed.'
+                && $context['campaign_uuid'] === $campaign->uuid;
+        });
 });
 
 test('send job broadcasts campaign progress when reverb is configured', function () {

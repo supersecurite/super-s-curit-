@@ -88,9 +88,16 @@ Mutations métier via **Actions** ([ADR-0003](../decisions/0003-actions-clean-ar
 - Hors V1 : A/B tests, automations, éditeur drag-and-drop.
 - « Lu » WhatsApp et « ouvert » e-mail ne sont pas des garanties absolues.
 
-### Setup temps réel (local)
+### Setup temps réel
 
-1. Copier les variables `REVERB_*` et `VITE_REVERB_*` depuis `.env.example`
-2. `BROADCAST_CONNECTION=reverb`
-3. Lancer `composer run dev` (serve + queue + Reverb + Vite) ou séparément `php artisan reverb:start`
-4. En production : process Reverb dédié (ou Pusher managé si hébergement mutualisé)
+**Local (Herd)**
+
+1. `BROADCAST_CONNECTION=reverb` + clés `REVERB_*` / `VITE_REVERB_*` (`php artisan reverb:install`)
+2. `REVERB_HOST=localhost`, `REVERB_SCHEME=http`, `REVERB_PORT=8080`
+3. `composer run dev` (queue + Reverb + Vite) ou `php artisan reverb:start` à part
+
+**Production**
+
+1. **Sans WebSocket** (hébergement mutualisé) : `BROADCAST_CONNECTION=null` — pas de mise à jour live, mais les campagnes et envois fonctionnent.
+2. **Avec Reverb** (VPS / process manager) : `BROADCAST_CONNECTION=reverb`, `REVERB_HOST` = domaine public (pas `localhost`), process `php artisan reverb:start` supervisé, reverse-proxy WSS si HTTPS.
+3. **Assets frontend** : `npm ci && npm run build` avant déploiement (`public/build/manifest.json` requis en prod ; absent si seul `npm run dev` a été lancé en local).

@@ -59,6 +59,22 @@ npm run dev
 | `docs/decisions/` | ADR |
 | `AGENTS.md` | Hub agents + Boost |
 
-## 7. Prochaine grande livraison produit
+## 7. Déploiement production
+
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+npm ci
+npm run build
+```
+
+- Le dossier `public/build/` (généré par `npm run build`) doit être présent sur le serveur — il n’est pas versionné.
+- **Reverb / WebSocket** : sur hébergement mutualisé, laisser `BROADCAST_CONNECTION=null`. Ne pas copier `REVERB_HOST=localhost` depuis le `.env` local.
+- Lancer un worker queue en production : `php artisan queue:work` (supervisé).
+
+## 8. Prochaine grande livraison produit
 
 Marketing (clients, campagnes e-mail / WhatsApp Meta, accusés) — voir ROADMAP §4 et ADR-0001 / ADR-0002.
