@@ -8,6 +8,17 @@ import {
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
@@ -16,8 +27,10 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { cn } from '@/lib/utils';
 import { showNavigationLoader } from '@/lib/navigation-loader';
 import type { NavGroup, NavItem } from '@/types';
 
@@ -54,6 +67,55 @@ function itemIsActive(
             itemIsActive(child, isCurrentOrParentUrl),
         ) ?? false
     );
+}
+
+function CollapsedNavDropdownItems({
+    items,
+    onNavigate,
+}: {
+    items: NavItem[];
+    onNavigate?: () => void;
+}) {
+    const { isCurrentOrParentUrl } = useCurrentUrl();
+
+    return items.map((child) => {
+        if (child.children?.length) {
+            return (
+                <DropdownMenuSub key={child.title}>
+                    <DropdownMenuSubTrigger>{child.title}</DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent>
+                        <CollapsedNavDropdownItems
+                            items={child.children}
+                            onNavigate={onNavigate}
+                        />
+                    </DropdownMenuSubContent>
+                </DropdownMenuSub>
+            );
+        }
+
+        if (!child.href) {
+            return null;
+        }
+
+        const active = isCurrentOrParentUrl(child.href);
+
+        return (
+            <DropdownMenuItem key={child.title} asChild>
+                <Link
+                    href={child.href}
+                    prefetch
+                    onClick={() => handleNavClick(onNavigate)}
+                    className={cn(
+                        'flex w-full items-center justify-between gap-2',
+                        active && 'bg-accent font-medium',
+                    )}
+                >
+                    <span>{child.title}</span>
+                    {child.badge ? <NavBadge count={child.badge} /> : null}
+                </Link>
+            </DropdownMenuItem>
+        );
+    });
 }
 
 function NavLinkItem({
@@ -171,14 +233,46 @@ function NavSubmenuItem({
     onNavigate?: () => void;
 }) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
+    const { state, isMobile } = useSidebar();
     const childActive = itemIsActive(item, isCurrentOrParentUrl);
     const [open, setOpen] = useState(childActive);
+    const isCollapsed = state === 'collapsed' && !isMobile;
 
     useEffect(() => {
         if (childActive) {
             setOpen(true);
         }
     }, [childActive]);
+
+    if (isCollapsed) {
+        return (
+            <SidebarMenuItem>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <SidebarMenuButton isActive={childActive}>
+                            {item.icon && <item.icon />}
+                            <span>{item.title}</span>
+                        </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                        side="right"
+                        align="start"
+                        sideOffset={8}
+                        className="min-w-52 rounded-lg"
+                    >
+                        <DropdownMenuLabel className="text-muted-foreground text-xs">
+                            {item.title}
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <CollapsedNavDropdownItems
+                            items={item.children ?? []}
+                            onNavigate={onNavigate}
+                        />
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </SidebarMenuItem>
+        );
+    }
 
     return (
         <Collapsible
