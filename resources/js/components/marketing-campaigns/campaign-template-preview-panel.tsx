@@ -29,7 +29,7 @@ export default function CampaignTemplatePreviewPanel({
                 <div>
                     <div className="flex items-center gap-2 text-sm font-semibold">
                         <FileText className="size-4" aria-hidden />
-                        Aperçu du modèle
+                        Aperçu du template
                     </div>
                     <p className="text-muted-foreground mt-1 text-xs">{template.name}</p>
                 </div>

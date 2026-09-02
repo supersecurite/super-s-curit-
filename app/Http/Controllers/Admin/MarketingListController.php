@@ -70,7 +70,7 @@ class MarketingListController extends Controller
     {
         $list = $action->handle($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Liste créée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Groupe créé avec succès.']);
 
         return to_route('marketing-lists.show', $list);
     }
@@ -120,7 +120,7 @@ class MarketingListController extends Controller
     ): RedirectResponse {
         $action->handle($marketingList, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Liste mise à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Groupe mis à jour avec succès.']);
 
         return to_route('marketing-lists.show', $marketingList);
     }
@@ -131,7 +131,7 @@ class MarketingListController extends Controller
 
         $action->handle($marketingList);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Liste supprimée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Groupe supprimé avec succès.']);
 
         return to_route('marketing-lists.index');
     }
@@ -156,7 +156,7 @@ class MarketingListController extends Controller
 
         $action->handle($marketingList, $contact);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact ajouté à la liste.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact ajouté au groupe.']);
 
         return to_route('marketing-lists.show', $marketingList);
     }
@@ -170,7 +170,7 @@ class MarketingListController extends Controller
 
         $action->handle($marketingList, $marketingClient);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact retiré de la liste.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact retiré du groupe.']);
 
         return to_route('marketing-lists.show', $marketingList);
     }

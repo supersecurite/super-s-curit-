@@ -72,7 +72,7 @@ class MarketingMessageTemplateController extends Controller
     ): RedirectResponse {
         $template = $action->handle($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Modèle créé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Template créé avec succès.']);
 
         return to_route('marketing-templates.show', $template);
     }
@@ -106,7 +106,7 @@ class MarketingMessageTemplateController extends Controller
     ): RedirectResponse {
         $action->handle($marketingTemplate, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Modèle mis à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Template mis à jour avec succès.']);
 
         return to_route('marketing-templates.show', $marketingTemplate);
     }
@@ -119,7 +119,7 @@ class MarketingMessageTemplateController extends Controller
 
         $action->handle($marketingTemplate);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Modèle supprimé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Template supprimé avec succès.']);
 
         return to_route('marketing-templates.index');
     }

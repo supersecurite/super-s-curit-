@@ -37,7 +37,7 @@ export default function MarketingCampaignsCreate() {
                         Nouvelle campagne
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Préparez une campagne e-mail vers une liste de diffusion.
+                        Préparez une campagne e-mail vers un groupe.
                     </p>
                 </div>
 

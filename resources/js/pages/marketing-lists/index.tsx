@@ -83,8 +83,8 @@ export default function MarketingListsIndex() {
                 ) : null}
                 {list.can_delete ? (
                     <ConfirmDeleteDialog
-                        title="Supprimer cette liste ?"
-                        description={`La liste « ${list.name} » sera supprimée.`}
+                        title="Supprimer ce groupe ?"
+                        description={`Le groupe « ${list.name} » sera supprimé.`}
                         deleteUrl={destroy.url(list.uuid)}
                         triggerSize="sm"
                         triggerVariant="outline"
@@ -141,14 +141,14 @@ export default function MarketingListsIndex() {
 
     return (
         <>
-            <Head title="Listes de diffusion" />
+            <Head title="Groupes" />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <List className="size-6" aria-hidden />
-                            Listes de diffusion
+                            Groupes
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             Organisez vos contacts en audiences pour les campagnes.
@@ -158,7 +158,7 @@ export default function MarketingListsIndex() {
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouvelle liste
+                                Nouveau groupe
                             </Link>
                         </Button>
                     ) : null}
@@ -173,7 +173,7 @@ export default function MarketingListsIndex() {
                         <Input
                             id="lists-search"
                             type="search"
-                            placeholder="Rechercher une liste…"
+                            placeholder="Rechercher un groupe…"
                             defaultValue={filters.search ?? ''}
                             onChange={(event) =>
                                 debouncedSearch(event.target.value)
@@ -188,7 +188,7 @@ export default function MarketingListsIndex() {
                         rows={lists.data}
                         columns={columns}
                         getRowKey={(list) => list.uuid}
-                        emptyMessage="Aucune liste pour le moment."
+                        emptyMessage="Aucun groupe pour le moment."
                         minWidth="640px"
                         sort={filters}
                         onSort={handleSort}
@@ -197,7 +197,7 @@ export default function MarketingListsIndex() {
 
                 <IndexTablePagination
                     paginated={lists}
-                    itemLabel="liste(s)"
+                    itemLabel="groupe(s)"
                     buildPageUrl={buildPageUrl}
                 />
             </div>
@@ -206,5 +206,5 @@ export default function MarketingListsIndex() {
 }
 
 MarketingListsIndex.layout = {
-    breadcrumbs: [{ title: 'Listes de diffusion', href: index.url() }],
+    breadcrumbs: [{ title: 'Groupes', href: index.url() }],
 };

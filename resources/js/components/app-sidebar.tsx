@@ -245,14 +245,14 @@ function buildNavGroups(
             href: marketingClientsIndex.url(),
         });
         marketingChildren.push({
-            title: 'Listes',
+            title: 'Groupes',
             href: marketingListsIndex.url(),
         });
     }
 
     if (hasFeatureAccess(permissions, 'marketing_campaigns')) {
         marketingChildren.push({
-            title: 'Modèles',
+            title: 'Templates',
             href: marketingTemplatesIndex.url(),
         });
         marketingChildren.push({
@@ -273,7 +273,7 @@ function buildNavGroups(
                       }
                     : {
                           ...marketingChildren[0],
-                          icon: marketingChildren[0].title === 'Modèles' ? FileText : Contact,
+                          icon: marketingChildren[0].title === 'Templates' ? FileText : Contact,
                       },
             ],
         });

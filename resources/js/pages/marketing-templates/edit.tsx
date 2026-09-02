@@ -24,7 +24,7 @@ export default function MarketingTemplatesEdit() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Modifier le modèle
+                        Modifier le template
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">{template.name}</p>
                 </div>
@@ -45,7 +45,7 @@ export default function MarketingTemplatesEdit() {
 
 MarketingTemplatesEdit.layout = {
     breadcrumbs: [
-        { title: 'Modèles de messages', href: index.url() },
+        { title: 'Templates', href: index.url() },
         { title: 'Modifier', href: edit.url('') },
     ],
 };

@@ -37,7 +37,7 @@ export default function MarketingListForm({
             ) : null}
 
             <div className="space-y-2">
-                <Label htmlFor="name">Nom de la liste</Label>
+                <Label htmlFor="name">Nom du groupe</Label>
                 <Input
                     id="name"
                     name="name"

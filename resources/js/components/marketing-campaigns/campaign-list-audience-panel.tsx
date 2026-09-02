@@ -90,7 +90,7 @@ export default function CampaignListAudiencePanel({
                     href={marketingListShow.url(audience.list.uuid)}
                     className="text-primary text-xs hover:underline"
                 >
-                    Voir la liste
+                    Voir le groupe
                 </Link>
             </div>
 
@@ -110,7 +110,7 @@ export default function CampaignListAudiencePanel({
             ) : null}
 
             {audience.contacts.length === 0 ? (
-                <p className="text-muted-foreground text-sm">Cette liste ne contient aucun contact.</p>
+                <p className="text-muted-foreground text-sm">Ce groupe ne contient aucun contact.</p>
             ) : (
                 <ul className="space-y-2">
                     {previewContacts.map((contact) => (

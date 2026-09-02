@@ -86,8 +86,8 @@ export default function MarketingTemplatesIndex() {
                 ) : null}
                 {template.can_delete ? (
                     <ConfirmDeleteDialog
-                        title="Supprimer ce modèle ?"
-                        description={`Le modèle « ${template.name} » sera définitivement supprimé.`}
+                        title="Supprimer ce template ?"
+                        description={`Le template « ${template.name} » sera définitivement supprimé.`}
                         deleteUrl={destroy.url(template.uuid)}
                         triggerLabel="Supprimer"
                         triggerVariant="outline"
@@ -154,24 +154,24 @@ export default function MarketingTemplatesIndex() {
 
     return (
         <>
-            <Head title="Modèles de messages" />
+            <Head title="Templates" />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <FileText className="size-6" aria-hidden />
-                            Modèles de messages
+                            Templates
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Modèles réutilisables pour les campagnes e-mail (Lot 2).
+                            Templates réutilisables pour les campagnes e-mail (Lot 2).
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouveau modèle
+                                Nouveau template
                             </Link>
                         </Button>
                     ) : null}
@@ -202,7 +202,7 @@ export default function MarketingTemplatesIndex() {
                         rows={templates.data}
                         columns={columns}
                         getRowKey={(template) => template.uuid}
-                        emptyMessage="Aucun modèle de message."
+                        emptyMessage="Aucun template."
                         minWidth="640px"
                         sort={filters}
                         onSort={handleSort}
@@ -211,7 +211,7 @@ export default function MarketingTemplatesIndex() {
 
                 <IndexTablePagination
                     paginated={templates}
-                    itemLabel="modèle(s)"
+                    itemLabel="template(s)"
                     buildPageUrl={buildPageUrl}
                 />
             </div>
@@ -220,5 +220,5 @@ export default function MarketingTemplatesIndex() {
 }
 
 MarketingTemplatesIndex.layout = {
-    breadcrumbs: [{ title: 'Modèles de messages', href: index.url() }],
+    breadcrumbs: [{ title: 'Templates', href: index.url() }],
 };

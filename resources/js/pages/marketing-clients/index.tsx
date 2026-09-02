@@ -180,7 +180,7 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'lists',
-                header: 'Listes',
+                header: 'Groupes',
                 sortKey: 'lists_count',
                 sortable: true,
                 mobileRole: 'meta',

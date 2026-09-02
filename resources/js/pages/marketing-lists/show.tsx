@@ -47,7 +47,7 @@ export default function MarketingListsShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Listes de diffusion', href: index.url() },
+            { title: 'Groupes', href: index.url() },
             { title: list.name, href: show.url(list.uuid) },
         ],
     });
@@ -97,8 +97,8 @@ export default function MarketingListsShow() {
                         ) : null}
                         {canDelete ? (
                             <ConfirmDeleteDialog
-                                title="Supprimer cette liste ?"
-                                description={`La liste « ${list.name} » sera supprimée. Les contacts ne seront pas effacés.`}
+                                title="Supprimer ce groupe ?"
+                                description={`Le groupe « ${list.name} » sera supprimé. Les contacts ne seront pas effacés.`}
                                 deleteUrl={destroy.url(list.uuid)}
                                 triggerLabel="Supprimer"
                                 triggerVariant="outline"
@@ -130,7 +130,7 @@ export default function MarketingListsShow() {
                                             colSpan={canUpdate ? 4 : 3}
                                             className="text-muted-foreground px-4 py-8 text-center"
                                         >
-                                            Aucun contact dans cette liste.
+                                            Aucun contact dans ce groupe.
                                             {canUpdate ? (
                                                 <span className="mt-1 block">
                                                     Utilisez « Ajouter un contact » pour commencer.
@@ -209,7 +209,7 @@ export default function MarketingListsShow() {
 
 MarketingListsShow.layout = {
     breadcrumbs: [
-        { title: 'Listes de diffusion', href: index.url() },
+        { title: 'Groupes', href: index.url() },
         { title: 'Détail', href: show.url('') },
     ],
 };

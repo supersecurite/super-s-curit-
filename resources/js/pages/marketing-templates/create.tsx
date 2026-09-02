@@ -12,21 +12,21 @@ export default function MarketingTemplatesCreate() {
 
     return (
         <>
-            <Head title="Nouveau modèle" />
+            <Head title="Nouveau template" />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Nouveau modèle e-mail
+                        Nouveau template e-mail
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Créez un modèle réutilisable avec variables dynamiques.
+                        Créez un template réutilisable avec variables dynamiques.
                     </p>
                 </div>
 
                 <MarketingMessageTemplateForm
                     submitUrl={store.url()}
-                    submitLabel="Créer le modèle"
+                    submitLabel="Créer le template"
                     cancelHref={index.url()}
                     errors={errors}
                     variables={variables}
@@ -38,7 +38,7 @@ export default function MarketingTemplatesCreate() {
 
 MarketingTemplatesCreate.layout = {
     breadcrumbs: [
-        { title: 'Modèles de messages', href: index.url() },
-        { title: 'Nouveau modèle', href: create.url() },
+        { title: 'Templates', href: index.url() },
+        { title: 'Nouveau template', href: create.url() },
     ],
 };

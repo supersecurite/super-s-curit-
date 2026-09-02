@@ -174,7 +174,7 @@ export default function MarketingTemplateEditor({
                             <ContentEditable
                                 className="prose min-h-[300px] max-w-none rounded-md p-2 outline-none focus:ring-2 focus:ring-ring/20"
                                 style={{ wordBreak: 'break-word' }}
-                                aria-label="Éditeur de modèle de message"
+                                aria-label="Éditeur de template de message"
                             />
                         }
                         placeholder={<Placeholder />}

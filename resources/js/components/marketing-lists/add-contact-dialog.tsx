@@ -64,7 +64,7 @@ export default function AddContactDialog({
                 <DialogHeader>
                     <DialogTitle>Ajouter un contact</DialogTitle>
                     <DialogDescription>
-                        Recherchez puis sélectionnez un contact à inclure dans cette liste.
+                        Recherchez puis sélectionnez un contact à inclure dans ce groupe.
                     </DialogDescription>
                 </DialogHeader>
 

@@ -30,7 +30,7 @@ export default function MarketingTemplatesShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Modèles de messages', href: index.url() },
+            { title: 'Templates', href: index.url() },
             { title: template.name, href: show.url(template.uuid) },
         ],
     });
@@ -69,8 +69,8 @@ export default function MarketingTemplatesShow() {
                         ) : null}
                         {canDelete ? (
                             <ConfirmDeleteDialog
-                                title="Supprimer ce modèle ?"
-                                description={`Le modèle « ${template.name} » sera définitivement supprimé.`}
+                                title="Supprimer ce template ?"
+                                description={`Le template « ${template.name} » sera définitivement supprimé.`}
                                 deleteUrl={destroy.url(template.uuid)}
                                 triggerLabel="Supprimer"
                                 triggerVariant="outline"
@@ -149,7 +149,7 @@ export default function MarketingTemplatesShow() {
 
 MarketingTemplatesShow.layout = {
     breadcrumbs: [
-        { title: 'Modèles de messages', href: index.url() },
+        { title: 'Templates', href: index.url() },
         { title: 'Détail', href: show.url('') },
     ],
 };

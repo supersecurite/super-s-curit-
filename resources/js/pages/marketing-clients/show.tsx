@@ -207,7 +207,7 @@ export default function MarketingClientsShow() {
                     ) : null}
 
                     <section className="app-panel space-y-4 p-4 lg:col-span-2">
-                        <h2 className="font-semibold">Listes de diffusion</h2>
+                        <h2 className="font-semibold">Groupes</h2>
                         {lists.length > 0 ? (
                             <ul className="space-y-2">
                                 {lists.map((list) => (
@@ -226,7 +226,7 @@ export default function MarketingClientsShow() {
                             </ul>
                         ) : (
                             <p className="text-muted-foreground text-sm">
-                                Ce contact n&apos;appartient à aucune liste.
+                                Ce contact n&apos;appartient à aucun groupe.
                             </p>
                         )}
                     </section>

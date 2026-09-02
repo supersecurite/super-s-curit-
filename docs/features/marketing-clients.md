@@ -49,6 +49,7 @@ Toasts : `Inertia::flash('toast', …)` sur toutes les mutations.
 | Contrôleurs | `app/Http/Controllers/Admin/MarketingContactController.php`, `MarketingListController.php` |
 | Pages | `resources/js/pages/marketing-clients/`, `marketing-lists/` |
 | Tests | `tests/Feature/MarketingContactTest.php`, `MarketingListTest.php` |
+| Seeder | `database/seeders/MarketingSeeder.php` — contacts, groupes, templates, campagnes réalistes (Conakry) |
 
 ## Limites & dette
 

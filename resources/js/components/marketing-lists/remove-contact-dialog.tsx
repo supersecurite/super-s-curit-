@@ -55,7 +55,7 @@ export default function RemoveContactDialog({
                 <DialogHeader>
                     <DialogTitle>Retirer ce contact ?</DialogTitle>
                     <DialogDescription>
-                        « {contactName} » sera retiré de cette liste. Le contact restera dans votre base.
+                        « {contactName} » sera retiré de ce groupe. Le contact restera dans votre base.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="gap-2">

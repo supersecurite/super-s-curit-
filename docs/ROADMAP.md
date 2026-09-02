@@ -35,7 +35,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Rôle `commercial` + droits marketing | Acteurs | ✅ Complet | [ADR-0001](decisions/0001-role-commercial.md) — prérequis module communication |
 | Site marketing public | Public | ✅ Complet | `docs/features/site-public.md` |
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
-| **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` |
+| **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` · seeder `MarketingSeeder` |
 | **Journal d'accès backoffice** | Support | ✅ Complet | `docs/features/access-logs.md` — monitoring sans Nightwatch |
 | **Lot 2 — Campagnes e-mail** | Marketing | ⚠️ En cours | Modèles ✅ · campagnes/envois ✅ · temps réel Reverb ✅ · bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
 | **Lot 3 — Campagnes WhatsApp** | Marketing | 🔲 À construire | CDC §8 — `docs/features/marketing-campagnes.md` |

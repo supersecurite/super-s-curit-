@@ -142,7 +142,7 @@ export default function MarketingCampaignsIndex() {
             },
             {
                 id: 'list',
-                header: 'Liste',
+                header: 'Groupe',
                 cell: (campaign) => campaign.list?.name ?? '—',
             },
             {
@@ -177,7 +177,7 @@ export default function MarketingCampaignsIndex() {
                             Campagnes e-mail
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Créez et suivez vos campagnes vers vos listes de contacts.
+                            Créez et suivez vos campagnes vers vos groupes de contacts.
                         </p>
                     </div>
 

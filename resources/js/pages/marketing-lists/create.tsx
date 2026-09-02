@@ -11,12 +11,12 @@ export default function MarketingListsCreate() {
 
     return (
         <>
-            <Head title="Nouvelle liste" />
+            <Head title="Nouveau groupe" />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Nouvelle liste
+                        Nouveau groupe
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
                         Créez une audience pour vos campagnes marketing.
@@ -25,7 +25,7 @@ export default function MarketingListsCreate() {
 
                 <MarketingListForm
                     submitUrl={store.url()}
-                    submitLabel="Créer la liste"
+                    submitLabel="Créer le groupe"
                     cancelHref={index.url()}
                     errors={errors}
                 />
@@ -36,7 +36,7 @@ export default function MarketingListsCreate() {
 
 MarketingListsCreate.layout = {
     breadcrumbs: [
-        { title: 'Listes de diffusion', href: index.url() },
-        { title: 'Nouvelle liste', href: create.url() },
+        { title: 'Groupes', href: index.url() },
+        { title: 'Nouveau groupe', href: create.url() },
     ],
 };

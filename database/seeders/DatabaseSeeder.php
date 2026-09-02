@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             GalleryImageSeeder::class,
             GalleryVideoSeeder::class,
             PartnerSeeder::class,
+            MarketingSeeder::class,
         ]);
     }
 }

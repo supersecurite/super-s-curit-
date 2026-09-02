@@ -239,7 +239,7 @@ export default function MarketingCampaignsShow() {
                                 </Badge>
                             ) : null}
                             {liveCampaign.list ? (
-                                <Badge variant="outline">Liste : {liveCampaign.list.name}</Badge>
+                                <Badge variant="outline">Groupe : {liveCampaign.list.name}</Badge>
                             ) : null}
                         </div>
                     </div>
@@ -293,7 +293,7 @@ export default function MarketingCampaignsShow() {
                             </div>
                             {campaign.template ? (
                                 <div>
-                                    <dt className="text-muted-foreground">Modèle source</dt>
+                                    <dt className="text-muted-foreground">Template source</dt>
                                     <dd>{campaign.template.name}</dd>
                                 </div>
                             ) : null}

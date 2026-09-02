@@ -160,7 +160,7 @@ export default function MarketingCampaignForm({
         })
             .then(async (response) => {
                 if (! response.ok) {
-                    throw new Error('Impossible de charger les contacts de la liste.');
+                    throw new Error('Impossible de charger les contacts du groupe.');
                 }
 
                 return response.json() as Promise<ListAudiencePayload>;
@@ -177,7 +177,7 @@ export default function MarketingCampaignForm({
                 setAudienceError(
                     error instanceof Error
                         ? error.message
-                        : 'Impossible de charger les contacts de la liste.',
+                        : 'Impossible de charger les contacts du groupe.',
                 );
             })
             .finally(() => {
@@ -224,14 +224,14 @@ export default function MarketingCampaignForm({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="marketing_list_id">Liste de diffusion</Label>
+                    <Label htmlFor="marketing_list_id">Groupe</Label>
                     <Select
                         value={formData.marketing_list_id?.toString() ?? ''}
                         onValueChange={(value) => updateField('marketing_list_id', Number(value))}
                         required
                     >
                         <SelectTrigger id="marketing_list_id">
-                            <SelectValue placeholder="Choisir une liste" />
+                            <SelectValue placeholder="Choisir un groupe" />
                         </SelectTrigger>
                         <SelectContent>
                             {lists.map((list) => (
@@ -246,16 +246,16 @@ export default function MarketingCampaignForm({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="marketing_message_template_id">Modèle (optionnel)</Label>
+                    <Label htmlFor="marketing_message_template_id">Template (optionnel)</Label>
                     <Select
                         value={formData.marketing_message_template_id?.toString() ?? 'none'}
                         onValueChange={applyTemplate}
                     >
                         <SelectTrigger id="marketing_message_template_id">
-                            <SelectValue placeholder="Sans modèle" />
+                            <SelectValue placeholder="Sans template" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="none">Sans modèle</SelectItem>
+                            <SelectItem value="none">Sans template</SelectItem>
                             {templates.map((template) => (
                                 <SelectItem key={template.id} value={template.id.toString()}>
                                     {template.name}
@@ -315,7 +315,7 @@ export default function MarketingCampaignForm({
                 {selectedList === null && selectedTemplate === null ? (
                     <section className="app-panel p-4">
                         <p className="text-muted-foreground text-sm">
-                            Sélectionnez une liste pour voir l&apos;audience, ou un modèle pour
+                            Sélectionnez un groupe pour voir l&apos;audience, ou un template pour
                             prévisualiser le message.
                         </p>
                     </section>
