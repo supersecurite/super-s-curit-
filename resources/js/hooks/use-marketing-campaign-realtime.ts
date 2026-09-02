@@ -21,7 +21,8 @@ export type CampaignProgressPayload = {
     };
     send: {
         uuid: string;
-        recipient_email: string;
+        recipient_email: string | null;
+        recipient_phone: string | null;
         recipient_name: string | null;
         status: string;
         status_label: string;

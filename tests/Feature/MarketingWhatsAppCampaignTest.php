@@ -100,6 +100,14 @@ test('commercial can launch whatsapp campaign with log driver', function () {
         ->and(MarketingCampaignSend::query()->where('marketing_campaign_id', $campaign->id)->count())->toBe(1);
 
     Queue::assertPushed(SendMarketingCampaignWhatsAppJob::class);
+
+    actingAs($user)
+        ->get(route('marketing-campaigns.show', $campaign))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('campaign.channel', 'whatsapp')
+            ->where('sends.data.0.recipient_phone', '+224622999888')
+            ->where('sends.data.0.recipient_email', 'wa-contact@example.com'));
 });
 
 test('whatsapp job stores provider message id via meta http fake', function () {

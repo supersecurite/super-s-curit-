@@ -36,9 +36,11 @@ type CampaignStats = {
 type CampaignData = {
     uuid: string;
     name: string;
+    channel: string;
+    channel_label: string;
     status: string;
     status_label: string;
-    subject: string;
+    subject: string | null;
     body: string;
     list: { uuid: string; name: string } | null;
     template: { uuid: string; name: string } | null;
@@ -50,7 +52,8 @@ type CampaignData = {
 
 type SendRow = {
     uuid: string;
-    recipient_email: string;
+    recipient_email: string | null;
+    recipient_phone: string | null;
     recipient_name: string | null;
     status: string;
     status_label: string;
@@ -99,6 +102,24 @@ function statusVariant(status: string): 'default' | 'secondary' | 'outline' | 'd
     }
 }
 
+/** Adresse réellement utilisée pour l’envoi (téléphone WhatsApp ou e-mail). */
+function sendDestination(
+    send: Pick<SendRow, 'recipient_email' | 'recipient_phone'>,
+    channel: string,
+): { value: string; label: string } {
+    if (channel === 'whatsapp') {
+        return {
+            value: send.recipient_phone || send.recipient_email || '—',
+            label: send.recipient_phone ? 'WhatsApp' : 'E-mail',
+        };
+    }
+
+    return {
+        value: send.recipient_email || send.recipient_phone || '—',
+        label: send.recipient_email ? 'E-mail' : 'WhatsApp',
+    };
+}
+
 export default function MarketingCampaignsShow() {
     const { campaign, sends, canUpdate, canDelete, canSend, broadcasting } =
         usePage<PageProps>().props;
@@ -128,9 +149,25 @@ export default function MarketingCampaignsShow() {
             ...previous,
             data: previous.data.some((row) => row.uuid === send.uuid)
                 ? previous.data.map((row) =>
-                      row.uuid === send.uuid ? send : row,
+                      row.uuid === send.uuid
+                          ? {
+                                ...row,
+                                ...send,
+                                recipient_email:
+                                    send.recipient_email ?? row.recipient_email,
+                                recipient_phone:
+                                    send.recipient_phone ?? row.recipient_phone,
+                            }
+                          : row,
                   )
-                : [send, ...previous.data],
+                : [
+                      {
+                          ...send,
+                          recipient_email: send.recipient_email ?? null,
+                          recipient_phone: send.recipient_phone ?? null,
+                      },
+                      ...previous.data,
+                  ],
         }));
     }, []);
 
@@ -138,7 +175,7 @@ export default function MarketingCampaignsShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Campagnes e-mail', href: index.url() },
+            { title: 'Campagnes', href: index.url() },
             { title: campaign.name, href: show.url(campaign.uuid) },
         ],
     });
@@ -157,14 +194,21 @@ export default function MarketingCampaignsShow() {
         {
             id: 'recipient',
             header: 'Destinataire',
-            cell: (send) => (
-                <div>
-                    <p className="font-medium">{send.recipient_name ?? send.recipient_email}</p>
-                    {send.recipient_name ? (
-                        <p className="text-muted-foreground text-xs">{send.recipient_email}</p>
-                    ) : null}
-                </div>
-            ),
+            mobileRole: 'title',
+            cell: (send) => {
+                const destination = sendDestination(send, campaign.channel);
+
+                return (
+                    <div>
+                        <p className="font-medium">
+                            {send.recipient_name ?? destination.value}
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                            {destination.label} : {destination.value}
+                        </p>
+                    </div>
+                );
+            },
         },
         {
             id: 'status',
@@ -232,6 +276,7 @@ export default function MarketingCampaignsShow() {
                             <Badge variant={statusVariant(liveCampaign.status)}>
                                 {liveCampaign.status_label}
                             </Badge>
+                            <Badge variant="outline">{campaign.channel_label}</Badge>
                             {realtimeEnabled ? (
                                 <Badge variant="outline" className="gap-1">
                                     <Radio className="size-3 animate-pulse" aria-hidden />
@@ -288,9 +333,15 @@ export default function MarketingCampaignsShow() {
                         <h2 className="font-semibold">Message</h2>
                         <dl className="space-y-3 text-sm">
                             <div>
-                                <dt className="text-muted-foreground">Objet</dt>
-                                <dd>{campaign.subject}</dd>
+                                <dt className="text-muted-foreground">Canal</dt>
+                                <dd>{campaign.channel_label}</dd>
                             </div>
+                            {campaign.channel === 'email' ? (
+                                <div>
+                                    <dt className="text-muted-foreground">Objet</dt>
+                                    <dd>{campaign.subject ?? '—'}</dd>
+                                </div>
+                            ) : null}
                             {campaign.template ? (
                                 <div>
                                     <dt className="text-muted-foreground">Template source</dt>
@@ -349,7 +400,7 @@ export default function MarketingCampaignsShow() {
 
 MarketingCampaignsShow.layout = {
     breadcrumbs: [
-        { title: 'Campagnes e-mail', href: index.url() },
+        { title: 'Campagnes', href: index.url() },
         { title: 'Détail', href: show.url('') },
     ],
 };

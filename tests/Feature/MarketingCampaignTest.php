@@ -207,6 +207,12 @@ test('commercial can view campaign show page with stats', function () {
 
     $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
     $campaign = MarketingCampaign::factory()->create();
+    MarketingCampaignSend::factory()->create([
+        'marketing_campaign_id' => $campaign->id,
+        'recipient_email' => 'dest@example.com',
+        'recipient_name' => 'Alice Dest',
+        'recipient_phone' => null,
+    ]);
 
     $this->actingAs($commercial)
         ->get(route('marketing-campaigns.show', $campaign))
@@ -214,6 +220,9 @@ test('commercial can view campaign show page with stats', function () {
         ->assertInertia(fn ($page) => $page
             ->has('campaign.name')
             ->has('campaign.stats')
+            ->where('campaign.channel', 'email')
+            ->where('sends.data.0.recipient_email', 'dest@example.com')
+            ->where('sends.data.0.recipient_name', 'Alice Dest')
             ->where('broadcasting.enabled', false));
 });
 
