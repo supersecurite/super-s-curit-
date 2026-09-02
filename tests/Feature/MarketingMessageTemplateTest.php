@@ -40,6 +40,45 @@ test('contributor without marketing campaigns permission cannot access templates
         ->assertForbidden();
 });
 
+test('commercial can create whatsapp meta template without free body', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-templates.store'), [
+            'name' => 'Hello Meta',
+            'channel' => MarketingMessageTemplateChannel::WhatsApp->value,
+            'meta_template_name' => 'hello_world',
+            'meta_template_language' => 'fr',
+            'body' => 'Ceci ne doit pas être utilisé',
+            'subject' => 'Ignoré',
+        ])
+        ->assertRedirect();
+
+    $template = MarketingMessageTemplate::query()->where('name', 'Hello Meta')->firstOrFail();
+
+    expect($template->channel)->toBe(MarketingMessageTemplateChannel::WhatsApp)
+        ->and($template->meta_template_name)->toBe('hello_world')
+        ->and($template->meta_template_language)->toBe('fr')
+        ->and($template->subject)->toBeNull()
+        ->and($template->body)->toBe('');
+});
+
+test('whatsapp template requires meta template name', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-templates.store'), [
+            'name' => 'Sans Meta',
+            'channel' => MarketingMessageTemplateChannel::WhatsApp->value,
+            'meta_template_language' => 'fr',
+        ])
+        ->assertSessionHasErrors('meta_template_name');
+});
+
 test('email template requires subject', function () {
     $this->seed(RoleUserSeeder::class);
 

@@ -14,6 +14,8 @@ type TemplateData = {
     channel_label: string;
     subject: string | null;
     body: string;
+    meta_template_name?: string | null;
+    meta_template_language?: string | null;
     created_at_formatted: string | null;
     updated_at_formatted: string | null;
 };
@@ -84,56 +86,99 @@ export default function MarketingTemplatesShow() {
                     <section className="app-panel space-y-4 p-4">
                         <h2 className="font-semibold">Détails</h2>
                         <dl className="space-y-3 text-sm">
-                            <div>
-                                <dt className="text-muted-foreground">Objet</dt>
-                                <dd>
-                                    {template.subject ? (
-                                        template.subject
-                                            .split(/(\{\{[a-z_]+\}\})/g)
-                                            .filter(Boolean)
-                                            .map((part, partIndex) => {
-                                                const match = part.match(/^\{\{([a-z_]+)\}\}$/);
+                            {template.channel === 'whatsapp' ? (
+                                <>
+                                    <div>
+                                        <dt className="text-muted-foreground">Modèle Meta</dt>
+                                        <dd className="font-mono text-sm">
+                                            {template.meta_template_name ?? '—'}
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-muted-foreground">Langue Meta</dt>
+                                        <dd className="font-mono text-sm">
+                                            {template.meta_template_language ?? '—'}
+                                        </dd>
+                                    </div>
+                                </>
+                            ) : (
+                                <div>
+                                    <dt className="text-muted-foreground">Objet</dt>
+                                    <dd>
+                                        {template.subject ? (
+                                            template.subject
+                                                .split(/(\{\{[a-z_]+\}\})/g)
+                                                .filter(Boolean)
+                                                .map((part, partIndex) => {
+                                                    const match = part.match(/^\{\{([a-z_]+)\}\}$/);
 
-                                                if (match) {
+                                                    if (match) {
+                                                        return (
+                                                            <span
+                                                                key={`subject-var-${partIndex}`}
+                                                                className={variableTokenClassName()}
+                                                            >
+                                                                {part}
+                                                            </span>
+                                                        );
+                                                    }
+
                                                     return (
-                                                        <span
-                                                            key={`subject-var-${partIndex}`}
-                                                            className={variableTokenClassName()}
-                                                        >
+                                                        <span key={`subject-text-${partIndex}`}>
                                                             {part}
                                                         </span>
                                                     );
-                                                }
-
-                                                return (
-                                                    <span key={`subject-text-${partIndex}`}>
-                                                        {part}
-                                                    </span>
-                                                );
-                                            })
-                                    ) : (
-                                        '—'
-                                    )}
-                                </dd>
-                            </div>
+                                                })
+                                        ) : (
+                                            '—'
+                                        )}
+                                    </dd>
+                                </div>
+                            )}
                         </dl>
                     </section>
 
-                    <section className="app-panel space-y-4 p-4">
-                        <h2 className="font-semibold">Variables</h2>
-                        <div className="flex flex-wrap gap-1.5">
-                            {variables.map((variable) => (
-                                <Badge key={variable} variant="outline" className="font-mono text-xs">
-                                    {`{{${variable}}}`}
-                                </Badge>
-                            ))}
-                        </div>
-                    </section>
+                    {template.channel === 'email' ? (
+                        <section className="app-panel space-y-4 p-4">
+                            <h2 className="font-semibold">Variables</h2>
+                            <div className="flex flex-wrap gap-1.5">
+                                {variables.map((variable) => (
+                                    <Badge
+                                        key={variable}
+                                        variant="outline"
+                                        className="font-mono text-xs"
+                                    >
+                                        {`{{${variable}}}`}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </section>
+                    ) : (
+                        <section className="app-panel space-y-4 p-4">
+                            <h2 className="font-semibold">Paramètres Meta</h2>
+                            <p className="text-muted-foreground text-sm">
+                                Les variables positionnelles {'{{1}}'}, {'{{2}}'}, {'{{3}}'} du
+                                modèle Meta sont remplies avec prénom, nom et entreprise du
+                                destinataire lors de l&apos;envoi.
+                            </p>
+                        </section>
+                    )}
 
-                    <section className="app-panel space-y-4 p-4 lg:col-span-2">
-                        <h2 className="font-semibold">Contenu</h2>
-                        <ContentRenderer content={template.body} />
-                    </section>
+                    {template.channel === 'email' ? (
+                        <section className="app-panel space-y-4 p-4 lg:col-span-2">
+                            <h2 className="font-semibold">Contenu</h2>
+                            <ContentRenderer content={template.body} />
+                        </section>
+                    ) : (
+                        <section className="app-panel space-y-2 p-4 lg:col-span-2">
+                            <h2 className="font-semibold">Contenu</h2>
+                            <p className="text-muted-foreground text-sm">
+                                Ce template WhatsApp pointe uniquement vers le modèle Meta
+                                approuvé — aucun corps de message libre n&apos;est stocké ni
+                                envoyé.
+                            </p>
+                        </section>
+                    )}
                 </div>
 
                 <p className="text-muted-foreground text-xs">

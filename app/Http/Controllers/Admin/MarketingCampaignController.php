@@ -98,7 +98,11 @@ class MarketingCampaignController extends Controller
     {
         $this->authorize('view', $marketingCampaign);
 
-        $marketingCampaign->load(['list:id,uuid,name', 'template:id,uuid,name', 'whatsappAccount:id,uuid,name']);
+        $marketingCampaign->load([
+            'list:id,uuid,name',
+            'template:id,uuid,name,meta_template_name,meta_template_language',
+            'whatsappAccount:id,uuid,name',
+        ]);
         $marketingCampaign->loadCount('sends');
 
         $sends = $marketingCampaign->sends()
@@ -124,7 +128,11 @@ class MarketingCampaignController extends Controller
     {
         $this->authorize('update', $marketingCampaign);
 
-        $marketingCampaign->load(['list:id,uuid,name', 'template:id,uuid,name', 'whatsappAccount:id,uuid,name']);
+        $marketingCampaign->load([
+            'list:id,uuid,name',
+            'template:id,uuid,name,meta_template_name,meta_template_language',
+            'whatsappAccount:id,uuid,name',
+        ]);
 
         return Inertia::render('marketing-campaigns/edit', [
             'campaign' => $marketingCampaign->toAdminArray(),

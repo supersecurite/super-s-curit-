@@ -24,6 +24,11 @@ class CreateMarketingCampaign extends Action
             $data['whatsapp_account_id'] = null;
         }
 
+        if ($channel === MarketingCampaignChannel::WhatsApp) {
+            $data['subject'] = null;
+            $data['body'] = '';
+        }
+
         return MarketingCampaign::query()->create([
             ...$data,
             'channel' => $channel,

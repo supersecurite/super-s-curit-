@@ -186,6 +186,8 @@ class MarketingCampaign extends Model
                 ? [
                     'uuid' => $this->template->uuid,
                     'name' => $this->template->name,
+                    'meta_template_name' => $this->template->meta_template_name,
+                    'meta_template_language' => $this->template->meta_template_language,
                 ]
                 : null,
             'whatsapp_account' => $this->relationLoaded('whatsappAccount') && $this->whatsappAccount

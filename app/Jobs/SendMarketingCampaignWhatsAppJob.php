@@ -7,11 +7,13 @@ use App\Models\MarketingCampaignSend;
 use App\Models\MarketingContact;
 use App\Services\Marketing\WhatsAppCloudApiService;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
-use App\Support\Marketing\RenderMarketingMessageTemplate;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Throwable;
 
+/**
+ * Envoie un message WhatsApp via le modèle Meta du template associé à la campagne.
+ */
 class SendMarketingCampaignWhatsAppJob implements ShouldQueue
 {
     use Queueable;
@@ -33,11 +35,17 @@ class SendMarketingCampaignWhatsAppJob implements ShouldQueue
         $template = $campaign?->template;
         $contact = $send->contact;
 
-        if ($campaign === null || $account === null || $template === null || $contact === null) {
+        if (
+            $campaign === null
+            || $account === null
+            || $template === null
+            || blank($template->meta_template_name)
+            || $contact === null
+        ) {
             $send->update([
                 'status' => MarketingCampaignSendStatus::Failed,
                 'failed_at' => now(),
-                'failure_reason' => 'Compte WhatsApp, template ou contact manquant.',
+                'failure_reason' => 'Compte WhatsApp ou modèle Meta manquant.',
             ]);
 
             if ($campaign !== null) {
@@ -62,14 +70,12 @@ class SendMarketingCampaignWhatsAppJob implements ShouldQueue
         }
 
         try {
-            $parameters = $this->bodyParameters($campaign->body, $contact);
-
             $result = $whatsApp->sendTemplateMessage(
                 $account,
                 $send->recipient_phone,
                 (string) $template->meta_template_name,
                 (string) ($template->meta_template_language ?: 'fr'),
-                $parameters,
+                $this->bodyParameters($contact),
             );
 
             $send->update([
@@ -90,23 +96,16 @@ class SendMarketingCampaignWhatsAppJob implements ShouldQueue
     }
 
     /**
+     * Paramètres positionnels Meta {{1}}, {{2}}, {{3}} — prénom, nom, entreprise.
+     *
      * @return list<string>
      */
-    private function bodyParameters(string $body, MarketingContact $contact): array
+    private function bodyParameters(MarketingContact $contact): array
     {
-        $plain = RenderMarketingMessageTemplate::render($body, $contact);
-
-        // Les paramètres Meta sont souvent dérivés des variables ; on envoie prénom/nom/entreprise si présents.
-        $values = array_values(array_filter([
+        return array_values(array_filter([
             $contact->first_name ?? '',
             $contact->last_name ?? '',
             $contact->company_name ?? '',
         ], fn (string $value): bool => $value !== ''));
-
-        if ($values !== []) {
-            return $values;
-        }
-
-        return $plain !== '' ? [mb_substr($plain, 0, 100)] : [];
     }
 }

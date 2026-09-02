@@ -161,11 +161,13 @@ export default function MarketingCampaignForm({
             setFormData((previous) => ({
                 ...previous,
                 marketing_message_template_id: parsedId,
-                subject: template.subject?.trim() || previous.subject,
-                body: template.body?.trim() || previous.body,
+                subject: isWhatsApp
+                    ? previous.subject
+                    : template.subject?.trim() || previous.subject,
+                body: isWhatsApp ? '' : template.body?.trim() || previous.body,
             }));
         },
-        [channelTemplates, updateField],
+        [channelTemplates, isWhatsApp, updateField],
     );
 
     useEffect(() => {
@@ -246,8 +248,8 @@ export default function MarketingCampaignForm({
                 marketing_list_id: formData.marketing_list_id,
                 marketing_message_template_id: formData.marketing_message_template_id,
                 whatsapp_account_id: isWhatsApp ? formData.whatsapp_account_id : null,
-                subject: isWhatsApp ? formData.subject || 'WhatsApp' : formData.subject,
-                body: formData.body,
+                subject: isWhatsApp ? null : formData.subject,
+                body: isWhatsApp ? '' : formData.body,
             },
             {
                 onFinish: () => setProcessing(false),
@@ -374,23 +376,46 @@ export default function MarketingCampaignForm({
                         <InputError message={errors.subject} />
                     </div>
                 ) : (
-                    <p className="text-muted-foreground text-sm">
-                        L&apos;envoi utilise le modèle Meta approuvé du template. Le « lu »
-                        WhatsApp dépend des réglages de confidentialité du destinataire.
-                    </p>
+                    <div className="bg-muted/40 space-y-2 rounded-lg border p-3 text-sm">
+                        <p className="font-medium">Envoi via modèle Meta uniquement</p>
+                        <p className="text-muted-foreground text-xs">
+                            WhatsApp n&apos;accepte pas de message libre hors fenêtre de
+                            conversation. Sélectionnez un template dont le nom Meta correspond
+                            à un modèle approuvé. Les variables Meta {'{{1}}'}, {'{{2}}'},{' '}
+                            {'{{3}}'} sont remplies avec prénom, nom et entreprise du contact.
+                        </p>
+                        {selectedTemplate ? (
+                            <dl className="grid gap-1 text-xs sm:grid-cols-2">
+                                <div>
+                                    <dt className="text-muted-foreground">Modèle Meta</dt>
+                                    <dd className="font-mono">
+                                        {selectedTemplate.meta_template_name ?? '—'}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt className="text-muted-foreground">Langue</dt>
+                                    <dd className="font-mono">
+                                        {selectedTemplate.meta_template_language ?? '—'}
+                                    </dd>
+                                </div>
+                            </dl>
+                        ) : null}
+                    </div>
                 )}
 
-                <div className="space-y-2">
-                    <Label>{isWhatsApp ? 'Aperçu / variables' : 'Message'}</Label>
-                    <MarketingTemplateEditor
-                        key={editorKey}
-                        initialContent={formData.body?.trim() ? formData.body : ''}
-                        fallbackPlainContent={formData.body?.trim() ? '' : formData.body}
-                        onChange={(content) => updateField('body', content)}
-                        variables={variables}
-                    />
-                    <InputError message={errors.body} />
-                </div>
+                {!isWhatsApp ? (
+                    <div className="space-y-2">
+                        <Label>Message</Label>
+                        <MarketingTemplateEditor
+                            key={editorKey}
+                            initialContent={formData.body?.trim() ? formData.body : ''}
+                            fallbackPlainContent={formData.body?.trim() ? '' : formData.body}
+                            onChange={(content) => updateField('body', content)}
+                            variables={variables}
+                        />
+                        <InputError message={errors.body} />
+                    </div>
+                ) : null}
 
                 <div className="flex flex-wrap gap-2">
                     <Button type="submit" disabled={processing}>

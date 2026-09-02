@@ -22,6 +22,11 @@ class UpdateMarketingCampaign extends Action
             $data['whatsapp_account_id'] = null;
         }
 
+        if ($channel === MarketingCampaignChannel::WhatsApp) {
+            $data['subject'] = null;
+            $data['body'] = '';
+        }
+
         $data['channel'] = $channel;
 
         $campaign->update($data);

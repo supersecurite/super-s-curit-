@@ -103,7 +103,7 @@ export default function MarketingMessageTemplateForm({
                 name: formData.name,
                 channel: formData.channel,
                 subject: isWhatsApp ? null : formData.subject,
-                body: formData.body,
+                body: isWhatsApp ? '' : formData.body,
                 meta_template_name: isWhatsApp ? formData.meta_template_name : null,
                 meta_template_language: isWhatsApp
                     ? formData.meta_template_language
@@ -165,7 +165,9 @@ export default function MarketingMessageTemplateForm({
                             required
                         />
                         <p className="text-muted-foreground text-xs">
-                            Doit correspondre à un modèle approuvé dans Meta Business.
+                            Doit correspondre exactement à un modèle approuvé dans Meta
+                            Business Manager. L&apos;envoi WhatsApp utilise uniquement ce
+                            modèle (pas de message libre).
                         </p>
                         <InputError message={errors.meta_template_name} />
                     </div>
@@ -184,34 +186,32 @@ export default function MarketingMessageTemplateForm({
                     </div>
                 </div>
             ) : (
-                <div className="space-y-2">
-                    <Label htmlFor="subject">Objet de l&apos;e-mail</Label>
-                    <TemplateSubjectInput
-                        value={formData.subject}
-                        onChange={(value) => updateField('subject', value)}
-                        variables={variables}
-                        placeholder={DEFAULT_MARKETING_TEMPLATE_SUBJECT}
-                        required
-                    />
-                    <InputError message={errors.subject} />
-                </div>
-            )}
+                <>
+                    <div className="space-y-2">
+                        <Label htmlFor="subject">Objet de l&apos;e-mail</Label>
+                        <TemplateSubjectInput
+                            value={formData.subject}
+                            onChange={(value) => updateField('subject', value)}
+                            variables={variables}
+                            placeholder={DEFAULT_MARKETING_TEMPLATE_SUBJECT}
+                            required
+                        />
+                        <InputError message={errors.subject} />
+                    </div>
 
-            <div className="space-y-2">
-                <Label>
-                    {isWhatsApp
-                        ? 'Aperçu / corps (variables pour paramètres Meta)'
-                        : 'Contenu du message'}
-                </Label>
-                <MarketingTemplateEditor
-                    key={`${template?.uuid ?? 'new-template'}-${formData.channel}`}
-                    initialContent={isEditing ? formData.body : ''}
-                    fallbackPlainContent={isEditing ? '' : formData.body}
-                    onChange={(content) => updateField('body', content)}
-                    variables={variables}
-                />
-                <InputError message={errors.body} />
-            </div>
+                    <div className="space-y-2">
+                        <Label>Contenu du message</Label>
+                        <MarketingTemplateEditor
+                            key={`${template?.uuid ?? 'new-template'}-${formData.channel}`}
+                            initialContent={isEditing ? formData.body : ''}
+                            fallbackPlainContent={isEditing ? '' : formData.body}
+                            onChange={(content) => updateField('body', content)}
+                            variables={variables}
+                        />
+                        <InputError message={errors.body} />
+                    </div>
+                </>
+            )}
 
             <div className="flex flex-wrap gap-3">
                 <Button type="submit" disabled={processing}>

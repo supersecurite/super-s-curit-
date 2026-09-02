@@ -22,8 +22,8 @@ Commercial / admin avec permissions `marketing_campaigns.*` — voir `Backoffice
 ### Livré (Lot 3)
 
 3. **Comptes WhatsApp multi-config** (`/marketing-whatsapp-accounts`) — credentials Meta en base (tokens chiffrés), driver `meta` \| `log`, compte par défaut, URL webhook par compte.
-4. **Templates WhatsApp** — canal + `meta_template_name` / `meta_template_language` (modèle Meta approuvé).
-5. **Campagnes WhatsApp** — sélection canal + compte + template ; éligibilité consentement + téléphone ; job `SendMarketingCampaignWhatsAppJob`.
+4. **Templates WhatsApp** — canal + `meta_template_name` / `meta_template_language` uniquement (modèle Meta approuvé, **pas** de corps libre).
+5. **Campagnes WhatsApp** — sélection canal + compte + template Meta ; éligibilité consentement + téléphone ; job `SendMarketingCampaignWhatsAppJob` (API template Meta uniquement).
 6. **Webhook Meta** — `GET|POST /webhooks/marketing/whatsapp/{uuid}` (signature `X-Hub-Signature-256`, challenge verify_token) → statuts `sent` / `delivered`→`received` / `read` / `failed`.
 
 ### Prévu / dette
@@ -62,5 +62,6 @@ Commercial / admin avec permissions `marketing_campaigns.*` — voir `Backoffice
 
 - Bounces e-mail provider : non implémentés.
 - Pas de sync templates Meta.
+- WhatsApp : **uniquement** modèles Meta approuvés (pas de message texte libre).
 - « Lu » WhatsApp et « ouvert » e-mail ne sont pas des garanties absolues.
 - Secrets WhatsApp : **uniquement en base** (pas `.env`).

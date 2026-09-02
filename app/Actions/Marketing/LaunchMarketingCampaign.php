@@ -90,7 +90,7 @@ class LaunchMarketingCampaign extends Action
                         'recipient_name' => $contact->full_name !== '—' ? $contact->full_name : null,
                         'status' => MarketingCampaignSendStatus::Queued,
                         'subject' => $campaign->template?->meta_template_name ?? $campaign->name,
-                        'body_html' => RenderMarketingMessageTemplate::renderHtml($campaign->body, $contact),
+                        'body_html' => '',
                         'open_token' => (string) Str::uuid(),
                         'queued_at' => now(),
                     ]);

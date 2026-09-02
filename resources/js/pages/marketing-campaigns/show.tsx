@@ -43,7 +43,12 @@ type CampaignData = {
     subject: string | null;
     body: string;
     list: { uuid: string; name: string } | null;
-    template: { uuid: string; name: string } | null;
+    template: {
+        uuid: string;
+        name: string;
+        meta_template_name?: string | null;
+        meta_template_language?: string | null;
+    } | null;
     launched_at_formatted: string | null;
     completed_at_formatted: string | null;
     created_at_formatted: string | null;
@@ -348,6 +353,22 @@ export default function MarketingCampaignsShow() {
                                     <dd>{campaign.template.name}</dd>
                                 </div>
                             ) : null}
+                            {campaign.channel === 'whatsapp' && campaign.template ? (
+                                <>
+                                    <div>
+                                        <dt className="text-muted-foreground">Modèle Meta</dt>
+                                        <dd className="font-mono text-xs">
+                                            {campaign.template.meta_template_name ?? '—'}
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-muted-foreground">Langue Meta</dt>
+                                        <dd className="font-mono text-xs">
+                                            {campaign.template.meta_template_language ?? '—'}
+                                        </dd>
+                                    </div>
+                                </>
+                            ) : null}
                         </dl>
                     </section>
 
@@ -369,10 +390,23 @@ export default function MarketingCampaignsShow() {
                         </dl>
                     </section>
 
-                    <section className="app-panel space-y-4 p-4 lg:col-span-2">
-                        <h2 className="font-semibold">Contenu</h2>
-                        <ContentRenderer content={campaign.body} />
-                    </section>
+                    {campaign.channel === 'email' ? (
+                        <section className="app-panel space-y-4 p-4 lg:col-span-2">
+                            <h2 className="font-semibold">Contenu</h2>
+                            <ContentRenderer content={campaign.body} />
+                        </section>
+                    ) : (
+                        <section className="app-panel space-y-2 p-4 lg:col-span-2">
+                            <h2 className="font-semibold">Contenu</h2>
+                            <p className="text-muted-foreground text-sm">
+                                Message envoyé via le modèle Meta approuvé
+                                {campaign.template?.meta_template_name
+                                    ? ` « ${campaign.template.meta_template_name} »`
+                                    : ''}
+                                . Aucun corps libre n&apos;est utilisé pour WhatsApp.
+                            </p>
+                        </section>
+                    )}
                 </div>
 
                 {liveCampaign.stats.total > 0 ? (

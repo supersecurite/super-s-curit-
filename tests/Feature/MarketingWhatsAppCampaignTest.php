@@ -3,7 +3,6 @@
 use App\Enums\MarketingCampaignChannel;
 use App\Enums\MarketingCampaignSendStatus;
 use App\Enums\MarketingCampaignStatus;
-use App\Enums\MarketingMessageTemplateChannel;
 use App\Enums\WhatsAppAccountDriver;
 use App\Jobs\SendMarketingCampaignWhatsAppJob;
 use App\Models\MarketingCampaign;
@@ -76,9 +75,7 @@ test('commercial can launch whatsapp campaign with log driver', function () {
         'email' => 'wa-contact@example.com',
     ]);
     $list->contacts()->attach($contact);
-    $template = MarketingMessageTemplate::factory()->create([
-        'channel' => MarketingMessageTemplateChannel::WhatsApp,
-        'subject' => null,
+    $template = MarketingMessageTemplate::factory()->whatsapp()->create([
         'meta_template_name' => 'hello_world',
         'meta_template_language' => 'fr',
     ]);
@@ -89,7 +86,8 @@ test('commercial can launch whatsapp campaign with log driver', function () {
         'marketing_message_template_id' => $template->id,
         'whatsapp_account_id' => $account->id,
         'created_by' => $user->id,
-        'subject' => 'hello_world',
+        'subject' => null,
+        'body' => '',
     ]);
 
     actingAs($user)
@@ -97,7 +95,8 @@ test('commercial can launch whatsapp campaign with log driver', function () {
         ->assertRedirect(route('marketing-campaigns.show', $campaign));
 
     expect($campaign->fresh()->status)->toBe(MarketingCampaignStatus::Sending)
-        ->and(MarketingCampaignSend::query()->where('marketing_campaign_id', $campaign->id)->count())->toBe(1);
+        ->and(MarketingCampaignSend::query()->where('marketing_campaign_id', $campaign->id)->count())->toBe(1)
+        ->and(MarketingCampaignSend::query()->where('marketing_campaign_id', $campaign->id)->value('body_html'))->toBe('');
 
     Queue::assertPushed(SendMarketingCampaignWhatsAppJob::class);
 
@@ -106,8 +105,45 @@ test('commercial can launch whatsapp campaign with log driver', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('campaign.channel', 'whatsapp')
+            ->where('campaign.template.meta_template_name', 'hello_world')
             ->where('sends.data.0.recipient_phone', '+224622999888')
             ->where('sends.data.0.recipient_email', 'wa-contact@example.com'));
+});
+
+test('whatsapp campaign requires meta template and ignores free body', function () {
+    $user = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $account = WhatsAppAccount::factory()->default()->create();
+    $list = MarketingList::factory()->create();
+
+    actingAs($user)
+        ->post(route('marketing-campaigns.store'), [
+            'name' => 'Campagne WA sans template',
+            'channel' => MarketingCampaignChannel::WhatsApp->value,
+            'marketing_list_id' => $list->id,
+            'whatsapp_account_id' => $account->id,
+            'body' => 'Message libre interdit',
+        ])
+        ->assertSessionHasErrors('marketing_message_template_id');
+
+    $template = MarketingMessageTemplate::factory()->whatsapp()->create();
+
+    actingAs($user)
+        ->post(route('marketing-campaigns.store'), [
+            'name' => 'Campagne WA Meta',
+            'channel' => MarketingCampaignChannel::WhatsApp->value,
+            'marketing_list_id' => $list->id,
+            'whatsapp_account_id' => $account->id,
+            'marketing_message_template_id' => $template->id,
+            'body' => 'Message libre à ignorer',
+            'subject' => 'Objet à ignorer',
+        ])
+        ->assertRedirect();
+
+    $campaign = MarketingCampaign::query()->where('name', 'Campagne WA Meta')->firstOrFail();
+
+    expect($campaign->body)->toBe('')
+        ->and($campaign->subject)->toBeNull()
+        ->and($campaign->marketing_message_template_id)->toBe($template->id);
 });
 
 test('whatsapp job stores provider message id via meta http fake', function () {
@@ -121,8 +157,9 @@ test('whatsapp job stores provider message id via meta http fake', function () {
     $campaign = MarketingCampaign::factory()->launched()->create([
         'channel' => MarketingCampaignChannel::WhatsApp,
         'whatsapp_account_id' => $account->id,
-        'marketing_message_template_id' => MarketingMessageTemplate::factory()->create([
-            'channel' => MarketingMessageTemplateChannel::WhatsApp,
+        'body' => '',
+        'subject' => null,
+        'marketing_message_template_id' => MarketingMessageTemplate::factory()->whatsapp()->create([
             'meta_template_name' => 'promo',
             'meta_template_language' => 'fr',
         ])->id,
