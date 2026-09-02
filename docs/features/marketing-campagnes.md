@@ -90,3 +90,11 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 - Secrets e-mail SMTP et WhatsApp : **uniquement en base** (pas `.env` pour ces comptes marketing).
 - Legacy `marketing_list_id` conservé pour compat lecture (premier groupe sync).
 - Quota e-mail : comptage des envois `sent_at` du jour ; le lancement refuse si l’audience dépasse le restant.
+
+## Outils locaux
+
+```bash
+php artisan marketing:purge super_admin@supersecurite.com --force
+```
+
+Purge contacts, listes, templates et campagnes. **Conserve** les comptes e-mail et WhatsApp. Disponible **uniquement en `local`**, et uniquement si l’e-mail fourni est un **super_admin**.
