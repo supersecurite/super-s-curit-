@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
     'marketing_campaign_id',
     'marketing_contact_id',
     'recipient_email',
+    'recipient_phone',
     'recipient_name',
     'status',
     'subject',
@@ -95,6 +96,7 @@ class MarketingCampaignSend extends Model
         return [
             'uuid' => $this->uuid,
             'recipient_email' => $this->recipient_email,
+            'recipient_phone' => $this->recipient_phone,
             'recipient_name' => $this->recipient_name,
             'status' => $this->status->value,
             'status_label' => $this->status->label(),

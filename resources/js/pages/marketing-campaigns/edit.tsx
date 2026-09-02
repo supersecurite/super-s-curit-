@@ -13,15 +13,26 @@ type TemplateOption = {
     id: number;
     uuid: string;
     name: string;
+    channel: string;
     subject: string | null;
     body: string;
+    meta_template_name?: string | null;
+    meta_template_language?: string | null;
+};
+
+type WhatsAppAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
 };
 
 type CampaignData = {
     uuid: string;
     name: string;
+    channel: string;
     marketing_list_id: number;
     marketing_message_template_id: number | null;
+    whatsapp_account_id: number | null;
     subject: string;
     body: string;
 };
@@ -31,11 +42,13 @@ type PageProps = {
     errors: Record<string, string>;
     lists: ListOption[];
     templates: TemplateOption[];
+    whatsappAccounts: WhatsAppAccountOption[];
     variables: string[];
 };
 
 export default function MarketingCampaignsEdit() {
-    const { campaign, errors, lists, templates, variables } = usePage<PageProps>().props;
+    const { campaign, errors, lists, templates, whatsappAccounts, variables } =
+        usePage<PageProps>().props;
 
     return (
         <>
@@ -57,6 +70,7 @@ export default function MarketingCampaignsEdit() {
                     campaign={campaign}
                     lists={lists}
                     templates={templates}
+                    whatsappAccounts={whatsappAccounts}
                     variables={variables}
                     method="put"
                 />
@@ -67,7 +81,7 @@ export default function MarketingCampaignsEdit() {
 
 MarketingCampaignsEdit.layout = {
     breadcrumbs: [
-        { title: 'Campagnes e-mail', href: index.url() },
+        { title: 'Campagnes', href: index.url() },
         { title: 'Modifier', href: edit.url('') },
     ],
 };

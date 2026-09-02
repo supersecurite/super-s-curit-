@@ -13,19 +13,37 @@ type TemplateOption = {
     id: number;
     uuid: string;
     name: string;
+    channel: string;
     subject: string | null;
     body: string;
+    meta_template_name?: string | null;
+    meta_template_language?: string | null;
+};
+
+type WhatsAppAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
 };
 
 type PageProps = {
     errors: Record<string, string>;
     lists: ListOption[];
     templates: TemplateOption[];
+    whatsappAccounts: WhatsAppAccountOption[];
+    defaultWhatsappAccountId: number | null;
     variables: string[];
 };
 
 export default function MarketingCampaignsCreate() {
-    const { errors, lists, templates, variables } = usePage<PageProps>().props;
+    const {
+        errors,
+        lists,
+        templates,
+        whatsappAccounts,
+        defaultWhatsappAccountId,
+        variables,
+    } = usePage<PageProps>().props;
 
     return (
         <>
@@ -37,7 +55,7 @@ export default function MarketingCampaignsCreate() {
                         Nouvelle campagne
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Préparez une campagne e-mail vers un groupe.
+                        Préparez une campagne e-mail ou WhatsApp vers un groupe.
                     </p>
                 </div>
 
@@ -48,6 +66,8 @@ export default function MarketingCampaignsCreate() {
                     errors={errors}
                     lists={lists}
                     templates={templates}
+                    whatsappAccounts={whatsappAccounts}
+                    defaultWhatsappAccountId={defaultWhatsappAccountId}
                     variables={variables}
                 />
             </div>
@@ -57,7 +77,7 @@ export default function MarketingCampaignsCreate() {
 
 MarketingCampaignsCreate.layout = {
     breadcrumbs: [
-        { title: 'Campagnes e-mail', href: index.url() },
+        { title: 'Campagnes', href: index.url() },
         { title: 'Nouvelle campagne', href: create.url() },
     ],
 };

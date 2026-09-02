@@ -37,6 +37,7 @@ class VisitTracking
         'marketing-lists',
         'marketing-templates',
         'marketing-campaigns',
+        'marketing-whatsapp-accounts',
         'access-logs',
         'marketing',
     ];

@@ -34,15 +34,26 @@ type TemplateOption = {
     id: number;
     uuid: string;
     name: string;
+    channel: string;
     subject: string | null;
     body: string;
+    meta_template_name?: string | null;
+    meta_template_language?: string | null;
+};
+
+type WhatsAppAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
 };
 
 type MarketingCampaignFormData = {
     uuid?: string;
     name: string;
+    channel?: string;
     marketing_list_id: number | null;
     marketing_message_template_id: number | null;
+    whatsapp_account_id?: number | null;
     subject: string;
     body: string;
 };
@@ -55,6 +66,8 @@ type MarketingCampaignFormProps = {
     campaign?: MarketingCampaignFormData;
     lists: ListOption[];
     templates: TemplateOption[];
+    whatsappAccounts?: WhatsAppAccountOption[];
+    defaultWhatsappAccountId?: number | null;
     variables: string[];
     method?: 'post' | 'put';
 };
@@ -83,13 +96,18 @@ export default function MarketingCampaignForm({
     campaign,
     lists,
     templates,
+    whatsappAccounts = [],
+    defaultWhatsappAccountId = null,
     variables,
     method = 'post',
 }: MarketingCampaignFormProps) {
     const [formData, setFormData] = useState({
         name: campaign?.name ?? '',
+        channel: campaign?.channel ?? 'email',
         marketing_list_id: campaign?.marketing_list_id ?? null,
         marketing_message_template_id: campaign?.marketing_message_template_id ?? null,
+        whatsapp_account_id:
+            campaign?.whatsapp_account_id ?? defaultWhatsappAccountId ?? null,
         subject: resolveInitialSubject(campaign),
         body: resolveInitialBody(campaign),
     });
@@ -98,14 +116,24 @@ export default function MarketingCampaignForm({
     const [audienceLoading, setAudienceLoading] = useState(false);
     const [audienceError, setAudienceError] = useState<string | null>(null);
 
+    const isWhatsApp = formData.channel === 'whatsapp';
+
+    const channelTemplates = useMemo(
+        () => templates.filter((template) => template.channel === formData.channel),
+        [formData.channel, templates],
+    );
+
     const selectedList = useMemo(
         () => lists.find((list) => list.id === formData.marketing_list_id) ?? null,
         [formData.marketing_list_id, lists],
     );
 
     const selectedTemplate = useMemo(
-        () => templates.find((template) => template.id === formData.marketing_message_template_id) ?? null,
-        [formData.marketing_message_template_id, templates],
+        () =>
+            channelTemplates.find(
+                (template) => template.id === formData.marketing_message_template_id,
+            ) ?? null,
+        [formData.marketing_message_template_id, channelTemplates],
     );
 
     const updateField = useCallback(
@@ -124,7 +152,7 @@ export default function MarketingCampaignForm({
                 return;
             }
 
-            const template = templates.find((item) => item.id === parsedId);
+            const template = channelTemplates.find((item) => item.id === parsedId);
 
             if (!template) {
                 return;
@@ -137,8 +165,22 @@ export default function MarketingCampaignForm({
                 body: template.body?.trim() || previous.body,
             }));
         },
-        [templates, updateField],
+        [channelTemplates, updateField],
     );
+
+    useEffect(() => {
+        setFormData((previous) => {
+            const stillValid = channelTemplates.some(
+                (template) => template.id === previous.marketing_message_template_id,
+            );
+
+            if (stillValid) {
+                return previous;
+            }
+
+            return { ...previous, marketing_message_template_id: null };
+        });
+    }, [channelTemplates]);
 
     useEffect(() => {
         if (selectedList === null) {
@@ -154,7 +196,11 @@ export default function MarketingCampaignForm({
         setAudienceLoading(true);
         setAudienceError(null);
 
-        fetch(listAudience.url(selectedList.uuid), {
+        const url = listAudience.url(selectedList.uuid, {
+            query: { channel: formData.channel },
+        });
+
+        fetch(url, {
             headers: { Accept: 'application/json' },
             signal: controller.signal,
         })
@@ -185,7 +231,7 @@ export default function MarketingCampaignForm({
             });
 
         return () => controller.abort();
-    }, [selectedList]);
+    }, [selectedList, formData.channel]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -196,9 +242,11 @@ export default function MarketingCampaignForm({
             {
                 _method: method === 'put' ? 'put' : undefined,
                 name: formData.name,
+                channel: formData.channel,
                 marketing_list_id: formData.marketing_list_id,
                 marketing_message_template_id: formData.marketing_message_template_id,
-                subject: formData.subject,
+                whatsapp_account_id: isWhatsApp ? formData.whatsapp_account_id : null,
+                subject: isWhatsApp ? formData.subject || 'WhatsApp' : formData.subject,
                 body: formData.body,
             },
             {
@@ -207,7 +255,7 @@ export default function MarketingCampaignForm({
         );
     };
 
-    const editorKey = `campaign-body-${campaign?.uuid ?? 'new'}-${formData.marketing_message_template_id ?? 'none'}`;
+    const editorKey = `campaign-body-${campaign?.uuid ?? 'new'}-${formData.channel}-${formData.marketing_message_template_id ?? 'none'}`;
 
     return (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:items-start">
@@ -222,6 +270,48 @@ export default function MarketingCampaignForm({
                     />
                     <InputError message={errors.name} />
                 </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="channel">Canal</Label>
+                    <Select
+                        value={formData.channel}
+                        onValueChange={(value) => updateField('channel', value)}
+                    >
+                        <SelectTrigger id="channel">
+                            <SelectValue placeholder="Canal" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="email">E-mail</SelectItem>
+                            <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.channel} />
+                </div>
+
+                {isWhatsApp ? (
+                    <div className="space-y-2">
+                        <Label htmlFor="whatsapp_account_id">Compte WhatsApp</Label>
+                        <Select
+                            value={formData.whatsapp_account_id?.toString() ?? ''}
+                            onValueChange={(value) =>
+                                updateField('whatsapp_account_id', Number(value))
+                            }
+                            required
+                        >
+                            <SelectTrigger id="whatsapp_account_id">
+                                <SelectValue placeholder="Choisir un compte" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {whatsappAccounts.map((account) => (
+                                    <SelectItem key={account.id} value={account.id.toString()}>
+                                        {account.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <InputError message={errors.whatsapp_account_id} />
+                    </div>
+                ) : null}
 
                 <div className="space-y-2">
                     <Label htmlFor="marketing_list_id">Groupe</Label>
@@ -246,17 +336,23 @@ export default function MarketingCampaignForm({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="marketing_message_template_id">Template (optionnel)</Label>
+                    <Label htmlFor="marketing_message_template_id">
+                        {isWhatsApp ? 'Template WhatsApp' : 'Template (optionnel)'}
+                    </Label>
                     <Select
                         value={formData.marketing_message_template_id?.toString() ?? 'none'}
                         onValueChange={applyTemplate}
                     >
                         <SelectTrigger id="marketing_message_template_id">
-                            <SelectValue placeholder="Sans template" />
+                            <SelectValue
+                                placeholder={isWhatsApp ? 'Choisir un template' : 'Sans template'}
+                            />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="none">Sans template</SelectItem>
-                            {templates.map((template) => (
+                            {!isWhatsApp ? (
+                                <SelectItem value="none">Sans template</SelectItem>
+                            ) : null}
+                            {channelTemplates.map((template) => (
                                 <SelectItem key={template.id} value={template.id.toString()}>
                                     {template.name}
                                 </SelectItem>
@@ -266,19 +362,26 @@ export default function MarketingCampaignForm({
                     <InputError message={errors.marketing_message_template_id} />
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="subject">Objet</Label>
-                    <TemplateSubjectInput
-                        id="subject"
-                        value={formData.subject}
-                        onChange={(value) => updateField('subject', value)}
-                        variables={variables}
-                    />
-                    <InputError message={errors.subject} />
-                </div>
+                {!isWhatsApp ? (
+                    <div className="space-y-2">
+                        <Label htmlFor="subject">Objet</Label>
+                        <TemplateSubjectInput
+                            id="subject"
+                            value={formData.subject}
+                            onChange={(value) => updateField('subject', value)}
+                            variables={variables}
+                        />
+                        <InputError message={errors.subject} />
+                    </div>
+                ) : (
+                    <p className="text-muted-foreground text-sm">
+                        L&apos;envoi utilise le modèle Meta approuvé du template. Le « lu »
+                        WhatsApp dépend des réglages de confidentialité du destinataire.
+                    </p>
+                )}
 
                 <div className="space-y-2">
-                    <Label>Message</Label>
+                    <Label>{isWhatsApp ? 'Aperçu / variables' : 'Message'}</Label>
                     <MarketingTemplateEditor
                         key={editorKey}
                         initialContent={formData.body?.trim() ? formData.body : ''}

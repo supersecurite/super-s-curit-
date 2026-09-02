@@ -23,6 +23,7 @@ use Illuminate\Support\Str;
     'status',
     'marketing_list_id',
     'marketing_message_template_id',
+    'whatsapp_account_id',
     'subject',
     'body',
     'created_by',
@@ -79,6 +80,14 @@ class MarketingCampaign extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(MarketingMessageTemplate::class, 'marketing_message_template_id');
+    }
+
+    /**
+     * @return BelongsTo<WhatsAppAccount, $this>
+     */
+    public function whatsappAccount(): BelongsTo
+    {
+        return $this->belongsTo(WhatsAppAccount::class, 'whatsapp_account_id');
     }
 
     /**
@@ -166,6 +175,7 @@ class MarketingCampaign extends Model
             'is_editable' => $this->status->isEditable(),
             'marketing_list_id' => $this->marketing_list_id,
             'marketing_message_template_id' => $this->marketing_message_template_id,
+            'whatsapp_account_id' => $this->whatsapp_account_id,
             'list' => $this->relationLoaded('list') && $this->list
                 ? [
                     'uuid' => $this->list->uuid,
@@ -176,6 +186,12 @@ class MarketingCampaign extends Model
                 ? [
                     'uuid' => $this->template->uuid,
                     'name' => $this->template->name,
+                ]
+                : null,
+            'whatsapp_account' => $this->relationLoaded('whatsappAccount') && $this->whatsappAccount
+                ? [
+                    'uuid' => $this->whatsappAccount->uuid,
+                    'name' => $this->whatsappAccount->name,
                 ]
                 : null,
             'subject' => $this->subject,

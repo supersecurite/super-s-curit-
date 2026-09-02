@@ -39,6 +39,9 @@ return Application::configure(basePath: dirname(__DIR__))
             RecordAccessLog::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/marketing/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->respond(app(MarketingErrorRenderer::class));

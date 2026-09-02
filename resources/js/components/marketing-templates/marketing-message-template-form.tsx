@@ -7,6 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     DEFAULT_MARKETING_TEMPLATE_BODY,
     DEFAULT_MARKETING_TEMPLATE_SUBJECT,
 } from '@/lib/marketing-template-variables';
@@ -17,6 +24,8 @@ type MarketingMessageTemplateFormData = {
     channel: string;
     subject?: string | null;
     body: string;
+    meta_template_name?: string | null;
+    meta_template_language?: string | null;
 };
 
 type MarketingMessageTemplateFormProps = {
@@ -57,13 +66,27 @@ export default function MarketingMessageTemplateForm({
     const isEditing = method === 'put';
     const [formData, setFormData] = useState({
         name: template?.name ?? '',
+        channel: template?.channel ?? 'email',
         subject: resolveInitialSubject(template),
         body: resolveInitialBody(template),
+        meta_template_name: template?.meta_template_name ?? '',
+        meta_template_language: template?.meta_template_language ?? 'fr',
     });
     const [processing, setProcessing] = useState(false);
 
+    const isWhatsApp = formData.channel === 'whatsapp';
+
     const updateField = useCallback(
-        (field: 'name' | 'subject' | 'body', value: string) => {
+        (
+            field:
+                | 'name'
+                | 'channel'
+                | 'subject'
+                | 'body'
+                | 'meta_template_name'
+                | 'meta_template_language',
+            value: string,
+        ) => {
             setFormData((previous) => ({ ...previous, [field]: value }));
         },
         [],
@@ -78,9 +101,13 @@ export default function MarketingMessageTemplateForm({
             {
                 _method: method === 'put' ? 'put' : undefined,
                 name: formData.name,
-                channel: 'email',
-                subject: formData.subject,
+                channel: formData.channel,
+                subject: isWhatsApp ? null : formData.subject,
                 body: formData.body,
+                meta_template_name: isWhatsApp ? formData.meta_template_name : null,
+                meta_template_language: isWhatsApp
+                    ? formData.meta_template_language
+                    : null,
             },
             {
                 preserveScroll: true,
@@ -108,21 +135,76 @@ export default function MarketingMessageTemplateForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="subject">Objet de l&apos;e-mail</Label>
-                <TemplateSubjectInput
-                    value={formData.subject}
-                    onChange={(value) => updateField('subject', value)}
-                    variables={variables}
-                    placeholder={DEFAULT_MARKETING_TEMPLATE_SUBJECT}
-                    required
-                />
-                <InputError message={errors.subject} />
+                <Label htmlFor="channel">Canal</Label>
+                <Select
+                    value={formData.channel}
+                    onValueChange={(value) => updateField('channel', value)}
+                >
+                    <SelectTrigger id="channel">
+                        <SelectValue placeholder="Canal" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="email">E-mail</SelectItem>
+                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                    </SelectContent>
+                </Select>
+                <InputError message={errors.channel} />
             </div>
 
+            {isWhatsApp ? (
+                <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                        <Label htmlFor="meta_template_name">Nom du modèle Meta</Label>
+                        <Input
+                            id="meta_template_name"
+                            value={formData.meta_template_name}
+                            onChange={(event) =>
+                                updateField('meta_template_name', event.target.value)
+                            }
+                            placeholder="hello_world"
+                            required
+                        />
+                        <p className="text-muted-foreground text-xs">
+                            Doit correspondre à un modèle approuvé dans Meta Business.
+                        </p>
+                        <InputError message={errors.meta_template_name} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="meta_template_language">Langue Meta</Label>
+                        <Input
+                            id="meta_template_language"
+                            value={formData.meta_template_language}
+                            onChange={(event) =>
+                                updateField('meta_template_language', event.target.value)
+                            }
+                            placeholder="fr"
+                            required
+                        />
+                        <InputError message={errors.meta_template_language} />
+                    </div>
+                </div>
+            ) : (
+                <div className="space-y-2">
+                    <Label htmlFor="subject">Objet de l&apos;e-mail</Label>
+                    <TemplateSubjectInput
+                        value={formData.subject}
+                        onChange={(value) => updateField('subject', value)}
+                        variables={variables}
+                        placeholder={DEFAULT_MARKETING_TEMPLATE_SUBJECT}
+                        required
+                    />
+                    <InputError message={errors.subject} />
+                </div>
+            )}
+
             <div className="space-y-2">
-                <Label>Contenu du message</Label>
+                <Label>
+                    {isWhatsApp
+                        ? 'Aperçu / corps (variables pour paramètres Meta)'
+                        : 'Contenu du message'}
+                </Label>
                 <MarketingTemplateEditor
-                    key={template?.uuid ?? 'new-template'}
+                    key={`${template?.uuid ?? 'new-template'}-${formData.channel}`}
                     initialContent={isEditing ? formData.body : ''}
                     fallbackPlainContent={isEditing ? '' : formData.body}
                     onChange={(content) => updateField('body', content)}

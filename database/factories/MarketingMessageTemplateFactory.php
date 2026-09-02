@@ -31,6 +31,8 @@ class MarketingMessageTemplateFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'channel' => MarketingMessageTemplateChannel::WhatsApp,
             'subject' => null,
+            'meta_template_name' => 'hello_world',
+            'meta_template_language' => 'fr',
         ]);
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Support\Marketing;
 
+use App\Enums\MarketingCampaignChannel;
 use App\Models\MarketingContact;
 
 /**
- * Résout le destinataire e-mail principal d'un contact pour une campagne.
+ * Résout le destinataire e-mail ou WhatsApp d'un contact pour une campagne.
  */
 final class ResolveMarketingCampaignRecipient
 {
@@ -20,8 +21,31 @@ final class ResolveMarketingCampaignRecipient
         return $emails[0]['value'] ?? null;
     }
 
+    public static function phone(MarketingContact $contact): ?string
+    {
+        if (filled($contact->phone)) {
+            return (string) $contact->phone;
+        }
+
+        $whatsapp = ResolveMarketingContactChannels::whatsapp($contact);
+
+        return $whatsapp[0]['value'] ?? null;
+    }
+
     public static function isEligible(MarketingContact $contact): bool
     {
-        return $contact->marketing_consent && filled(self::email($contact));
+        return self::isEligibleFor($contact, MarketingCampaignChannel::Email);
+    }
+
+    public static function isEligibleFor(MarketingContact $contact, MarketingCampaignChannel $channel): bool
+    {
+        if (! $contact->marketing_consent) {
+            return false;
+        }
+
+        return match ($channel) {
+            MarketingCampaignChannel::Email => filled(self::email($contact)),
+            MarketingCampaignChannel::WhatsApp => filled(self::phone($contact)),
+        };
     }
 }

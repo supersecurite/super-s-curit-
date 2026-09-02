@@ -6,12 +6,14 @@ use App\Actions\Marketing\CreateMarketingCampaign;
 use App\Actions\Marketing\DeleteMarketingCampaign;
 use App\Actions\Marketing\LaunchMarketingCampaign;
 use App\Actions\Marketing\UpdateMarketingCampaign;
+use App\Enums\MarketingCampaignChannel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMarketingCampaignRequest;
 use App\Http\Requests\UpdateMarketingCampaignRequest;
 use App\Models\MarketingCampaign;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
+use App\Models\WhatsAppAccount;
 use App\Support\IndexTableSort;
 use App\Support\Marketing\RenderMarketingMessageTemplate;
 use App\Support\Marketing\ResolveMarketingCampaignRecipient;
@@ -72,6 +74,11 @@ class MarketingCampaignController extends Controller
         return Inertia::render('marketing-campaigns/create', [
             'lists' => $this->listOptions(),
             'templates' => $this->templateOptions(),
+            'whatsappAccounts' => $this->whatsappAccountOptions(),
+            'defaultWhatsappAccountId' => WhatsAppAccount::query()
+                ->where('is_active', true)
+                ->where('is_default', true)
+                ->value('id'),
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
         ]);
     }
@@ -91,7 +98,7 @@ class MarketingCampaignController extends Controller
     {
         $this->authorize('view', $marketingCampaign);
 
-        $marketingCampaign->load(['list:id,uuid,name', 'template:id,uuid,name']);
+        $marketingCampaign->load(['list:id,uuid,name', 'template:id,uuid,name', 'whatsappAccount:id,uuid,name']);
         $marketingCampaign->loadCount('sends');
 
         $sends = $marketingCampaign->sends()
@@ -117,12 +124,13 @@ class MarketingCampaignController extends Controller
     {
         $this->authorize('update', $marketingCampaign);
 
-        $marketingCampaign->load(['list:id,uuid,name', 'template:id,uuid,name']);
+        $marketingCampaign->load(['list:id,uuid,name', 'template:id,uuid,name', 'whatsappAccount:id,uuid,name']);
 
         return Inertia::render('marketing-campaigns/edit', [
             'campaign' => $marketingCampaign->toAdminArray(),
             'lists' => $this->listOptions(),
             'templates' => $this->templateOptions(),
+            'whatsappAccounts' => $this->whatsappAccountOptions(),
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
         ]);
     }
@@ -172,9 +180,12 @@ class MarketingCampaignController extends Controller
     /**
      * Aperçu audience d'une liste pour le formulaire campagne (contacts + éligibilité envoi).
      */
-    public function listAudience(MarketingList $marketingList): JsonResponse
+    public function listAudience(Request $request, MarketingList $marketingList): JsonResponse
     {
         $this->authorize('create', MarketingCampaign::class);
+
+        $channel = MarketingCampaignChannel::tryFrom($request->string('channel')->toString())
+            ?? MarketingCampaignChannel::Email;
 
         $contacts = $marketingList->contacts()
             ->orderBy('last_name')
@@ -184,8 +195,9 @@ class MarketingCampaignController extends Controller
                 'uuid' => $contact->uuid,
                 'full_name' => $contact->full_name,
                 'email' => $contact->email,
+                'phone' => $contact->phone,
                 'marketing_consent' => $contact->marketing_consent,
-                'is_eligible' => ResolveMarketingCampaignRecipient::isEligible($contact),
+                'is_eligible' => ResolveMarketingCampaignRecipient::isEligibleFor($contact, $channel),
             ])
             ->values()
             ->all();
@@ -226,20 +238,40 @@ class MarketingCampaignController extends Controller
     }
 
     /**
-     * @return list<array{id: int, uuid: string, name: string, subject: string|null, body: string}>
+     * @return list<array{id: int, uuid: string, name: string, channel: string, subject: string|null, body: string, meta_template_name: string|null, meta_template_language: string|null}>
      */
     private function templateOptions(): array
     {
         return MarketingMessageTemplate::query()
-            ->where('channel', 'email')
             ->orderBy('name')
-            ->get(['id', 'uuid', 'name', 'subject', 'body'])
+            ->get(['id', 'uuid', 'name', 'channel', 'subject', 'body', 'meta_template_name', 'meta_template_language'])
             ->map(fn (MarketingMessageTemplate $template) => [
                 'id' => $template->id,
                 'uuid' => $template->uuid,
                 'name' => $template->name,
+                'channel' => $template->channel->value,
                 'subject' => $template->subject,
                 'body' => $template->body,
+                'meta_template_name' => $template->meta_template_name,
+                'meta_template_language' => $template->meta_template_language,
+            ])
+            ->all();
+    }
+
+    /**
+     * @return list<array{id: int, uuid: string, name: string}>
+     */
+    private function whatsappAccountOptions(): array
+    {
+        return WhatsAppAccount::query()
+            ->where('is_active', true)
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->get(['id', 'uuid', 'name'])
+            ->map(fn (WhatsAppAccount $account) => [
+                'id' => $account->id,
+                'uuid' => $account->uuid,
+                'name' => $account->name,
             ])
             ->all();
     }

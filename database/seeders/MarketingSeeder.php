@@ -7,12 +7,14 @@ use App\Enums\MarketingCampaignSendStatus;
 use App\Enums\MarketingCampaignStatus;
 use App\Enums\MarketingMessageTemplateChannel;
 use App\Enums\UserRole;
+use App\Enums\WhatsAppAccountDriver;
 use App\Models\MarketingCampaign;
 use App\Models\MarketingCampaignSend;
 use App\Models\MarketingContact;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Models\User;
+use App\Models\WhatsAppAccount;
 use App\Support\SeedLexicalContent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -27,10 +29,30 @@ class MarketingSeeder extends Seeder
             ?? User::query()->where('role', UserRole::Admin)->first()
             ?? User::query()->first();
 
+        $this->seedWhatsAppAccount();
         $contacts = $this->seedContacts();
         $lists = $this->seedLists($contacts);
         $templates = $this->seedTemplates();
         $this->seedCampaigns($author, $lists, $templates, $contacts);
+    }
+
+    private function seedWhatsAppAccount(): void
+    {
+        if (WhatsAppAccount::query()->exists()) {
+            return;
+        }
+
+        WhatsAppAccount::query()->create([
+            'name' => 'Démo locale',
+            'phone_number_id' => '000000000000000',
+            'business_account_id' => null,
+            'access_token' => 'demo-access-token',
+            'app_secret' => 'demo-app-secret',
+            'verify_token' => 'demo-verify-token',
+            'driver' => WhatsAppAccountDriver::Log,
+            'is_active' => true,
+            'is_default' => true,
+        ]);
     }
 
     /**

@@ -17,11 +17,12 @@ return new class extends Migration
                 $table->uuid()->unique();
                 $table->foreignId('marketing_campaign_id')->constrained()->cascadeOnDelete();
                 $table->foreignId('marketing_contact_id')->constrained()->cascadeOnDelete();
-                $table->string('recipient_email');
+                $table->string('recipient_email')->nullable();
+                $table->string('recipient_phone')->nullable();
                 $table->string('recipient_name')->nullable();
                 $table->string('status')->default('queued');
-                $table->string('subject');
-                $table->longText('body_html');
+                $table->string('subject')->nullable();
+                $table->longText('body_html')->nullable();
                 $table->uuid('open_token')->unique();
                 $table->timestamp('queued_at')->nullable();
                 $table->timestamp('sent_at')->nullable();

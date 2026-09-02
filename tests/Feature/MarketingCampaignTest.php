@@ -30,6 +30,7 @@ test('commercial can create email campaign', function () {
 
     $response = $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
         'name' => 'Relance printemps',
+        'channel' => 'email',
         'marketing_list_id' => $list->id,
         'subject' => 'Bonjour {{prenom}}',
         'body' => 'Message de campagne pour {{nom}}.',

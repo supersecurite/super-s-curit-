@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\MarketingMessageTemplateController as AdminMarket
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\SecurityAgentApplicationController as AdminSecurityAgentApplicationController;
 use App\Http\Controllers\Admin\SecurityTipController as AdminSecurityTipController;
+use App\Http\Controllers\Admin\WhatsAppAccountController as AdminWhatsAppAccountController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Marketing\SecurityAgentApplicationController as Marketi
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
 use App\Http\Controllers\Marketing\ServiceController;
 use App\Http\Controllers\MarketingCampaignOpenController;
+use App\Http\Controllers\MarketingWhatsAppWebhookController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UserController;
@@ -49,6 +51,14 @@ Route::get('/sitemap.xml', SitemapController::class)
 
 Route::get('c/o/{openToken}', [MarketingCampaignOpenController::class, 'track'])
     ->name('marketing-campaigns.open')
+    ->withoutMiddleware([
+        TrackVisit::class,
+        HandleInertiaRequests::class,
+        AddLinkHeadersForPreloadedAssets::class,
+    ]);
+
+Route::match(['get', 'post'], 'webhooks/marketing/whatsapp/{whatsapp_account}', MarketingWhatsAppWebhookController::class)
+    ->name('webhooks.marketing.whatsapp')
     ->withoutMiddleware([
         TrackVisit::class,
         HandleInertiaRequests::class,
@@ -130,6 +140,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('backoffice.permission:marketing_campaigns')->group(function () {
+        Route::resource('marketing-whatsapp-accounts', AdminWhatsAppAccountController::class)
+            ->parameters(['marketing-whatsapp-accounts' => 'whatsapp_account'])
+            ->except(['show']);
         Route::resource('marketing-templates', AdminMarketingMessageTemplateController::class);
         Route::post('marketing-campaigns/{marketing_campaign}/launch', [AdminMarketingCampaignController::class, 'launch'])
             ->name('marketing-campaigns.launch');

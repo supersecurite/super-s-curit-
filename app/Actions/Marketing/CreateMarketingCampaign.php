@@ -18,9 +18,15 @@ class CreateMarketingCampaign extends Action
      */
     public function handle(array $data, User $creator): MarketingCampaign
     {
+        $channel = MarketingCampaignChannel::from($data['channel'] ?? MarketingCampaignChannel::Email->value);
+
+        if ($channel === MarketingCampaignChannel::Email) {
+            $data['whatsapp_account_id'] = null;
+        }
+
         return MarketingCampaign::query()->create([
             ...$data,
-            'channel' => MarketingCampaignChannel::Email,
+            'channel' => $channel,
             'status' => MarketingCampaignStatus::Draft,
             'created_by' => $creator->id,
         ]);

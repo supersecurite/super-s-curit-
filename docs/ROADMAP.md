@@ -37,20 +37,21 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
 | **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` · seeder `MarketingSeeder` |
 | **Journal d'accès backoffice** | Support | ✅ Complet | `docs/features/access-logs.md` — monitoring sans Nightwatch |
-| **Lot 2 — Campagnes e-mail** | Marketing | ⚠️ En cours | Modèles ✅ · campagnes/envois ✅ · temps réel Reverb ✅ · bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
-| **Lot 3 — Campagnes WhatsApp** | Marketing | 🔲 À construire | CDC §8 — `docs/features/marketing-campagnes.md` |
+| **Lot 2 — Campagnes e-mail** | Marketing | ✅ Complet | Modèles · campagnes/envois · Reverb — bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
+| **Lot 3 — Campagnes WhatsApp** | Marketing | ✅ Complet | Comptes Meta multi-config DB · templates · envois · webhook — `docs/features/marketing-campagnes.md` |
 
 Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
 
 ## 3. Prochaine livraison
 
-**Lot 2 — Campagnes e-mail** (deuxième lot du [cahier des charges client](CAHIER%20DES%20CHARGES.md)) :
+**Lot 2 — dette** : bounces e-mail (webhook provider).
 
-- ✅ Modèles de messages e-mail (variables dynamiques) — `/marketing-templates`
-- ✅ Campagnes e-mail (CRUD brouillon, lancement queue, statuts, pixel ouverture) — `/marketing-campaigns`
-- ✅ Suivi temps réel fiche campagne (Laravel Reverb + Echo)
-- Bounces e-mail (webhook provider)
-- Permissions `marketing_campaigns.*` · UI backoffice · tests Feature
+**Lot 3 — Campagnes WhatsApp** — ✅ livré :
+
+- Comptes WhatsApp multi-config en base (`/marketing-whatsapp-accounts`)
+- Templates Meta + campagnes canal WhatsApp
+- Jobs queue + webhook statuts signé
+- Tests Feature + seeder compte « Démo locale » (driver log)
 
 Dette transverse à surveiller :
 
@@ -92,15 +93,15 @@ Fiche : `docs/features/marketing-clients.md`
 
 Fiche : `docs/features/marketing-campagnes.md`
 
-### 4.3 Lot 3 — Campagnes WhatsApp
+### 4.3 Lot 3 — Campagnes WhatsApp — ✅ livré
 
 | Périmètre CDC | Livrable technique |
 |---|---|
-| Intégration API Meta WhatsApp Cloud | Config `.env`, service envoi |
-| Modèles Meta approuvés + variables | Liaison template Meta |
-| Envois individuels / groupés | Jobs queue |
-| Statuts : envoyé, livré, lu, échec | Webhook Meta signé |
-| Tableau de bord (partie WhatsApp) | Compteurs + détail destinataires |
+| Intégration API Meta WhatsApp Cloud | `WhatsAppCloudApiService` + comptes DB |
+| Modèles Meta approuvés + variables | Templates canal WhatsApp + `meta_template_*` |
+| Envois individuels / groupés | `SendMarketingCampaignWhatsAppJob` |
+| Statuts : envoyé, livré, lu, échec | Webhook `/webhooks/marketing/whatsapp/{uuid}` |
+| Tableau de bord (partie WhatsApp) | Fiche campagne + compteurs existants |
 
 Fiche : `docs/features/marketing-campagnes.md` · [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md)
 
@@ -137,4 +138,4 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 | 2026-08-31 | Phase 0 : ROADMAP, features, ADR, rules Cursor, AGENTS hub |
 | 2026-08-31 | Prérequis marketing : rôle `commercial`, permissions `marketing_*`, seeder, tests |
 | 2026-09-01 | Cahier des charges client — 3 lots, 1,5 M GNF, paiement à livraison complète |
-| 2026-09-01 | Roadmap alignée sur CDC client (Lots 1–3) |
+| 2026-09-02 | Lot 3 WhatsApp : comptes multi-config DB, envois Meta, webhook, tests |

@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
     'channel',
     'subject',
     'body',
+    'meta_template_name',
+    'meta_template_language',
 ])]
 class MarketingMessageTemplate extends Model
 {
@@ -82,6 +84,8 @@ class MarketingMessageTemplate extends Model
             },
             'subject' => $this->subject,
             'body' => $this->body,
+            'meta_template_name' => $this->meta_template_name,
+            'meta_template_language' => $this->meta_template_language,
             'created_at' => $this->created_at?->toIso8601String(),
             'created_at_formatted' => $this->created_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
             'updated_at' => $this->updated_at?->toIso8601String(),
