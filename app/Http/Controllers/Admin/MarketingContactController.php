@@ -68,7 +68,19 @@ class MarketingContactController extends Controller
     {
         $this->authorize('create', MarketingContact::class);
 
-        return Inertia::render('marketing-clients/create');
+        $lists = MarketingList::query()
+            ->orderBy('name')
+            ->get(['id', 'uuid', 'name'])
+            ->map(fn (MarketingList $list) => [
+                'uuid' => $list->uuid,
+                'name' => $list->name,
+            ])
+            ->values()
+            ->all();
+
+        return Inertia::render('marketing-clients/create', [
+            'lists' => $lists,
+        ]);
     }
 
     public function store(StoreMarketingContactRequest $request, CreateMarketingContact $action): RedirectResponse

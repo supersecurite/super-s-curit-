@@ -108,6 +108,10 @@ function itemIsActive(
         current?: string,
     ) => boolean,
 ): boolean {
+    if (item.isSectionLabel) {
+        return false;
+    }
+
     if (item.href && isCurrentOrParentUrl(item.href)) {
         return true;
     }
@@ -116,6 +120,32 @@ function itemIsActive(
         item.children?.some((child) =>
             itemIsActive(child, isCurrentOrParentUrl),
         ) ?? false
+    );
+}
+
+function navChildKey(child: NavItem): string {
+    if (child.isSectionLabel) {
+        return `label-${child.title}`;
+    }
+
+    if (typeof child.href === 'string') {
+        return child.href;
+    }
+
+    if (child.href && typeof child.href === 'object' && 'url' in child.href) {
+        return String(child.href.url);
+    }
+
+    return child.title;
+}
+
+function NestedNavSectionLabel({ title }: { title: string }) {
+    return (
+        <SidebarMenuSubItem>
+            <span className="text-black px-2 pt-2.5 pb-1 text-[10px] font-bold tracking-wide uppercase">
+                {title}
+            </span>
+        </SidebarMenuSubItem>
     );
 }
 
@@ -129,9 +159,20 @@ function CollapsedNavDropdownItems({
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return items.map((child) => {
+        if (child.isSectionLabel) {
+            return (
+                <DropdownMenuLabel
+                    key={navChildKey(child)}
+                    className="text-muted-foreground text-[10px] font-medium tracking-wide uppercase"
+                >
+                    {child.title}
+                </DropdownMenuLabel>
+            );
+        }
+
         if (child.children?.length) {
             return (
-                <DropdownMenuSub key={child.title}>
+                <DropdownMenuSub key={navChildKey(child)}>
                     <DropdownMenuSubTrigger>{child.title}</DropdownMenuSubTrigger>
                     <DropdownMenuSubContent>
                         <CollapsedNavDropdownItems
@@ -150,7 +191,7 @@ function CollapsedNavDropdownItems({
         const active = isCurrentOrParentUrl(child.href);
 
         return (
-            <DropdownMenuItem key={child.title} asChild>
+            <DropdownMenuItem key={navChildKey(child)} asChild>
                 <Link
                     href={child.href}
                     prefetch
@@ -220,6 +261,10 @@ function NestedNavChild({
         setOpen(childActive);
     }, [childActive, page.url]);
 
+    if (item.isSectionLabel) {
+        return <NestedNavSectionLabel title={item.title} />;
+    }
+
     if (item.children?.length) {
         if (!hydrated) {
             return (
@@ -240,7 +285,7 @@ function NestedNavChild({
                         <SidebarMenuSub className="mr-0 ml-3.5 border-l border-sidebar-border px-0 py-0.5 translate-x-px">
                             {item.children.map((child) => (
                                 <NestedNavChild
-                                    key={child.title}
+                                    key={navChildKey(child)}
                                     item={child}
                                     onNavigate={onNavigate}
                                 />
@@ -271,7 +316,7 @@ function NestedNavChild({
                         <SidebarMenuSub className="mr-0 ml-3.5 border-l border-sidebar-border px-0 py-0.5 translate-x-px">
                             {item.children.map((child) => (
                                 <NestedNavChild
-                                    key={child.title}
+                                    key={navChildKey(child)}
                                     item={child}
                                     onNavigate={onNavigate}
                                 />
@@ -377,7 +422,7 @@ function NavSubmenuItem({
                     <SidebarMenuSub>
                         {item.children?.map((child) => (
                             <NestedNavChild
-                                key={child.title}
+                                key={navChildKey(child)}
                                 item={child}
                                 onNavigate={onNavigate}
                             />
@@ -410,7 +455,7 @@ function NavSubmenuItem({
                     <SidebarMenuSub>
                         {item.children?.map((child) => (
                             <NestedNavChild
-                                key={child.title}
+                                key={navChildKey(child)}
                                 item={child}
                                 onNavigate={onNavigate}
                             />

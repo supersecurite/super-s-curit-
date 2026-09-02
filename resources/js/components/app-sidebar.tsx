@@ -2,13 +2,11 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
     Contact,
-    FileText,
     Globe,
     Handshake,
     History,
     Images,
     LayoutGrid,
-    List,
     Newspaper,
     Shield,
     UserPlus,
@@ -239,6 +237,7 @@ function buildNavGroups(
     }
 
     const marketingChildren: NavItem[] = [];
+    
 
     if (hasFeatureAccess(permissions, 'marketing_clients')) {
         marketingChildren.push({
@@ -253,15 +252,31 @@ function buildNavGroups(
 
     if (hasFeatureAccess(permissions, 'marketing_campaigns')) {
         marketingChildren.push({
+            title: 'E-mail',
+            isSectionLabel: true,
+        });
+        marketingChildren.push({
             title: 'Templates',
-            href: marketingTemplatesIndex.url(),
+            href: marketingTemplatesIndex.url({ query: { channel: 'email' } }),
         });
         marketingChildren.push({
             title: 'Campagnes',
-            href: marketingCampaignsIndex.url(),
+            href: marketingCampaignsIndex.url({ query: { channel: 'email' } }),
         });
         marketingChildren.push({
-            title: 'Comptes WhatsApp',
+            title: 'WhatsApp',
+            isSectionLabel: true,
+        });
+        marketingChildren.push({
+            title: 'Templates',
+            href: marketingTemplatesIndex.url({ query: { channel: 'whatsapp' } }),
+        });
+        marketingChildren.push({
+            title: 'Campagnes',
+            href: marketingCampaignsIndex.url({ query: { channel: 'whatsapp' } }),
+        });
+        marketingChildren.push({
+            title: 'Comptes',
             href: marketingWhatsAppAccountsIndex.url(),
         });
     }
@@ -277,8 +292,8 @@ function buildNavGroups(
                           children: marketingChildren,
                       }
                     : {
-                          ...marketingChildren[0],
-                          icon: marketingChildren[0].title === 'Templates' ? FileText : Contact,
+                          ...marketingChildren.find((item) => !item.isSectionLabel)!,
+                          icon: Contact,
                       },
             ],
         });

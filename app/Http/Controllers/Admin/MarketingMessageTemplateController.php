@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Marketing\CreateMarketingMessageTemplate;
 use App\Actions\Marketing\DeleteMarketingMessageTemplate;
 use App\Actions\Marketing\UpdateMarketingMessageTemplate;
+use App\Enums\MarketingCampaignChannel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMarketingMessageTemplateRequest;
 use App\Http\Requests\UpdateMarketingMessageTemplateRequest;
@@ -29,7 +30,11 @@ class MarketingMessageTemplateController extends Controller
             'desc',
         );
 
+        $channel = MarketingCampaignChannel::tryFrom($request->string('channel')->toString())
+            ?? MarketingCampaignChannel::Email;
+
         $query = MarketingMessageTemplate::query()
+            ->where('channel', $channel)
             ->search($request->string('search')->toString() ?: null);
 
         match ($sort['column']) {
@@ -48,8 +53,10 @@ class MarketingMessageTemplateController extends Controller
 
         return Inertia::render('marketing-templates/index', [
             'templates' => $templates,
+            'channel' => $channel->value,
             'filters' => [
                 ...$request->only(['search']),
+                'channel' => $channel->value,
                 ...IndexTableSort::filters($request),
             ],
             'canCreate' => $request->user()?->can('create', MarketingMessageTemplate::class) ?? false,
@@ -61,7 +68,11 @@ class MarketingMessageTemplateController extends Controller
     {
         $this->authorize('create', MarketingMessageTemplate::class);
 
+        $channel = MarketingCampaignChannel::tryFrom($request->string('channel')->toString())
+            ?? MarketingCampaignChannel::Email;
+
         return Inertia::render('marketing-templates/create', [
+            'lockedChannel' => $channel->value,
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
         ]);
     }

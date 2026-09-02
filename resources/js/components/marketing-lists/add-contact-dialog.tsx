@@ -12,7 +12,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { SearchableSelect } from '@/components/ui/searchable-select';
+import { SearchableMultiSelect } from '@/components/ui/searchable-multi-select';
 import { attach } from '@/routes/marketing-lists/contacts';
 
 type ContactOption = {
@@ -31,7 +31,7 @@ export default function AddContactDialog({
     availableContacts,
 }: AddContactDialogProps) {
     const [open, setOpen] = useState(false);
-    const [selectedContact, setSelectedContact] = useState('');
+    const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
 
     const options = useMemo(
         () =>
@@ -50,21 +50,22 @@ export default function AddContactDialog({
             onOpenChange={(next) => {
                 setOpen(next);
                 if (!next) {
-                    setSelectedContact('');
+                    setSelectedContacts([]);
                 }
             }}
         >
             <DialogTrigger asChild>
                 <Button type="button">
                     <Plus className="size-4" aria-hidden />
-                    Ajouter un contact
+                    Ajouter des contacts
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Ajouter un contact</DialogTitle>
+                    <DialogTitle>Ajouter des contacts</DialogTitle>
                     <DialogDescription>
-                        Recherchez puis sélectionnez un contact à inclure dans ce groupe.
+                        Recherchez puis sélectionnez un ou plusieurs contacts à inclure dans
+                        ce groupe.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -74,24 +75,23 @@ export default function AddContactDialog({
                     resetOnSuccess
                     onSuccess={() => {
                         setOpen(false);
-                        setSelectedContact('');
+                        setSelectedContacts([]);
                     }}
                     className="space-y-4"
                 >
                     {({ processing }) => (
                         <>
                             <div className="space-y-2">
-                                <Label htmlFor="contact_uuid">Contact</Label>
-                                <SearchableSelect
-                                    id="contact_uuid"
-                                    name="contact_uuid"
+                                <Label htmlFor="contact_uuids">Contacts</Label>
+                                <SearchableMultiSelect
+                                    id="contact_uuids"
+                                    name="contact_uuids"
                                     options={options}
-                                    value={selectedContact}
-                                    onChange={setSelectedContact}
-                                    placeholder="Sélectionner un contact…"
-                                    searchPlaceholder="Rechercher par nom ou e-mail..."
+                                    value={selectedContacts}
+                                    onChange={setSelectedContacts}
+                                    placeholder="Sélectionner des contacts…"
+                                    searchPlaceholder="Rechercher par nom ou e-mail…"
                                     emptyMessage="Aucun contact disponible"
-                                    required
                                 />
                             </div>
 
@@ -108,10 +108,12 @@ export default function AddContactDialog({
                                     disabled={
                                         processing ||
                                         availableContacts.length === 0 ||
-                                        selectedContact === ''
+                                        selectedContacts.length === 0
                                     }
                                 >
-                                    Ajouter
+                                    {selectedContacts.length > 1
+                                        ? `Ajouter (${selectedContacts.length})`
+                                        : 'Ajouter'}
                                 </Button>
                             </DialogFooter>
                         </>

@@ -146,6 +146,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('marketing-templates', AdminMarketingMessageTemplateController::class);
         Route::post('marketing-campaigns/{marketing_campaign}/launch', [AdminMarketingCampaignController::class, 'launch'])
             ->name('marketing-campaigns.launch');
+        Route::get('marketing-campaigns/audience-preview', [AdminMarketingCampaignController::class, 'audiencePreview'])
+            ->name('marketing-campaigns.audience-preview');
         Route::get('marketing-campaigns/list-audience/{marketing_list}', [AdminMarketingCampaignController::class, 'listAudience'])
             ->name('marketing-campaigns.list-audience');
         Route::resource('marketing-campaigns', AdminMarketingCampaignController::class);

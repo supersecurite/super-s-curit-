@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMarketingCampaignRequest;
 use App\Http\Requests\UpdateMarketingCampaignRequest;
 use App\Models\MarketingCampaign;
+use App\Models\MarketingContact;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Models\WhatsAppAccount;
@@ -20,6 +21,7 @@ use App\Support\Marketing\ResolveMarketingCampaignRecipient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,6 +31,8 @@ class MarketingCampaignController extends Controller
     {
         $this->authorize('viewAny', MarketingCampaign::class);
 
+        $channel = $this->resolveChannelFilter($request) ?? MarketingCampaignChannel::Email;
+
         $sort = IndexTableSort::resolve(
             $request,
             ['name', 'status', 'subject', 'created_at', 'launched_at'],
@@ -37,8 +41,13 @@ class MarketingCampaignController extends Controller
         );
 
         $query = MarketingCampaign::query()
-            ->with(['list:id,uuid,name', 'template:id,uuid,name'])
+            ->with([
+                'lists:id,uuid,name',
+                'audienceContacts:id,uuid,first_name,last_name',
+                'template:id,uuid,name',
+            ])
             ->withCount('sends')
+            ->where('channel', $channel)
             ->search($request->string('search')->toString() ?: null);
 
         match ($sort['column']) {
@@ -59,8 +68,10 @@ class MarketingCampaignController extends Controller
 
         return Inertia::render('marketing-campaigns/index', [
             'campaigns' => $campaigns,
+            'channel' => $channel->value,
             'filters' => [
                 ...$request->only(['search']),
+                'channel' => $channel->value,
                 ...IndexTableSort::filters($request),
             ],
             'canCreate' => $request->user()?->can('create', MarketingCampaign::class) ?? false,
@@ -71,14 +82,23 @@ class MarketingCampaignController extends Controller
     {
         $this->authorize('create', MarketingCampaign::class);
 
+        $channel = MarketingCampaignChannel::tryFrom($request->string('channel')->toString())
+            ?? MarketingCampaignChannel::Email;
+
         return Inertia::render('marketing-campaigns/create', [
+            'lockedChannel' => $channel->value,
             'lists' => $this->listOptions(),
-            'templates' => $this->templateOptions(),
-            'whatsappAccounts' => $this->whatsappAccountOptions(),
-            'defaultWhatsappAccountId' => WhatsAppAccount::query()
-                ->where('is_active', true)
-                ->where('is_default', true)
-                ->value('id'),
+            'contacts' => $this->contactOptions(),
+            'templates' => $this->templateOptions($channel),
+            'whatsappAccounts' => $channel === MarketingCampaignChannel::WhatsApp
+                ? $this->whatsappAccountOptions()
+                : [],
+            'defaultWhatsappAccountId' => $channel === MarketingCampaignChannel::WhatsApp
+                ? WhatsAppAccount::query()
+                    ->where('is_active', true)
+                    ->where('is_default', true)
+                    ->value('id')
+                : null,
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
         ]);
     }
@@ -99,7 +119,8 @@ class MarketingCampaignController extends Controller
         $this->authorize('view', $marketingCampaign);
 
         $marketingCampaign->load([
-            'list:id,uuid,name',
+            'lists:id,uuid,name',
+            'audienceContacts:id,uuid,first_name,last_name,email,phone',
             'template:id,uuid,name,meta_template_name,meta_template_language',
             'whatsappAccount:id,uuid,name',
         ]);
@@ -129,16 +150,21 @@ class MarketingCampaignController extends Controller
         $this->authorize('update', $marketingCampaign);
 
         $marketingCampaign->load([
-            'list:id,uuid,name',
+            'lists:id,uuid,name',
+            'audienceContacts:id,uuid,first_name,last_name,email,phone',
             'template:id,uuid,name,meta_template_name,meta_template_language',
             'whatsappAccount:id,uuid,name',
         ]);
 
         return Inertia::render('marketing-campaigns/edit', [
             'campaign' => $marketingCampaign->toAdminArray(),
+            'lockedChannel' => $marketingCampaign->channel->value,
             'lists' => $this->listOptions(),
-            'templates' => $this->templateOptions(),
-            'whatsappAccounts' => $this->whatsappAccountOptions(),
+            'contacts' => $this->contactOptions(),
+            'templates' => $this->templateOptions($marketingCampaign->channel),
+            'whatsappAccounts' => $marketingCampaign->channel === MarketingCampaignChannel::WhatsApp
+                ? $this->whatsappAccountOptions()
+                : [],
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
         ]);
     }
@@ -161,11 +187,12 @@ class MarketingCampaignController extends Controller
     ): RedirectResponse {
         $this->authorize('delete', $marketingCampaign);
 
+        $channel = $marketingCampaign->channel->value;
         $action->handle($marketingCampaign);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Campagne supprimée avec succès.']);
 
-        return to_route('marketing-campaigns.index');
+        return to_route('marketing-campaigns.index', ['channel' => $channel]);
     }
 
     public function launch(
@@ -186,7 +213,65 @@ class MarketingCampaignController extends Controller
     }
 
     /**
-     * Aperçu audience d'une liste pour le formulaire campagne (contacts + éligibilité envoi).
+     * Aperçu audience (groupes + contacts) pour le formulaire campagne.
+     */
+    public function audiencePreview(Request $request): JsonResponse
+    {
+        $this->authorize('create', MarketingCampaign::class);
+
+        $validated = $request->validate([
+            'channel' => ['required', 'string', Rule::enum(MarketingCampaignChannel::class)],
+            'list_uuids' => ['nullable', 'array'],
+            'list_uuids.*' => ['uuid'],
+            'contact_uuids' => ['nullable', 'array'],
+            'contact_uuids.*' => ['uuid'],
+        ]);
+
+        $channel = MarketingCampaignChannel::from($validated['channel']);
+        $listUuids = $validated['list_uuids'] ?? [];
+        $contactUuids = $validated['contact_uuids'] ?? [];
+
+        $fromLists = MarketingList::query()
+            ->whereIn('uuid', $listUuids)
+            ->with('contacts')
+            ->get()
+            ->flatMap(fn (MarketingList $list) => $list->contacts);
+
+        $direct = MarketingContact::query()
+            ->whereIn('uuid', $contactUuids)
+            ->get();
+
+        $contacts = $fromLists
+            ->concat($direct)
+            ->unique('id')
+            ->sortBy([['last_name', 'asc'], ['first_name', 'asc']])
+            ->values()
+            ->map(fn (MarketingContact $contact) => [
+                'uuid' => $contact->uuid,
+                'full_name' => $contact->full_name,
+                'email' => $contact->email,
+                'phone' => $contact->phone,
+                'marketing_consent' => $contact->marketing_consent,
+                'is_eligible' => ResolveMarketingCampaignRecipient::isEligibleFor($contact, $channel),
+            ])
+            ->all();
+
+        $eligibleCount = collect($contacts)->where('is_eligible', true)->count();
+
+        return response()->json([
+            'contacts' => $contacts,
+            'stats' => [
+                'total' => count($contacts),
+                'eligible' => $eligibleCount,
+                'ineligible' => count($contacts) - $eligibleCount,
+                'lists_count' => count($listUuids),
+                'direct_contacts_count' => count($contactUuids),
+            ],
+        ]);
+    }
+
+    /**
+     * @deprecated Conservé pour compat — préférer audiencePreview.
      */
     public function listAudience(Request $request, MarketingList $marketingList): JsonResponse
     {
@@ -227,6 +312,17 @@ class MarketingCampaignController extends Controller
         ]);
     }
 
+    private function resolveChannelFilter(Request $request): ?MarketingCampaignChannel
+    {
+        $value = $request->string('channel')->toString();
+
+        if ($value === '' || $value === 'all') {
+            return null;
+        }
+
+        return MarketingCampaignChannel::tryFrom($value);
+    }
+
     /**
      * @return list<array{id: int, uuid: string, name: string, contacts_count: int}>
      */
@@ -246,12 +342,36 @@ class MarketingCampaignController extends Controller
     }
 
     /**
+     * @return list<array{uuid: string, full_name: string, email: string|null, phone: string|null}>
+     */
+    private function contactOptions(): array
+    {
+        return MarketingContact::query()
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->limit(500)
+            ->get(['id', 'uuid', 'first_name', 'last_name', 'email', 'phone'])
+            ->map(fn (MarketingContact $contact) => [
+                'uuid' => $contact->uuid,
+                'full_name' => $contact->full_name,
+                'email' => $contact->email,
+                'phone' => $contact->phone,
+            ])
+            ->all();
+    }
+
+    /**
      * @return list<array{id: int, uuid: string, name: string, channel: string, subject: string|null, body: string, meta_template_name: string|null, meta_template_language: string|null}>
      */
-    private function templateOptions(): array
+    private function templateOptions(?MarketingCampaignChannel $channel = null): array
     {
-        return MarketingMessageTemplate::query()
-            ->orderBy('name')
+        $query = MarketingMessageTemplate::query()->orderBy('name');
+
+        if ($channel !== null) {
+            $query->where('channel', $channel);
+        }
+
+        return $query
             ->get(['id', 'uuid', 'name', 'channel', 'subject', 'body', 'meta_template_name', 'meta_template_language'])
             ->map(fn (MarketingMessageTemplate $template) => [
                 'id' => $template->id,

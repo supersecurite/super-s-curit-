@@ -12,6 +12,7 @@ use App\Models\MarketingCampaign;
 use App\Models\MarketingCampaignSend;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use App\Support\Marketing\RenderMarketingMessageTemplate;
+use App\Support\Marketing\ResolveMarketingCampaignAudience;
 use App\Support\Marketing\ResolveMarketingCampaignRecipient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -50,20 +51,15 @@ class LaunchMarketingCampaign extends Action
             }
         }
 
-        $contacts = $campaign->list()
-            ->firstOrFail()
-            ->contacts()
-            ->where('marketing_consent', true)
-            ->get()
-            ->filter(fn ($contact) => ResolveMarketingCampaignRecipient::isEligibleFor($contact, $channel));
+        $contacts = ResolveMarketingCampaignAudience::eligibleContacts($campaign, $channel);
 
         if ($contacts->isEmpty()) {
             $hint = $channel === MarketingCampaignChannel::WhatsApp
-                ? 'Aucun contact éligible (consentement + téléphone) dans ce groupe.'
-                : 'Aucun contact éligible (consentement + e-mail) dans ce groupe.';
+                ? 'Aucun contact éligible (consentement + téléphone) dans l\'audience.'
+                : 'Aucun contact éligible (consentement + e-mail) dans l\'audience.';
 
             throw ValidationException::withMessages([
-                'marketing_list_id' => $hint,
+                'list_uuids' => $hint,
             ]);
         }
 

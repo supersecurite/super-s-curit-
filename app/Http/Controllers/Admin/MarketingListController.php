@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Marketing\AttachContactToMarketingList;
+use App\Actions\Marketing\AttachContactsToMarketingList;
 use App\Actions\Marketing\CreateMarketingList;
 use App\Actions\Marketing\DeleteMarketingList;
 use App\Actions\Marketing\DetachContactFromMarketingList;
@@ -139,24 +139,32 @@ class MarketingListController extends Controller
     public function attachContact(
         Request $request,
         MarketingList $marketingList,
-        AttachContactToMarketingList $action,
+        AttachContactsToMarketingList $action,
     ): RedirectResponse {
         $this->authorize('update', $marketingList);
 
         $validated = $request->validate([
-            'contact_uuid' => ['required', 'uuid', 'exists:marketing_contacts,uuid'],
+            'contact_uuids' => ['required', 'array', 'min:1'],
+            'contact_uuids.*' => ['uuid', 'exists:marketing_contacts,uuid'],
         ], [
-            'contact_uuid.required' => 'Veuillez sélectionner un contact.',
-            'contact_uuid.exists' => 'Contact introuvable.',
+            'contact_uuids.required' => 'Veuillez sélectionner au moins un contact.',
+            'contact_uuids.min' => 'Veuillez sélectionner au moins un contact.',
+            'contact_uuids.*.exists' => 'Un des contacts sélectionnés est introuvable.',
         ]);
 
-        $contact = MarketingContact::query()
-            ->where('uuid', $validated['contact_uuid'])
-            ->firstOrFail();
+        $contactIds = MarketingContact::query()
+            ->whereIn('uuid', $validated['contact_uuids'])
+            ->pluck('id')
+            ->all();
 
-        $action->handle($marketingList, $contact);
+        $count = $action->handle($marketingList, $contactIds);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact ajouté au groupe.']);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $count === 1
+                ? 'Contact ajouté au groupe.'
+                : "{$count} contacts ajoutés au groupe.",
+        ]);
 
         return to_route('marketing-lists.show', $marketingList);
     }

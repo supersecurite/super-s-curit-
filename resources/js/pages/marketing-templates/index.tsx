@@ -44,15 +44,21 @@ type PaginatedTemplates = {
 
 type PageProps = {
     templates: PaginatedTemplates;
-    filters: TableSortState & { search?: string };
+    channel: 'email' | 'whatsapp';
+    filters: TableSortState & { search?: string; channel?: string };
     canCreate: boolean;
 };
 
 export default function MarketingTemplatesIndex() {
-    const { templates, filters, canCreate } = usePage<PageProps>().props;
+    const { templates, channel, filters, canCreate } = usePage<PageProps>().props;
+    const activeChannel = channel === 'whatsapp' ? 'whatsapp' : 'email';
+    const isWhatsApp = activeChannel === 'whatsapp';
+    const title = isWhatsApp ? 'Templates WhatsApp' : 'Templates e-mail';
 
-    const applyFilters = (updates: Partial<TableSortState & { search?: string; page?: number }>) => {
-        const next = { ...filters, ...updates };
+    const applyFilters = (
+        updates: Partial<TableSortState & { search?: string; channel?: string; page?: number }>,
+    ) => {
+        const next = { ...filters, channel: activeChannel, ...updates };
         Object.keys(next).forEach((key) => {
             if (next[key as keyof typeof next] === undefined || next[key as keyof typeof next] === '') {
                 delete next[key as keyof typeof next];
@@ -68,7 +74,7 @@ export default function MarketingTemplatesIndex() {
     });
 
     const buildPageUrl = (page: number) =>
-        index.url({ query: withIndexTableQuery(filters, page) });
+        index.url({ query: withIndexTableQuery({ ...filters, channel: activeChannel }, page) });
 
     const columns = useMemo((): ResponsiveColumn<TemplateRow>[] => {
         const renderActions = (template: TemplateRow) => (
@@ -126,7 +132,7 @@ export default function MarketingTemplatesIndex() {
             },
             {
                 id: 'subject',
-                header: 'Objet',
+                header: isWhatsApp ? 'Modèle Meta' : 'Objet',
                 sortKey: 'subject',
                 sortable: true,
                 mobileRole: 'subtitle',
@@ -150,28 +156,30 @@ export default function MarketingTemplatesIndex() {
                 cell: renderActions,
             },
         ];
-    }, []);
+    }, [isWhatsApp]);
 
     return (
         <>
-            <Head title="Templates" />
+            <Head title={title} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <FileText className="size-6" aria-hidden />
-                            Templates
+                            {title}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Templates réutilisables pour les campagnes e-mail (Lot 2).
+                            {isWhatsApp
+                                ? 'Templates WhatsApp uniquement — modèles Meta approuvés.'
+                                : 'Templates e-mail uniquement — variables dynamiques pour les campagnes.'}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
-                            <Link href={create.url()}>
+                            <Link href={create.url({ query: { channel: activeChannel } })}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouveau template
+                                Nouveau template {isWhatsApp ? 'WhatsApp' : 'e-mail'}
                             </Link>
                         </Button>
                     ) : null}
@@ -202,7 +210,7 @@ export default function MarketingTemplatesIndex() {
                         rows={templates.data}
                         columns={columns}
                         getRowKey={(template) => template.uuid}
-                        emptyMessage="Aucun template."
+                        emptyMessage={`Aucun template ${isWhatsApp ? 'WhatsApp' : 'e-mail'}.`}
                         minWidth="640px"
                         sort={filters}
                         onSort={handleSort}
@@ -220,5 +228,5 @@ export default function MarketingTemplatesIndex() {
 }
 
 MarketingTemplatesIndex.layout = {
-    breadcrumbs: [{ title: 'Templates', href: index.url() }],
+    breadcrumbs: [{ title: 'Templates', href: index.url({ query: { channel: 'email' } }) }],
 };

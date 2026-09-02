@@ -11,8 +11,12 @@ use App\Models\MarketingList;
  */
 class AttachContactToMarketingList extends Action
 {
+    public function __construct(
+        private AttachContactsToMarketingList $attachContacts,
+    ) {}
+
     public function handle(MarketingList $list, MarketingContact $contact): void
     {
-        $list->contacts()->syncWithoutDetaching([$contact->id]);
+        $this->attachContacts->handle($list, [$contact->id]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\MarketingContact;
+use App\Models\MarketingList;
 use App\Support\InternationalPhoneNumber;
 use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Foundation\Http\FormRequest;
@@ -70,6 +71,8 @@ class StoreMarketingContactRequest extends FormRequest
             'notes' => ['nullable', 'string', 'max:5000'],
             'company_name' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:5000'],
+            'list_uuids' => ['nullable', 'array'],
+            'list_uuids.*' => ['uuid', Rule::exists(MarketingList::class, 'uuid')],
             ...MarketingCompanyContactRules::rules(),
         ];
     }
@@ -94,6 +97,7 @@ class StoreMarketingContactRequest extends FormRequest
             'email.unique' => 'Un contact avec cet e-mail existe déjà.',
             'phone.unique' => 'Un contact avec ce téléphone existe déjà.',
             'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636).',
+            'list_uuids.*.exists' => 'Un des groupes sélectionnés est introuvable.',
             ...MarketingCompanyContactRules::messages(),
         ];
     }

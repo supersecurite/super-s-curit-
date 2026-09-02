@@ -13,8 +13,8 @@ CRM léger pour le module marketing : contacts clients (e-mail, téléphone What
 
 ## Fonctionnement
 
-1. **Contacts** (`/marketing-clients`) — CRUD : type **particulier / entreprise** (`is_company`), prénom, nom, e-mail, téléphone E.164 (interlocuteur principal), nom de l'entreprise, **rôle de l'interlocuteur** (`company_role`), **canaux entreprise JSON plats** (`company_contacts` : `{ type, value, label }` pour `email` / `phone` / `whatsapp`), adresse, tags, consentement, notes. Le formulaire masque les champs entreprise si `is_company` est faux. Résolution campagne via `MarketingContact::campaignChannels()` et `ResolveMarketingContactChannels` (destinataires, CC e-mail entreprise).
-2. **Listes** (`/marketing-lists`) — fiche détail (contacts, actions) + page d’édition des infos séparée.
+1. **Contacts** (`/marketing-clients`) — CRUD : type **particulier / entreprise** (`is_company`), prénom, nom, e-mail, téléphone international (interlocuteur principal), nom de l'entreprise, **rôle de l'interlocuteur** (`company_role`), **canaux entreprise JSON plats** (`company_contacts` : `{ type, value, label }` pour `email` / `phone` / `whatsapp`), adresse, tags, consentement, notes. À la **création**, association optionnelle à un ou plusieurs **groupes** (`list_uuids`). Le formulaire masque les champs entreprise si `is_company` est faux. Résolution campagne via `MarketingContact::campaignChannels()` et `ResolveMarketingContactChannels` (destinataires, CC e-mail entreprise).
+2. **Listes / groupes** (`/marketing-lists`) — fiche détail (contacts, actions) + page d’édition des infos séparée. Ajout de **plusieurs contacts** en une fois depuis la fiche groupe.
 3. **Import CSV** (`/marketing-clients/import`) — colonnes reconnues : `prenom`, `nom`, `email`, `telephone`, `entreprise`, `role_entreprise`, `contacts_entreprise` (**JSON plat**), `adresse`, `consentement` ; modèle téléchargeable ; rapport ajouts / doublons / erreurs. Format legacy imbriqué (interlocuteurs + `channels`) accepté à l'import et normalisé.
 4. **UI** — max 3 actions principales par page ; confirmations (suppression, ajout/retrait contact) en modales.
 5. **Déduplication** — unicité e-mail et téléphone en base ; doublons ignorés à l’import.
@@ -32,7 +32,8 @@ Mutations métier via **Actions** ([ADR-0003](../decisions/0003-actions-clean-ar
 | `CreateMarketingList` | Création liste |
 | `UpdateMarketingList` | Mise à jour liste |
 | `DeleteMarketingList` | Suppression liste |
-| `AttachContactToMarketingList` | Ajout contact à une liste |
+| `AttachContactToMarketingList` | Ajout d'un contact à une liste |
+| `AttachContactsToMarketingList` | Ajout de plusieurs contacts à une liste |
 | `DetachContactFromMarketingList` | Retrait contact d'une liste |
 
 Toasts : `Inertia::flash('toast', …)` sur toutes les mutations.

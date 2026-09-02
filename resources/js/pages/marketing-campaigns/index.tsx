@@ -27,10 +27,13 @@ import {
 type CampaignRow = {
     uuid: string;
     name: string;
+    channel: string;
     status: string;
     status_label: string;
-    subject: string;
+    subject: string | null;
     list: { uuid: string; name: string } | null;
+    lists: { uuid: string; name: string }[];
+    audience_contacts: { uuid: string; full_name: string }[];
     sends_count: number;
     launched_at_formatted: string | null;
     can_update: boolean;
@@ -47,7 +50,8 @@ type PaginatedCampaigns = {
 
 type PageProps = {
     campaigns: PaginatedCampaigns;
-    filters: TableSortState & { search?: string };
+    channel: 'email' | 'whatsapp' | 'all';
+    filters: TableSortState & { search?: string; channel?: string };
     canCreate: boolean;
 };
 
@@ -65,11 +69,41 @@ function statusVariant(status: string): 'default' | 'secondary' | 'outline' | 'd
     }
 }
 
-export default function MarketingCampaignsIndex() {
-    const { campaigns, filters, canCreate } = usePage<PageProps>().props;
+function audienceLabel(campaign: CampaignRow): string {
+    const listNames = (campaign.lists ?? []).map((list) => list.name);
+    const directCount = campaign.audience_contacts?.length ?? 0;
 
-    const applyFilters = (updates: Partial<TableSortState & { search?: string; page?: number }>) => {
-        const next = { ...filters, ...updates };
+    if (listNames.length === 0 && directCount === 0) {
+        return campaign.list?.name ?? '—';
+    }
+
+    const parts: string[] = [];
+
+    if (listNames.length === 1) {
+        parts.push(listNames[0]);
+    } else if (listNames.length > 1) {
+        parts.push(`${listNames.length} groupes`);
+    }
+
+    if (directCount > 0) {
+        parts.push(
+            `${directCount} contact${directCount > 1 ? 's' : ''} direct${directCount > 1 ? 's' : ''}`,
+        );
+    }
+
+    return parts.join(' + ') || '—';
+}
+
+export default function MarketingCampaignsIndex() {
+    const { campaigns, channel, filters, canCreate } = usePage<PageProps>().props;
+    const activeChannel = channel === 'whatsapp' ? 'whatsapp' : 'email';
+    const isWhatsApp = activeChannel === 'whatsapp';
+    const title = isWhatsApp ? 'Campagnes WhatsApp' : 'Campagnes e-mail';
+
+    const applyFilters = (
+        updates: Partial<TableSortState & { search?: string; channel?: string; page?: number }>,
+    ) => {
+        const next = { ...filters, channel: activeChannel, ...updates };
         Object.keys(next).forEach((key) => {
             if (next[key as keyof typeof next] === undefined || next[key as keyof typeof next] === '') {
                 delete next[key as keyof typeof next];
@@ -85,7 +119,7 @@ export default function MarketingCampaignsIndex() {
     });
 
     const buildPageUrl = (page: number) =>
-        index.url({ query: withIndexTableQuery(filters, page) });
+        index.url({ query: withIndexTableQuery({ ...filters, channel: activeChannel }, page) });
 
     const columns = useMemo((): ResponsiveColumn<CampaignRow>[] => {
         const renderActions = (campaign: CampaignRow) => (
@@ -128,7 +162,9 @@ export default function MarketingCampaignsIndex() {
                         >
                             {campaign.name}
                         </Link>
-                        <p className="text-muted-foreground mt-0.5 text-xs">{campaign.subject}</p>
+                        {!isWhatsApp && campaign.subject ? (
+                            <p className="text-muted-foreground mt-0.5 text-xs">{campaign.subject}</p>
+                        ) : null}
                     </div>
                 ),
             },
@@ -141,9 +177,9 @@ export default function MarketingCampaignsIndex() {
                 ),
             },
             {
-                id: 'list',
-                header: 'Groupe',
-                cell: (campaign) => campaign.list?.name ?? '—',
+                id: 'audience',
+                header: 'Audience',
+                cell: (campaign) => audienceLabel(campaign),
             },
             {
                 id: 'sends',
@@ -163,29 +199,31 @@ export default function MarketingCampaignsIndex() {
                 className: 'text-right',
             },
         ];
-    }, []);
+    }, [isWhatsApp]);
 
     return (
         <>
-            <Head title="Campagnes e-mail" />
+            <Head title={title} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <Megaphone className="size-6" aria-hidden />
-                            Campagnes e-mail
+                            {title}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Créez et suivez vos campagnes vers vos groupes de contacts.
+                            {isWhatsApp
+                                ? 'Campagnes WhatsApp uniquement — templates Meta, accusés de réception et de lecture.'
+                                : 'Campagnes e-mail uniquement — groupes, contacts et suivi d’ouvertures.'}
                         </p>
                     </div>
 
                     {canCreate ? (
                         <Button asChild>
-                            <Link href={create.url()}>
+                            <Link href={create.url({ query: { channel: activeChannel } })}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouvelle campagne
+                                Nouvelle campagne {isWhatsApp ? 'WhatsApp' : 'e-mail'}
                             </Link>
                         </Button>
                     ) : null}
@@ -203,7 +241,7 @@ export default function MarketingCampaignsIndex() {
                                 <Input
                                     id="search"
                                     defaultValue={filters.search ?? ''}
-                                    placeholder="Nom ou objet…"
+                                    placeholder={isWhatsApp ? 'Nom…' : 'Nom ou objet…'}
                                     className="pl-8"
                                     onChange={(event) => debouncedSearch(event.target.value)}
                                 />
@@ -215,7 +253,7 @@ export default function MarketingCampaignsIndex() {
                         rows={campaigns.data}
                         columns={columns}
                         getRowKey={(campaign) => campaign.uuid}
-                        emptyMessage="Aucune campagne pour le moment."
+                        emptyMessage={`Aucune campagne ${isWhatsApp ? 'WhatsApp' : 'e-mail'} pour le moment.`}
                         minWidth="720px"
                         sort={filters}
                         onSort={handleSort}
@@ -233,5 +271,5 @@ export default function MarketingCampaignsIndex() {
 }
 
 MarketingCampaignsIndex.layout = {
-    breadcrumbs: [{ title: 'Campagnes e-mail', href: index.url() }],
+    breadcrumbs: [{ title: 'Campagnes', href: index.url({ query: { channel: 'email' } }) }],
 };

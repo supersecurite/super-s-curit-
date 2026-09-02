@@ -6,8 +6,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import InternationalPhoneInput from '@/components/ui/international-phone-input';
 import { Label } from '@/components/ui/label';
+import { SearchableMultiSelect } from '@/components/ui/searchable-multi-select';
 import { Textarea } from '@/components/ui/textarea';
 import type { MarketingCompanyChannel } from '@/types/marketing-company-contact';
+
+type ListOption = {
+    uuid: string;
+    name: string;
+};
 
 type MarketingContactFormData = {
     first_name?: string | null;
@@ -30,6 +36,7 @@ type MarketingContactFormProps = {
     cancelHref: string;
     errors: Record<string, string>;
     contact?: MarketingContactFormData;
+    lists?: ListOption[];
     method?: 'post' | 'put';
 };
 
@@ -51,10 +58,13 @@ export default function MarketingContactForm({
     cancelHref,
     errors,
     contact,
+    lists = [],
     method = 'post',
 }: MarketingContactFormProps) {
     const tagsValue = contact?.tags?.join(', ') ?? '';
     const [isCompany, setIsCompany] = useState(() => resolveIsCompany(contact));
+    const [selectedListUuids, setSelectedListUuids] = useState<string[]>([]);
+    const showLists = method === 'post' && lists.length > 0;
 
     return (
         <Form
@@ -227,6 +237,31 @@ export default function MarketingContactForm({
                     <p className="text-sm text-destructive">{errors.notes}</p>
                 ) : null}
             </div>
+
+            {showLists ? (
+                <div className="space-y-2">
+                    <Label htmlFor="list_uuids">Groupes (optionnel)</Label>
+                    <SearchableMultiSelect
+                        id="list_uuids"
+                        name="list_uuids"
+                        options={lists.map((list) => ({
+                            value: list.uuid,
+                            label: list.name,
+                        }))}
+                        value={selectedListUuids}
+                        onChange={setSelectedListUuids}
+                        placeholder="Associer à un ou plusieurs groupes…"
+                        searchPlaceholder="Rechercher un groupe…"
+                        emptyMessage="Aucun groupe disponible"
+                    />
+                    <p className="text-muted-foreground text-xs">
+                        Le contact sera ajouté immédiatement aux groupes sélectionnés.
+                    </p>
+                    {errors.list_uuids ? (
+                        <p className="text-sm text-destructive">{errors.list_uuids}</p>
+                    ) : null}
+                </div>
+            ) : null}
 
             <label className="flex items-center gap-2 text-sm">
                 <input

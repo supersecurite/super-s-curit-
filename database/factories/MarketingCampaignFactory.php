@@ -41,4 +41,19 @@ class MarketingCampaignFactory extends Factory
             'launched_at' => now(),
         ]);
     }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (MarketingCampaign $campaign): void {
+            if ($campaign->marketing_list_id === null) {
+                return;
+            }
+
+            if ($campaign->lists()->where('marketing_lists.id', $campaign->marketing_list_id)->exists()) {
+                return;
+            }
+
+            $campaign->lists()->syncWithoutDetaching([$campaign->marketing_list_id]);
+        });
+    }
 }

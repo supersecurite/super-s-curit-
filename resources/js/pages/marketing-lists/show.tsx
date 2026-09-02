@@ -133,7 +133,7 @@ export default function MarketingListsShow() {
                                             Aucun contact dans ce groupe.
                                             {canUpdate ? (
                                                 <span className="mt-1 block">
-                                                    Utilisez « Ajouter un contact » pour commencer.
+                                                    Utilisez « Ajouter des contacts » pour commencer.
                                                 </span>
                                             ) : null}
                                         </td>

@@ -24,13 +24,29 @@ test('commercial can create marketing list and attach contact', function () {
     $createResponse->assertRedirect(route('marketing-lists.show', $list));
 
     $attachResponse = $this->actingAs($commercial)->post(route('marketing-lists.contacts.attach', $list), [
-        'contact_uuid' => $contact->uuid,
+        'contact_uuids' => [$contact->uuid],
     ]);
 
     $attachResponse->assertRedirect(route('marketing-lists.show', $list));
 
     expect($list->contacts()->count())->toBe(1)
         ->and($list->contacts()->first()?->is($contact))->toBeTrue();
+});
+
+test('commercial can attach multiple contacts to list at once', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $list = MarketingList::factory()->create();
+    $contacts = MarketingContact::factory()->count(3)->create();
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-lists.contacts.attach', $list), [
+            'contact_uuids' => $contacts->pluck('uuid')->all(),
+        ])
+        ->assertRedirect(route('marketing-lists.show', $list));
+
+    expect($list->contacts()->count())->toBe(3);
 });
 
 test('commercial can detach contact from list', function () {

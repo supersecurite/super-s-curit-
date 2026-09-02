@@ -12,6 +12,8 @@ export type NavItem = {
     icon?: LucideIcon | null;
     isActive?: boolean;
     badge?: number;
+    /** Titre de section non cliquable (style SidebarGroupLabel). */
+    isSectionLabel?: boolean;
     children?: NavItem[];
 };
 

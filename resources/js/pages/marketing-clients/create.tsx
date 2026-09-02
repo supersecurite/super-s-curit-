@@ -2,12 +2,18 @@ import { Head, usePage } from '@inertiajs/react';
 import MarketingContactForm from '@/components/marketing-clients/marketing-contact-form';
 import { create, index, store } from '@/routes/marketing-clients';
 
+type ListOption = {
+    uuid: string;
+    name: string;
+};
+
 type PageProps = {
     errors: Record<string, string>;
+    lists: ListOption[];
 };
 
 export default function MarketingClientsCreate() {
-    const { errors } = usePage<PageProps>().props;
+    const { errors, lists } = usePage<PageProps>().props;
 
     return (
         <>
@@ -28,6 +34,7 @@ export default function MarketingClientsCreate() {
                     submitLabel="Ajouter le contact"
                     cancelHref={index.url()}
                     errors={errors}
+                    lists={lists}
                 />
             </div>
         </>

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\MarketingCampaignChannel;
 use App\Enums\MarketingMessageTemplateChannel;
 use App\Models\MarketingCampaign;
+use App\Models\MarketingContact;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Models\WhatsAppAccount;
@@ -27,6 +28,11 @@ class StoreMarketingCampaignRequest extends FormRequest
                 'body' => '',
             ]);
         }
+
+        $this->merge([
+            'list_uuids' => array_values(array_filter((array) $this->input('list_uuids', []))),
+            'contact_uuids' => array_values(array_filter((array) $this->input('contact_uuids', []))),
+        ]);
     }
 
     /**
@@ -39,7 +45,10 @@ class StoreMarketingCampaignRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'channel' => ['required', 'string', Rule::enum(MarketingCampaignChannel::class)],
-            'marketing_list_id' => ['required', 'integer', Rule::exists(MarketingList::class, 'id')],
+            'list_uuids' => ['nullable', 'array'],
+            'list_uuids.*' => ['uuid', Rule::exists(MarketingList::class, 'uuid')],
+            'contact_uuids' => ['nullable', 'array'],
+            'contact_uuids.*' => ['uuid', Rule::exists(MarketingContact::class, 'uuid')],
             'marketing_message_template_id' => [
                 Rule::requiredIf($isWhatsApp),
                 'nullable',
@@ -70,6 +79,16 @@ class StoreMarketingCampaignRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
+            $lists = (array) $this->input('list_uuids', []);
+            $contacts = (array) $this->input('contact_uuids', []);
+
+            if ($lists === [] && $contacts === []) {
+                $validator->errors()->add(
+                    'list_uuids',
+                    'Sélectionnez au moins un groupe ou un contact.',
+                );
+            }
+
             if ($this->input('channel') !== MarketingCampaignChannel::WhatsApp->value) {
                 return;
             }
@@ -109,7 +128,6 @@ class StoreMarketingCampaignRequest extends FormRequest
     {
         return [
             'name.required' => 'Le nom de la campagne est requis.',
-            'marketing_list_id.required' => 'Le groupe est requis.',
             'whatsapp_account_id.required' => 'Un compte WhatsApp actif est requis.',
             'marketing_message_template_id.required' => 'Un template Meta WhatsApp est requis.',
             'subject.required' => 'L\'objet est requis.',

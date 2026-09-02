@@ -43,6 +43,13 @@ type CampaignData = {
     subject: string | null;
     body: string;
     list: { uuid: string; name: string } | null;
+    lists: { uuid: string; name: string }[];
+    audience_contacts: {
+        uuid: string;
+        full_name: string;
+        email: string | null;
+        phone: string | null;
+    }[];
     template: {
         uuid: string;
         name: string;
@@ -131,6 +138,8 @@ export default function MarketingCampaignsShow() {
     const [launching, setLaunching] = useState(false);
     const [liveCampaign, setLiveCampaign] = useState(campaign);
     const [liveSends, setLiveSends] = useState(sends);
+    const isWhatsApp = campaign.channel === 'whatsapp';
+    const listHref = index.url({ query: { channel: campaign.channel } });
 
     const realtimeEnabled =
         broadcasting.enabled &&
@@ -180,7 +189,10 @@ export default function MarketingCampaignsShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Campagnes', href: index.url() },
+            {
+                title: isWhatsApp ? 'Campagnes WhatsApp' : 'Campagnes e-mail',
+                href: listHref,
+            },
             { title: campaign.name, href: show.url(campaign.uuid) },
         ],
     });
@@ -221,9 +233,12 @@ export default function MarketingCampaignsShow() {
             cell: (send) => (
                 <div
                     className="flex items-center gap-2"
-                    aria-label={marketingSendReceiptAriaLabel(send.status)}
+                    aria-label={marketingSendReceiptAriaLabel(send.status, campaign.channel)}
                 >
-                    <MarketingSendReceiptIndicator status={send.status} />
+                    <MarketingSendReceiptIndicator
+                        status={send.status}
+                        channel={campaign.channel}
+                    />
                     <Badge variant={statusVariant(send.status)}>{send.status_label}</Badge>
                 </div>
             ),
@@ -235,13 +250,13 @@ export default function MarketingCampaignsShow() {
         },
         {
             id: 'received_at',
-            header: 'Reçu',
+            header: campaign.channel === 'whatsapp' ? 'Reçu (delivered)' : 'Reçu',
             cell: (send) =>
                 send.received_at_formatted ?? send.delivered_at_formatted ?? '—',
         },
         {
             id: 'read_at',
-            header: 'Lu',
+            header: campaign.channel === 'whatsapp' ? 'Lu (read)' : 'Lu',
             cell: (send) => send.read_at_formatted ?? '—',
         },
         {
@@ -254,8 +269,14 @@ export default function MarketingCampaignsShow() {
     const statCards = [
         { label: 'Total', value: liveCampaign.stats.total },
         { label: 'En file', value: liveCampaign.stats.queued },
-        { label: 'Reçus', value: liveCampaign.stats.received },
-        { label: 'Lus', value: liveCampaign.stats.read },
+        {
+            label: isWhatsApp ? 'Reçus (delivered)' : 'Reçus',
+            value: liveCampaign.stats.received,
+        },
+        {
+            label: isWhatsApp ? 'Lus (read)' : 'Lus / ouverts',
+            value: liveCampaign.stats.read,
+        },
         { label: 'Échecs', value: liveCampaign.stats.failed + liveCampaign.stats.bounced },
     ];
 
@@ -267,11 +288,11 @@ export default function MarketingCampaignsShow() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                         <Link
-                            href={index.url()}
+                            href={listHref}
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" aria-hidden />
-                            Retour à la liste
+                            Retour aux campagnes {isWhatsApp ? 'WhatsApp' : 'e-mail'}
                         </Link>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <Megaphone className="size-6" aria-hidden />
@@ -288,8 +309,17 @@ export default function MarketingCampaignsShow() {
                                     Temps réel
                                 </Badge>
                             ) : null}
-                            {liveCampaign.list ? (
-                                <Badge variant="outline">Groupe : {liveCampaign.list.name}</Badge>
+                            {(liveCampaign.lists ?? []).map((list) => (
+                                <Badge key={list.uuid} variant="outline">
+                                    Groupe : {list.name}
+                                </Badge>
+                            ))}
+                            {(liveCampaign.audience_contacts?.length ?? 0) > 0 ? (
+                                <Badge variant="outline">
+                                    {liveCampaign.audience_contacts.length} contact
+                                    {liveCampaign.audience_contacts.length > 1 ? 's' : ''} direct
+                                    {liveCampaign.audience_contacts.length > 1 ? 's' : ''}
+                                </Badge>
                             ) : null}
                         </div>
                     </div>
@@ -373,8 +403,26 @@ export default function MarketingCampaignsShow() {
                     </section>
 
                     <section className="app-panel space-y-4 p-4">
-                        <h2 className="font-semibold">Historique</h2>
+                        <h2 className="font-semibold">Audience & historique</h2>
                         <dl className="space-y-3 text-sm">
+                            <div>
+                                <dt className="text-muted-foreground">Groupes</dt>
+                                <dd>
+                                    {(campaign.lists ?? []).length > 0
+                                        ? campaign.lists.map((list) => list.name).join(', ')
+                                        : '—'}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="text-muted-foreground">Contacts directs</dt>
+                                <dd>
+                                    {(campaign.audience_contacts ?? []).length > 0
+                                        ? campaign.audience_contacts
+                                              .map((contact) => contact.full_name)
+                                              .join(', ')
+                                        : '—'}
+                                </dd>
+                            </div>
                             <div>
                                 <dt className="text-muted-foreground">Créée le</dt>
                                 <dd>{campaign.created_at_formatted ?? '—'}</dd>
@@ -411,7 +459,15 @@ export default function MarketingCampaignsShow() {
 
                 {liveCampaign.stats.total > 0 ? (
                     <div className="space-y-3">
-                        <h2 className="font-semibold">Destinataires</h2>
+                        <div className="flex flex-wrap items-end justify-between gap-2">
+                            <h2 className="font-semibold">Destinataires</h2>
+                            {isWhatsApp ? (
+                                <p className="text-muted-foreground text-xs">
+                                    Accusés WhatsApp : ✓ envoyé · ✓✓ reçu (delivered) · ✓✓ vert lu
+                                    (read)
+                                </p>
+                            ) : null}
+                        </div>
                         <BackofficeIndexPanel>
                             <ResponsiveDataTable<SendRow>
                                 rows={liveSends.data}

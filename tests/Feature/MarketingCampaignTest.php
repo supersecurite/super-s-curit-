@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\MarketingCampaignChannel;
 use App\Enums\MarketingCampaignSendStatus;
 use App\Enums\MarketingCampaignStatus;
 use App\Events\Marketing\MarketingCampaignProgressUpdated;
@@ -31,7 +32,8 @@ test('commercial can create email campaign', function () {
     $response = $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
         'name' => 'Relance printemps',
         'channel' => 'email',
-        'marketing_list_id' => $list->id,
+        'list_uuids' => [$list->uuid],
+        'contact_uuids' => [],
         'subject' => 'Bonjour {{prenom}}',
         'body' => 'Message de campagne pour {{nom}}.',
     ]);
@@ -41,7 +43,8 @@ test('commercial can create email campaign', function () {
     $campaign = MarketingCampaign::query()->where('name', 'Relance printemps')->firstOrFail();
 
     expect($campaign->status)->toBe(MarketingCampaignStatus::Draft)
-        ->and($campaign->subject)->toBe('Bonjour {{prenom}}');
+        ->and($campaign->subject)->toBe('Bonjour {{prenom}}')
+        ->and($campaign->lists()->pluck('marketing_lists.id')->all())->toBe([$list->id]);
 });
 
 test('contributor without marketing campaigns permission cannot access campaigns', function () {
@@ -117,7 +120,7 @@ test('launch fails when no eligible contacts in list', function () {
 
     $this->actingAs($commercial)
         ->post(route('marketing-campaigns.launch', $campaign))
-        ->assertSessionHasErrors('marketing_list_id');
+        ->assertSessionHasErrors('list_uuids');
 });
 
 test('send job marks campaign email as received', function () {
@@ -195,11 +198,101 @@ test('cannot update launched campaign', function () {
     $this->actingAs($commercial)
         ->put(route('marketing-campaigns.update', $campaign), [
             'name' => 'Nouveau nom',
-            'marketing_list_id' => $campaign->marketing_list_id,
+            'list_uuids' => $campaign->lists()->pluck('uuid')->all(),
+            'contact_uuids' => [],
             'subject' => $campaign->subject,
             'body' => $campaign->body,
         ])
         ->assertForbidden();
+});
+
+test('campaign can mix list and direct contacts in audience', function () {
+    Queue::fake();
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $list = MarketingList::factory()->create();
+    $fromList = MarketingContact::factory()->create([
+        'email' => 'from-list@example.com',
+        'marketing_consent' => true,
+    ]);
+    $direct = MarketingContact::factory()->create([
+        'email' => 'direct@example.com',
+        'marketing_consent' => true,
+    ]);
+    $list->contacts()->attach($fromList);
+
+    $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
+        'name' => 'Audience mixte',
+        'channel' => 'email',
+        'list_uuids' => [$list->uuid],
+        'contact_uuids' => [$direct->uuid],
+        'subject' => 'Hello',
+        'body' => 'Body',
+    ])->assertRedirect();
+
+    $campaign = MarketingCampaign::query()->where('name', 'Audience mixte')->firstOrFail();
+
+    expect($campaign->lists()->count())->toBe(1)
+        ->and($campaign->audienceContacts()->count())->toBe(1);
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-campaigns.launch', $campaign))
+        ->assertRedirect();
+
+    expect(MarketingCampaignSend::query()->where('marketing_campaign_id', $campaign->id)->count())->toBe(2);
+    Queue::assertPushed(SendMarketingCampaignEmailJob::class, 2);
+});
+
+test('campaigns index is separated by channel', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $email = MarketingCampaign::factory()->create(['name' => 'Campagne mail only']);
+    $whatsapp = MarketingCampaign::factory()->create([
+        'name' => 'Campagne wa only',
+        'channel' => MarketingCampaignChannel::WhatsApp,
+        'subject' => null,
+        'body' => '',
+    ]);
+
+    $this->actingAs($commercial)
+        ->get(route('marketing-campaigns.index', ['channel' => 'email']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('channel', 'email')
+            ->has('campaigns.data', 1)
+            ->where('campaigns.data.0.uuid', $email->uuid));
+
+    $this->actingAs($commercial)
+        ->get(route('marketing-campaigns.index', ['channel' => 'whatsapp']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('channel', 'whatsapp')
+            ->has('campaigns.data', 1)
+            ->where('campaigns.data.0.uuid', $whatsapp->uuid));
+});
+
+test('audience preview returns merged eligible contacts', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $list = MarketingList::factory()->create();
+    $contact = MarketingContact::factory()->create([
+        'email' => 'preview@example.com',
+        'marketing_consent' => true,
+    ]);
+    $list->contacts()->attach($contact);
+
+    $this->actingAs($commercial)
+        ->getJson(route('marketing-campaigns.audience-preview', [
+            'channel' => 'email',
+            'list_uuids' => [$list->uuid],
+            'contact_uuids' => [],
+        ]))
+        ->assertOk()
+        ->assertJsonPath('stats.eligible', 1)
+        ->assertJsonPath('contacts.0.email', 'preview@example.com');
 });
 
 test('commercial can view campaign show page with stats', function () {

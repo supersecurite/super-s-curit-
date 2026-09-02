@@ -3,11 +3,12 @@ import { cn } from '@/lib/utils';
 
 type MarketingSendReceiptIndicatorProps = {
     status: string;
+    channel?: string;
     className?: string;
 };
 
 /**
- * Indicateur type WhatsApp pour le suivi d'un envoi e-mail :
+ * Indicateur type WhatsApp pour le suivi d'un envoi :
  * 1 ✓ = envoyé, 2 ✓ gris = reçu (non lu), 2 ✓ vert = lu.
  */
 export function MarketingSendReceiptIndicator({
@@ -62,15 +63,19 @@ export function MarketingSendReceiptIndicator({
     return null;
 }
 
-export function marketingSendReceiptAriaLabel(status: string): string {
+export function marketingSendReceiptAriaLabel(status: string, channel?: string): string {
+    const isWhatsApp = channel === 'whatsapp';
+
     switch (status) {
         case 'read':
-            return 'Lu';
+            return isWhatsApp ? 'Lu (confirmation WhatsApp)' : 'Lu / ouvert';
         case 'received':
         case 'delivered':
-            return 'Reçu, non lu';
+            return isWhatsApp
+                ? 'Reçu sur l’appareil (delivered)'
+                : 'Reçu, non lu';
         case 'sent':
-            return 'Envoyé';
+            return isWhatsApp ? 'Envoyé au serveur WhatsApp' : 'Envoyé';
         case 'queued':
             return 'En file';
         case 'failed':

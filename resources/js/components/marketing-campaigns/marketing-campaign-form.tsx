@@ -1,8 +1,8 @@
 import { router } from '@inertiajs/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import CampaignListAudiencePanel, {
-    type ListAudiencePayload,
-} from '@/components/marketing-campaigns/campaign-list-audience-panel';
+import CampaignAudiencePanel, {
+    type AudiencePreviewPayload,
+} from '@/components/marketing-campaigns/campaign-audience-panel';
 import CampaignTemplatePreviewPanel from '@/components/marketing-campaigns/campaign-template-preview-panel';
 import InputError from '@/components/input-error';
 import MarketingTemplateEditor from '@/components/marketing-templates/marketing-template-editor';
@@ -17,17 +17,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { SearchableMultiSelect } from '@/components/ui/searchable-multi-select';
 import {
     DEFAULT_MARKETING_TEMPLATE_BODY,
     DEFAULT_MARKETING_TEMPLATE_SUBJECT,
 } from '@/lib/marketing-template-variables';
-import { listAudience } from '@/routes/marketing-campaigns';
+import { audiencePreview } from '@/routes/marketing-campaigns';
 
 type ListOption = {
     id: number;
     uuid: string;
     name: string;
     contacts_count: number;
+};
+
+type ContactOption = {
+    uuid: string;
+    full_name: string;
+    email: string | null;
+    phone: string | null;
 };
 
 type TemplateOption = {
@@ -51,10 +59,11 @@ type MarketingCampaignFormData = {
     uuid?: string;
     name: string;
     channel?: string;
-    marketing_list_id: number | null;
+    list_uuids?: string[];
+    contact_uuids?: string[];
     marketing_message_template_id: number | null;
     whatsapp_account_id?: number | null;
-    subject: string;
+    subject: string | null;
     body: string;
 };
 
@@ -64,7 +73,9 @@ type MarketingCampaignFormProps = {
     cancelHref: string;
     errors: Record<string, string>;
     campaign?: MarketingCampaignFormData;
+    lockedChannel: 'email' | 'whatsapp';
     lists: ListOption[];
+    contacts: ContactOption[];
     templates: TemplateOption[];
     whatsappAccounts?: WhatsAppAccountOption[];
     defaultWhatsappAccountId?: number | null;
@@ -72,7 +83,14 @@ type MarketingCampaignFormProps = {
     method?: 'post' | 'put';
 };
 
-function resolveInitialSubject(campaign?: MarketingCampaignFormData): string {
+function resolveInitialSubject(
+    campaign: MarketingCampaignFormData | undefined,
+    channel: string,
+): string {
+    if (channel === 'whatsapp') {
+        return '';
+    }
+
     if (campaign?.subject?.trim()) {
         return campaign.subject;
     }
@@ -80,7 +98,14 @@ function resolveInitialSubject(campaign?: MarketingCampaignFormData): string {
     return DEFAULT_MARKETING_TEMPLATE_SUBJECT;
 }
 
-function resolveInitialBody(campaign?: MarketingCampaignFormData): string {
+function resolveInitialBody(
+    campaign: MarketingCampaignFormData | undefined,
+    channel: string,
+): string {
+    if (channel === 'whatsapp') {
+        return '';
+    }
+
     if (campaign?.body?.trim()) {
         return campaign.body;
     }
@@ -94,7 +119,9 @@ export default function MarketingCampaignForm({
     cancelHref,
     errors,
     campaign,
+    lockedChannel,
     lists,
+    contacts,
     templates,
     whatsappAccounts = [],
     defaultWhatsappAccountId = null,
@@ -103,16 +130,17 @@ export default function MarketingCampaignForm({
 }: MarketingCampaignFormProps) {
     const [formData, setFormData] = useState({
         name: campaign?.name ?? '',
-        channel: campaign?.channel ?? 'email',
-        marketing_list_id: campaign?.marketing_list_id ?? null,
+        channel: lockedChannel,
+        list_uuids: campaign?.list_uuids ?? [],
+        contact_uuids: campaign?.contact_uuids ?? [],
         marketing_message_template_id: campaign?.marketing_message_template_id ?? null,
         whatsapp_account_id:
             campaign?.whatsapp_account_id ?? defaultWhatsappAccountId ?? null,
-        subject: resolveInitialSubject(campaign),
-        body: resolveInitialBody(campaign),
+        subject: resolveInitialSubject(campaign, lockedChannel),
+        body: resolveInitialBody(campaign, lockedChannel),
     });
     const [processing, setProcessing] = useState(false);
-    const [audience, setAudience] = useState<ListAudiencePayload | null>(null);
+    const [audience, setAudience] = useState<AudiencePreviewPayload | null>(null);
     const [audienceLoading, setAudienceLoading] = useState(false);
     const [audienceError, setAudienceError] = useState<string | null>(null);
 
@@ -123,9 +151,29 @@ export default function MarketingCampaignForm({
         [formData.channel, templates],
     );
 
-    const selectedList = useMemo(
-        () => lists.find((list) => list.id === formData.marketing_list_id) ?? null,
-        [formData.marketing_list_id, lists],
+    const listOptions = useMemo(
+        () =>
+            lists.map((list) => ({
+                value: list.uuid,
+                label: `${list.name} (${list.contacts_count} contact${list.contacts_count > 1 ? 's' : ''})`,
+            })),
+        [lists],
+    );
+
+    const contactOptions = useMemo(
+        () =>
+            contacts.map((contact) => ({
+                value: contact.uuid,
+                label: [
+                    contact.full_name,
+                    isWhatsApp
+                        ? (contact.phone ?? contact.email)
+                        : (contact.email ?? contact.phone),
+                ]
+                    .filter(Boolean)
+                    .join(' — '),
+            })),
+        [contacts, isWhatsApp],
     );
 
     const selectedTemplate = useMemo(
@@ -136,8 +184,11 @@ export default function MarketingCampaignForm({
         [formData.marketing_message_template_id, channelTemplates],
     );
 
+    const hasAudience =
+        formData.list_uuids.length > 0 || formData.contact_uuids.length > 0;
+
     const updateField = useCallback(
-        (field: keyof typeof formData, value: string | number | null) => {
+        (field: keyof typeof formData, value: string | number | null | string[]) => {
             setFormData((previous) => ({ ...previous, [field]: value }));
         },
         [],
@@ -185,7 +236,7 @@ export default function MarketingCampaignForm({
     }, [channelTemplates]);
 
     useEffect(() => {
-        if (selectedList === null) {
+        if (!hasAudience) {
             setAudience(null);
             setAudienceError(null);
             setAudienceLoading(false);
@@ -198,20 +249,23 @@ export default function MarketingCampaignForm({
         setAudienceLoading(true);
         setAudienceError(null);
 
-        const url = listAudience.url(selectedList.uuid, {
-            query: { channel: formData.channel },
-        });
+        const params = new URLSearchParams();
+        params.set('channel', formData.channel);
+        formData.list_uuids.forEach((uuid) => params.append('list_uuids[]', uuid));
+        formData.contact_uuids.forEach((uuid) => params.append('contact_uuids[]', uuid));
+
+        const url = `${audiencePreview.url()}?${params.toString()}`;
 
         fetch(url, {
             headers: { Accept: 'application/json' },
             signal: controller.signal,
         })
             .then(async (response) => {
-                if (! response.ok) {
-                    throw new Error('Impossible de charger les contacts du groupe.');
+                if (!response.ok) {
+                    throw new Error('Impossible de charger l’audience.');
                 }
 
-                return response.json() as Promise<ListAudiencePayload>;
+                return response.json() as Promise<AudiencePreviewPayload>;
             })
             .then((payload) => {
                 setAudience(payload);
@@ -225,7 +279,7 @@ export default function MarketingCampaignForm({
                 setAudienceError(
                     error instanceof Error
                         ? error.message
-                        : 'Impossible de charger les contacts du groupe.',
+                        : 'Impossible de charger l’audience.',
                 );
             })
             .finally(() => {
@@ -233,7 +287,7 @@ export default function MarketingCampaignForm({
             });
 
         return () => controller.abort();
-    }, [selectedList, formData.channel]);
+    }, [formData.channel, formData.list_uuids, formData.contact_uuids, hasAudience]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -245,7 +299,8 @@ export default function MarketingCampaignForm({
                 _method: method === 'put' ? 'put' : undefined,
                 name: formData.name,
                 channel: formData.channel,
-                marketing_list_id: formData.marketing_list_id,
+                list_uuids: formData.list_uuids,
+                contact_uuids: formData.contact_uuids,
                 marketing_message_template_id: formData.marketing_message_template_id,
                 whatsapp_account_id: isWhatsApp ? formData.whatsapp_account_id : null,
                 subject: isWhatsApp ? null : formData.subject,
@@ -258,10 +313,15 @@ export default function MarketingCampaignForm({
     };
 
     const editorKey = `campaign-body-${campaign?.uuid ?? 'new'}-${formData.channel}-${formData.marketing_message_template_id ?? 'none'}`;
+    const channelLabel = isWhatsApp ? 'WhatsApp' : 'e-mail';
 
     return (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:items-start">
             <form onSubmit={handleSubmit} className="app-panel space-y-6 p-4 xl:max-w-none">
+                <div className="bg-muted/40 rounded-lg border px-3 py-2 text-sm">
+                    Canal verrouillé : <span className="font-medium">{channelLabel}</span>
+                </div>
+
                 <div className="space-y-2">
                     <Label htmlFor="name">Nom de la campagne</Label>
                     <Input
@@ -271,23 +331,6 @@ export default function MarketingCampaignForm({
                         required
                     />
                     <InputError message={errors.name} />
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="channel">Canal</Label>
-                    <Select
-                        value={formData.channel}
-                        onValueChange={(value) => updateField('channel', value)}
-                    >
-                        <SelectTrigger id="channel">
-                            <SelectValue placeholder="Canal" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="email">E-mail</SelectItem>
-                            <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.channel} />
                 </div>
 
                 {isWhatsApp ? (
@@ -316,25 +359,34 @@ export default function MarketingCampaignForm({
                 ) : null}
 
                 <div className="space-y-2">
-                    <Label htmlFor="marketing_list_id">Groupe</Label>
-                    <Select
-                        value={formData.marketing_list_id?.toString() ?? ''}
-                        onValueChange={(value) => updateField('marketing_list_id', Number(value))}
-                        required
-                    >
-                        <SelectTrigger id="marketing_list_id">
-                            <SelectValue placeholder="Choisir un groupe" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {lists.map((list) => (
-                                <SelectItem key={list.id} value={list.id.toString()}>
-                                    {list.name} ({list.contacts_count} contact
-                                    {list.contacts_count > 1 ? 's' : ''})
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.marketing_list_id} />
+                    <Label htmlFor="list_uuids">Groupes</Label>
+                    <SearchableMultiSelect
+                        id="list_uuids"
+                        options={listOptions}
+                        value={formData.list_uuids}
+                        onChange={(values) => updateField('list_uuids', values)}
+                        placeholder="Ajouter des groupes…"
+                        searchPlaceholder="Rechercher un groupe…"
+                        emptyMessage="Aucun groupe trouvé"
+                    />
+                    <InputError message={errors.list_uuids} />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="contact_uuids">Contacts individuels</Label>
+                    <SearchableMultiSelect
+                        id="contact_uuids"
+                        options={contactOptions}
+                        value={formData.contact_uuids}
+                        onChange={(values) => updateField('contact_uuids', values)}
+                        placeholder="Ajouter des contacts…"
+                        searchPlaceholder="Rechercher un contact…"
+                        emptyMessage="Aucun contact trouvé"
+                    />
+                    <p className="text-muted-foreground text-xs">
+                        Combinez groupes et contacts : l’audience fusionne sans doublon.
+                    </p>
+                    <InputError message={errors.contact_uuids} />
                 </div>
 
                 <div className="space-y-2">
@@ -428,11 +480,12 @@ export default function MarketingCampaignForm({
             </form>
 
             <aside className="space-y-4 xl:sticky xl:top-4">
-                {selectedList !== null ? (
-                    <CampaignListAudiencePanel
+                {hasAudience ? (
+                    <CampaignAudiencePanel
                         audience={audience}
                         loading={audienceLoading}
                         error={audienceError}
+                        channel={formData.channel}
                     />
                 ) : null}
 
@@ -440,11 +493,11 @@ export default function MarketingCampaignForm({
                     <CampaignTemplatePreviewPanel template={selectedTemplate} />
                 ) : null}
 
-                {selectedList === null && selectedTemplate === null ? (
+                {!hasAudience && selectedTemplate === null ? (
                     <section className="app-panel p-4">
                         <p className="text-muted-foreground text-sm">
-                            Sélectionnez un groupe pour voir l&apos;audience, ou un template pour
-                            prévisualiser le message.
+                            Sélectionnez des groupes et/ou des contacts pour voir l&apos;audience,
+                            ou un template pour prévisualiser le message.
                         </p>
                     </section>
                 ) : null}

@@ -9,7 +9,8 @@ use App\Models\MarketingCampaignSend;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 
 /**
- * Met à jour le statut d'un envoi WhatsApp à partir d'un webhook Meta.
+ * Met à jour le statut d'un envoi WhatsApp à partir d'un webhook Meta
+ * (réception = delivered, lecture = read).
  */
 class RecordWhatsAppMessageStatus extends Action
 {
@@ -32,6 +33,10 @@ class RecordWhatsAppMessageStatus extends Action
         };
 
         if ($mapped === null) {
+            return $send;
+        }
+
+        if (! $this->canAdvance($send->status, $mapped)) {
             return $send;
         }
 
@@ -70,5 +75,27 @@ class RecordWhatsAppMessageStatus extends Action
         }
 
         return $send;
+    }
+
+    /**
+     * Empêche de rétrograder un statut (ex. Lu → Reçu).
+     */
+    private function canAdvance(MarketingCampaignSendStatus $current, MarketingCampaignSendStatus $next): bool
+    {
+        if ($next === MarketingCampaignSendStatus::Failed) {
+            return true;
+        }
+
+        $rank = [
+            MarketingCampaignSendStatus::Queued->value => 0,
+            MarketingCampaignSendStatus::Sent->value => 1,
+            MarketingCampaignSendStatus::Received->value => 2,
+            MarketingCampaignSendStatus::Delivered->value => 2,
+            MarketingCampaignSendStatus::Read->value => 3,
+            MarketingCampaignSendStatus::Failed->value => 99,
+            MarketingCampaignSendStatus::Bounced->value => 99,
+        ];
+
+        return ($rank[$next->value] ?? 0) >= ($rank[$current->value] ?? 0);
     }
 }

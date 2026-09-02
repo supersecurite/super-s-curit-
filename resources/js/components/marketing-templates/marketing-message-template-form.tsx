@@ -34,6 +34,7 @@ type MarketingMessageTemplateFormProps = {
     cancelHref: string;
     errors: Record<string, string>;
     template?: MarketingMessageTemplateFormData;
+    lockedChannel?: 'email' | 'whatsapp';
     variables: string[];
     method?: 'post' | 'put';
 };
@@ -60,13 +61,14 @@ export default function MarketingMessageTemplateForm({
     cancelHref,
     errors,
     template,
+    lockedChannel,
     variables,
     method = 'post',
 }: MarketingMessageTemplateFormProps) {
     const isEditing = method === 'put';
     const [formData, setFormData] = useState({
         name: template?.name ?? '',
-        channel: template?.channel ?? 'email',
+        channel: template?.channel ?? lockedChannel ?? 'email',
         subject: resolveInitialSubject(template),
         body: resolveInitialBody(template),
         meta_template_name: template?.meta_template_name ?? '',
@@ -75,6 +77,7 @@ export default function MarketingMessageTemplateForm({
     const [processing, setProcessing] = useState(false);
 
     const isWhatsApp = formData.channel === 'whatsapp';
+    const channelLocked = lockedChannel !== undefined || isEditing;
 
     const updateField = useCallback(
         (
@@ -136,18 +139,27 @@ export default function MarketingMessageTemplateForm({
 
             <div className="space-y-2">
                 <Label htmlFor="channel">Canal</Label>
-                <Select
-                    value={formData.channel}
-                    onValueChange={(value) => updateField('channel', value)}
-                >
-                    <SelectTrigger id="channel">
-                        <SelectValue placeholder="Canal" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="email">E-mail</SelectItem>
-                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                    </SelectContent>
-                </Select>
+                {channelLocked ? (
+                    <div className="bg-muted/40 rounded-lg border px-3 py-2 text-sm">
+                        Canal verrouillé :{' '}
+                        <span className="font-medium">
+                            {isWhatsApp ? 'WhatsApp' : 'E-mail'}
+                        </span>
+                    </div>
+                ) : (
+                    <Select
+                        value={formData.channel}
+                        onValueChange={(value) => updateField('channel', value)}
+                    >
+                        <SelectTrigger id="channel">
+                            <SelectValue placeholder="Canal" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="email">E-mail</SelectItem>
+                            <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                        </SelectContent>
+                    </Select>
+                )}
                 <InputError message={errors.channel} />
             </div>
 

@@ -119,7 +119,8 @@ test('whatsapp campaign requires meta template and ignores free body', function 
         ->post(route('marketing-campaigns.store'), [
             'name' => 'Campagne WA sans template',
             'channel' => MarketingCampaignChannel::WhatsApp->value,
-            'marketing_list_id' => $list->id,
+            'list_uuids' => [$list->uuid],
+            'contact_uuids' => [],
             'whatsapp_account_id' => $account->id,
             'body' => 'Message libre interdit',
         ])
@@ -131,7 +132,8 @@ test('whatsapp campaign requires meta template and ignores free body', function 
         ->post(route('marketing-campaigns.store'), [
             'name' => 'Campagne WA Meta',
             'channel' => MarketingCampaignChannel::WhatsApp->value,
-            'marketing_list_id' => $list->id,
+            'list_uuids' => [$list->uuid],
+            'contact_uuids' => [],
             'whatsapp_account_id' => $account->id,
             'marketing_message_template_id' => $template->id,
             'body' => 'Message libre à ignorer',
@@ -225,6 +227,83 @@ test('whatsapp webhook verifies challenge and updates delivery status', function
     )->assertOk();
 
     expect($send->fresh()->status)->toBe(MarketingCampaignSendStatus::Received);
+});
+
+test('whatsapp webhook marks message as read and does not regress', function () {
+    $account = WhatsAppAccount::factory()->create([
+        'verify_token' => 'verify-token-test',
+        'app_secret' => 'app-secret-test',
+    ]);
+
+    $send = MarketingCampaignSend::factory()->create([
+        'provider_message_id' => 'wamid.READ',
+        'status' => MarketingCampaignSendStatus::Received,
+        'delivered_at' => now(),
+        'recipient_phone' => '+224622000222',
+    ]);
+
+    $payload = [
+        'entry' => [[
+            'changes' => [[
+                'value' => [
+                    'statuses' => [[
+                        'id' => 'wamid.READ',
+                        'status' => 'read',
+                    ]],
+                ],
+            ]],
+        ]],
+    ];
+
+    $body = json_encode($payload, JSON_THROW_ON_ERROR);
+    $signature = 'sha256='.hash_hmac('sha256', $body, 'app-secret-test');
+
+    $this->call(
+        'POST',
+        route('webhooks.marketing.whatsapp', $account),
+        [],
+        [],
+        [],
+        [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_X-Hub-Signature-256' => $signature,
+        ],
+        $body,
+    )->assertOk();
+
+    expect($send->fresh()->status)->toBe(MarketingCampaignSendStatus::Read)
+        ->and($send->fresh()->read_at)->not->toBeNull();
+
+    $deliveredPayload = [
+        'entry' => [[
+            'changes' => [[
+                'value' => [
+                    'statuses' => [[
+                        'id' => 'wamid.READ',
+                        'status' => 'delivered',
+                    ]],
+                ],
+            ]],
+        ]],
+    ];
+
+    $deliveredBody = json_encode($deliveredPayload, JSON_THROW_ON_ERROR);
+    $deliveredSignature = 'sha256='.hash_hmac('sha256', $deliveredBody, 'app-secret-test');
+
+    $this->call(
+        'POST',
+        route('webhooks.marketing.whatsapp', $account),
+        [],
+        [],
+        [],
+        [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_X-Hub-Signature-256' => $deliveredSignature,
+        ],
+        $deliveredBody,
+    )->assertOk();
+
+    expect($send->fresh()->status)->toBe(MarketingCampaignSendStatus::Read);
 });
 
 test('whatsapp webhook rejects invalid signature', function () {

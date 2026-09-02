@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\MarketingContact;
+use App\Models\MarketingList;
 use App\Models\User;
 use App\Services\Marketing\MarketingContactImportService;
 use App\Support\Marketing\ResolveMarketingContactChannels;
@@ -196,6 +197,29 @@ test('marketing contact accepts formatted international phone numbers', function
 
     expect($contact->phone)->toBe('+15556708636')
         ->and($contact->company_contacts[0]['value'])->toBe('+224622999888');
+});
+
+test('commercial can create marketing contact associated to lists', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $listA = MarketingList::factory()->create(['name' => 'Prospects']);
+    $listB = MarketingList::factory()->create(['name' => 'VIP']);
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-clients.store'), [
+            'first_name' => 'Fatou',
+            'last_name' => 'Bah',
+            'email' => 'fatou.bah@example.com',
+            'phone' => '+224622111222',
+            'list_uuids' => [$listA->uuid, $listB->uuid],
+        ])
+        ->assertRedirect(route('marketing-clients.index'));
+
+    $contact = MarketingContact::query()->where('email', 'fatou.bah@example.com')->firstOrFail();
+
+    expect($contact->lists()->pluck('uuid')->sort()->values()->all())
+        ->toBe(collect([$listA->uuid, $listB->uuid])->sort()->values()->all());
 });
 
 test('company contact channel values are validated', function () {

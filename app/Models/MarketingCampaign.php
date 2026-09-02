@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-/** Campagne marketing e-mail ou WhatsApp vers une liste de contacts. */
+/** Campagne marketing e-mail ou WhatsApp vers des groupes et/ou contacts. */
 #[Fillable([
     'uuid',
     'name',
@@ -72,6 +73,28 @@ class MarketingCampaign extends Model
     public function list(): BelongsTo
     {
         return $this->belongsTo(MarketingList::class, 'marketing_list_id');
+    }
+
+    /**
+     * Groupes ciblés par la campagne.
+     *
+     * @return BelongsToMany<MarketingList, $this>
+     */
+    public function lists(): BelongsToMany
+    {
+        return $this->belongsToMany(MarketingList::class, 'marketing_campaign_marketing_list')
+            ->withTimestamps();
+    }
+
+    /**
+     * Contacts individuels ciblés (en plus ou à la place des groupes).
+     *
+     * @return BelongsToMany<MarketingContact, $this>
+     */
+    public function audienceContacts(): BelongsToMany
+    {
+        return $this->belongsToMany(MarketingContact::class, 'marketing_campaign_marketing_contact')
+            ->withTimestamps();
     }
 
     /**
@@ -182,6 +205,26 @@ class MarketingCampaign extends Model
                     'name' => $this->list->name,
                 ]
                 : null,
+            'lists' => $this->relationLoaded('lists')
+                ? $this->lists->map(fn (MarketingList $list) => [
+                    'uuid' => $list->uuid,
+                    'name' => $list->name,
+                ])->values()->all()
+                : [],
+            'audience_contacts' => $this->relationLoaded('audienceContacts')
+                ? $this->audienceContacts->map(fn (MarketingContact $contact) => [
+                    'uuid' => $contact->uuid,
+                    'full_name' => $contact->full_name,
+                    'email' => $contact->email,
+                    'phone' => $contact->phone,
+                ])->values()->all()
+                : [],
+            'list_uuids' => $this->relationLoaded('lists')
+                ? $this->lists->pluck('uuid')->values()->all()
+                : [],
+            'contact_uuids' => $this->relationLoaded('audienceContacts')
+                ? $this->audienceContacts->pluck('uuid')->values()->all()
+                : [],
             'template' => $this->relationLoaded('template') && $this->template
                 ? [
                     'uuid' => $this->template->uuid,
