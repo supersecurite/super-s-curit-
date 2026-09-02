@@ -2,6 +2,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import InternationalPhoneInput from '@/components/ui/international-phone-input';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -23,16 +24,8 @@ type CompanyChannelsEditorProps = {
     errors?: Record<string, string>;
 };
 
-function channelPlaceholder(type: MarketingCompanyContactChannelType): string {
-    switch (type) {
-        case 'email':
-            return 'compta@entreprise.com';
-        case 'phone':
-        case 'whatsapp':
-            return '+224612345678';
-        default:
-            return '';
-    }
+function isPhoneChannel(type: MarketingCompanyContactChannelType): boolean {
+    return type === 'phone' || type === 'whatsapp';
 }
 
 export default function CompanyChannelsEditor({
@@ -142,15 +135,27 @@ export default function CompanyChannelsEditor({
 
                         <div className="space-y-1">
                             <Label className="text-xs">Valeur</Label>
-                            <Input
-                                value={channel.value}
-                                onChange={(event) =>
-                                    updateChannel(channelIndex, {
-                                        value: event.target.value,
-                                    })
-                                }
-                                placeholder={channelPlaceholder(channel.type)}
-                            />
+                            {isPhoneChannel(channel.type) ? (
+                                <InternationalPhoneInput
+                                    value={channel.value}
+                                    onChange={(phone) =>
+                                        updateChannel(channelIndex, {
+                                            value: phone,
+                                        })
+                                    }
+                                    aria-invalid={Boolean(errors[valueErrorKey])}
+                                />
+                            ) : (
+                                <Input
+                                    value={channel.value}
+                                    onChange={(event) =>
+                                        updateChannel(channelIndex, {
+                                            value: event.target.value,
+                                        })
+                                    }
+                                    placeholder="compta@entreprise.com"
+                                />
+                            )}
                             {errors[valueErrorKey] ? (
                                 <p className="text-xs text-destructive">
                                     {errors[valueErrorKey]}

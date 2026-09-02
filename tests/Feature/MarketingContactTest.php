@@ -174,6 +174,30 @@ test('import template csv can be imported successfully', function () {
         ->and($contact->company_contacts[0]['type'])->toBe('email');
 });
 
+test('marketing contact accepts formatted international phone numbers', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-clients.store'), [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'phone' => '+1 (555) 670-8636',
+            'is_company' => '1',
+            'company_contacts' => json_encode([
+                ['type' => 'whatsapp', 'value' => '+224 622 999 888', 'label' => 'WhatsApp'],
+            ]),
+        ])
+        ->assertRedirect(route('marketing-clients.index'));
+
+    $contact = MarketingContact::query()->where('email', 'john.doe@example.com')->firstOrFail();
+
+    expect($contact->phone)->toBe('+15556708636')
+        ->and($contact->company_contacts[0]['value'])->toBe('+224622999888');
+});
+
 test('company contact channel values are validated', function () {
     $this->seed(RoleUserSeeder::class);
 

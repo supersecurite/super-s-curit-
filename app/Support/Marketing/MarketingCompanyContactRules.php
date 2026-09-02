@@ -3,6 +3,7 @@
 namespace App\Support\Marketing;
 
 use App\Enums\MarketingCompanyContactChannel;
+use App\Support\InternationalPhoneNumber;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -63,6 +64,38 @@ final class MarketingCompanyContactRules
         if ($value === null) {
             $request->merge(['company_contacts' => []]);
         }
+    }
+
+    /**
+     * Normalise les numéros phone/whatsapp dans company_contacts avant validation.
+     */
+    public static function normalizePhoneFields(FormRequest $request): void
+    {
+        if (! $request->has('company_contacts') || ! is_array($request->input('company_contacts'))) {
+            return;
+        }
+
+        $contacts = $request->input('company_contacts');
+
+        foreach ($contacts as $index => $channel) {
+            if (! is_array($channel)) {
+                continue;
+            }
+
+            $type = MarketingCompanyContactChannel::tryFrom((string) ($channel['type'] ?? ''));
+
+            if (! in_array($type, [MarketingCompanyContactChannel::Phone, MarketingCompanyContactChannel::WhatsApp], true)) {
+                continue;
+            }
+
+            $normalized = InternationalPhoneNumber::normalize($channel['value'] ?? null);
+
+            if ($normalized !== null) {
+                $contacts[$index]['value'] = $normalized;
+            }
+        }
+
+        $request->merge(['company_contacts' => $contacts]);
     }
 
     /**
@@ -163,9 +196,9 @@ final class MarketingCompanyContactRules
 
             if (
                 in_array($type, [MarketingCompanyContactChannel::Phone, MarketingCompanyContactChannel::WhatsApp], true)
-                && ! preg_match('/^\+[1-9]\d{1,14}$/', $value)
+                && ! InternationalPhoneNumber::isValid($value)
             ) {
-                $validator->errors()->add($field, 'Le numéro doit être au format E.164 (ex. +224612345678).');
+                $validator->errors()->add($field, 'Le numéro doit être au format international avec indicatif (ex. +1 (555) 670-8636).');
             }
         }
     }
@@ -225,6 +258,10 @@ final class MarketingCompanyContactRules
 
         if ($value === '') {
             return null;
+        }
+
+        if (in_array($type, [MarketingCompanyContactChannel::Phone, MarketingCompanyContactChannel::WhatsApp], true)) {
+            $value = InternationalPhoneNumber::normalize($value) ?? $value;
         }
 
         return [

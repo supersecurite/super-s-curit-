@@ -5,6 +5,7 @@ import InputError from '@/components/input-error';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import InternationalPhoneInput from '@/components/ui/international-phone-input';
 import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
@@ -128,14 +129,13 @@ export default function Profile({
                             <div className="grid gap-2">
                                 <Label htmlFor="phone">Téléphone</Label>
 
-                                <Input
+                                <InternationalPhoneInput
                                     id="phone"
-                                    type="tel"
-                                    className="mt-1 block w-full"
-                                    defaultValue={user.phone ?? ''}
                                     name="phone"
+                                    className="mt-1"
+                                    defaultValue={user.phone ?? ''}
                                     autoComplete="tel"
-                                    placeholder="+224 ..."
+                                    aria-invalid={Boolean(errors.phone)}
                                 />
 
                                 <InputError

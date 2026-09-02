@@ -4,6 +4,7 @@ import CompanyChannelsEditor from '@/components/marketing-clients/company-channe
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import InternationalPhoneInput from '@/components/ui/international-phone-input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import type { MarketingCompanyChannel } from '@/types/marketing-company-contact';
@@ -130,13 +131,16 @@ export default function MarketingContactForm({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="phone">Téléphone (E.164)</Label>
-                        <Input
+                        <Label htmlFor="phone">Téléphone</Label>
+                        <InternationalPhoneInput
                             id="phone"
                             name="phone"
-                            placeholder="+224612345678"
                             defaultValue={contact?.phone ?? ''}
+                            aria-invalid={Boolean(errors.phone)}
                         />
+                        <p className="text-muted-foreground text-xs">
+                            Choisissez l&apos;indicatif pays, puis saisissez le numéro.
+                        </p>
                         {errors.phone ? (
                             <p className="text-sm text-destructive">{errors.phone}</p>
                         ) : null}

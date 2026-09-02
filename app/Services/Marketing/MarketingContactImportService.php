@@ -4,6 +4,7 @@ namespace App\Services\Marketing;
 
 use App\DataTransferObjects\MarketingContactImportResult;
 use App\Models\MarketingContact;
+use App\Support\InternationalPhoneNumber;
 use App\Support\Marketing\CompanyContactLegacyConverter;
 use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Http\UploadedFile;
@@ -63,6 +64,8 @@ class MarketingContactImportService
             }
 
             $data = $this->extractRowData($row, $columnMap);
+            $data['phone'] = InternationalPhoneNumber::normalize($data['phone'] ?? null) ?? $data['phone'];
+            $data['company_contacts'] = $this->normalizeImportedCompanyContacts($data['company_contacts'] ?? []);
 
             $validator = Validator::make($data, [
                 'first_name' => ['nullable', 'string', 'max:255'],
@@ -75,7 +78,7 @@ class MarketingContactImportService
                 ...MarketingCompanyContactRules::rules(),
             ], [
                 'email.email' => 'Adresse e-mail invalide.',
-                'phone.regex' => 'Le téléphone doit être au format E.164 (ex. +224612345678).',
+                'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636).',
                 ...MarketingCompanyContactRules::messages(),
             ]);
 
@@ -257,7 +260,7 @@ class MarketingContactImportService
             }
 
             if ($field === 'phone') {
-                $data[$field] = str_starts_with($value, '+') ? $value : '+'.$value;
+                $data[$field] = $value;
 
                 continue;
             }
@@ -278,6 +281,33 @@ class MarketingContactImportService
         }
 
         return $data;
+    }
+
+    /**
+     * @param  array<int, mixed>  $contacts
+     * @return array<int, mixed>
+     */
+    private function normalizeImportedCompanyContacts(array $contacts): array
+    {
+        foreach ($contacts as $index => $channel) {
+            if (! is_array($channel)) {
+                continue;
+            }
+
+            $type = (string) ($channel['type'] ?? '');
+
+            if (! in_array($type, ['phone', 'whatsapp'], true)) {
+                continue;
+            }
+
+            $normalized = InternationalPhoneNumber::normalize($channel['value'] ?? null);
+
+            if ($normalized !== null) {
+                $contacts[$index]['value'] = $normalized;
+            }
+        }
+
+        return $contacts;
     }
 
     /**

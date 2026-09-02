@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\MarketingContact;
+use App\Support\InternationalPhoneNumber;
 use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -23,6 +24,13 @@ class StoreMarketingContactRequest extends FormRequest
         }
 
         MarketingCompanyContactRules::prepareForValidation($this);
+        MarketingCompanyContactRules::normalizePhoneFields($this);
+
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => InternationalPhoneNumber::normalize($this->input('phone')),
+            ]);
+        }
 
         $this->merge(['is_company' => $this->boolean('is_company')]);
 
@@ -85,7 +93,7 @@ class StoreMarketingContactRequest extends FormRequest
         return [
             'email.unique' => 'Un contact avec cet e-mail existe déjà.',
             'phone.unique' => 'Un contact avec ce téléphone existe déjà.',
-            'phone.regex' => 'Le téléphone doit être au format E.164 (ex. +224612345678).',
+            'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636).',
             ...MarketingCompanyContactRules::messages(),
         ];
     }

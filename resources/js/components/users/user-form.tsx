@@ -7,6 +7,7 @@ import UserPermissionsPanel, {
 import UserSecurityActions from '@/components/users/user-security-actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import InternationalPhoneInput from '@/components/ui/international-phone-input';
 import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { cn } from '@/lib/utils';
@@ -119,13 +120,12 @@ export default function UserForm({
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="phone">Téléphone</Label>
-                                    <Input
+                                    <InternationalPhoneInput
                                         id="phone"
                                         name="phone"
-                                        type="tel"
                                         defaultValue={user?.phone ?? ''}
                                         autoComplete="tel"
-                                        placeholder="+224 ..."
+                                        aria-invalid={Boolean(errors.phone)}
                                     />
                                     <InputError message={errors.phone} />
                                 </div>
