@@ -3,10 +3,8 @@
 namespace App\Mail;
 
 use App\Models\MarketingCampaignSend;
-use App\Support\Marketing\MarketingReplyAddress;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -23,9 +21,6 @@ class MarketingCampaignMailable extends Mailable
     {
         return new Envelope(
             subject: $this->send->subject,
-            replyTo: [
-                new Address(MarketingReplyAddress::forSend($this->send)),
-            ],
         );
     }
 

@@ -9,7 +9,6 @@ import {
     Images,
     LayoutGrid,
     List,
-    MessageSquare,
     Newspaper,
     Shield,
     UserPlus,
@@ -43,7 +42,6 @@ import { index as partnersIndex } from '@/routes/partners';
 import { index as marketingClientsIndex } from '@/routes/marketing-clients';
 import { index as marketingListsIndex } from '@/routes/marketing-lists';
 import { index as marketingCampaignsIndex } from '@/routes/marketing-campaigns';
-import { index as marketingConversationsIndex } from '@/routes/marketing-conversations';
 import { index as marketingTemplatesIndex } from '@/routes/marketing-templates';
 import { index as accessLogsIndex } from '@/routes/access-logs';
 import type { Auth, NavGroup, NavItem } from '@/types';
@@ -249,10 +247,6 @@ function buildNavGroups(
         marketingChildren.push({
             title: 'Listes',
             href: marketingListsIndex.url(),
-        });
-        marketingChildren.push({
-            title: 'Conversations',
-            href: marketingConversationsIndex.url(),
         });
     }
 

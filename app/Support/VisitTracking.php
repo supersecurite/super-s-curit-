@@ -37,7 +37,6 @@ class VisitTracking
         'marketing-lists',
         'marketing-templates',
         'marketing-campaigns',
-        'marketing-conversations',
         'access-logs',
         'marketing',
     ];

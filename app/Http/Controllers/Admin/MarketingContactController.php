@@ -6,7 +6,6 @@ use App\Actions\Marketing\CreateMarketingContact;
 use App\Actions\Marketing\DeleteMarketingContact;
 use App\Actions\Marketing\ImportMarketingContacts;
 use App\Actions\Marketing\UpdateMarketingContact;
-use App\Enums\BackofficePermission;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportMarketingContactsRequest;
 use App\Http\Requests\StoreMarketingContactRequest;
@@ -101,19 +100,16 @@ class MarketingContactController extends Controller
 
         $marketingClient->load([
             'lists' => fn ($query) => $query->orderBy('name'),
-            'conversation',
         ]);
 
         return Inertia::render('marketing-clients/show', [
             'contact' => $marketingClient->toAdminArray(),
-            'conversationUuid' => $marketingClient->conversation?->uuid,
             'lists' => $marketingClient->lists
                 ->map(fn (MarketingList $list) => $list->toAdminArray())
                 ->values()
                 ->all(),
             'canUpdate' => $request->user()?->can('update', $marketingClient) ?? false,
             'canDelete' => $request->user()?->can('delete', $marketingClient) ?? false,
-            'canReply' => $request->user()?->hasBackofficePermission(BackofficePermission::MarketingCampaignsSend) ?? false,
         ]);
     }
 

@@ -49,7 +49,6 @@ Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire
 - ✅ Modèles de messages e-mail (variables dynamiques) — `/marketing-templates`
 - ✅ Campagnes e-mail (CRUD brouillon, lancement queue, statuts, pixel ouverture) — `/marketing-campaigns`
 - ✅ Suivi temps réel fiche campagne (Laravel Reverb + Echo)
-- ✅ Conversations e-mail MVP (réponses + réponse manuelle)
 - Bounces e-mail (webhook provider)
 - Permissions `marketing_campaigns.*` · UI backoffice · tests Feature
 

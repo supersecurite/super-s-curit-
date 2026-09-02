@@ -30,16 +30,11 @@ Commercial / admin avec permissions `marketing_campaigns.*` — voir `Backoffice
    - Dispatch depuis job d’envoi, sync de clôture, lancement et pixel d’ouverture
    - Frontend : Laravel Echo + hook `useMarketingCampaignRealtime` sur la page show
    - Actif si `BROADCAST_CONNECTION=reverb` (ou `pusher`) + variables `REVERB_*` / `VITE_REVERB_*`
-8. **Conversations e-mail (MVP)** — `/marketing-conversations` :
-   - Fil par contact (réponses campagne + réponses manuelles équipe)
-   - `Reply-To` campagne : `notifications+{reply_token}@domaine`
-   - Webhook inbound `POST /webhooks/marketing/inbound-email` (token `MARKETING_INBOUND_WEBHOOK_TOKEN`)
-   - Réponse manuelle depuis le backoffice (permission `marketing_campaigns.send`)
 
 ### Prévu (suite Lot 2 / Lot 3)
 
-9. Bounces provider e-mail (webhook / feedback loop).
-10. WhatsApp Meta Cloud API (Lot 3).
+8. Bounces provider e-mail (webhook / feedback loop).
+9. WhatsApp Meta Cloud API (Lot 3).
 
 - Intégration API Meta WhatsApp Cloud
 - Modèles Meta approuvés + webhooks status
