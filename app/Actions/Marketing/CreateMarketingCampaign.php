@@ -34,6 +34,7 @@ class CreateMarketingCampaign extends Action
         }
 
         if ($channel === MarketingCampaignChannel::WhatsApp) {
+            $data['marketing_email_account_id'] = null;
             $data['subject'] = null;
             $data['body'] = '';
         }

@@ -6,6 +6,7 @@ use App\Enums\MarketingCampaignChannel;
 use App\Enums\MarketingMessageTemplateChannel;
 use App\Models\MarketingCampaign;
 use App\Models\MarketingContact;
+use App\Models\MarketingEmailAccount;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Models\WhatsAppAccount;
@@ -63,6 +64,12 @@ class UpdateMarketingCampaignRequest extends FormRequest
                 'nullable',
                 'integer',
                 Rule::exists(WhatsAppAccount::class, 'id')->where(fn ($query) => $query->where('is_active', true)),
+            ],
+            'marketing_email_account_id' => [
+                Rule::requiredIf(! $isWhatsApp),
+                'nullable',
+                'integer',
+                Rule::exists(MarketingEmailAccount::class, 'id')->where(fn ($query) => $query->where('is_active', true)),
             ],
             'subject' => [
                 Rule::requiredIf(! $isWhatsApp),
@@ -132,6 +139,7 @@ class UpdateMarketingCampaignRequest extends FormRequest
         return [
             'name.required' => 'Le nom de la campagne est requis.',
             'whatsapp_account_id.required' => 'Un compte WhatsApp actif est requis.',
+            'marketing_email_account_id.required' => 'Un compte e-mail actif est requis.',
             'marketing_message_template_id.required' => 'Un template Meta WhatsApp est requis.',
             'subject.required' => 'L\'objet est requis.',
             'body.required' => 'Le contenu du message est requis.',

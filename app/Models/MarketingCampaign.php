@@ -25,6 +25,7 @@ use Illuminate\Support\Str;
     'marketing_list_id',
     'marketing_message_template_id',
     'whatsapp_account_id',
+    'marketing_email_account_id',
     'subject',
     'body',
     'created_by',
@@ -114,6 +115,14 @@ class MarketingCampaign extends Model
     }
 
     /**
+     * @return BelongsTo<MarketingEmailAccount, $this>
+     */
+    public function emailAccount(): BelongsTo
+    {
+        return $this->belongsTo(MarketingEmailAccount::class, 'marketing_email_account_id');
+    }
+
+    /**
      * @return BelongsTo<User, $this>
      */
     public function creator(): BelongsTo
@@ -199,6 +208,7 @@ class MarketingCampaign extends Model
             'marketing_list_id' => $this->marketing_list_id,
             'marketing_message_template_id' => $this->marketing_message_template_id,
             'whatsapp_account_id' => $this->whatsapp_account_id,
+            'marketing_email_account_id' => $this->marketing_email_account_id,
             'list' => $this->relationLoaded('list') && $this->list
                 ? [
                     'uuid' => $this->list->uuid,
@@ -237,6 +247,15 @@ class MarketingCampaign extends Model
                 ? [
                     'uuid' => $this->whatsappAccount->uuid,
                     'name' => $this->whatsappAccount->name,
+                ]
+                : null,
+            'email_account' => $this->relationLoaded('emailAccount') && $this->emailAccount
+                ? [
+                    'uuid' => $this->emailAccount->uuid,
+                    'name' => $this->emailAccount->name,
+                    'from_address' => $this->emailAccount->from_address,
+                    'daily_send_limit' => $this->emailAccount->daily_send_limit,
+                    'remaining_today' => $this->emailAccount->remainingDailyQuota(),
                 ]
                 : null,
             'subject' => $this->subject,

@@ -37,7 +37,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
 | **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` · seeder `MarketingSeeder` |
 | **Journal d'accès backoffice** | Support | ✅ Complet | `docs/features/access-logs.md` — monitoring sans Nightwatch |
-| **Lot 2 — Campagnes e-mail** | Marketing | ✅ Complet | Canaux séparés UI · audience groupes+contacts · Reverb — bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
+| **Lot 2 — Campagnes e-mail** | Marketing | ✅ Complet | Canaux séparés · comptes SMTP multi + quotas · audience mixte · Reverb — bounces provider 🔲 — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
 | **Lot 3 — Campagnes WhatsApp** | Marketing | ✅ Complet | Comptes Meta · templates · audience mixte · webhook delivered/read — `docs/features/marketing-campagnes.md` |
 
 Légende : ✅ Complet · ⚠️ Partiel/dette · 🔲 À construire

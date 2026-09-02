@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageContro
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
 use App\Http\Controllers\Admin\MarketingCampaignController as AdminMarketingCampaignController;
 use App\Http\Controllers\Admin\MarketingContactController as AdminMarketingContactController;
+use App\Http\Controllers\Admin\MarketingEmailAccountController as AdminMarketingEmailAccountController;
 use App\Http\Controllers\Admin\MarketingListController as AdminMarketingListController;
 use App\Http\Controllers\Admin\MarketingMessageTemplateController as AdminMarketingMessageTemplateController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
@@ -140,6 +141,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('backoffice.permission:marketing_campaigns')->group(function () {
+        Route::resource('marketing-email-accounts', AdminMarketingEmailAccountController::class)
+            ->parameters(['marketing-email-accounts' => 'marketing_email_account'])
+            ->except(['show']);
         Route::resource('marketing-whatsapp-accounts', AdminWhatsAppAccountController::class)
             ->parameters(['marketing-whatsapp-accounts' => 'whatsapp_account'])
             ->except(['show']);

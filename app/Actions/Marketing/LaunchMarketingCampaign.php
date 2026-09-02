@@ -33,6 +33,16 @@ class LaunchMarketingCampaign extends Action
 
         $channel = $campaign->channel;
 
+        if ($channel === MarketingCampaignChannel::Email) {
+            $account = $campaign->emailAccount;
+
+            if ($account === null || ! $account->is_active) {
+                throw ValidationException::withMessages([
+                    'marketing_email_account_id' => 'Un compte e-mail actif est requis pour lancer cette campagne.',
+                ]);
+            }
+        }
+
         if ($channel === MarketingCampaignChannel::WhatsApp) {
             $account = $campaign->whatsappAccount;
 
@@ -61,6 +71,18 @@ class LaunchMarketingCampaign extends Action
             throw ValidationException::withMessages([
                 'list_uuids' => $hint,
             ]);
+        }
+
+        if ($channel === MarketingCampaignChannel::Email) {
+            $emailAccount = $campaign->emailAccount;
+
+            if ($emailAccount !== null && ! $emailAccount->hasRemainingQuotaFor($contacts->count())) {
+                $remaining = $emailAccount->remainingDailyQuota() ?? 0;
+
+                throw ValidationException::withMessages([
+                    'marketing_email_account_id' => "Quota journalier insuffisant pour ce compte e-mail ({$remaining} envoi(s) restant(s), {$contacts->count()} destinataire(s)).",
+                ]);
+            }
         }
 
         DB::transaction(function () use ($campaign, $contacts, $channel): void {

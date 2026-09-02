@@ -12,6 +12,7 @@ use App\Http\Requests\StoreMarketingCampaignRequest;
 use App\Http\Requests\UpdateMarketingCampaignRequest;
 use App\Models\MarketingCampaign;
 use App\Models\MarketingContact;
+use App\Models\MarketingEmailAccount;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Models\WhatsAppAccount;
@@ -90,6 +91,15 @@ class MarketingCampaignController extends Controller
             'lists' => $this->listOptions(),
             'contacts' => $this->contactOptions(),
             'templates' => $this->templateOptions($channel),
+            'emailAccounts' => $channel === MarketingCampaignChannel::Email
+                ? $this->emailAccountOptions()
+                : [],
+            'defaultEmailAccountId' => $channel === MarketingCampaignChannel::Email
+                ? MarketingEmailAccount::query()
+                    ->where('is_active', true)
+                    ->where('is_default', true)
+                    ->value('id')
+                : null,
             'whatsappAccounts' => $channel === MarketingCampaignChannel::WhatsApp
                 ? $this->whatsappAccountOptions()
                 : [],
@@ -123,6 +133,7 @@ class MarketingCampaignController extends Controller
             'audienceContacts:id,uuid,first_name,last_name,email,phone',
             'template:id,uuid,name,meta_template_name,meta_template_language',
             'whatsappAccount:id,uuid,name',
+            'emailAccount:id,uuid,name,from_address,from_name,daily_send_limit',
         ]);
         $marketingCampaign->loadCount('sends');
 
@@ -154,6 +165,7 @@ class MarketingCampaignController extends Controller
             'audienceContacts:id,uuid,first_name,last_name,email,phone',
             'template:id,uuid,name,meta_template_name,meta_template_language',
             'whatsappAccount:id,uuid,name',
+            'emailAccount:id,uuid,name,from_address,from_name,daily_send_limit',
         ]);
 
         return Inertia::render('marketing-campaigns/edit', [
@@ -162,6 +174,9 @@ class MarketingCampaignController extends Controller
             'lists' => $this->listOptions(),
             'contacts' => $this->contactOptions(),
             'templates' => $this->templateOptions($marketingCampaign->channel),
+            'emailAccounts' => $marketingCampaign->channel === MarketingCampaignChannel::Email
+                ? $this->emailAccountOptions()
+                : [],
             'whatsappAccounts' => $marketingCampaign->channel === MarketingCampaignChannel::WhatsApp
                 ? $this->whatsappAccountOptions()
                 : [],
@@ -382,6 +397,27 @@ class MarketingCampaignController extends Controller
                 'body' => $template->body,
                 'meta_template_name' => $template->meta_template_name,
                 'meta_template_language' => $template->meta_template_language,
+            ])
+            ->all();
+    }
+
+    /**
+     * @return list<array{id: int, uuid: string, name: string, from_address: string, remaining_today: int|null, daily_send_limit: int|null}>
+     */
+    private function emailAccountOptions(): array
+    {
+        return MarketingEmailAccount::query()
+            ->where('is_active', true)
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->get()
+            ->map(fn (MarketingEmailAccount $account) => [
+                'id' => $account->id,
+                'uuid' => $account->uuid,
+                'name' => $account->name,
+                'from_address' => $account->from_address,
+                'daily_send_limit' => $account->daily_send_limit,
+                'remaining_today' => $account->remainingDailyQuota(),
             ])
             ->all();
     }

@@ -10,6 +10,7 @@ use App\Mail\MarketingCampaignMailable;
 use App\Models\MarketingCampaign;
 use App\Models\MarketingCampaignSend;
 use App\Models\MarketingContact;
+use App\Models\MarketingEmailAccount;
 use App\Models\MarketingList;
 use App\Models\User;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
@@ -28,12 +29,14 @@ test('commercial can create email campaign', function () {
 
     $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
     $list = MarketingList::factory()->create();
+    $emailAccount = MarketingEmailAccount::factory()->default()->create();
 
     $response = $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
         'name' => 'Relance printemps',
         'channel' => 'email',
         'list_uuids' => [$list->uuid],
         'contact_uuids' => [],
+        'marketing_email_account_id' => $emailAccount->id,
         'subject' => 'Bonjour {{prenom}}',
         'body' => 'Message de campagne pour {{nom}}.',
     ]);
@@ -222,11 +225,14 @@ test('campaign can mix list and direct contacts in audience', function () {
     ]);
     $list->contacts()->attach($fromList);
 
+    $emailAccount = MarketingEmailAccount::factory()->default()->create();
+
     $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
         'name' => 'Audience mixte',
         'channel' => 'email',
         'list_uuids' => [$list->uuid],
         'contact_uuids' => [$direct->uuid],
+        'marketing_email_account_id' => $emailAccount->id,
         'subject' => 'Hello',
         'body' => 'Body',
     ])->assertRedirect();
@@ -271,6 +277,34 @@ test('campaigns index is separated by channel', function () {
             ->where('channel', 'whatsapp')
             ->has('campaigns.data', 1)
             ->where('campaigns.data.0.uuid', $whatsapp->uuid));
+});
+
+test('launch fails when email account daily quota is exceeded', function () {
+    Queue::fake();
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $list = MarketingList::factory()->create();
+    $emailAccount = MarketingEmailAccount::factory()->create([
+        'daily_send_limit' => 1,
+    ]);
+
+    $contacts = MarketingContact::factory()->count(2)->create([
+        'marketing_consent' => true,
+    ]);
+    $list->contacts()->attach($contacts->pluck('id'));
+
+    $campaign = MarketingCampaign::factory()->create([
+        'marketing_list_id' => $list->id,
+        'marketing_email_account_id' => $emailAccount->id,
+        'status' => MarketingCampaignStatus::Draft,
+    ]);
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-campaigns.launch', $campaign))
+        ->assertSessionHasErrors('marketing_email_account_id');
+
+    Queue::assertNothingPushed();
 });
 
 test('audience preview returns merged eligible contacts', function () {

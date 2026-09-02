@@ -16,9 +16,11 @@ Commercial / admin avec permissions `marketing_campaigns.*` — voir `Backoffice
 
 ### Séparation des canaux
 
-- Sidebar : **Templates e-mail** / **Campagnes e-mail** vs **Templates WhatsApp** / **Campagnes WhatsApp** (+ comptes WhatsApp).
+- Sidebar : **E-mail** (templates, campagnes, comptes) vs **WhatsApp** (templates, campagnes, comptes) + **Commun** (contacts, groupes).
 - Index filtrés par `?channel=email|whatsapp` (défaut e-mail).
 - Création : canal **verrouillé** selon l’entrée menu (pas de bascule e-mail ↔ WhatsApp dans le formulaire).
+- Campagne e-mail : sélection obligatoire d’un **compte e-mail** (SMTP / log + quota journalier).
+- Campagne WhatsApp : sélection obligatoire d’un **compte WhatsApp**.
 
 ### Audience campagne
 
@@ -31,18 +33,19 @@ Commercial / admin avec permissions `marketing_campaigns.*` — voir `Backoffice
 
 1. **Templates e-mail** (`/marketing-templates?channel=email`) — CRUD + variables dynamiques.
 2. **Campagnes e-mail** — brouillon, lancement queue, pixel d’ouverture, indicateurs type WhatsApp, temps réel Reverb.
+3. **Comptes e-mail multi-SMTP** (`/marketing-email-accounts`) — expéditeur + SMTP (ou driver `log`), compte par défaut, **quota journalier** optionnel pour contourner les limites fournisseurs.
 
 ### Livré (Lot 3)
 
-3. **Comptes WhatsApp multi-config** (`/marketing-whatsapp-accounts`) — credentials Meta en base (tokens chiffrés), driver `meta` \| `log`, compte par défaut, URL webhook par compte.
-4. **Templates WhatsApp** — canal + `meta_template_name` / `meta_template_language` uniquement (modèle Meta approuvé, **pas** de corps libre).
-5. **Campagnes WhatsApp** — compte + template Meta ; éligibilité consentement + téléphone ; job `SendMarketingCampaignWhatsAppJob`.
-6. **Webhook Meta** — `GET|POST /webhooks/marketing/whatsapp/{uuid}` → `sent` / `delivered`→`received` / `read` / `failed` (anti-régression de statut).
+4. **Comptes WhatsApp multi-config** (`/marketing-whatsapp-accounts`) — credentials Meta en base (tokens chiffrés), driver `meta` \| `log`, compte par défaut, URL webhook par compte.
+5. **Templates WhatsApp** — canal + `meta_template_name` / `meta_template_language` uniquement (modèle Meta approuvé, **pas** de corps libre).
+6. **Campagnes WhatsApp** — compte + template Meta ; éligibilité consentement + téléphone ; job `SendMarketingCampaignWhatsAppJob`.
+7. **Webhook Meta** — `GET|POST /webhooks/marketing/whatsapp/{uuid}` → `sent` / `delivered`→`received` / `read` / `failed` (anti-régression de statut).
 
 ### Prévu / dette
 
-7. Bounces provider e-mail.
-8. Sync automatique des templates depuis Meta Graph API.
+8. Bounces provider e-mail.
+9. Sync automatique des templates depuis Meta Graph API.
 
 ## Accusés
 
@@ -57,6 +60,8 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 
 | Élément | Rôle |
 |---|---|
+| `MarketingEmailAccount` | Config SMTP multi-comptes + quota journalier |
+| `ConfigureMarketingEmailMailer` | Mailer Laravel à la volée |
 | `WhatsAppAccount` | Config Meta multi-comptes |
 | `WhatsAppCloudApiService` | Envoi template Graph API / log |
 | `SendMarketingCampaignWhatsAppJob` | Queue envoi WA |
@@ -69,11 +74,12 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 
 | Couche | Fichier |
 |---|---|
-| Comptes | `app/Models/WhatsAppAccount.php`, `Admin/WhatsAppAccountController.php` |
+| Comptes e-mail | `app/Models/MarketingEmailAccount.php`, `Admin/MarketingEmailAccountController.php` |
+| Comptes WA | `app/Models/WhatsAppAccount.php`, `Admin/WhatsAppAccountController.php` |
 | Service / Job | `app/Services/Marketing/WhatsAppCloudApiService.php`, `SendMarketingCampaignWhatsAppJob.php` |
 | Webhook | `MarketingWhatsAppWebhookController.php` |
-| Pages | `resources/js/pages/marketing-whatsapp-accounts/`, `marketing-campaigns/`, `marketing-templates/` |
-| Tests | `tests/Feature/WhatsAppAccountTest.php`, `MarketingWhatsAppCampaignTest.php`, `MarketingCampaignTest.php` |
+| Pages | `resources/js/pages/marketing-email-accounts/`, `marketing-whatsapp-accounts/`, `marketing-campaigns/`, `marketing-templates/` |
+| Tests | `tests/Feature/MarketingEmailAccountTest.php`, `WhatsAppAccountTest.php`, `MarketingWhatsAppCampaignTest.php`, `MarketingCampaignTest.php` |
 
 ## Limites & dette
 
@@ -81,5 +87,6 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 - Pas de sync templates Meta.
 - WhatsApp : **uniquement** modèles Meta approuvés (pas de message texte libre).
 - « Lu » WhatsApp et « ouvert » e-mail ne sont pas des garanties absolues.
-- Secrets WhatsApp : **uniquement en base** (pas `.env`).
+- Secrets e-mail SMTP et WhatsApp : **uniquement en base** (pas `.env` pour ces comptes marketing).
 - Legacy `marketing_list_id` conservé pour compat lecture (premier groupe sync).
+- Quota e-mail : comptage des envois `sent_at` du jour ; le lancement refuse si l’audience dépasse le restant.

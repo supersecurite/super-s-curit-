@@ -49,6 +49,15 @@ type TemplateOption = {
     meta_template_language?: string | null;
 };
 
+type EmailAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
+    from_address: string;
+    daily_send_limit: number | null;
+    remaining_today: number | null;
+};
+
 type WhatsAppAccountOption = {
     id: number;
     uuid: string;
@@ -62,6 +71,7 @@ type MarketingCampaignFormData = {
     list_uuids?: string[];
     contact_uuids?: string[];
     marketing_message_template_id: number | null;
+    marketing_email_account_id?: number | null;
     whatsapp_account_id?: number | null;
     subject: string | null;
     body: string;
@@ -77,6 +87,8 @@ type MarketingCampaignFormProps = {
     lists: ListOption[];
     contacts: ContactOption[];
     templates: TemplateOption[];
+    emailAccounts?: EmailAccountOption[];
+    defaultEmailAccountId?: number | null;
     whatsappAccounts?: WhatsAppAccountOption[];
     defaultWhatsappAccountId?: number | null;
     variables: string[];
@@ -123,6 +135,8 @@ export default function MarketingCampaignForm({
     lists,
     contacts,
     templates,
+    emailAccounts = [],
+    defaultEmailAccountId = null,
     whatsappAccounts = [],
     defaultWhatsappAccountId = null,
     variables,
@@ -134,6 +148,8 @@ export default function MarketingCampaignForm({
         list_uuids: campaign?.list_uuids ?? [],
         contact_uuids: campaign?.contact_uuids ?? [],
         marketing_message_template_id: campaign?.marketing_message_template_id ?? null,
+        marketing_email_account_id:
+            campaign?.marketing_email_account_id ?? defaultEmailAccountId ?? null,
         whatsapp_account_id:
             campaign?.whatsapp_account_id ?? defaultWhatsappAccountId ?? null,
         subject: resolveInitialSubject(campaign, lockedChannel),
@@ -302,6 +318,9 @@ export default function MarketingCampaignForm({
                 list_uuids: formData.list_uuids,
                 contact_uuids: formData.contact_uuids,
                 marketing_message_template_id: formData.marketing_message_template_id,
+                marketing_email_account_id: isWhatsApp
+                    ? null
+                    : formData.marketing_email_account_id,
                 whatsapp_account_id: isWhatsApp ? formData.whatsapp_account_id : null,
                 subject: isWhatsApp ? null : formData.subject,
                 body: isWhatsApp ? '' : formData.body,
@@ -356,7 +375,34 @@ export default function MarketingCampaignForm({
                         </Select>
                         <InputError message={errors.whatsapp_account_id} />
                     </div>
-                ) : null}
+                ) : (
+                    <div className="space-y-2">
+                        <Label htmlFor="marketing_email_account_id">Compte e-mail</Label>
+                        <Select
+                            value={formData.marketing_email_account_id?.toString() ?? ''}
+                            onValueChange={(value) =>
+                                updateField('marketing_email_account_id', Number(value))
+                            }
+                            required
+                        >
+                            <SelectTrigger id="marketing_email_account_id">
+                                <SelectValue placeholder="Choisir un compte" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {emailAccounts.map((account) => (
+                                    <SelectItem key={account.id} value={account.id.toString()}>
+                                        {account.name} ({account.from_address}
+                                        {account.daily_send_limit !== null
+                                            ? ` — ${account.remaining_today ?? 0}/${account.daily_send_limit} restants`
+                                            : ''}
+                                        )
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <InputError message={errors.marketing_email_account_id} />
+                    </div>
+                )}
 
                 <div className="space-y-2">
                     <Label htmlFor="list_uuids">Groupes</Label>

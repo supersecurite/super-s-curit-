@@ -56,6 +56,13 @@ type CampaignData = {
         meta_template_name?: string | null;
         meta_template_language?: string | null;
     } | null;
+    email_account: {
+        uuid: string;
+        name: string;
+        from_address: string;
+        daily_send_limit: number | null;
+        remaining_today: number | null;
+    } | null;
     launched_at_formatted: string | null;
     completed_at_formatted: string | null;
     created_at_formatted: string | null;
@@ -371,6 +378,18 @@ export default function MarketingCampaignsShow() {
                                 <dt className="text-muted-foreground">Canal</dt>
                                 <dd>{campaign.channel_label}</dd>
                             </div>
+                            {campaign.channel === 'email' && campaign.email_account ? (
+                                <div>
+                                    <dt className="text-muted-foreground">Compte e-mail</dt>
+                                    <dd>
+                                        {campaign.email_account.name} (
+                                        {campaign.email_account.from_address})
+                                        {campaign.email_account.daily_send_limit !== null
+                                            ? ` — quota ${campaign.email_account.remaining_today ?? 0}/${campaign.email_account.daily_send_limit}`
+                                            : ''}
+                                    </dd>
+                                </div>
+                            ) : null}
                             {campaign.channel === 'email' ? (
                                 <div>
                                     <dt className="text-muted-foreground">Objet</dt>

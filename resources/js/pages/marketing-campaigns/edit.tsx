@@ -33,6 +33,15 @@ type WhatsAppAccountOption = {
     name: string;
 };
 
+type EmailAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
+    from_address: string;
+    daily_send_limit: number | null;
+    remaining_today: number | null;
+};
+
 type CampaignData = {
     uuid: string;
     name: string;
@@ -40,6 +49,7 @@ type CampaignData = {
     list_uuids: string[];
     contact_uuids: string[];
     marketing_message_template_id: number | null;
+    marketing_email_account_id: number | null;
     whatsapp_account_id: number | null;
     subject: string | null;
     body: string;
@@ -52,6 +62,7 @@ type PageProps = {
     lists: ListOption[];
     contacts: ContactOption[];
     templates: TemplateOption[];
+    emailAccounts: EmailAccountOption[];
     whatsappAccounts: WhatsAppAccountOption[];
     variables: string[];
 };
@@ -64,12 +75,12 @@ export default function MarketingCampaignsEdit() {
         lists,
         contacts,
         templates,
+        emailAccounts,
         whatsappAccounts,
         variables,
     } = usePage<PageProps>().props;
 
     const isWhatsApp = lockedChannel === 'whatsapp';
-    const listHref = index.url({ query: { channel: lockedChannel } });
 
     return (
         <>
@@ -93,6 +104,7 @@ export default function MarketingCampaignsEdit() {
                     lists={lists}
                     contacts={contacts}
                     templates={templates}
+                    emailAccounts={emailAccounts}
                     whatsappAccounts={whatsappAccounts}
                     variables={variables}
                     method="put"

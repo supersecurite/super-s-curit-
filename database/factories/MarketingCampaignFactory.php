@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\MarketingCampaignChannel;
 use App\Enums\MarketingCampaignStatus;
 use App\Models\MarketingCampaign;
+use App\Models\MarketingEmailAccount;
 use App\Models\MarketingList;
 use App\Models\MarketingMessageTemplate;
 use App\Models\User;
@@ -28,6 +29,7 @@ class MarketingCampaignFactory extends Factory
             'status' => MarketingCampaignStatus::Draft,
             'marketing_list_id' => MarketingList::factory(),
             'marketing_message_template_id' => MarketingMessageTemplate::factory(),
+            'marketing_email_account_id' => MarketingEmailAccount::factory(),
             'subject' => fake()->sentence(),
             'body' => 'Bonjour {{prenom}} {{nom}},'."\n\n".fake()->paragraph(),
             'created_by' => User::factory(),

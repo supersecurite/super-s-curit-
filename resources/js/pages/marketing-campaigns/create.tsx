@@ -33,12 +33,23 @@ type WhatsAppAccountOption = {
     name: string;
 };
 
+type EmailAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
+    from_address: string;
+    daily_send_limit: number | null;
+    remaining_today: number | null;
+};
+
 type PageProps = {
     errors: Record<string, string>;
     lockedChannel: 'email' | 'whatsapp';
     lists: ListOption[];
     contacts: ContactOption[];
     templates: TemplateOption[];
+    emailAccounts: EmailAccountOption[];
+    defaultEmailAccountId: number | null;
     whatsappAccounts: WhatsAppAccountOption[];
     defaultWhatsappAccountId: number | null;
     variables: string[];
@@ -51,6 +62,8 @@ export default function MarketingCampaignsCreate() {
         lists,
         contacts,
         templates,
+        emailAccounts,
+        defaultEmailAccountId,
         whatsappAccounts,
         defaultWhatsappAccountId,
         variables,
@@ -83,6 +96,8 @@ export default function MarketingCampaignsCreate() {
                     lists={lists}
                     contacts={contacts}
                     templates={templates}
+                    emailAccounts={emailAccounts}
+                    defaultEmailAccountId={defaultEmailAccountId}
                     whatsappAccounts={whatsappAccounts}
                     defaultWhatsappAccountId={defaultWhatsappAccountId}
                     variables={variables}

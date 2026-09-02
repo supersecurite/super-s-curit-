@@ -41,6 +41,7 @@ import { index as marketingClientsIndex } from '@/routes/marketing-clients';
 import { index as marketingListsIndex } from '@/routes/marketing-lists';
 import { index as marketingCampaignsIndex } from '@/routes/marketing-campaigns';
 import { index as marketingTemplatesIndex } from '@/routes/marketing-templates';
+import { index as marketingEmailAccountsIndex } from '@/routes/marketing-email-accounts';
 import { index as marketingWhatsAppAccountsIndex } from '@/routes/marketing-whatsapp-accounts';
 import { index as accessLogsIndex } from '@/routes/access-logs';
 import type { Auth, NavGroup, NavItem } from '@/types';
@@ -262,6 +263,10 @@ function buildNavGroups(
         marketingChildren.push({
             title: 'Campagnes',
             href: marketingCampaignsIndex.url({ query: { channel: 'email' } }),
+        });
+        marketingChildren.push({
+            title: 'Comptes',
+            href: marketingEmailAccountsIndex.url(),
         });
         marketingChildren.push({
             title: 'WhatsApp',
