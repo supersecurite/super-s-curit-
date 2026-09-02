@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageContro
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
 use App\Http\Controllers\Admin\MarketingCampaignController as AdminMarketingCampaignController;
 use App\Http\Controllers\Admin\MarketingContactController as AdminMarketingContactController;
+use App\Http\Controllers\Admin\MarketingEditorImageController as AdminMarketingEditorImageController;
 use App\Http\Controllers\Admin\MarketingEmailAccountController as AdminMarketingEmailAccountController;
 use App\Http\Controllers\Admin\MarketingListController as AdminMarketingListController;
 use App\Http\Controllers\Admin\MarketingMessageTemplateController as AdminMarketingMessageTemplateController;
@@ -147,6 +148,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('marketing-whatsapp-accounts', AdminWhatsAppAccountController::class)
             ->parameters(['marketing-whatsapp-accounts' => 'whatsapp_account'])
             ->except(['show']);
+        Route::post('marketing-editor-images', [AdminMarketingEditorImageController::class, 'store'])
+            ->name('marketing-editor-images.store');
         Route::resource('marketing-templates', AdminMarketingMessageTemplateController::class);
         Route::post('marketing-campaigns/{marketing_campaign}/launch', [AdminMarketingCampaignController::class, 'launch'])
             ->name('marketing-campaigns.launch');

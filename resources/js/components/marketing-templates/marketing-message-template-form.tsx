@@ -17,6 +17,7 @@ import {
     DEFAULT_MARKETING_TEMPLATE_BODY,
     DEFAULT_MARKETING_TEMPLATE_SUBJECT,
 } from '@/lib/marketing-template-variables';
+import { store as storeMarketingEditorImage } from '@/routes/marketing-editor-images';
 
 type MarketingMessageTemplateFormData = {
     uuid?: string;
@@ -219,6 +220,7 @@ export default function MarketingMessageTemplateForm({
                             fallbackPlainContent={isEditing ? '' : formData.body}
                             onChange={(content) => updateField('body', content)}
                             variables={variables}
+                            imageUploadUrl={storeMarketingEditorImage.url()}
                         />
                         <InputError message={errors.body} />
                     </div>

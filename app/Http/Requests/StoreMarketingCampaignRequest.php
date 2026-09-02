@@ -78,7 +78,7 @@ class StoreMarketingCampaignRequest extends FormRequest
                 Rule::requiredIf(! $isWhatsApp),
                 'nullable',
                 'string',
-                'max:50000',
+                'max:500000',
             ],
         ];
     }

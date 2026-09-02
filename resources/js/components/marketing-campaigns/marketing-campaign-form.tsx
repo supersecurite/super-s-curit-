@@ -23,6 +23,7 @@ import {
     DEFAULT_MARKETING_TEMPLATE_SUBJECT,
 } from '@/lib/marketing-template-variables';
 import { audiencePreview } from '@/routes/marketing-campaigns';
+import { store as storeMarketingEditorImage } from '@/routes/marketing-editor-images';
 
 type ListOption = {
     id: number;
@@ -510,6 +511,7 @@ export default function MarketingCampaignForm({
                             fallbackPlainContent={formData.body?.trim() ? '' : formData.body}
                             onChange={(content) => updateField('body', content)}
                             variables={variables}
+                            imageUploadUrl={storeMarketingEditorImage.url()}
                         />
                         <InputError message={errors.body} />
                     </div>

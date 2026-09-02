@@ -1,6 +1,7 @@
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $createHeadingNode } from '@lexical/rich-text';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
 import {
     $getSelection,
     $isRangeSelection,
@@ -59,7 +60,11 @@ function ToolbarButton({
     );
 }
 
-export default function Toolbar() {
+export default function Toolbar({
+    onPickImageFile,
+}: {
+    onPickImageFile?: () => void;
+} = {}) {
     const [editor] = useLexicalComposerContext();
     const [showHeadingOptions, setShowHeadingOptions] = useState(false);
 
@@ -83,6 +88,11 @@ export default function Toolbar() {
     );
 
     const insertImage = useCallback(() => {
+        if (onPickImageFile) {
+            onPickImageFile();
+            return;
+        }
+
         const url = window.prompt("Entrez l'URL de l'image :");
         if (url) {
             editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
@@ -90,7 +100,7 @@ export default function Toolbar() {
                 alt: 'Image insérée',
             });
         }
-    }, [editor]);
+    }, [editor, onPickImageFile]);
 
     const insertLink = useCallback(() => {
         const url = window.prompt("Entrez l'URL du lien :");
@@ -249,9 +259,16 @@ export default function Toolbar() {
                     title="Code"
                 />
                 <ToolbarButton
-                    onClick={() =>
-                        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'quote')
-                    }
+                    onClick={() => {
+                        editor.update(() => {
+                            const selection = $getSelection();
+                            if ($isRangeSelection(selection)) {
+                                $setBlocksType(selection, () =>
+                                    $createQuoteNode(),
+                                );
+                            }
+                        });
+                    }}
                     icon={<Quote className="size-4" />}
                     title="Citation"
                 />

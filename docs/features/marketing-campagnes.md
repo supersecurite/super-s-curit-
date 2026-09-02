@@ -90,6 +90,7 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 - Secrets e-mail SMTP et WhatsApp : **uniquement en base** (pas `.env` pour ces comptes marketing).
 - Legacy `marketing_list_id` conservé pour compat lecture (premier groupe sync).
 - Quota e-mail : comptage des envois `sent_at` du jour ; le lancement refuse si l’audience dépasse le restant.
+- Images éditeur : upload vers `storage/app/public/marketing/editor-images` (URL), **pas** de base64 dans le JSON Lexical.
 
 ## Outils locaux
 

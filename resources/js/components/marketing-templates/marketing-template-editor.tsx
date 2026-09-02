@@ -13,13 +13,13 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import {
-    type EditorState,
-    type LexicalEditor,
-} from 'lexical';
+import { type EditorState } from 'lexical';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { TemplateVariableNode } from '@/components/lexical-editor/nodes/template-variable-node';
-import ImagePlugin, { ImageNode } from '@/components/lexical-editor/plugins/image-plugin';
+import ImagePlugin, {
+    ImageNode,
+    INSERT_IMAGE_COMMAND,
+} from '@/components/lexical-editor/plugins/image-plugin';
 import {
     $importPlainTemplateContent,
     TemplateVariableAutocompletePlugin,
@@ -121,6 +121,7 @@ type MarketingTemplateEditorProps = {
     initialContent?: string;
     fallbackPlainContent?: string;
     variables: string[];
+    imageUploadUrl?: string;
 };
 
 export default function MarketingTemplateEditor({
@@ -128,8 +129,10 @@ export default function MarketingTemplateEditor({
     initialContent = '',
     fallbackPlainContent = '',
     variables,
+    imageUploadUrl,
 }: MarketingTemplateEditorProps) {
     const mountInitialContent = useRef(initialContent);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const initialConfig = useMemo(
         () => ({
@@ -163,10 +166,73 @@ export default function MarketingTemplateEditor({
         [onChange],
     );
 
+    const handleFileChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const file = event.target.files?.[0];
+            event.target.value = '';
+
+            if (!file || !imageUploadUrl) {
+                return;
+            }
+
+            void (async () => {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const meta = document.querySelector('meta[name="csrf-token"]');
+                const headers: HeadersInit = {
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                };
+                if (meta instanceof HTMLMetaElement && meta.content) {
+                    headers['X-CSRF-TOKEN'] = meta.content;
+                }
+
+                try {
+                    const response = await fetch(imageUploadUrl, {
+                        method: 'POST',
+                        headers,
+                        body: formData,
+                        credentials: 'same-origin',
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Échec de l'upload de l'image.");
+                    }
+
+                    const payload = (await response.json()) as { url?: string };
+                    if (!payload.url) {
+                        throw new Error("L'upload n'a pas renvoyé d'URL.");
+                    }
+
+                    window.dispatchEvent(
+                        new CustomEvent('marketing-editor-insert-image', {
+                            detail: { src: payload.url, alt: file.name },
+                        }),
+                    );
+                } catch (error: unknown) {
+                    window.alert(
+                        error instanceof Error
+                            ? error.message
+                            : "Impossible d'uploader l'image.",
+                    );
+                }
+            })();
+        },
+        [imageUploadUrl],
+    );
+
     return (
         <LexicalComposer initialConfig={initialConfig}>
             <div className="overflow-hidden rounded-lg border bg-card">
-                <Toolbar />
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    className="hidden"
+                    onChange={handleFileChange}
+                />
+                <Toolbar onPickImageFile={() => fileInputRef.current?.click()} />
                 <TemplateVariablePicker variables={variables} />
                 <div className="relative min-h-[300px] p-3">
                     <RichTextPlugin
@@ -184,7 +250,8 @@ export default function MarketingTemplateEditor({
                     <ListPlugin />
                     <LinkPlugin />
                     <MarkdownShortcutPlugin />
-                    <ImagePlugin />
+                    <ImagePlugin uploadUrl={imageUploadUrl} />
+                    <InsertImageBridge />
                     <TemplateVariableAutocompletePlugin variables={variables} />
                     <OnChangePlugin onChange={handleChange} />
                     <EditorInitializer
@@ -195,4 +262,27 @@ export default function MarketingTemplateEditor({
             </div>
         </LexicalComposer>
     );
+}
+
+function InsertImageBridge() {
+    const [editor] = useLexicalComposerContext();
+
+    useEffect(() => {
+        const handler = (event: Event) => {
+            const custom = event as CustomEvent<{ src?: string; alt?: string }>;
+            if (!custom.detail?.src) {
+                return;
+            }
+
+            editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+                src: custom.detail.src,
+                alt: custom.detail.alt,
+            });
+        };
+
+        window.addEventListener('marketing-editor-insert-image', handler);
+        return () => window.removeEventListener('marketing-editor-insert-image', handler);
+    }, [editor]);
+
+    return null;
 }

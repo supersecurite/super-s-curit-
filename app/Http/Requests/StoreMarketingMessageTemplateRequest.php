@@ -45,7 +45,7 @@ class StoreMarketingMessageTemplateRequest extends FormRequest
                 Rule::requiredIf($isEmail),
                 'nullable',
                 'string',
-                'max:50000',
+                'max:500000',
             ],
             'meta_template_name' => [
                 Rule::requiredIf($isWhatsApp),

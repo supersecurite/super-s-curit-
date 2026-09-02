@@ -193,6 +193,22 @@ final class RenderMarketingMessageTemplate
                 continue;
             }
 
+            if ($type === 'image') {
+                $src = self::absoluteMediaUrl((string) ($node['src'] ?? ''));
+
+                if ($src === '') {
+                    continue;
+                }
+
+                $alt = e((string) ($node['alt'] ?? ''));
+                $parts[] = '<p style="text-align:center;margin:16px 0;"><img src="'
+                    .e($src)
+                    .'" alt="'.$alt
+                    .'" style="max-width:100%;height:auto;border-radius:8px;"></p>';
+
+                continue;
+            }
+
             if (! isset($node['children']) || ! is_array($node['children'])) {
                 continue;
             }
@@ -222,5 +238,27 @@ final class RenderMarketingMessageTemplate
         }
 
         return "<{$tag}>{$inner}</{$tag}>";
+    }
+
+    /**
+     * Rend une URL média absolue pour les e-mails (les clients mail n'affichent pas les chemins relatifs).
+     */
+    private static function absoluteMediaUrl(string $src): string
+    {
+        $src = trim($src);
+
+        if ($src === '') {
+            return '';
+        }
+
+        if (str_starts_with($src, 'data:')) {
+            return $src;
+        }
+
+        if (preg_match('#^https?://#i', $src) === 1) {
+            return $src;
+        }
+
+        return url($src);
     }
 }
