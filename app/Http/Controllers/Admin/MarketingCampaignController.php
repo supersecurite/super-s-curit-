@@ -37,7 +37,7 @@ class MarketingCampaignController extends Controller
 
         $sort = IndexTableSort::resolve(
             $request,
-            ['name', 'status', 'subject', 'created_at', 'launched_at'],
+            ['name', 'status', 'subject', 'created_at', 'launched_at', 'scheduled_at'],
             'created_at',
             'desc',
         );

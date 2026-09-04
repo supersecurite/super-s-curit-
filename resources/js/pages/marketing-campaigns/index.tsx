@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Megaphone, Pencil, Plus, Search } from 'lucide-react';
+import { Calendar, Megaphone, Pencil, Plus, Search } from 'lucide-react';
 import { useMemo } from 'react';
 import {
     BackofficeFiltersBar,
@@ -37,6 +37,7 @@ type CampaignRow = {
     audience_contacts: { uuid: string; full_name: string }[];
     sends_count: number;
     launched_at_formatted: string | null;
+    scheduled_at_formatted: string | null;
     can_update: boolean;
     can_delete: boolean;
     can_send: boolean;
@@ -64,6 +65,7 @@ function statusVariant(status: string): 'default' | 'secondary' | 'outline' | 'd
             return 'destructive';
         case 'sending':
         case 'queued':
+        case 'scheduled':
             return 'secondary';
         default:
             return 'outline';
@@ -183,7 +185,15 @@ export default function MarketingCampaignsIndex() {
                 header: 'Statut',
                 sortKey: 'status',
                 cell: (campaign) => (
-                    <Badge variant={statusVariant(campaign.status)}>{campaign.status_label}</Badge>
+                    <div className="flex flex-col items-start gap-1">
+                        <Badge variant={statusVariant(campaign.status)}>{campaign.status_label}</Badge>
+                        {campaign.status === 'scheduled' && campaign.scheduled_at_formatted ? (
+                            <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                                <Calendar className="size-3 shrink-0" aria-hidden />
+                                {campaign.scheduled_at_formatted}
+                            </span>
+                        ) : null}
+                    </div>
                 ),
             },
             {
@@ -198,9 +208,22 @@ export default function MarketingCampaignsIndex() {
             },
             {
                 id: 'launched_at',
-                header: 'Lancée le',
+                header: 'Lancée / Prévue le',
                 sortKey: 'launched_at',
-                cell: (campaign) => campaign.launched_at_formatted ?? '—',
+                cell: (campaign) => {
+                    if (campaign.launched_at_formatted) {
+                        return campaign.launched_at_formatted;
+                    }
+                    if (campaign.status === 'scheduled' && campaign.scheduled_at_formatted) {
+                        return (
+                            <span className="text-muted-foreground flex items-center gap-1 text-sm">
+                                <Calendar className="size-3.5 shrink-0" aria-hidden />
+                                <span>{campaign.scheduled_at_formatted}</span>
+                            </span>
+                        );
+                    }
+                    return '—';
+                },
             },
             {
                 id: 'actions',
