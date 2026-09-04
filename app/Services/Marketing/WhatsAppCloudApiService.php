@@ -16,7 +16,7 @@ use RuntimeException;
 class WhatsAppCloudApiService
 {
     /**
-     * @param  list<string>  $bodyParameters
+     * @param  list<string>|list<array<string, mixed>>  $parametersOrComponents
      * @return array{provider_message_id: string}
      */
     public function sendTemplateMessage(
@@ -24,7 +24,7 @@ class WhatsAppCloudApiService
         string $toPhoneE164,
         string $templateName,
         string $languageCode,
-        array $bodyParameters = [],
+        array $parametersOrComponents = [],
     ): array {
         $to = ltrim($toPhoneE164, '+');
 
@@ -36,7 +36,7 @@ class WhatsAppCloudApiService
                 'to' => $to,
                 'template' => $templateName,
                 'language' => $languageCode,
-                'parameters' => $bodyParameters,
+                'parameters' => $parametersOrComponents,
                 'provider_message_id' => $messageId,
             ]);
 
@@ -45,25 +45,36 @@ class WhatsAppCloudApiService
 
         $components = [];
 
-        if ($bodyParameters !== []) {
-            $components[] = [
-                'type' => 'body',
-                'parameters' => array_map(
-                    fn (string $text): array => ['type' => 'text', 'text' => $text],
-                    $bodyParameters,
-                ),
-            ];
+        if ($parametersOrComponents !== []) {
+            if (isset($parametersOrComponents[0]) && is_array($parametersOrComponents[0]) && isset($parametersOrComponents[0]['type'])) {
+                /** @var list<array<string, mixed>> $components */
+                $components = $parametersOrComponents;
+            } else {
+                /** @var list<string> $parametersOrComponents */
+                $components[] = [
+                    'type' => 'body',
+                    'parameters' => array_map(
+                        fn (string $text): array => ['type' => 'text', 'text' => $text],
+                        $parametersOrComponents,
+                    ),
+                ];
+            }
+        }
+
+        $templateData = [
+            'name' => $templateName,
+            'language' => ['code' => $languageCode],
+        ];
+
+        if ($components !== []) {
+            $templateData['components'] = $components;
         }
 
         $payload = [
             'messaging_product' => 'whatsapp',
             'to' => $to,
             'type' => 'template',
-            'template' => [
-                'name' => $templateName,
-                'language' => ['code' => $languageCode],
-                'components' => $components,
-            ],
+            'template' => $templateData,
         ];
 
         try {
@@ -77,6 +88,7 @@ class WhatsAppCloudApiService
         } catch (RequestException $exception) {
             $body = $exception->response?->json();
             $message = data_get($body, 'error.message')
+                ?? data_get($body, 'error.error_user_msg')
                 ?? $exception->getMessage();
 
             throw new RuntimeException('WhatsApp Meta API: '.$message, previous: $exception);

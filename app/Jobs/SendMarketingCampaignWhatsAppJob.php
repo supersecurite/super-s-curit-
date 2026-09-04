@@ -4,10 +4,9 @@ namespace App\Jobs;
 
 use App\Enums\MarketingCampaignSendStatus;
 use App\Models\MarketingCampaignSend;
-use App\Models\MarketingContact;
-use App\Models\MarketingMessageTemplate;
 use App\Services\Marketing\WhatsAppCloudApiService;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
+use App\Support\Marketing\WhatsAppTemplatePayloadAdapter;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Throwable;
@@ -70,13 +69,15 @@ class SendMarketingCampaignWhatsAppJob implements ShouldQueue
             return;
         }
 
+        $components = WhatsAppTemplatePayloadAdapter::buildComponents($template, $contact);
+
         try {
             $result = $whatsApp->sendTemplateMessage(
                 $account,
                 $send->recipient_phone,
                 (string) $template->meta_template_name,
                 (string) ($template->meta_template_language ?: 'fr'),
-                $this->resolveBodyParameters($template, $contact),
+                $components,
             );
 
             $send->update([
@@ -94,48 +95,5 @@ class SendMarketingCampaignWhatsAppJob implements ShouldQueue
 
         BroadcastMarketingCampaignProgress::dispatch($campaign, $send->fresh(['contact']));
         SyncMarketingCampaignCompletionJob::dispatch($campaign);
-    }
-
-    /**
-     * Calcule exactement les paramètres positionnels Meta {{1}}, {{2}} requis par le template.
-     * Si le template ne contient aucune variable positionnelle (ex. hello_world), renvoie un tableau vide.
-     *
-     * @return list<string>
-     */
-    private function resolveBodyParameters(MarketingMessageTemplate $template, MarketingContact $contact): array
-    {
-        $body = (string) $template->body;
-
-        preg_match_all('/\{\{(\d+)\}\}/', $body, $matches);
-
-        if (empty($matches[1])) {
-            return [];
-        }
-
-        $expectedCount = max(array_map('intval', $matches[1]));
-
-        if ($expectedCount <= 0) {
-            return [];
-        }
-
-        [$givenName, $familyName] = $contact->nameParts();
-        $fullName = $contact->full_name !== '—' && filled($contact->full_name)
-            ? $contact->full_name
-            : ($givenName ?: 'Client');
-
-        $pool = [
-            1 => $fullName,
-            2 => filled($contact->company_name) ? $contact->company_name : ($familyName ?: 'Super Sécurité'),
-            3 => filled($contact->phone) ? $contact->phone : '+224 620 00 00 00',
-            4 => filled($contact->email) ? $contact->email : 'contact@supersecurite.com',
-        ];
-
-        $parameters = [];
-        for ($i = 1; $i <= $expectedCount; $i++) {
-            $value = $pool[$i] ?? ('Paramètre '.$i);
-            $parameters[] = filled($value) ? (string) $value : '—';
-        }
-
-        return $parameters;
     }
 }
