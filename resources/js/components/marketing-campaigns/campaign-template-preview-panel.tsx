@@ -48,25 +48,35 @@ export default function CampaignTemplatePreviewPanel({
 
             {isWhatsApp ? (
                 <>
-                    <div className="space-y-2">
-                        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-                            Nom Meta
+                    <div className="space-y-1 text-xs">
+                        <div className="flex items-center justify-between font-mono text-[11px] text-muted-foreground border-b pb-1">
+                            <span>Modèle : <strong className="text-foreground">{template.meta_template_name ?? '—'}</strong></span>
+                            <span>{template.meta_template_language?.toUpperCase() ?? 'FR'}</span>
+                        </div>
+                    </div>
+
+                    <div className="rounded-xl border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 p-3 space-y-1 text-xs shadow-2xs">
+                        {template.subject ? (
+                            <p className="font-bold text-foreground border-b border-emerald-500/10 pb-1">
+                                {template.subject}
+                            </p>
+                        ) : null}
+                        <p className="whitespace-pre-line text-muted-foreground leading-relaxed">
+                            {template.body
+                                ? template.body
+                                      .replace(/\{\{1\}\}/g, 'Mamadou Camara')
+                                      .replace(/\{\{2\}\}/g, '+224 620 00 00 00')
+                                      .replace(/\{\{3\}\}/g, 'Super Sécurité')
+                                : `Message modèle WhatsApp : ${template.meta_template_name}`}
                         </p>
-                        <p className="font-mono text-sm">
-                            {template.meta_template_name ?? '—'}
+                        <p className="text-[10px] text-muted-foreground/60 text-right pt-1">
+                            12:00 ✓✓
                         </p>
                     </div>
-                    <div className="space-y-2">
-                        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-                            Langue
-                        </p>
-                        <p className="font-mono text-sm">
-                            {template.meta_template_language ?? '—'}
-                        </p>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                        Envoi exclusivement via ce modèle Meta approuvé.
-                    </Badge>
+
+                    <p className="text-[11px] text-muted-foreground">
+                        Les variables <code className="font-bold text-primary">{'{{1}}'}</code> (Nom), <code className="font-bold text-primary">{'{{2}}'}</code> (Téléphone) et <code className="font-bold text-primary">{'{{3}}'}</code> (Entreprise) sont automatiquement insérées pour chaque destinataire.
+                    </p>
                 </>
             ) : (
                 <>

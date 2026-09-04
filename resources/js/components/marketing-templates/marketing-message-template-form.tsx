@@ -6,6 +6,7 @@ import TemplateSubjectInput from '@/components/marketing-templates/template-subj
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
     Select,
     SelectContent,
@@ -165,38 +166,98 @@ export default function MarketingMessageTemplateForm({
             </div>
 
             {isWhatsApp ? (
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-4 rounded-xl border bg-muted/10 p-4">
+                    <div className="flex items-center justify-between border-b pb-2">
+                        <h2 className="text-sm font-semibold">Configuration du modèle Meta WhatsApp</h2>
+                        <Badge variant="outline" className="text-xs">
+                            Modèle approuvé
+                        </Badge>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                            <Label htmlFor="meta_template_name">Nom du modèle Meta</Label>
+                            <Input
+                                id="meta_template_name"
+                                value={formData.meta_template_name}
+                                onChange={(event) =>
+                                    updateField('meta_template_name', event.target.value)
+                                }
+                                placeholder="notification_securite"
+                                required
+                            />
+                            <p className="text-muted-foreground text-xs">
+                                Nom technique exact du modèle dans votre Meta Business Manager.
+                            </p>
+                            <InputError message={errors.meta_template_name} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="meta_template_language">Code langue Meta</Label>
+                            <Input
+                                id="meta_template_language"
+                                value={formData.meta_template_language}
+                                onChange={(event) =>
+                                    updateField('meta_template_language', event.target.value)
+                                }
+                                placeholder="fr"
+                                required
+                            />
+                            <p className="text-muted-foreground text-xs">
+                                Code langue officiel (ex. fr, en_US, etc.).
+                            </p>
+                            <InputError message={errors.meta_template_language} />
+                        </div>
+                    </div>
+
                     <div className="space-y-2">
-                        <Label htmlFor="meta_template_name">Nom du modèle Meta</Label>
+                        <Label htmlFor="subject">En-tête du message (optionnel)</Label>
                         <Input
-                            id="meta_template_name"
-                            value={formData.meta_template_name}
-                            onChange={(event) =>
-                                updateField('meta_template_name', event.target.value)
-                            }
-                            placeholder="hello_world"
-                            required
+                            id="subject"
+                            value={formData.subject ?? ''}
+                            onChange={(event) => updateField('subject', event.target.value)}
+                            placeholder="Super Sécurité — Alerte"
+                        />
+                        <InputError message={errors.subject} />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="body">Texte du modèle & Variables positionnelles</Label>
+                        <textarea
+                            id="body"
+                            rows={4}
+                            value={formData.body}
+                            onChange={(event) => updateField('body', event.target.value)}
+                            placeholder="Bonjour {{1}}, nous vous confirmons votre devis pour l'entreprise {{2}}..."
+                            className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 font-mono text-xs"
                         />
                         <p className="text-muted-foreground text-xs">
-                            Doit correspondre exactement à un modèle approuvé dans Meta
-                            Business Manager. L&apos;envoi WhatsApp utilise uniquement ce
-                            modèle (pas de message libre).
+                            Indiquez le texte du modèle Meta avec les variables positionnelles <code className="text-primary font-bold">{'{{1}}'}</code>, <code className="text-primary font-bold">{'{{2}}'}</code>, <code className="text-primary font-bold">{'{{3}}'}</code> pour prévisualiser le rendu final.
                         </p>
-                        <InputError message={errors.meta_template_name} />
+                        <InputError message={errors.body} />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="meta_template_language">Langue Meta</Label>
-                        <Input
-                            id="meta_template_language"
-                            value={formData.meta_template_language}
-                            onChange={(event) =>
-                                updateField('meta_template_language', event.target.value)
-                            }
-                            placeholder="fr"
-                            required
-                        />
-                        <InputError message={errors.meta_template_language} />
-                    </div>
+
+                    {/* Live preview */}
+                    {formData.body ? (
+                        <div className="space-y-2 pt-2 border-t">
+                            <Label className="text-xs text-muted-foreground">Aperçu du rendu WhatsApp</Label>
+                            <div className="max-w-md rounded-xl border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 p-4 space-y-1 text-xs text-foreground shadow-xs">
+                                {formData.subject ? (
+                                    <p className="font-semibold text-foreground border-b border-emerald-500/10 pb-1">
+                                        {formData.subject}
+                                    </p>
+                                ) : null}
+                                <p className="whitespace-pre-line text-muted-foreground leading-relaxed">
+                                    {formData.body
+                                        .replace(/\{\{1\}\}/g, 'Mamadou Camara')
+                                        .replace(/\{\{2\}\}/g, '+224 620 00 00 00')
+                                        .replace(/\{\{3\}\}/g, 'Super Sécurité SARL')}
+                                </p>
+                                <p className="text-[10px] text-muted-foreground/60 text-right pt-1">
+                                    12:00 ✓✓
+                                </p>
+                            </div>
+                        </div>
+                    ) : null}
                 </div>
             ) : (
                 <>

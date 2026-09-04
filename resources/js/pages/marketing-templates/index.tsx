@@ -9,6 +9,7 @@ import {
     type ResponsiveColumn,
 } from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import ImportMetaTemplatesDialog from '@/components/marketing-templates/import-meta-templates-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,12 +25,21 @@ import {
     show,
 } from '@/routes/marketing-templates';
 
+type WhatsAppAccountOption = {
+    id: number;
+    uuid: string;
+    name: string;
+    is_default: boolean;
+};
+
 type TemplateRow = {
     uuid: string;
     name: string;
     channel: string;
     channel_label: string;
     subject: string | null;
+    meta_template_name?: string | null;
+    meta_template_language?: string | null;
     can_update: boolean;
     can_delete: boolean;
     created_at_formatted: string | null;
@@ -47,10 +57,11 @@ type PageProps = {
     channel: 'email' | 'whatsapp';
     filters: TableSortState & { search?: string; channel?: string };
     canCreate: boolean;
+    whatsappAccounts?: WhatsAppAccountOption[];
 };
 
 export default function MarketingTemplatesIndex() {
-    const { templates, channel, filters, canCreate } = usePage<PageProps>().props;
+    const { templates, channel, filters, canCreate, whatsappAccounts = [] } = usePage<PageProps>().props;
     const activeChannel = channel === 'whatsapp' ? 'whatsapp' : 'email';
     const isWhatsApp = activeChannel === 'whatsapp';
     const title = isWhatsApp ? 'Templates WhatsApp' : 'Templates e-mail';
@@ -137,7 +148,21 @@ export default function MarketingTemplatesIndex() {
                 sortable: true,
                 mobileRole: 'subtitle',
                 className: 'text-muted-foreground',
-                cell: (template) => template.subject ?? '—',
+                cell: (template) =>
+                    isWhatsApp ? (
+                        <div className="flex items-center gap-1.5 font-mono text-xs">
+                            <span className="font-medium text-foreground">
+                                {template.meta_template_name ?? '—'}
+                            </span>
+                            {template.meta_template_language ? (
+                                <Badge variant="outline" className="text-[10px]">
+                                    {template.meta_template_language.toUpperCase()}
+                                </Badge>
+                            ) : null}
+                        </div>
+                    ) : (
+                        template.subject ?? '—'
+                    ),
             },
             {
                 id: 'created_at',
@@ -171,17 +196,22 @@ export default function MarketingTemplatesIndex() {
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             {isWhatsApp
-                                ? 'Templates WhatsApp uniquement — modèles Meta approuvés.'
+                                ? 'Templates WhatsApp uniquement — importez vos modèles approuvés Meta ou créez-en de nouveaux.'
                                 : 'Templates e-mail uniquement — variables dynamiques pour les campagnes.'}
                         </p>
                     </div>
                     {canCreate ? (
-                        <Button asChild>
-                            <Link href={create.url({ query: { channel: activeChannel } })}>
-                                <Plus className="size-4" aria-hidden />
-                                Nouveau template {isWhatsApp ? 'WhatsApp' : 'e-mail'}
-                            </Link>
-                        </Button>
+                        <div className="flex flex-wrap items-center gap-2">
+                            {isWhatsApp && whatsappAccounts.length > 0 ? (
+                                <ImportMetaTemplatesDialog accounts={whatsappAccounts} />
+                            ) : null}
+                            <Button asChild>
+                                <Link href={create.url({ query: { channel: activeChannel } })}>
+                                    <Plus className="size-4" aria-hidden />
+                                    Nouveau template {isWhatsApp ? 'WhatsApp' : 'e-mail'}
+                                </Link>
+                            </Button>
+                        </div>
                     ) : null}
                 </div>
 

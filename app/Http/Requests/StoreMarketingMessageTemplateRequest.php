@@ -18,8 +18,7 @@ class StoreMarketingMessageTemplateRequest extends FormRequest
     {
         if ($this->input('channel') === MarketingMessageTemplateChannel::WhatsApp->value) {
             $this->merge([
-                'subject' => null,
-                'body' => '',
+                'body' => $this->input('body') ?? '',
             ]);
         }
     }

@@ -170,13 +170,60 @@ export default function MarketingTemplatesShow() {
                             <ContentRenderer content={template.body} />
                         </section>
                     ) : (
-                        <section className="app-panel space-y-2 p-4 lg:col-span-2">
-                            <h2 className="font-semibold">Contenu</h2>
-                            <p className="text-muted-foreground text-sm">
-                                Ce template WhatsApp pointe uniquement vers le modèle Meta
-                                approuvé — aucun corps de message libre n&apos;est stocké ni
-                                envoyé.
-                            </p>
+                        <section className="app-panel space-y-4 p-4 lg:col-span-2">
+                            <div className="flex items-center justify-between">
+                                <h2 className="font-semibold">Aperçu du message WhatsApp</h2>
+                                <Badge variant="outline" className="text-xs">
+                                    Modèle Meta : {template.meta_template_name}
+                                </Badge>
+                            </div>
+
+                            <div className="grid gap-6 md:grid-cols-[1fr_320px] items-start">
+                                {/* WhatsApp Phone Bubble */}
+                                <div className="rounded-2xl border bg-muted/20 p-4 sm:p-6 flex flex-col items-center">
+                                    <div className="w-full max-w-sm rounded-2xl bg-[#e5ddd5] dark:bg-[#0b141a] p-4 shadow-md space-y-2">
+                                        <div className="rounded-xl bg-white dark:bg-[#1f2c34] p-3.5 shadow-xs text-xs text-foreground space-y-1.5">
+                                            {template.subject ? (
+                                                <p className="font-bold text-foreground border-b border-border/40 pb-1">
+                                                    {template.subject}
+                                                </p>
+                                            ) : null}
+                                            <p className="whitespace-pre-line leading-relaxed text-foreground/90">
+                                                {template.body || `Bonjour {{1}}, message envoyé via le modèle approuvé ${template.meta_template_name}.`}
+                                            </p>
+                                            <div className="flex items-center justify-end gap-1 text-[10px] text-muted-foreground/70 pt-1">
+                                                <span>12:00</span>
+                                                <span className="text-emerald-500 font-bold">✓✓</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-muted-foreground text-[11px] mt-2">
+                                        Aperçu simulé du message reçu par le destinataire
+                                    </p>
+                                </div>
+
+                                {/* Variables explanation */}
+                                <div className="space-y-3 rounded-xl border bg-card p-4 text-xs">
+                                    <h3 className="font-semibold text-sm">Variables positionnelles Meta</h3>
+                                    <p className="text-muted-foreground">
+                                        Les balises sont automatiquement remplies pour chaque destinataire :
+                                    </p>
+                                    <ul className="space-y-2">
+                                        <li className="flex items-start gap-2 rounded-lg border p-2 bg-muted/20">
+                                            <code className="font-bold text-primary shrink-0">{'{{1}}'}</code>
+                                            <span className="text-muted-foreground">Nom complet du contact</span>
+                                        </li>
+                                        <li className="flex items-start gap-2 rounded-lg border p-2 bg-muted/20">
+                                            <code className="font-bold text-primary shrink-0">{'{{2}}'}</code>
+                                            <span className="text-muted-foreground">Téléphone / Contact secondaire</span>
+                                        </li>
+                                        <li className="flex items-start gap-2 rounded-lg border p-2 bg-muted/20">
+                                            <code className="font-bold text-primary shrink-0">{'{{3}}'}</code>
+                                            <span className="text-muted-foreground">Nom de l&apos;entreprise</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </section>
                     )}
                 </div>

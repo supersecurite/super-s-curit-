@@ -4,18 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Marketing\CreateMarketingMessageTemplate;
 use App\Actions\Marketing\DeleteMarketingMessageTemplate;
+use App\Actions\Marketing\ImportWhatsAppMetaTemplates;
 use App\Actions\Marketing\UpdateMarketingMessageTemplate;
 use App\Enums\MarketingCampaignChannel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMarketingMessageTemplateRequest;
 use App\Http\Requests\UpdateMarketingMessageTemplateRequest;
 use App\Models\MarketingMessageTemplate;
+use App\Models\WhatsAppAccount;
+use App\Services\Marketing\WhatsAppCloudApiService;
 use App\Support\IndexTableSort;
 use App\Support\Marketing\RenderMarketingMessageTemplate;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class MarketingMessageTemplateController extends Controller
 {
@@ -61,6 +66,9 @@ class MarketingMessageTemplateController extends Controller
             ],
             'canCreate' => $request->user()?->can('create', MarketingMessageTemplate::class) ?? false,
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
+            'whatsappAccounts' => $channel === MarketingCampaignChannel::WhatsApp
+                ? $this->whatsappAccountOptions()
+                : [],
         ]);
     }
 
@@ -74,7 +82,100 @@ class MarketingMessageTemplateController extends Controller
         return Inertia::render('marketing-templates/create', [
             'lockedChannel' => $channel->value,
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
+            'whatsappAccounts' => $channel === MarketingCampaignChannel::WhatsApp
+                ? $this->whatsappAccountOptions()
+                : [],
         ]);
+    }
+
+    /**
+     * Interroge l'API Meta Cloud pour récupérer les modèles disponibles du compte WhatsApp.
+     */
+    public function fetchMetaTemplates(Request $request, WhatsAppCloudApiService $service): JsonResponse
+    {
+        $this->authorize('create', MarketingMessageTemplate::class);
+
+        $accountUuid = $request->string('account_uuid')->toString();
+        $account = $accountUuid !== ''
+            ? WhatsAppAccount::query()->where('uuid', $accountUuid)->where('is_active', true)->first()
+            : WhatsAppAccount::query()->where('is_active', true)->orderByDesc('is_default')->first();
+
+        if ($account === null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Aucun compte WhatsApp actif configuré.',
+                'templates' => [],
+            ], 422);
+        }
+
+        try {
+            $templates = $service->fetchTemplates($account);
+
+            return response()->json([
+                'success' => true,
+                'account' => [
+                    'uuid' => $account->uuid,
+                    'name' => $account->name,
+                ],
+                'templates' => $templates,
+            ]);
+        } catch (Throwable $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+                'templates' => [],
+            ], 422);
+        }
+    }
+
+    /**
+     * Importe un ou plusieurs modèles Meta sélectionnés dans les templates de l'application.
+     */
+    public function importMetaTemplates(Request $request, ImportWhatsAppMetaTemplates $action): RedirectResponse
+    {
+        $this->authorize('create', MarketingMessageTemplate::class);
+
+        $validated = $request->validate([
+            'templates' => ['required', 'array', 'min:1'],
+            'templates.*.name' => ['required', 'string', 'max:255'],
+            'templates.*.language' => ['required', 'string', 'max:16'],
+            'templates.*.body_text' => ['nullable', 'string', 'max:500000'],
+            'templates.*.header_text' => ['nullable', 'string', 'max:255'],
+            'templates.*.title' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        /** @var list<array{name: string, language: string, body_text?: string|null, header_text?: string|null, title?: string|null}> $templatesList */
+        $templatesList = $validated['templates'];
+
+        $count = $action->handle($templatesList);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $count > 1
+                ? "{$count} modèles WhatsApp importés avec succès depuis Meta."
+                : 'Modèle WhatsApp importé avec succès depuis Meta.',
+        ]);
+
+        return to_route('marketing-templates.index', ['channel' => 'whatsapp']);
+    }
+
+    /**
+     * @return list<array{id: int, uuid: string, name: string, is_default: bool}>
+     */
+    private function whatsappAccountOptions(): array
+    {
+        return WhatsAppAccount::query()
+            ->where('is_active', true)
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->get(['id', 'uuid', 'name', 'is_default'])
+            ->map(fn (WhatsAppAccount $account) => [
+                'id' => $account->id,
+                'uuid' => $account->uuid,
+                'name' => $account->name,
+                'is_default' => $account->is_default,
+            ])
+            ->all();
     }
 
     public function store(

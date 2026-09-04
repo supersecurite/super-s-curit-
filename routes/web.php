@@ -150,6 +150,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->except(['show']);
         Route::post('marketing-editor-images', [AdminMarketingEditorImageController::class, 'store'])
             ->name('marketing-editor-images.store');
+        Route::get('marketing-templates/meta-fetch', [AdminMarketingMessageTemplateController::class, 'fetchMetaTemplates'])
+            ->name('marketing-templates.meta-fetch');
+        Route::post('marketing-templates/meta-import', [AdminMarketingMessageTemplateController::class, 'importMetaTemplates'])
+            ->name('marketing-templates.meta-import');
         Route::resource('marketing-templates', AdminMarketingMessageTemplateController::class);
         Route::post('marketing-campaigns/{marketing_campaign}/launch', [AdminMarketingCampaignController::class, 'launch'])
             ->name('marketing-campaigns.launch');
