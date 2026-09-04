@@ -9,7 +9,7 @@ type MarketingSendReceiptIndicatorProps = {
 
 /**
  * Indicateur type WhatsApp pour le suivi d'un envoi :
- * 1 ✓ = envoyé, 2 ✓ gris = reçu (non lu), 2 ✓ vert = lu.
+ * 1 coche = envoye, 2 coches grises = recu (non lu), 2 coches vertes = lu.
  */
 export function MarketingSendReceiptIndicator({
     status,

@@ -18,7 +18,10 @@ class StoreMarketingMessageTemplateRequest extends FormRequest
     {
         if ($this->input('channel') === MarketingMessageTemplateChannel::WhatsApp->value) {
             $this->merge([
-                'body' => $this->input('body') ?? '',
+                'body' => $this->input('body') ?? $this->input('body_text') ?? '',
+                'subject' => $this->input('subject') ?? $this->input('header_text'),
+                'meta_template_language' => $this->input('meta_template_language') ?? $this->input('language') ?? 'fr',
+                'meta_template_name' => $this->input('meta_template_name') ?? $this->input('name_technical'),
             ]);
         }
     }
@@ -51,12 +54,28 @@ class StoreMarketingMessageTemplateRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
+                'regex:/^[a-zA-Z0-9_]+$/',
             ],
             'meta_template_language' => [
                 Rule::requiredIf($isWhatsApp),
                 'nullable',
                 'string',
                 'max:16',
+            ],
+            'category' => [
+                'nullable',
+                'string',
+                Rule::in(['MARKETING', 'UTILITY', 'AUTHENTICATION']),
+            ],
+            'account_uuid' => [
+                'nullable',
+                'uuid',
+                Rule::exists('whatsapp_accounts', 'uuid')->where('is_active', true),
+            ],
+            'footer_text' => [
+                'nullable',
+                'string',
+                'max:60',
             ],
         ];
     }

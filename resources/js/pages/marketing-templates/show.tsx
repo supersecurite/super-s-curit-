@@ -1,5 +1,5 @@
 import { Head, Link, setLayoutProps, usePage } from '@inertiajs/react';
-import { ArrowLeft, FileText, Pencil } from 'lucide-react';
+import { ArrowLeft, CheckCheck, FileText, Pencil } from 'lucide-react';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
 import { Badge } from '@/components/ui/badge';
@@ -196,7 +196,7 @@ export default function MarketingTemplatesShow() {
                                             </p>
                                             <div className="flex items-center justify-end gap-1 text-[10px] text-muted-foreground/70 pt-1">
                                                 <span>12:00</span>
-                                                <span className="text-emerald-500 font-bold">✓✓</span>
+                                                <CheckCheck className="size-3 text-emerald-500" aria-hidden />
                                             </div>
                                         </div>
                                     </div>

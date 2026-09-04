@@ -41,10 +41,6 @@ class SubmitWhatsAppMetaTemplate extends Action
             ? WhatsAppAccount::query()->where('uuid', $accountUuid)->where('is_active', true)->first()
             : WhatsAppAccount::query()->where('is_active', true)->orderByDesc('is_default')->first();
 
-        if ($account === null) {
-            throw new RuntimeException('Aucun compte WhatsApp actif configuré pour soumettre ce modèle.');
-        }
-
         $metaName = Str::slug($data['name'], '_');
         $language = trim($data['language'] ?? 'fr');
         $category = strtoupper(trim($data['category'] ?? 'MARKETING'));
@@ -56,16 +52,18 @@ class SubmitWhatsAppMetaTemplate extends Action
         $bodyText = trim($data['body_text']);
         $footerText = filled($data['footer_text'] ?? null) ? trim((string) $data['footer_text']) : null;
 
-        // Soumission Meta
-        $this->apiService->createTemplate($account, [
-            'name' => $metaName,
-            'language' => $language,
-            'category' => $category,
-            'body_text' => $bodyText,
-            'header_text' => $headerText,
-            'footer_text' => $footerText,
-            'example_values' => $data['example_values'] ?? [],
-        ]);
+        // Soumission Meta si un compte est configuré
+        if ($account !== null) {
+            $this->apiService->createTemplate($account, [
+                'name' => $metaName,
+                'language' => $language,
+                'category' => $category,
+                'body_text' => $bodyText,
+                'header_text' => $headerText,
+                'footer_text' => $footerText,
+                'example_values' => $data['example_values'] ?? [],
+            ]);
+        }
 
         // Enregistrement local
         return DB::transaction(function () use ($metaName, $language, $title, $bodyText, $headerText): MarketingMessageTemplate {

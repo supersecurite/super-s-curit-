@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { FileText } from 'lucide-react';
+import { FileText, CheckCheck } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
 import { Badge } from '@/components/ui/badge';
 import { variableTokenClassName } from '@/lib/marketing-template-variables';
@@ -69,9 +69,10 @@ export default function CampaignTemplatePreviewPanel({
                                       .replace(/\{\{3\}\}/g, 'Super Sécurité')
                                 : `Message modèle WhatsApp : ${template.meta_template_name}`}
                         </p>
-                        <p className="text-[10px] text-muted-foreground/60 text-right pt-1">
-                            12:00 ✓✓
-                        </p>
+                        <div className="text-[10px] text-muted-foreground/60 flex items-center justify-end gap-1 pt-1">
+                            <span>12:00</span>
+                            <CheckCheck className="size-3 text-emerald-500" aria-hidden />
+                        </div>
                     </div>
 
                     <p className="text-[11px] text-muted-foreground">

@@ -1,6 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
 import MarketingMessageTemplateForm from '@/components/marketing-templates/marketing-message-template-form';
-import SubmitMetaTemplateDialog from '@/components/marketing-templates/submit-meta-template-dialog';
 import { create, index, store } from '@/routes/marketing-templates';
 
 type WhatsAppAccountOption = {
@@ -33,23 +32,20 @@ export default function MarketingTemplatesCreate() {
                         <h1 className="font-heading text-2xl font-semibold tracking-tight">{title}</h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             {isWhatsApp
-                                ? 'Référencez un modèle Meta approuvé ou soumettez-en un directement à Meta.'
+                                ? 'Créez votre modèle WhatsApp — il sera automatiquement soumis pour approbation Meta.'
                                 : 'Créez un template e-mail réutilisable avec variables dynamiques.'}
                         </p>
                     </div>
-
-                    {isWhatsApp && whatsappAccounts.length > 0 ? (
-                        <SubmitMetaTemplateDialog accounts={whatsappAccounts} />
-                    ) : null}
                 </div>
 
                 <MarketingMessageTemplateForm
                     submitUrl={store.url()}
-                    submitLabel="Créer le template"
+                    submitLabel={isWhatsApp ? 'Créer et soumettre à Meta' : 'Créer le template'}
                     cancelHref={listHref}
                     errors={errors}
                     lockedChannel={lockedChannel}
                     variables={variables}
+                    whatsappAccounts={whatsappAccounts}
                 />
             </div>
         </>

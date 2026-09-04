@@ -494,7 +494,7 @@ export default function MarketingCampaignsShow() {
                             </div>
                             {isWhatsApp ? (
                                 <p className="text-muted-foreground text-xs">
-                                    Accusés WhatsApp : ✓ envoyé · ✓✓ reçu (delivered) · ✓✓ vert lu (read)
+                                    Accusés WhatsApp : envoyé (1 coche) · reçu / delivered (2 coches grises) · lu / read (2 coches vertes)
                                 </p>
                             ) : null}
                         </div>

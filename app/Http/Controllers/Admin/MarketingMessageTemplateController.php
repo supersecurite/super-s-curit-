@@ -209,8 +209,40 @@ class MarketingMessageTemplateController extends Controller
     public function store(
         StoreMarketingMessageTemplateRequest $request,
         CreateMarketingMessageTemplate $action,
+        SubmitWhatsAppMetaTemplate $metaAction,
     ): RedirectResponse {
-        $template = $action->handle($request->validated());
+        $validated = $request->validated();
+
+        if ($validated['channel'] === MarketingCampaignChannel::WhatsApp->value) {
+            try {
+                $template = $metaAction->handle([
+                    'account_uuid' => $request->input('account_uuid'),
+                    'name' => $validated['meta_template_name'] ?? $validated['name'],
+                    'title' => $validated['name'],
+                    'category' => $request->input('category', 'MARKETING'),
+                    'language' => $validated['meta_template_language'] ?? 'fr',
+                    'header_text' => $validated['subject'] ?? null,
+                    'body_text' => $validated['body'] ?? '',
+                    'footer_text' => $request->input('footer_text'),
+                ]);
+
+                Inertia::flash('toast', [
+                    'type' => 'success',
+                    'message' => "Modèle WhatsApp « {$template->meta_template_name} » créé et soumis avec succès à Meta.",
+                ]);
+
+                return to_route('marketing-templates.show', $template);
+            } catch (Throwable $exception) {
+                Inertia::flash('toast', [
+                    'type' => 'error',
+                    'message' => 'Échec de la soumission Meta : '.$exception->getMessage(),
+                ]);
+
+                return redirect()->back()->withInput();
+            }
+        }
+
+        $template = $action->handle($validated);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Template créé avec succès.']);
 
