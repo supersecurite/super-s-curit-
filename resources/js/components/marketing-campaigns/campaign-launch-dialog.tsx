@@ -54,9 +54,17 @@ export default function CampaignLaunchDialog({
     const handleSubmit = () => {
         setProcessing(true);
 
+        let scheduledAtPayload: string | undefined = undefined;
+        if (mode === 'schedule' && scheduledAt) {
+            const dateObj = new Date(scheduledAt);
+            scheduledAtPayload = !isNaN(dateObj.getTime())
+                ? dateObj.toISOString()
+                : scheduledAt;
+        }
+
         router.post(
             launch.url(campaignUuid),
-            mode === 'schedule' ? { scheduled_at: scheduledAt } : {},
+            mode === 'schedule' ? { scheduled_at: scheduledAtPayload } : {},
             {
                 onFinish: () => {
                     setProcessing(false);

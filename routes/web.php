@@ -154,6 +154,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('marketing-templates.meta-fetch');
         Route::post('marketing-templates/meta-import', [AdminMarketingMessageTemplateController::class, 'importMetaTemplates'])
             ->name('marketing-templates.meta-import');
+        Route::post('marketing-templates/meta-submit', [AdminMarketingMessageTemplateController::class, 'submitMetaTemplate'])
+            ->name('marketing-templates.meta-submit');
         Route::resource('marketing-templates', AdminMarketingMessageTemplateController::class);
         Route::post('marketing-campaigns/{marketing_campaign}/launch', [AdminMarketingCampaignController::class, 'launch'])
             ->name('marketing-campaigns.launch');

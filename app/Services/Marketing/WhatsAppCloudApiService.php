@@ -209,4 +209,119 @@ class WhatsAppCloudApiService
             ];
         }, $data);
     }
+
+    /**
+     * Crée et soumet un modèle de message WhatsApp auprès de Meta Cloud API.
+     *
+     * @param array{
+     *     name: string,
+     *     language?: string,
+     *     category?: string,
+     *     body_text: string,
+     *     header_text?: string|null,
+     *     footer_text?: string|null,
+     *     example_values?: list<string>
+     * } $payload
+     * @return array{id: string, status: string, category: string}
+     */
+    public function createTemplate(WhatsAppAccount $account, array $payload): array
+    {
+        $name = Str::slug($payload['name'], '_');
+        $language = $payload['language'] ?? 'fr';
+        $category = strtoupper($payload['category'] ?? 'MARKETING');
+
+        if ($account->driver === WhatsAppAccountDriver::Log) {
+            $mockId = 'meta_tpl_'.Str::random(12);
+
+            Log::info('WhatsApp log driver: template submitted to Meta.', [
+                'account_uuid' => $account->uuid,
+                'name' => $name,
+                'language' => $language,
+                'category' => $category,
+                'body_text' => $payload['body_text'],
+                'header_text' => $payload['header_text'] ?? null,
+                'footer_text' => $payload['footer_text'] ?? null,
+                'meta_template_id' => $mockId,
+            ]);
+
+            return [
+                'id' => $mockId,
+                'status' => 'APPROVED',
+                'category' => $category,
+            ];
+        }
+
+        if (blank($account->business_account_id) || blank($account->access_token)) {
+            throw new RuntimeException('Identifiant de compte business Meta (WABA ID) ou jeton d’accès manquant.');
+        }
+
+        $components = [];
+
+        if (filled($payload['header_text'] ?? null)) {
+            $components[] = [
+                'type' => 'HEADER',
+                'format' => 'TEXT',
+                'text' => (string) $payload['header_text'],
+            ];
+        }
+
+        $bodyComponent = [
+            'type' => 'BODY',
+            'text' => $payload['body_text'],
+        ];
+
+        // Meta requires example values if body contains variables like {{1}}, {{2}}
+        preg_match_all('/\{\{(\d+)\}\}/', $payload['body_text'], $matches);
+        if (! empty($matches[1])) {
+            $uniqueVars = array_unique($matches[1]);
+            $exampleValues = [];
+            foreach ($uniqueVars as $idx => $varNum) {
+                $exampleValues[] = $payload['example_values'][$idx] ?? ('Exemple '.$varNum);
+            }
+            $bodyComponent['example'] = [
+                'body_text' => [$exampleValues],
+            ];
+        }
+
+        $components[] = $bodyComponent;
+
+        if (filled($payload['footer_text'] ?? null)) {
+            $components[] = [
+                'type' => 'FOOTER',
+                'text' => (string) $payload['footer_text'],
+            ];
+        }
+
+        $metaPayload = [
+            'name' => $name,
+            'language' => $language,
+            'category' => $category,
+            'components' => $components,
+        ];
+
+        try {
+            $response = Http::withToken($account->access_token)
+                ->acceptJson()
+                ->post(
+                    'https://graph.facebook.com/v21.0/'.$account->business_account_id.'/message_templates',
+                    $metaPayload,
+                )
+                ->throw();
+        } catch (RequestException $exception) {
+            $body = $exception->response?->json();
+            $message = data_get($body, 'error.message')
+                ?? data_get($body, 'error.error_user_msg')
+                ?? $exception->getMessage();
+
+            throw new RuntimeException('WhatsApp Meta API (create template): '.$message, previous: $exception);
+        }
+
+        $result = $response->json();
+
+        return [
+            'id' => (string) ($result['id'] ?? Str::uuid()),
+            'status' => (string) ($result['status'] ?? 'PENDING'),
+            'category' => (string) ($result['category'] ?? $category),
+        ];
+    }
 }

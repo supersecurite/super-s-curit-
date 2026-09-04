@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Marketing\CreateMarketingMessageTemplate;
 use App\Actions\Marketing\DeleteMarketingMessageTemplate;
 use App\Actions\Marketing\ImportWhatsAppMetaTemplates;
+use App\Actions\Marketing\SubmitWhatsAppMetaTemplate;
 use App\Actions\Marketing\UpdateMarketingMessageTemplate;
 use App\Enums\MarketingCampaignChannel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMarketingMessageTemplateRequest;
+use App\Http\Requests\SubmitWhatsAppMetaTemplateRequest;
 use App\Http\Requests\UpdateMarketingMessageTemplateRequest;
 use App\Models\MarketingMessageTemplate;
 use App\Models\WhatsAppAccount;
@@ -157,6 +159,32 @@ class MarketingMessageTemplateController extends Controller
         ]);
 
         return to_route('marketing-templates.index', ['channel' => 'whatsapp']);
+    }
+
+    /**
+     * Soumet un nouveau modèle de message à Meta Cloud API et l'enregistre localement.
+     */
+    public function submitMetaTemplate(
+        SubmitWhatsAppMetaTemplateRequest $request,
+        SubmitWhatsAppMetaTemplate $action,
+    ): RedirectResponse {
+        try {
+            $template = $action->handle($request->validated());
+
+            Inertia::flash('toast', [
+                'type' => 'success',
+                'message' => "Modèle WhatsApp « {$template->meta_template_name} » soumis avec succès à Meta.",
+            ]);
+
+            return to_route('marketing-templates.show', $template);
+        } catch (Throwable $exception) {
+            Inertia::flash('toast', [
+                'type' => 'error',
+                'message' => 'Échec de la soumission Meta : '.$exception->getMessage(),
+            ]);
+
+            return redirect()->back();
+        }
     }
 
     /**

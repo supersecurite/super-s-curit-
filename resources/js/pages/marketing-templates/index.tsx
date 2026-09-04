@@ -10,6 +10,7 @@ import {
 } from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import ImportMetaTemplatesDialog from '@/components/marketing-templates/import-meta-templates-dialog';
+import SubmitMetaTemplateDialog from '@/components/marketing-templates/submit-meta-template-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -203,7 +204,10 @@ export default function MarketingTemplatesIndex() {
                     {canCreate ? (
                         <div className="flex flex-wrap items-center gap-2">
                             {isWhatsApp && whatsappAccounts.length > 0 ? (
-                                <ImportMetaTemplatesDialog accounts={whatsappAccounts} />
+                                <>
+                                    <SubmitMetaTemplateDialog accounts={whatsappAccounts} />
+                                    <ImportMetaTemplatesDialog accounts={whatsappAccounts} />
+                                </>
                             ) : null}
                             <Button asChild>
                                 <Link href={create.url({ query: { channel: activeChannel } })}>

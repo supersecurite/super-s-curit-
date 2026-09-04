@@ -244,3 +244,85 @@ test('commercial can delete template and is redirected back or to channel index'
 
     expect(MarketingMessageTemplate::query()->find($template2->id))->toBeNull();
 });
+
+test('commercial can submit whatsapp template to meta', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $account = WhatsAppAccount::factory()->create([
+        'driver' => WhatsAppAccountDriver::Log,
+        'is_active' => true,
+        'is_default' => true,
+    ]);
+
+    $response = $this->actingAs($commercial)
+        ->post(route('marketing-templates.meta-submit'), [
+            'account_uuid' => $account->uuid,
+            'name' => 'alerte_site_2026',
+            'title' => 'Alerte Site 2026',
+            'category' => 'MARKETING',
+            'language' => 'fr',
+            'header_text' => 'Super Sécurité Alerte',
+            'body_text' => 'Bonjour {{1}}, alerte sur votre site {{2}}.',
+            'footer_text' => 'Super Sécurité SARL',
+        ]);
+
+    $template = MarketingMessageTemplate::query()
+        ->where('meta_template_name', 'alerte_site_2026')
+        ->first();
+
+    expect($template)->not->toBeNull()
+        ->and($template->channel)->toBe(MarketingMessageTemplateChannel::WhatsApp)
+        ->and($template->meta_template_language)->toBe('fr')
+        ->and($template->name)->toBe('Alerte Site 2026')
+        ->and($template->subject)->toBe('Super Sécurité Alerte')
+        ->and($template->body)->toBe('Bonjour {{1}}, alerte sur votre site {{2}}.');
+
+    $response->assertRedirect(route('marketing-templates.show', $template));
+});
+
+test('submitting whatsapp template to meta with live driver calls meta graph api', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $account = WhatsAppAccount::factory()->create([
+        'driver' => WhatsAppAccountDriver::Meta,
+        'business_account_id' => '123456789',
+        'access_token' => 'fake_meta_token',
+        'is_active' => true,
+        'is_default' => true,
+    ]);
+
+    Http::fake([
+        'https://graph.facebook.com/v21.0/123456789/message_templates' => Http::response([
+            'id' => 'meta_tpl_987654321',
+            'status' => 'PENDING',
+            'category' => 'MARKETING',
+        ], 200),
+    ]);
+
+    $response = $this->actingAs($commercial)
+        ->post(route('marketing-templates.meta-submit'), [
+            'account_uuid' => $account->uuid,
+            'name' => 'confirmation_devis_pro',
+            'title' => 'Confirmation Devis Pro',
+            'category' => 'MARKETING',
+            'language' => 'fr',
+            'body_text' => 'Bonjour {{1}}, votre devis {{2}} a été transmis avec succès.',
+        ]);
+
+    $template = MarketingMessageTemplate::query()
+        ->where('meta_template_name', 'confirmation_devis_pro')
+        ->first();
+
+    expect($template)->not->toBeNull()
+        ->and($template->name)->toBe('Confirmation Devis Pro');
+
+    $response->assertRedirect(route('marketing-templates.show', $template));
+
+    Http::assertSent(function ($request) {
+        return str_contains($request->url(), '123456789/message_templates')
+            && $request['name'] === 'confirmation_devis_pro'
+            && $request['category'] === 'MARKETING';
+    });
+});
