@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Calendar, Megaphone, Pencil, Plus, Search } from 'lucide-react';
+import { Calendar, Megaphone, Pencil, Plus, RotateCcw, Search } from 'lucide-react';
 import { useMemo } from 'react';
 import {
     BackofficeFiltersBar,
@@ -22,6 +22,7 @@ import {
     destroy,
     edit,
     index,
+    retry,
     show,
 } from '@/routes/marketing-campaigns';
 
@@ -41,6 +42,7 @@ type CampaignRow = {
     can_update: boolean;
     can_delete: boolean;
     can_send: boolean;
+    can_retry?: boolean;
 };
 
 type PaginatedCampaigns = {
@@ -127,6 +129,17 @@ export default function MarketingCampaignsIndex() {
     const columns = useMemo((): ResponsiveColumn<CampaignRow>[] => {
         const renderActions = (campaign: CampaignRow) => (
             <div className="flex items-center justify-end gap-1.5">
+                {campaign.can_retry ? (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.post(retry.url(campaign.uuid), {}, { preserveScroll: true })}
+                        title="Relancer les envois échoués"
+                    >
+                        <RotateCcw className="size-4" aria-hidden />
+                        Relancer
+                    </Button>
+                ) : null}
                 {campaign.can_send ? (
                     <CampaignLaunchDialog
                         campaignUuid={campaign.uuid}

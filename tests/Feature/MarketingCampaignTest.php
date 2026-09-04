@@ -490,3 +490,61 @@ test('commercial can preview list audience for campaign form', function () {
         ->assertJsonPath('stats.ineligible', 1)
         ->assertJsonCount(2, 'contacts');
 });
+
+test('commercial can retry failed campaign sends', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    Queue::fake();
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $emailAccount = MarketingEmailAccount::factory()->create([
+        'is_active' => true,
+        'is_default' => true,
+    ]);
+
+    $campaign = MarketingCampaign::factory()->create([
+        'channel' => MarketingCampaignChannel::Email,
+        'status' => MarketingCampaignStatus::Completed,
+        'marketing_email_account_id' => $emailAccount->id,
+    ]);
+
+    $successSend = MarketingCampaignSend::factory()->create([
+        'marketing_campaign_id' => $campaign->id,
+        'status' => MarketingCampaignSendStatus::Received,
+    ]);
+
+    $failedSend = MarketingCampaignSend::factory()->create([
+        'marketing_campaign_id' => $campaign->id,
+        'status' => MarketingCampaignSendStatus::Failed,
+        'failure_reason' => 'SMTP timeout',
+    ]);
+
+    $response = $this->actingAs($commercial)
+        ->post(route('marketing-campaigns.retry', $campaign));
+
+    $response->assertRedirect(route('marketing-campaigns.show', $campaign));
+
+    $failedSend->refresh();
+    $successSend->refresh();
+    $campaign->refresh();
+
+    expect($failedSend->status)->toBe(MarketingCampaignSendStatus::Queued)
+        ->and($failedSend->failure_reason)->toBeNull()
+        ->and($successSend->status)->toBe(MarketingCampaignSendStatus::Received)
+        ->and($campaign->status)->toBe(MarketingCampaignStatus::Sending);
+
+    Queue::assertPushed(SendMarketingCampaignEmailJob::class, 1);
+});
+
+test('commercial cannot retry campaign while actively sending', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $campaign = MarketingCampaign::factory()->create([
+        'status' => MarketingCampaignStatus::Sending,
+    ]);
+
+    $this->actingAs($commercial)
+        ->post(route('marketing-campaigns.retry', $campaign))
+        ->assertForbidden();
+});

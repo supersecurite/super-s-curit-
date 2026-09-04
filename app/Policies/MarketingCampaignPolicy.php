@@ -40,4 +40,10 @@ class MarketingCampaignPolicy
         return $user->hasBackofficePermission(BackofficePermission::MarketingCampaignsSend)
             && $marketingCampaign->status->canLaunch();
     }
+
+    public function retry(User $user, MarketingCampaign $marketingCampaign): bool
+    {
+        return $user->hasBackofficePermission(BackofficePermission::MarketingCampaignsSend)
+            && $marketingCampaign->canRetry();
+    }
 }

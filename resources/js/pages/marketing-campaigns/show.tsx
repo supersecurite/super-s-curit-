@@ -1,5 +1,5 @@
-import { Head, Link, setLayoutProps, usePage } from '@inertiajs/react';
-import { ArrowLeft, Megaphone, Pencil, Radio } from 'lucide-react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
+import { ArrowLeft, Megaphone, Pencil, Radio, RotateCcw } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import {
     BackofficeIndexPanel,
@@ -23,7 +23,7 @@ import {
     useMarketingCampaignRealtime,
     type CampaignProgressPayload,
 } from '@/hooks/use-marketing-campaign-realtime';
-import { destroy, edit, index, show } from '@/routes/marketing-campaigns';
+import { destroy, edit, index, retry, show } from '@/routes/marketing-campaigns';
 
 type CampaignStats = {
     total: number;
@@ -100,6 +100,7 @@ type PageProps = {
     canUpdate: boolean;
     canDelete: boolean;
     canSend: boolean;
+    canRetry: boolean;
     broadcasting: {
         enabled: boolean;
     };
@@ -144,11 +145,12 @@ function sendDestination(
 }
 
 export default function MarketingCampaignsShow() {
-    const { campaign, sends, canUpdate, canDelete, canSend, broadcasting } =
+    const { campaign, sends, canUpdate, canDelete, canSend, canRetry, broadcasting } =
         usePage<PageProps>().props;
     const [liveCampaign, setLiveCampaign] = useState(campaign);
     const [liveSends, setLiveSends] = useState(sends);
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
+    const [retrying, setRetrying] = useState(false);
     const isWhatsApp = campaign.channel === 'whatsapp';
     const listHref = index.url({ query: { channel: campaign.channel } });
 
@@ -210,6 +212,18 @@ export default function MarketingCampaignsShow() {
 
     const buildPageUrl = (page: number) =>
         show.url(campaign.uuid, { query: withIndexTableQuery({}, page) });
+
+    const handleRetry = () => {
+        setRetrying(true);
+        router.post(
+            retry.url(campaign.uuid),
+            {},
+            {
+                preserveScroll: true,
+                onFinish: () => setRetrying(false),
+            },
+        );
+    };
 
     const sendColumns: ResponsiveColumn<SendRow>[] = [
         {
@@ -329,6 +343,19 @@ export default function MarketingCampaignsShow() {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
+                        {canRetry ? (
+                            <Button
+                                variant="outline"
+                                onClick={handleRetry}
+                                disabled={retrying}
+                            >
+                                <RotateCcw
+                                    className={`size-4 ${retrying ? 'animate-spin' : ''}`}
+                                    aria-hidden
+                                />
+                                {retrying ? 'Relance en cours...' : 'Relancer les échecs'}
+                            </Button>
+                        ) : null}
                         {canSend ? (
                             <CampaignLaunchDialog
                                 campaignUuid={campaign.uuid}

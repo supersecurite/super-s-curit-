@@ -190,6 +190,24 @@ class MarketingCampaign extends Model
         return $stats;
     }
 
+    public function canRetry(): bool
+    {
+        if ($this->status === MarketingCampaignStatus::Sending) {
+            return false;
+        }
+
+        if ($this->status === MarketingCampaignStatus::Failed) {
+            return true;
+        }
+
+        return $this->sends()
+            ->whereIn('status', [
+                MarketingCampaignSendStatus::Failed,
+                MarketingCampaignSendStatus::Bounced,
+            ])
+            ->exists();
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -207,6 +225,7 @@ class MarketingCampaign extends Model
             'status' => $this->status->value,
             'status_label' => $this->status->label(),
             'is_editable' => $this->status->isEditable(),
+            'can_retry' => $this->canRetry(),
             'marketing_list_id' => $this->marketing_list_id,
             'marketing_message_template_id' => $this->marketing_message_template_id,
             'whatsapp_account_id' => $this->whatsapp_account_id,

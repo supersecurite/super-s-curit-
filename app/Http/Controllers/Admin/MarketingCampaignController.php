@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Marketing\CreateMarketingCampaign;
 use App\Actions\Marketing\DeleteMarketingCampaign;
 use App\Actions\Marketing\LaunchMarketingCampaign;
+use App\Actions\Marketing\RetryFailedMarketingCampaignSends;
 use App\Actions\Marketing\UpdateMarketingCampaign;
 use App\Enums\MarketingCampaignChannel;
 use App\Http\Controllers\Controller;
@@ -66,6 +67,7 @@ class MarketingCampaignController extends Controller
                 'can_update' => $request->user()?->can('update', $campaign) ?? false,
                 'can_delete' => $request->user()?->can('delete', $campaign) ?? false,
                 'can_send' => $request->user()?->can('send', $campaign) ?? false,
+                'can_retry' => $request->user()?->can('retry', $campaign) ?? false,
             ]);
 
         return Inertia::render('marketing-campaigns/index', [
@@ -98,16 +100,16 @@ class MarketingCampaignController extends Controller
             'defaultEmailAccountId' => $channel === MarketingCampaignChannel::Email
                 ? MarketingEmailAccount::query()
                     ->where('is_active', true)
-                    ->where('is_default', true)
+                    ->orderByDesc('is_default')
                     ->value('id')
                 : null,
             'whatsappAccounts' => $channel === MarketingCampaignChannel::WhatsApp
                 ? $this->whatsappAccountOptions()
                 : [],
-            'defaultWhatsappAccountId' => $channel === MarketingCampaignChannel::WhatsApp
+            'defaultWhatsAppAccountId' => $channel === MarketingCampaignChannel::WhatsApp
                 ? WhatsAppAccount::query()
                     ->where('is_active', true)
-                    ->where('is_default', true)
+                    ->orderByDesc('is_default')
                     ->value('id')
                 : null,
             'variables' => RenderMarketingMessageTemplate::VARIABLES,
@@ -154,6 +156,7 @@ class MarketingCampaignController extends Controller
             'canUpdate' => $request->user()?->can('update', $marketingCampaign) ?? false,
             'canDelete' => $request->user()?->can('delete', $marketingCampaign) ?? false,
             'canSend' => $request->user()?->can('send', $marketingCampaign) ?? false,
+            'canRetry' => $request->user()?->can('retry', $marketingCampaign) ?? false,
         ]);
     }
 
@@ -227,6 +230,25 @@ class MarketingCampaignController extends Controller
             'message' => $isScheduled
                 ? 'Campagne planifiée — elle sera lancée automatiquement à la date choisie.'
                 : 'Campagne lancée — les envois sont en cours.',
+            'sound' => 'success',
+        ]);
+
+        return to_route('marketing-campaigns.show', $marketingCampaign);
+    }
+
+    public function retry(
+        MarketingCampaign $marketingCampaign,
+        RetryFailedMarketingCampaignSends $action,
+    ): RedirectResponse {
+        $this->authorize('retry', $marketingCampaign);
+
+        $count = $action->handle($marketingCampaign);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $count > 0
+                ? "Relance effectuée : {$count} envoi(s) échoué(s) replacé(s) en file d'attente."
+                : 'Aucun envoi en échec à relancer.',
             'sound' => 'success',
         ]);
 

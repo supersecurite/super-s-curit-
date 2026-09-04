@@ -9,7 +9,6 @@ use App\Models\WhatsAppAccount;
 use App\Services\Marketing\WhatsAppCloudApiService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use RuntimeException;
 
 /**
  * Soumet un modèle de message à Meta Cloud API et l'enregistre localement.
