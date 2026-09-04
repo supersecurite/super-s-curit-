@@ -224,15 +224,29 @@ class MarketingMessageTemplateController extends Controller
     }
 
     public function destroy(
+        Request $request,
         MarketingMessageTemplate $marketingTemplate,
         DeleteMarketingMessageTemplate $action,
     ): RedirectResponse {
         $this->authorize('delete', $marketingTemplate);
 
+        $channel = $marketingTemplate->channel;
+
         $action->handle($marketingTemplate);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Template supprimé avec succès.']);
 
-        return to_route('marketing-templates.index');
+        $previousUrl = url()->previous();
+        $fallbackUrl = route('marketing-templates.index', ['channel' => $channel->value]);
+
+        if (
+            str_contains($previousUrl, $marketingTemplate->uuid) ||
+            str_contains($previousUrl, (string) $marketingTemplate->id) ||
+            $previousUrl === $request->fullUrl()
+        ) {
+            return redirect()->to($fallbackUrl);
+        }
+
+        return redirect()->back(fallback: $fallbackUrl);
     }
 }

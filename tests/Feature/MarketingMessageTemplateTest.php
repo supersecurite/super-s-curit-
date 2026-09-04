@@ -213,3 +213,34 @@ test('commercial can import meta templates into application', function () {
     expect($template2)->not->toBeNull()
         ->and($template2->name)->toBe('Devis Gardiennage');
 });
+
+test('commercial can delete template and is redirected back or to channel index', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+    $template = MarketingMessageTemplate::factory()->create([
+        'channel' => MarketingMessageTemplateChannel::WhatsApp,
+    ]);
+
+    // Deletion when coming from the index page with search query
+    $indexUrl = route('marketing-templates.index', ['channel' => 'whatsapp', 'search' => 'test']);
+    $this->actingAs($commercial)
+        ->from($indexUrl)
+        ->delete(route('marketing-templates.destroy', $template))
+        ->assertRedirect($indexUrl);
+
+    expect(MarketingMessageTemplate::query()->find($template->id))->toBeNull();
+
+    // Deletion when coming from the show page itself
+    $template2 = MarketingMessageTemplate::factory()->create([
+        'channel' => MarketingMessageTemplateChannel::WhatsApp,
+    ]);
+    $showUrl = route('marketing-templates.show', $template2);
+
+    $this->actingAs($commercial)
+        ->from($showUrl)
+        ->delete(route('marketing-templates.destroy', $template2))
+        ->assertRedirect(route('marketing-templates.index', ['channel' => 'whatsapp']));
+
+    expect(MarketingMessageTemplate::query()->find($template2->id))->toBeNull();
+});

@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import MarketingMessageTemplateForm from '@/components/marketing-templates/marketing-message-template-form';
 import { edit, index, show, update } from '@/routes/marketing-templates';
 
@@ -16,6 +16,17 @@ type PageProps = {
 
 export default function MarketingTemplatesEdit() {
     const { template, errors, variables } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: 'Templates',
+                href: index.url({ query: { channel: template.channel } }),
+            },
+            { title: template.name, href: show.url(template.uuid) },
+            { title: 'Modifier', href: edit.url(template.uuid) },
+        ],
+    });
 
     return (
         <>
@@ -42,10 +53,3 @@ export default function MarketingTemplatesEdit() {
         </>
     );
 }
-
-MarketingTemplatesEdit.layout = {
-    breadcrumbs: [
-        { title: 'Templates', href: index.url() },
-        { title: 'Modifier', href: edit.url('') },
-    ],
-};

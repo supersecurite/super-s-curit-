@@ -32,7 +32,10 @@ export default function MarketingTemplatesShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Templates', href: index.url() },
+            {
+                title: 'Templates',
+                href: index.url({ query: { channel: template.channel } }),
+            },
             { title: template.name, href: show.url(template.uuid) },
         ],
     });
@@ -45,7 +48,7 @@ export default function MarketingTemplatesShow() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                         <Link
-                            href={index.url()}
+                            href={index.url({ query: { channel: template.channel } })}
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" aria-hidden />
