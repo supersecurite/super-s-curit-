@@ -5,6 +5,7 @@ namespace App\Enums;
 enum MarketingCampaignStatus: string
 {
     case Draft = 'draft';
+    case Scheduled = 'scheduled';
     case Queued = 'queued';
     case Sending = 'sending';
     case Completed = 'completed';
@@ -14,6 +15,7 @@ enum MarketingCampaignStatus: string
     {
         return match ($this) {
             self::Draft => 'Brouillon',
+            self::Scheduled => 'Planifiée',
             self::Queued => 'En file',
             self::Sending => 'Envoi en cours',
             self::Completed => 'Terminée',
@@ -23,6 +25,11 @@ enum MarketingCampaignStatus: string
 
     public function isEditable(): bool
     {
-        return $this === self::Draft;
+        return in_array($this, [self::Draft, self::Scheduled], true);
+    }
+
+    public function canLaunch(): bool
+    {
+        return in_array($this, [self::Draft, self::Scheduled], true);
     }
 }

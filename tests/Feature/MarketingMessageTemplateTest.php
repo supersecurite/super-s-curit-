@@ -96,8 +96,7 @@ test('email template requires subject', function () {
 test('message template variables are rendered for contact', function () {
     $contact = MarketingContact::factory()->create([
         'is_company' => true,
-        'first_name' => 'Aissata',
-        'last_name' => 'Diallo',
+        'name' => 'Aissata Diallo',
         'company_name' => 'Super Sécurité',
     ]);
 
@@ -111,8 +110,7 @@ test('message template variables are rendered for contact', function () {
 
 test('lexical template body is converted to plain text before rendering', function () {
     $contact = MarketingContact::factory()->create([
-        'first_name' => 'Aissata',
-        'last_name' => 'Diallo',
+        'name' => 'Aissata Diallo',
     ]);
 
     $lexicalBody = json_encode([

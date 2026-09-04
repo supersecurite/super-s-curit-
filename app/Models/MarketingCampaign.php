@@ -30,6 +30,7 @@ use Illuminate\Support\Str;
     'body',
     'created_by',
     'launched_at',
+    'scheduled_at',
     'completed_at',
 ])]
 class MarketingCampaign extends Model
@@ -64,6 +65,7 @@ class MarketingCampaign extends Model
             'channel' => MarketingCampaignChannel::class,
             'status' => MarketingCampaignStatus::class,
             'launched_at' => 'datetime',
+            'scheduled_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
     }
@@ -262,6 +264,8 @@ class MarketingCampaign extends Model
             'body' => $this->body,
             'launched_at' => $this->launched_at?->toIso8601String(),
             'launched_at_formatted' => $this->launched_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
+            'scheduled_at' => $this->scheduled_at?->toIso8601String(),
+            'scheduled_at_formatted' => $this->scheduled_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
             'completed_at' => $this->completed_at?->toIso8601String(),
             'completed_at_formatted' => $this->completed_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
             'created_at' => $this->created_at?->toIso8601String(),

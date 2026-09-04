@@ -18,10 +18,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { SearchableMultiSelect } from '@/components/ui/searchable-multi-select';
-import {
-    DEFAULT_MARKETING_TEMPLATE_BODY,
-    DEFAULT_MARKETING_TEMPLATE_SUBJECT,
-} from '@/lib/marketing-template-variables';
 import { audiencePreview } from '@/routes/marketing-campaigns';
 import { store as storeMarketingEditorImage } from '@/routes/marketing-editor-images';
 
@@ -96,36 +92,6 @@ type MarketingCampaignFormProps = {
     method?: 'post' | 'put';
 };
 
-function resolveInitialSubject(
-    campaign: MarketingCampaignFormData | undefined,
-    channel: string,
-): string {
-    if (channel === 'whatsapp') {
-        return '';
-    }
-
-    if (campaign?.subject?.trim()) {
-        return campaign.subject;
-    }
-
-    return DEFAULT_MARKETING_TEMPLATE_SUBJECT;
-}
-
-function resolveInitialBody(
-    campaign: MarketingCampaignFormData | undefined,
-    channel: string,
-): string {
-    if (channel === 'whatsapp') {
-        return '';
-    }
-
-    if (campaign?.body?.trim()) {
-        return campaign.body;
-    }
-
-    return DEFAULT_MARKETING_TEMPLATE_BODY;
-}
-
 export default function MarketingCampaignForm({
     submitUrl,
     submitLabel,
@@ -153,8 +119,8 @@ export default function MarketingCampaignForm({
             campaign?.marketing_email_account_id ?? defaultEmailAccountId ?? null,
         whatsapp_account_id:
             campaign?.whatsapp_account_id ?? defaultWhatsappAccountId ?? null,
-        subject: resolveInitialSubject(campaign, lockedChannel),
-        body: resolveInitialBody(campaign, lockedChannel),
+        subject: campaign?.subject ?? '',
+        body: campaign?.body ?? '',
     });
     const [processing, setProcessing] = useState(false);
     const [audience, setAudience] = useState<AudiencePreviewPayload | null>(null);
@@ -213,13 +179,7 @@ export default function MarketingCampaignForm({
 
     const applyTemplate = useCallback(
         (templateId: string) => {
-            const parsedId = templateId === 'none' ? null : Number(templateId);
-            updateField('marketing_message_template_id', parsedId);
-
-            if (parsedId === null) {
-                return;
-            }
-
+            const parsedId = Number(templateId);
             const template = channelTemplates.find((item) => item.id === parsedId);
 
             if (!template) {
@@ -235,7 +195,7 @@ export default function MarketingCampaignForm({
                 body: isWhatsApp ? '' : template.body?.trim() || previous.body,
             }));
         },
-        [channelTemplates, isWhatsApp, updateField],
+        [channelTemplates, isWhatsApp],
     );
 
     useEffect(() => {
@@ -334,6 +294,8 @@ export default function MarketingCampaignForm({
 
     const editorKey = `campaign-body-${campaign?.uuid ?? 'new'}-${formData.channel}-${formData.marketing_message_template_id ?? 'none'}`;
     const channelLabel = isWhatsApp ? 'WhatsApp' : 'e-mail';
+    const canEditMessage =
+        !isWhatsApp && formData.marketing_message_template_id !== null;
 
     return (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:items-start">
@@ -438,42 +400,76 @@ export default function MarketingCampaignForm({
 
                 <div className="space-y-2">
                     <Label htmlFor="marketing_message_template_id">
-                        {isWhatsApp ? 'Template WhatsApp' : 'Template (optionnel)'}
+                        {isWhatsApp ? 'Template WhatsApp' : 'Template e-mail'}
                     </Label>
-                    <Select
-                        value={formData.marketing_message_template_id?.toString() ?? 'none'}
-                        onValueChange={applyTemplate}
-                    >
-                        <SelectTrigger id="marketing_message_template_id">
-                            <SelectValue
-                                placeholder={isWhatsApp ? 'Choisir un template' : 'Sans template'}
-                            />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {!isWhatsApp ? (
-                                <SelectItem value="none">Sans template</SelectItem>
-                            ) : null}
-                            {channelTemplates.map((template) => (
-                                <SelectItem key={template.id} value={template.id.toString()}>
-                                    {template.name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    {channelTemplates.length > 0 ? (
+                        <Select
+                            value={formData.marketing_message_template_id?.toString() ?? ''}
+                            onValueChange={applyTemplate}
+                            required
+                        >
+                            <SelectTrigger id="marketing_message_template_id">
+                                <SelectValue placeholder="Choisir un template" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {channelTemplates.map((template) => (
+                                    <SelectItem key={template.id} value={template.id.toString()}>
+                                        {template.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    ) : (
+                        <div className="rounded-lg border border-dashed border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
+                            <p className="font-medium">Aucun template disponible pour ce canal.</p>
+                            <p className="text-muted-foreground mt-1 text-xs">
+                                Vous devez créer un template {isWhatsApp ? 'WhatsApp' : 'e-mail'} avant de pouvoir configurer une campagne.
+                            </p>
+                        </div>
+                    )}
+                    {!isWhatsApp && channelTemplates.length > 0 ? (
+                        <p className="text-muted-foreground text-xs">
+                            Sélectionnez un template disponible : l’objet et le message seront chargés et modifiables avant validation.
+                        </p>
+                    ) : null}
                     <InputError message={errors.marketing_message_template_id} />
                 </div>
 
                 {!isWhatsApp ? (
-                    <div className="space-y-2">
-                        <Label htmlFor="subject">Objet</Label>
-                        <TemplateSubjectInput
-                            id="subject"
-                            value={formData.subject}
-                            onChange={(value) => updateField('subject', value)}
-                            variables={variables}
-                        />
-                        <InputError message={errors.subject} />
-                    </div>
+                    canEditMessage ? (
+                        <>
+                            <div className="space-y-2">
+                                <Label htmlFor="subject">Objet</Label>
+                                <TemplateSubjectInput
+                                    id="subject"
+                                    value={formData.subject}
+                                    onChange={(value) => updateField('subject', value)}
+                                    variables={variables}
+                                />
+                                <InputError message={errors.subject} />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label>Message</Label>
+                                <MarketingTemplateEditor
+                                    key={editorKey}
+                                    initialContent={formData.body?.trim() ? formData.body : ''}
+                                    fallbackPlainContent={
+                                        formData.body?.trim() ? '' : formData.body
+                                    }
+                                    onChange={(content) => updateField('body', content)}
+                                    variables={variables}
+                                    imageUploadUrl={storeMarketingEditorImage.url()}
+                                />
+                                <InputError message={errors.body} />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="bg-muted/40 text-muted-foreground rounded-lg border p-3 text-sm">
+                            Choisissez un template pour charger l’objet et le message
+                            (modifiables ensuite).
+                        </div>
+                    )
                 ) : (
                     <div className="bg-muted/40 space-y-2 rounded-lg border p-3 text-sm">
                         <p className="font-medium">Envoi via modèle Meta uniquement</p>
@@ -481,7 +477,7 @@ export default function MarketingCampaignForm({
                             WhatsApp n&apos;accepte pas de message libre hors fenêtre de
                             conversation. Sélectionnez un template dont le nom Meta correspond
                             à un modèle approuvé. Les variables Meta {'{{1}}'}, {'{{2}}'},{' '}
-                            {'{{3}}'} sont remplies avec prénom, nom et entreprise du contact.
+                            {'{{3}}'} sont remplies avec le nom et l&apos;entreprise du contact.
                         </p>
                         {selectedTemplate ? (
                             <dl className="grid gap-1 text-xs sm:grid-cols-2">
@@ -501,21 +497,6 @@ export default function MarketingCampaignForm({
                         ) : null}
                     </div>
                 )}
-
-                {!isWhatsApp ? (
-                    <div className="space-y-2">
-                        <Label>Message</Label>
-                        <MarketingTemplateEditor
-                            key={editorKey}
-                            initialContent={formData.body?.trim() ? formData.body : ''}
-                            fallbackPlainContent={formData.body?.trim() ? '' : formData.body}
-                            onChange={(content) => updateField('body', content)}
-                            variables={variables}
-                            imageUploadUrl={storeMarketingEditorImage.url()}
-                        />
-                        <InputError message={errors.body} />
-                    </div>
-                ) : null}
 
                 <div className="flex flex-wrap gap-2">
                     <Button type="submit" disabled={processing}>
@@ -545,7 +526,7 @@ export default function MarketingCampaignForm({
                     <section className="app-panel p-4">
                         <p className="text-muted-foreground text-sm">
                             Sélectionnez des groupes et/ou des contacts pour voir l&apos;audience,
-                            ou un template pour prévisualiser le message.
+                            et un template pour prévisualiser le message.
                         </p>
                     </section>
                 ) : null}

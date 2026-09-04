@@ -38,6 +38,6 @@ class MarketingCampaignPolicy
     public function send(User $user, MarketingCampaign $marketingCampaign): bool
     {
         return $user->hasBackofficePermission(BackofficePermission::MarketingCampaignsSend)
-            && $marketingCampaign->status->isEditable();
+            && $marketingCampaign->status->canLaunch();
     }
 }

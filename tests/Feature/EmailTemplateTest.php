@@ -42,7 +42,7 @@ test('transactional email layout renders header and footer branding', function (
         'super-securite.email' => 'contact@supersecurite.com',
         'super-securite.phone' => '+224 612 13 13 14',
         'super-securite.phone_secondary' => '+224 612 13 13 15',
-        'super-securite.mail.address_short' => 'Lambanyi (en face CIS Média)',
+        'super-securite.address' => 'Lambanyi (en face de Cis Media) – Conakry – Rép. de Guinée',
         'super-securite.company_legal_name' => 'Super Sécurité sarl',
         'super-securite.share_capital' => '10 000 000 GNF',
         'super-securite.rccm' => 'GN.TCC.2022.14296',
@@ -60,11 +60,12 @@ test('transactional email layout renders header and footer branding', function (
 
     expect($html)
         ->toContain('logo-white.jpeg')
-        ->toContain('background-color:#c4161d')
-        ->toContain('background-color:#7a0e14')
-        ->toContain('Tél</span>&nbsp;&nbsp;+224 612 13 13 14 / +224 612 13 13 15')
+        ->toContain('Votre sécurité notre priorité')
+        ->toContain('background-color:#ed1c24')
+        ->toContain('background-color:#0f172a')
+        ->toContain('+224 612 13 13 14 / +224 612 13 13 15')
         ->toContain('contact@supersecurite.com')
-        ->toContain('Lambanyi (en face CIS Média)')
+        ->toContain('Lambanyi')
         ->toContain('Super Sécurité sarl')
         ->toContain('Choisir mon mot de passe');
 });

@@ -9,6 +9,7 @@ import {
     type ResponsiveColumn,
 } from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import CampaignLaunchDialog from '@/components/marketing-campaigns/campaign-launch-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -123,7 +124,16 @@ export default function MarketingCampaignsIndex() {
 
     const columns = useMemo((): ResponsiveColumn<CampaignRow>[] => {
         const renderActions = (campaign: CampaignRow) => (
-            <>
+            <div className="flex items-center justify-end gap-1.5">
+                {campaign.can_send ? (
+                    <CampaignLaunchDialog
+                        campaignUuid={campaign.uuid}
+                        campaignName={campaign.name}
+                        triggerVariant="outline"
+                        triggerSize="sm"
+                        triggerLabel="Lancer"
+                    />
+                ) : null}
                 <Button variant="outline" size="sm" asChild>
                     <Link href={show.url(campaign.uuid)}>Voir</Link>
                 </Button>
@@ -146,7 +156,7 @@ export default function MarketingCampaignsIndex() {
                         aria-label={`Supprimer ${campaign.name}`}
                     />
                 ) : null}
-            </>
+            </div>
         );
 
         return [

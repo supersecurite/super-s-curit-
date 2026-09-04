@@ -89,7 +89,8 @@ Fiche : `docs/features/marketing-clients.md`
 | Campagnes individuelles / groupées | Jobs queue Laravel |
 | Historique et statuts | Table envois, statuts `queued` → `sent` → `delivered` / `failed` / `bounced` |
 | Suivi réception / ouverture (si provider le permet) | Pixel ouverture, bounces — [ADR-0002](decisions/0002-marketing-meta-whatsapp-et-email.md) |
-| Tableau de bord (partie e-mail) | Compteurs campagne + mise à jour temps réel (Reverb) |
+| Tableau de bord (partie e-mail) | Stats enrichies fiche campagne (donut + barres + taux) + Reverb |
+| Template obligatoire + planification | Template e-mail requis ; lancement immédiat ou `scheduled_at` |
 
 Fiche : `docs/features/marketing-campagnes.md`
 

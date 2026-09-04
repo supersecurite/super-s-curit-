@@ -14,21 +14,33 @@ use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use App\Support\Marketing\RenderMarketingMessageTemplate;
 use App\Support\Marketing\ResolveMarketingCampaignAudience;
 use App\Support\Marketing\ResolveMarketingCampaignRecipient;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
- * Lance une campagne e-mail ou WhatsApp : crée les envois individuels et les met en file.
+ * Lance ou planifie une campagne e-mail / WhatsApp.
  */
 class LaunchMarketingCampaign extends Action
 {
-    public function handle(MarketingCampaign $campaign): MarketingCampaign
+    public function handle(MarketingCampaign $campaign, ?CarbonInterface $scheduledAt = null): MarketingCampaign
     {
-        if ($campaign->status !== MarketingCampaignStatus::Draft) {
+        if (! $campaign->status->canLaunch()) {
             throw ValidationException::withMessages([
-                'campaign' => 'Seule une campagne en brouillon peut être lancée.',
+                'campaign' => 'Seule une campagne en brouillon ou planifiée peut être lancée.',
             ]);
+        }
+
+        if ($scheduledAt !== null && $scheduledAt->isFuture()) {
+            $campaign->update([
+                'status' => MarketingCampaignStatus::Scheduled,
+                'scheduled_at' => $scheduledAt,
+                'launched_at' => null,
+                'completed_at' => null,
+            ]);
+
+            return $campaign->refresh();
         }
 
         $channel = $campaign->channel;
@@ -39,6 +51,12 @@ class LaunchMarketingCampaign extends Action
             if ($account === null || ! $account->is_active) {
                 throw ValidationException::withMessages([
                     'marketing_email_account_id' => 'Un compte e-mail actif est requis pour lancer cette campagne.',
+                ]);
+            }
+
+            if ($campaign->template === null && $campaign->marketing_message_template_id === null) {
+                throw ValidationException::withMessages([
+                    'marketing_message_template_id' => 'Un template e-mail est requis pour lancer cette campagne.',
                 ]);
             }
         }
@@ -89,6 +107,7 @@ class LaunchMarketingCampaign extends Action
             $campaign->update([
                 'status' => MarketingCampaignStatus::Sending,
                 'launched_at' => now(),
+                'scheduled_at' => null,
                 'completed_at' => null,
             ]);
 

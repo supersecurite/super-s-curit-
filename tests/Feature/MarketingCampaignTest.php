@@ -12,6 +12,7 @@ use App\Models\MarketingCampaignSend;
 use App\Models\MarketingContact;
 use App\Models\MarketingEmailAccount;
 use App\Models\MarketingList;
+use App\Models\MarketingMessageTemplate;
 use App\Models\User;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use Database\Seeders\RoleUserSeeder;
@@ -30,6 +31,7 @@ test('commercial can create email campaign', function () {
     $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
     $list = MarketingList::factory()->create();
     $emailAccount = MarketingEmailAccount::factory()->default()->create();
+    $template = MarketingMessageTemplate::factory()->create();
 
     $response = $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
         'name' => 'Relance printemps',
@@ -37,6 +39,7 @@ test('commercial can create email campaign', function () {
         'list_uuids' => [$list->uuid],
         'contact_uuids' => [],
         'marketing_email_account_id' => $emailAccount->id,
+        'marketing_message_template_id' => $template->id,
         'subject' => 'Bonjour {{prenom}}',
         'body' => 'Message de campagne pour {{nom}}.',
     ]);
@@ -226,6 +229,7 @@ test('campaign can mix list and direct contacts in audience', function () {
     $list->contacts()->attach($fromList);
 
     $emailAccount = MarketingEmailAccount::factory()->default()->create();
+    $template = MarketingMessageTemplate::factory()->create();
 
     $this->actingAs($commercial)->post(route('marketing-campaigns.store'), [
         'name' => 'Audience mixte',
@@ -233,6 +237,7 @@ test('campaign can mix list and direct contacts in audience', function () {
         'list_uuids' => [$list->uuid],
         'contact_uuids' => [$direct->uuid],
         'marketing_email_account_id' => $emailAccount->id,
+        'marketing_message_template_id' => $template->id,
         'subject' => 'Hello',
         'body' => 'Body',
     ])->assertRedirect();

@@ -54,8 +54,7 @@ class UpdateMarketingCampaignRequest extends FormRequest
             'contact_uuids' => ['nullable', 'array'],
             'contact_uuids.*' => ['uuid', Rule::exists(MarketingContact::class, 'uuid')],
             'marketing_message_template_id' => [
-                Rule::requiredIf($isWhatsApp),
-                'nullable',
+                'required',
                 'integer',
                 Rule::exists(MarketingMessageTemplate::class, 'id'),
             ],
@@ -99,10 +98,6 @@ class UpdateMarketingCampaignRequest extends FormRequest
                 );
             }
 
-            if ($this->input('channel') !== MarketingCampaignChannel::WhatsApp->value) {
-                return;
-            }
-
             $templateId = $this->input('marketing_message_template_id');
 
             if (! filled($templateId)) {
@@ -115,17 +110,30 @@ class UpdateMarketingCampaignRequest extends FormRequest
                 return;
             }
 
-            if ($template->channel !== MarketingMessageTemplateChannel::WhatsApp) {
-                $validator->errors()->add(
-                    'marketing_message_template_id',
-                    'Le template doit être un template WhatsApp.',
-                );
+            $isWhatsApp = $this->input('channel') === MarketingCampaignChannel::WhatsApp->value;
+
+            if ($isWhatsApp) {
+                if ($template->channel !== MarketingMessageTemplateChannel::WhatsApp) {
+                    $validator->errors()->add(
+                        'marketing_message_template_id',
+                        'Le template doit être un template WhatsApp.',
+                    );
+                }
+
+                if (blank($template->meta_template_name)) {
+                    $validator->errors()->add(
+                        'marketing_message_template_id',
+                        'Le template sélectionné doit référencer un modèle Meta approuvé.',
+                    );
+                }
+
+                return;
             }
 
-            if (blank($template->meta_template_name)) {
+            if ($template->channel !== MarketingMessageTemplateChannel::Email) {
                 $validator->errors()->add(
                     'marketing_message_template_id',
-                    'Le template sélectionné doit référencer un modèle Meta approuvé.',
+                    'Le template doit être un template e-mail.',
                 );
             }
         });
@@ -140,7 +148,7 @@ class UpdateMarketingCampaignRequest extends FormRequest
             'name.required' => 'Le nom de la campagne est requis.',
             'whatsapp_account_id.required' => 'Un compte WhatsApp actif est requis.',
             'marketing_email_account_id.required' => 'Un compte e-mail actif est requis.',
-            'marketing_message_template_id.required' => 'Un template Meta WhatsApp est requis.',
+            'marketing_message_template_id.required' => 'Un template est requis.',
             'subject.required' => 'L\'objet est requis.',
             'body.required' => 'Le contenu du message est requis.',
         ];

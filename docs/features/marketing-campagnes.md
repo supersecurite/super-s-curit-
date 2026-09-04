@@ -32,7 +32,7 @@ Commercial / admin avec permissions `marketing_campaigns.*` — voir `Backoffice
 ### Livré (Lot 2)
 
 1. **Templates e-mail** (`/marketing-templates?channel=email`) — CRUD + variables dynamiques.
-2. **Campagnes e-mail** — brouillon, lancement queue, pixel d’ouverture, indicateurs type WhatsApp, temps réel Reverb.
+2. **Campagnes e-mail** — brouillon, **template e-mail obligatoire** (contenu prérempli puis éditable avant validation), lancement immédiat ou **planifié** (`scheduled_at` + commande `marketing:dispatch-scheduled-campaigns`), pixel d’ouverture, indicateurs type WhatsApp, temps réel Reverb, stats enrichies (donut + barres) sur la fiche détail.
 3. **Comptes e-mail multi-SMTP** (`/marketing-email-accounts`) — expéditeur + SMTP (ou driver `log`), compte par défaut, **quota journalier** optionnel pour contourner les limites fournisseurs.
 
 ### Livré (Lot 3)
@@ -68,7 +68,8 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 | `RecordWhatsAppMessageStatus` | Mise à jour statut webhook (sans régression) |
 | `SyncMarketingCampaignAudience` | Pivots listes + contacts |
 | `ResolveMarketingCampaignAudience` | Fusion audience au lancement |
-| `LaunchMarketingCampaign` | Branche e-mail ou WhatsApp |
+| `LaunchMarketingCampaign` | Branche e-mail ou WhatsApp ; planification si `scheduled_at` futur |
+| `marketing:dispatch-scheduled-campaigns` | Scheduler chaque minute — lance les campagnes dues |
 
 ## Fichiers clés
 
@@ -86,6 +87,8 @@ UI fiche campagne WhatsApp : colonnes **Reçu (delivered)** / **Lu (read)** + l�
 - Bounces e-mail provider : non implémentés.
 - Pas de sync templates Meta.
 - WhatsApp : **uniquement** modèles Meta approuvés (pas de message texte libre).
+- E-mail : template catalogue **obligatoire** ; l’objet et le corps restent modifiables sur la campagne avant validation.
+- Planification : statut `scheduled` + `scheduled_at` ; dispatch via schedule Artisan.
 - « Lu » WhatsApp et « ouvert » e-mail ne sont pas des garanties absolues.
 - Secrets e-mail SMTP et WhatsApp : **uniquement en base** (pas `.env` pour ces comptes marketing).
 - Legacy `marketing_list_id` conservé pour compat lecture (premier groupe sync).

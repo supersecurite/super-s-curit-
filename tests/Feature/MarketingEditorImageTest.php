@@ -61,7 +61,7 @@ test('lexical html renderer includes absolute image urls', function () {
     ], JSON_THROW_ON_ERROR);
 
     $contact = MarketingContact::factory()->create([
-        'first_name' => 'Ada',
+        'name' => 'Ada Lovelace',
     ]);
 
     $html = RenderMarketingMessageTemplate::renderHtml($content, $contact);

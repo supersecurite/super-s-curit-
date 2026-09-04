@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('access-logs:prune')->daily();
+Schedule::command('marketing:dispatch-scheduled-campaigns')->everyMinute();

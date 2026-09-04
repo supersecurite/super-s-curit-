@@ -8,6 +8,7 @@ use App\Actions\Marketing\LaunchMarketingCampaign;
 use App\Actions\Marketing\UpdateMarketingCampaign;
 use App\Enums\MarketingCampaignChannel;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LaunchMarketingCampaignRequest;
 use App\Http\Requests\StoreMarketingCampaignRequest;
 use App\Http\Requests\UpdateMarketingCampaignRequest;
 use App\Models\MarketingCampaign;
@@ -211,16 +212,21 @@ class MarketingCampaignController extends Controller
     }
 
     public function launch(
+        LaunchMarketingCampaignRequest $request,
         MarketingCampaign $marketingCampaign,
         LaunchMarketingCampaign $action,
     ): RedirectResponse {
-        $this->authorize('send', $marketingCampaign);
+        $scheduledAt = $request->date('scheduled_at');
 
-        $action->handle($marketingCampaign);
+        $action->handle($marketingCampaign, $scheduledAt);
+
+        $isScheduled = $scheduledAt !== null && $scheduledAt->isFuture();
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => 'Campagne lancée — les envois sont en cours.',
+            'message' => $isScheduled
+                ? 'Campagne planifiée — elle sera lancée automatiquement à la date choisie.'
+                : 'Campagne lancée — les envois sont en cours.',
             'sound' => 'success',
         ]);
 

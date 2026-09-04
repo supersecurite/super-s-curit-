@@ -1,6 +1,6 @@
-import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
-import { ArrowLeft, Megaphone, Pencil, Radio, Send } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { Head, Link, setLayoutProps, usePage } from '@inertiajs/react';
+import { ArrowLeft, Megaphone, Pencil, Radio } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
 import {
     BackofficeIndexPanel,
     IndexTablePagination,
@@ -9,6 +9,8 @@ import {
 } from '@/components/backoffice/responsive-data-table';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
+import CampaignLaunchDialog from '@/components/marketing-campaigns/campaign-launch-dialog';
+import CampaignStatsPanel from '@/components/marketing-campaigns/campaign-stats-panel';
 import {
     MarketingSendReceiptIndicator,
     marketingSendReceiptAriaLabel,
@@ -21,7 +23,7 @@ import {
     useMarketingCampaignRealtime,
     type CampaignProgressPayload,
 } from '@/hooks/use-marketing-campaign-realtime';
-import { destroy, edit, index, launch, show } from '@/routes/marketing-campaigns';
+import { destroy, edit, index, show } from '@/routes/marketing-campaigns';
 
 type CampaignStats = {
     total: number;
@@ -64,6 +66,7 @@ type CampaignData = {
         remaining_today: number | null;
     } | null;
     launched_at_formatted: string | null;
+    scheduled_at_formatted: string | null;
     completed_at_formatted: string | null;
     created_at_formatted: string | null;
     stats: CampaignStats;
@@ -115,6 +118,7 @@ function statusVariant(status: string): 'default' | 'secondary' | 'outline' | 'd
         case 'queued':
         case 'sent':
         case 'sending':
+        case 'scheduled':
             return 'secondary';
         default:
             return 'outline';
@@ -142,9 +146,9 @@ function sendDestination(
 export default function MarketingCampaignsShow() {
     const { campaign, sends, canUpdate, canDelete, canSend, broadcasting } =
         usePage<PageProps>().props;
-    const [launching, setLaunching] = useState(false);
     const [liveCampaign, setLiveCampaign] = useState(campaign);
     const [liveSends, setLiveSends] = useState(sends);
+    const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const isWhatsApp = campaign.channel === 'whatsapp';
     const listHref = index.url({ query: { channel: campaign.channel } });
 
@@ -203,13 +207,6 @@ export default function MarketingCampaignsShow() {
             { title: campaign.name, href: show.url(campaign.uuid) },
         ],
     });
-
-    const handleLaunch = () => {
-        setLaunching(true);
-        router.post(launch.url(campaign.uuid), {}, {
-            onFinish: () => setLaunching(false),
-        });
-    };
 
     const buildPageUrl = (page: number) =>
         show.url(campaign.uuid, { query: withIndexTableQuery({}, page) });
@@ -273,19 +270,19 @@ export default function MarketingCampaignsShow() {
         },
     ];
 
-    const statCards = [
-        { label: 'Total', value: liveCampaign.stats.total },
-        { label: 'En file', value: liveCampaign.stats.queued },
-        {
-            label: isWhatsApp ? 'Reçus (delivered)' : 'Reçus',
-            value: liveCampaign.stats.received,
-        },
-        {
-            label: isWhatsApp ? 'Lus (read)' : 'Lus / ouverts',
-            value: liveCampaign.stats.read,
-        },
-        { label: 'Échecs', value: liveCampaign.stats.failed + liveCampaign.stats.bounced },
-    ];
+    const filteredSendsData = useMemo(() => {
+        if (!statusFilter) {
+            return liveSends.data;
+        }
+
+        if (statusFilter === 'failed') {
+            return liveSends.data.filter(
+                (row) => row.status === 'failed' || row.status === 'bounced',
+            );
+        }
+
+        return liveSends.data.filter((row) => row.status === statusFilter);
+    }, [liveSends.data, statusFilter]);
 
     return (
         <>
@@ -333,10 +330,11 @@ export default function MarketingCampaignsShow() {
 
                     <div className="flex flex-wrap gap-2">
                         {canSend ? (
-                            <Button onClick={handleLaunch} disabled={launching}>
-                                <Send className="size-4" aria-hidden />
-                                {launching ? 'Lancement…' : 'Lancer la campagne'}
-                            </Button>
+                            <CampaignLaunchDialog
+                                campaignUuid={campaign.uuid}
+                                campaignName={campaign.name}
+                                scheduledAtFormatted={liveCampaign.scheduled_at_formatted}
+                            />
                         ) : null}
                         {canUpdate ? (
                             <Button variant="outline" asChild>
@@ -360,14 +358,12 @@ export default function MarketingCampaignsShow() {
                 </div>
 
                 {liveCampaign.stats.total > 0 ? (
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                        {statCards.map((stat) => (
-                            <div key={stat.label} className="app-panel p-4">
-                                <p className="text-muted-foreground text-xs">{stat.label}</p>
-                                <p className="font-heading text-2xl font-semibold">{stat.value}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <CampaignStatsPanel
+                        stats={liveCampaign.stats}
+                        channel={campaign.channel}
+                        selectedStatusFilter={statusFilter}
+                        onSelectStatusFilter={setStatusFilter}
+                    />
                 ) : null}
 
                 <div className="grid gap-4 lg:grid-cols-2">
@@ -447,6 +443,10 @@ export default function MarketingCampaignsShow() {
                                 <dd>{campaign.created_at_formatted ?? '—'}</dd>
                             </div>
                             <div>
+                                <dt className="text-muted-foreground">Planifiée pour</dt>
+                                <dd>{liveCampaign.scheduled_at_formatted ?? '—'}</dd>
+                            </div>
+                            <div>
                                 <dt className="text-muted-foreground">Lancée le</dt>
                                 <dd>{liveCampaign.launched_at_formatted ?? '—'}</dd>
                             </div>
@@ -478,21 +478,32 @@ export default function MarketingCampaignsShow() {
 
                 {liveCampaign.stats.total > 0 ? (
                     <div className="space-y-3">
-                        <div className="flex flex-wrap items-end justify-between gap-2">
-                            <h2 className="font-semibold">Destinataires</h2>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                                <h2 className="font-semibold">Destinataires ({filteredSendsData.length})</h2>
+                                {statusFilter ? (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setStatusFilter(null)}
+                                        className="h-7 text-xs text-muted-foreground hover:text-foreground"
+                                    >
+                                        Effacer le filtre ({statusFilter})
+                                    </Button>
+                                ) : null}
+                            </div>
                             {isWhatsApp ? (
                                 <p className="text-muted-foreground text-xs">
-                                    Accusés WhatsApp : ✓ envoyé · ✓✓ reçu (delivered) · ✓✓ vert lu
-                                    (read)
+                                    Accusés WhatsApp : ✓ envoyé · ✓✓ reçu (delivered) · ✓✓ vert lu (read)
                                 </p>
                             ) : null}
                         </div>
                         <BackofficeIndexPanel>
                             <ResponsiveDataTable<SendRow>
-                                rows={liveSends.data}
+                                rows={filteredSendsData}
                                 columns={sendColumns}
                                 getRowKey={(send) => send.uuid}
-                                emptyMessage="Aucun envoi enregistré."
+                                emptyMessage={statusFilter ? `Aucun destinataire avec le statut « ${statusFilter} » sur cette page.` : "Aucun envoi enregistré."}
                             />
                             <IndexTablePagination
                                 paginated={liveSends}
