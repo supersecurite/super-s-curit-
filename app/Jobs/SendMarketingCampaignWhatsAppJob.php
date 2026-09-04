@@ -96,15 +96,17 @@ class SendMarketingCampaignWhatsAppJob implements ShouldQueue
     }
 
     /**
-     * Paramètres positionnels Meta {{1}}, {{2}}, {{3}} — prénom, nom, entreprise.
+     * Paramètres positionnels Meta {{1}}, {{2}}, {{3}} — début du nom, reste du nom, entreprise.
      *
      * @return list<string>
      */
     private function bodyParameters(MarketingContact $contact): array
     {
+        [$givenName, $familyName] = $contact->nameParts();
+
         return array_values(array_filter([
-            $contact->first_name ?? '',
-            $contact->last_name ?? '',
+            $givenName,
+            $familyName,
             $contact->company_name ?? '',
         ], fn (string $value): bool => $value !== ''));
     }

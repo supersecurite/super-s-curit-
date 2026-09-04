@@ -16,13 +16,11 @@ type ListOption = {
 };
 
 type MarketingContactFormData = {
-    first_name?: string | null;
-    last_name?: string | null;
+    name?: string | null;
     email?: string | null;
     phone?: string | null;
     is_company?: boolean;
     company_name?: string | null;
-    company_role?: string | null;
     company_contacts?: MarketingCompanyChannel[] | null;
     address?: string | null;
     tags?: string[];
@@ -47,7 +45,6 @@ function resolveIsCompany(contact?: MarketingContactFormData): boolean {
 
     return !!(
         contact?.company_name ||
-        contact?.company_role ||
         (contact?.company_contacts?.length ?? 0) > 0
     );
 }
@@ -89,8 +86,7 @@ export default function MarketingContactForm({
                         Contact entreprise
                     </Label>
                     <p className="text-muted-foreground text-xs">
-                        Cochez pour renseigner les informations de l&apos;entreprise et le rôle
-                        de l&apos;interlocuteur.
+                        Cochez pour renseigner les informations de l&apos;entreprise.
                     </p>
                 </div>
             </label>
@@ -100,40 +96,31 @@ export default function MarketingContactForm({
                     {isCompany ? 'Interlocuteur' : 'Contact'}
                 </h2>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                        <Label htmlFor="first_name">Prénom</Label>
-                        <Input
-                            id="first_name"
-                            name="first_name"
-                            defaultValue={contact?.first_name ?? ''}
-                        />
-                        {errors.first_name ? (
-                            <p className="text-sm text-destructive">{errors.first_name}</p>
-                        ) : null}
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="last_name">Nom</Label>
-                        <Input
-                            id="last_name"
-                            name="last_name"
-                            defaultValue={contact?.last_name ?? ''}
-                        />
-                        {errors.last_name ? (
-                            <p className="text-sm text-destructive">{errors.last_name}</p>
-                        ) : null}
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="name">Nom</Label>
+                    <Input
+                        id="name"
+                        name="name"
+                        defaultValue={contact?.name ?? ''}
+                        placeholder="Ex. Mamadou Camara"
+                        required
+                    />
+                    {errors.name ? (
+                        <p className="text-sm text-destructive">{errors.name}</p>
+                    ) : null}
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                        <Label htmlFor="email">E-mail</Label>
+                        <Label htmlFor="email">
+                            E-mail <span className="text-muted-foreground text-xs font-normal">(optionnel)</span>
+                        </Label>
                         <Input
                             id="email"
                             name="email"
                             type="email"
                             defaultValue={contact?.email ?? ''}
+                            placeholder="contact@example.com"
                         />
                         {errors.email ? (
                             <p className="text-sm text-destructive">{errors.email}</p>
@@ -162,31 +149,17 @@ export default function MarketingContactForm({
                 <div className="space-y-4 rounded-lg border border-border/60 bg-muted/20 p-4">
                     <h2 className="text-sm font-semibold">Entreprise</h2>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="company_name">Nom de l&apos;entreprise</Label>
-                            <Input
-                                id="company_name"
-                                name="company_name"
-                                defaultValue={contact?.company_name ?? ''}
-                            />
-                            {errors.company_name ? (
-                                <p className="text-sm text-destructive">{errors.company_name}</p>
-                            ) : null}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="company_role">Rôle de l&apos;interlocuteur</Label>
-                            <Input
-                                id="company_role"
-                                name="company_role"
-                                placeholder="Directeur commercial, Comptabilité…"
-                                defaultValue={contact?.company_role ?? ''}
-                            />
-                            {errors.company_role ? (
-                                <p className="text-sm text-destructive">{errors.company_role}</p>
-                            ) : null}
-                        </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="company_name">Nom de l&apos;entreprise</Label>
+                        <Input
+                            id="company_name"
+                            name="company_name"
+                            defaultValue={contact?.company_name ?? ''}
+                            placeholder="Ex. Super Sécurité SARL"
+                        />
+                        {errors.company_name ? (
+                            <p className="text-sm text-destructive">{errors.company_name}</p>
+                        ) : null}
                     </div>
 
                     <div className="space-y-2">

@@ -37,9 +37,7 @@ class MarketingContactController extends Controller
         $query = MarketingContact::query()->withCount('lists')->search($request->string('search')->toString() ?: null);
 
         match ($sort['column']) {
-            'full_name' => $query
-                ->orderBy('last_name', $sort['direction'])
-                ->orderBy('first_name', $sort['direction']),
+            'full_name' => $query->orderBy('name', $sort['direction']),
             'lists_count' => $query->orderBy('lists_count', $sort['direction']),
             default => $query->orderBy($sort['column'], $sort['direction']),
         };
@@ -95,7 +93,6 @@ class MarketingContactController extends Controller
             $validated['company_contacts'] = $companyContacts === [] ? null : $companyContacts;
         } else {
             $validated['company_name'] = null;
-            $validated['company_role'] = null;
             $validated['company_contacts'] = null;
         }
 
@@ -149,7 +146,6 @@ class MarketingContactController extends Controller
             $validated['company_contacts'] = $companyContacts === [] ? null : $companyContacts;
         } else {
             $validated['company_name'] = null;
-            $validated['company_role'] = null;
             $validated['company_contacts'] = null;
         }
 

@@ -27,23 +27,14 @@ function channelLabel(type: string): string {
 }
 
 export function CompanyChannelsDisplay({
-    companyRole,
     channels,
     campaignChannels,
 }: {
-    companyRole: string | null;
     channels: MarketingCompanyChannel[];
     campaignChannels: CampaignChannels;
 }) {
     return (
         <div className="space-y-4">
-            {companyRole ? (
-                <p className="text-sm">
-                    <span className="text-muted-foreground">Rôle : </span>
-                    {companyRole}
-                </p>
-            ) : null}
-
             {channels.length > 0 ? (
                 <ul className="space-y-2">
                     {channels.map((channel, index) => (

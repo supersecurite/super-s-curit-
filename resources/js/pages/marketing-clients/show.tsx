@@ -25,13 +25,11 @@ type CampaignChannels = {
 type ContactData = {
     uuid: string;
     full_name: string;
-    first_name: string | null;
-    last_name: string | null;
+    name: string | null;
     email: string | null;
     phone: string | null;
     is_company: boolean;
     company_name: string | null;
-    company_role: string | null;
     company_contacts: MarketingCompanyChannel[];
     campaign_channels: CampaignChannels;
     address: string | null;
@@ -142,7 +140,7 @@ export default function MarketingClientsShow() {
                                     <dt className="text-muted-foreground">Tags</dt>
                                     <dd className="mt-1 flex flex-wrap gap-1">
                                         {contact.tags.length > 0 ? (
-                                            contact.tags.map((tag) => (
+                                             contact.tags.map((tag) => (
                                                 <Badge key={tag} variant="outline">
                                                     {tag}
                                                 </Badge>
@@ -186,7 +184,6 @@ export default function MarketingClientsShow() {
                                         </dt>
                                         <dd>
                                             <CompanyChannelsDisplay
-                                                companyRole={contact.company_role}
                                                 channels={contact.company_contacts}
                                                 campaignChannels={contact.campaign_channels}
                                             />

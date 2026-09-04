@@ -22,13 +22,11 @@ test('commercial can create marketing contact', function () {
     ];
 
     $response = $this->actingAs($commercial)->post(route('marketing-clients.store'), [
-        'first_name' => 'Aissata',
-        'last_name' => 'Diallo',
+        'name' => 'Aissata Diallo',
         'email' => 'aissata@example.com',
         'phone' => '+224612345678',
         'is_company' => '1',
         'company_name' => 'Super Sécurité Guinée',
-        'company_role' => 'Directrice commerciale',
         'company_contacts' => json_encode($companyContacts),
         'address' => 'Immeuble Kaloum, Conakry',
         'marketing_consent' => '1',
@@ -39,7 +37,7 @@ test('commercial can create marketing contact', function () {
 
     $contact = MarketingContact::query()->where('email', 'aissata@example.com')->firstOrFail();
 
-    expect($contact->company_role)->toBe('Directrice commerciale')
+    expect($contact->name)->toBe('Aissata Diallo')
         ->and($contact->is_company)->toBeTrue()
         ->and($contact->company_contacts)->toBe($companyContacts);
 
@@ -48,6 +46,25 @@ test('commercial can create marketing contact', function () {
     expect($campaign['emails'])->toHaveCount(2)
         ->and($campaign['whatsapp'])->toHaveCount(1)
         ->and($campaign['cc_emails'])->toBe(['compta@example.com']);
+});
+
+test('commercial can create marketing contact without email', function () {
+    $this->seed(RoleUserSeeder::class);
+
+    $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
+
+    $response = $this->actingAs($commercial)->post(route('marketing-clients.store'), [
+        'name' => 'Ousmane Barry',
+        'email' => '',
+        'phone' => '+224620000111',
+    ]);
+
+    $response->assertRedirect(route('marketing-clients.index'));
+
+    $contact = MarketingContact::query()->where('phone', '+224620000111')->firstOrFail();
+
+    expect($contact->name)->toBe('Ousmane Barry')
+        ->and($contact->email)->toBeNull();
 });
 
 test('contributor without marketing permission cannot access contacts', function () {
@@ -60,7 +77,7 @@ test('contributor without marketing permission cannot access contacts', function
         ->assertForbidden();
 });
 
-test('commercial can import contacts from csv with duplicate report', function () {
+test('commercial can import contacts from csv with duplicate report and group auto creation', function () {
     $this->seed(RoleUserSeeder::class);
 
     $commercial = User::query()->where('email', 'commercial@supersecurite.com')->firstOrFail();
@@ -71,9 +88,9 @@ test('commercial can import contacts from csv with duplicate report', function (
     ]);
 
     $csv = <<<'CSV'
-prenom,nom,email,telephone,consentement
-Mamadou,Camara,new@example.com,+224611111111,oui
-Fatou,Bah,existing@example.com,+224622222222,non
+nom,email,telephone,groupe,consentement
+Mamadou Camara,new@example.com,+224611111111,Nouveau Groupe,oui
+Fatou Bah,existing@example.com,+224622222222,Nouveau Groupe,non
 CSV;
 
     $file = UploadedFile::fake()->createWithContent('contacts.csv', $csv);
@@ -84,8 +101,16 @@ CSV;
 
     $response->assertRedirect(route('marketing-clients.import'));
 
-    expect(MarketingContact::query()->count())->toBe(2)
-        ->and(MarketingContact::query()->where('email', 'new@example.com')->exists())->toBeTrue();
+    expect(MarketingContact::query()->count())->toBe(2);
+
+    $newContact = MarketingContact::query()->where('email', 'new@example.com')->firstOrFail();
+    expect($newContact->name)->toBe('Mamadou Camara');
+
+    $group = MarketingList::query()->where('name', 'Nouveau Groupe')->first();
+    expect($group)->not->toBeNull();
+
+    expect($newContact->lists()->pluck('marketing_lists.id')->all())
+        ->toContain($group->id);
 });
 
 test('marketing contact requires email or phone', function () {
@@ -95,8 +120,7 @@ test('marketing contact requires email or phone', function () {
 
     $this->actingAs($commercial)
         ->post(route('marketing-clients.store'), [
-            'first_name' => 'Sans',
-            'last_name' => 'Contact',
+            'name' => 'Sans Contact',
         ])
         ->assertSessionHasErrors('email');
 });
@@ -112,8 +136,7 @@ test('commercial can view marketing contact show page', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->has('contact.campaign_channels.emails')
-            ->has('contact.company_contacts')
-            ->has('contact.company_role'));
+            ->has('contact.company_contacts'));
 });
 
 test('contributor cannot import contacts', function () {
@@ -140,10 +163,12 @@ test('commercial can download import template csv', function () {
         ->assertDownload('modele-import-contacts.csv');
 
     expect($response->streamedContent())
-        ->toContain('prenom')
-        ->toContain('role_entreprise')
-        ->toContain('aissata@example.com')
-        ->toContain('compta@example.com');
+        ->toContain('nom')
+        ->toContain('email')
+        ->toContain('telephone')
+        ->toContain('groupe')
+        ->toContain('Aissata Diallo')
+        ->toContain('aissata@example.com');
 });
 
 test('contributor cannot download import template', function () {
@@ -170,9 +195,12 @@ test('import template csv can be imported successfully', function () {
 
     $contact = MarketingContact::query()->where('email', 'aissata@example.com')->firstOrFail();
 
-    expect($contact->company_role)->toBe('Directrice commerciale')
-        ->and($contact->company_contacts)->toBeArray()
-        ->and($contact->company_contacts[0]['type'])->toBe('email');
+    expect($contact->name)->toBe('Aissata Diallo')
+        ->and($contact->phone)->toBe('+224612345678');
+
+    $list = MarketingList::query()->where('name', 'Clients VIP')->first();
+    expect($list)->not->toBeNull()
+        ->and($contact->lists()->pluck('marketing_lists.id')->all())->toContain($list->id);
 });
 
 test('marketing contact accepts formatted international phone numbers', function () {
@@ -182,8 +210,7 @@ test('marketing contact accepts formatted international phone numbers', function
 
     $this->actingAs($commercial)
         ->post(route('marketing-clients.store'), [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'email' => 'john.doe@example.com',
             'phone' => '+1 (555) 670-8636',
             'is_company' => '1',
@@ -208,8 +235,7 @@ test('commercial can create marketing contact associated to lists', function () 
 
     $this->actingAs($commercial)
         ->post(route('marketing-clients.store'), [
-            'first_name' => 'Fatou',
-            'last_name' => 'Bah',
+            'name' => 'Fatou Bah',
             'email' => 'fatou.bah@example.com',
             'phone' => '+224622111222',
             'list_uuids' => [$listA->uuid, $listB->uuid],
@@ -229,8 +255,7 @@ test('company contact channel values are validated', function () {
 
     $this->actingAs($commercial)
         ->post(route('marketing-clients.store'), [
-            'first_name' => 'Test',
-            'last_name' => 'Invalid',
+            'name' => 'Test Invalid',
             'email' => 'test-invalid@example.com',
             'is_company' => '1',
             'company_contacts' => json_encode([
@@ -247,12 +272,10 @@ test('particulier contact clears company fields on save', function () {
 
     $this->actingAs($commercial)
         ->post(route('marketing-clients.store'), [
-            'first_name' => 'Mamadou',
-            'last_name' => 'Camara',
+            'name' => 'Mamadou Camara',
             'email' => 'mamadou@example.com',
             'is_company' => '0',
             'company_name' => 'Ne doit pas être enregistré',
-            'company_role' => 'Ne doit pas être enregistré',
             'company_contacts' => json_encode([
                 ['type' => 'email', 'value' => 'ignore@example.com'],
             ]),
@@ -264,7 +287,6 @@ test('particulier contact clears company fields on save', function () {
 
     expect($contact->is_company)->toBeFalse()
         ->and($contact->company_name)->toBeNull()
-        ->and($contact->company_role)->toBeNull()
         ->and($contact->company_contacts)->toBeNull()
         ->and($contact->address)->toBe('Quartier Hamdallaye');
 });

@@ -35,10 +35,14 @@ class StoreMarketingContactRequest extends FormRequest
 
         $this->merge(['is_company' => $this->boolean('is_company')]);
 
+        if ($this->has('email')) {
+            $email = trim((string) $this->input('email'));
+            $this->merge(['email' => $email === '' ? null : $email]);
+        }
+
         if (! $this->boolean('is_company')) {
             $this->merge([
                 'company_name' => null,
-                'company_role' => null,
                 'company_contacts' => [],
             ]);
         }
@@ -50,8 +54,7 @@ class StoreMarketingContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['nullable', 'string', 'max:255'],
-            'last_name' => ['nullable', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'nullable',
                 'email',
@@ -80,8 +83,8 @@ class StoreMarketingContactRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator): void {
-            if (! $this->filled('email') && ! $this->filled('phone')) {
-                $validator->errors()->add('email', 'Au moins un e-mail ou un téléphone est requis.');
+            if (empty($this->input('email')) && empty($this->input('phone'))) {
+                $validator->errors()->add('email', 'Au moins un e-mail ou un numéro de téléphone est requis.');
             }
 
             MarketingCompanyContactRules::validateChannelValues($validator, $this->input('company_contacts'));
@@ -94,6 +97,7 @@ class StoreMarketingContactRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'name.required' => 'Le nom est obligatoire.',
             'email.unique' => 'Un contact avec cet e-mail existe déjà.',
             'phone.unique' => 'Un contact avec ce téléphone existe déjà.',
             'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636).',

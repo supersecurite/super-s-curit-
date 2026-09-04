@@ -16,7 +16,6 @@ final class ResolveMarketingContactChannels
      *     value: string,
      *     label: string|null,
      *     person_name: string|null,
-     *     person_role: string|null,
      *     scope: 'primary'|'company'
      * }>
      */
@@ -24,7 +23,6 @@ final class ResolveMarketingContactChannels
     {
         $channels = [];
         $personName = $contact->full_name !== '—' ? $contact->full_name : null;
-        $personRole = filled($contact->company_role) ? (string) $contact->company_role : null;
 
         if (filled($contact->email)) {
             $channels[] = self::entry(
@@ -32,7 +30,6 @@ final class ResolveMarketingContactChannels
                 (string) $contact->email,
                 'Contact principal',
                 $personName,
-                $personRole,
                 'primary',
             );
         }
@@ -43,7 +40,6 @@ final class ResolveMarketingContactChannels
                 (string) $contact->phone,
                 'Contact principal',
                 $personName,
-                $personRole,
                 'primary',
             );
         }
@@ -56,7 +52,6 @@ final class ResolveMarketingContactChannels
                 $channel['value'],
                 $channel['label'],
                 $personName,
-                $personRole,
                 'company',
             );
         }
@@ -140,7 +135,6 @@ final class ResolveMarketingContactChannels
      *     value: string,
      *     label: string|null,
      *     person_name: string|null,
-     *     person_role: string|null,
      *     scope: 'primary'|'company'
      * }
      */
@@ -149,7 +143,6 @@ final class ResolveMarketingContactChannels
         string $value,
         ?string $label,
         ?string $personName,
-        ?string $personRole,
         string $scope,
     ): array {
         return [
@@ -157,7 +150,6 @@ final class ResolveMarketingContactChannels
             'value' => $value,
             'label' => $label,
             'person_name' => $personName,
-            'person_role' => $personRole,
             'scope' => $scope,
         ];
     }

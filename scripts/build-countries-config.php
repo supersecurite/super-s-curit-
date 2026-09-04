@@ -4,7 +4,6 @@
  * Builds config/countries.php (ISO 3166-1 alpha-2 → French names).
  * Run: php scripts/build-countries-config.php
  */
-
 $jsonPath = __DIR__.'/../storage/app/iso-countries-slim-2.json';
 
 if (! file_exists($jsonPath)) {

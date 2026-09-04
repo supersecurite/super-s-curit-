@@ -16,13 +16,11 @@ use Illuminate\Support\Str;
 /** Contact marketing (e-mail, téléphone, consentement) pour campagnes futures. */
 #[Fillable([
     'uuid',
-    'first_name',
-    'last_name',
+    'name',
     'email',
     'phone',
     'is_company',
     'company_name',
-    'company_role',
     'company_contacts',
     'address',
     'tags',
@@ -71,7 +69,25 @@ class MarketingContact extends Model
 
     public function getFullNameAttribute(): string
     {
-        return trim("{$this->first_name} {$this->last_name}") ?: '—';
+        return filled($this->name) ? trim((string) $this->name) : '—';
+    }
+
+    /**
+     * Découpe le nom unique pour les variables de modèle ({{prenom}} / {{nom}}).
+     *
+     * @return array{0: string, 1: string}
+     */
+    public function nameParts(): array
+    {
+        $name = trim((string) $this->name);
+
+        if ($name === '') {
+            return ['', ''];
+        }
+
+        $parts = preg_split('/\s+/', $name, 2);
+
+        return [$parts[0], $parts[1] ?? ''];
     }
 
     /**
@@ -101,12 +117,10 @@ class MarketingContact extends Model
 
         return $query->where(function (Builder $builder) use ($search): void {
             $builder
-                ->where('first_name', 'like', "%{$search}%")
-                ->orWhere('last_name', 'like', "%{$search}%")
+                ->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->orWhere('phone', 'like', "%{$search}%")
                 ->orWhere('company_name', 'like', "%{$search}%")
-                ->orWhere('company_role', 'like', "%{$search}%")
                 ->orWhere('company_contacts', 'like', "%{$search}%")
                 ->orWhere('address', 'like', "%{$search}%");
         });
@@ -120,14 +134,12 @@ class MarketingContact extends Model
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
+            'name' => $this->name,
             'full_name' => $this->full_name,
             'email' => $this->email,
             'phone' => $this->phone,
             'is_company' => $this->is_company,
             'company_name' => $this->company_name,
-            'company_role' => $this->company_role,
             'company_contacts' => MarketingCompanyContactRules::normalize($this->company_contacts),
             'campaign_channels' => $this->campaignChannels(),
             'address' => $this->address,

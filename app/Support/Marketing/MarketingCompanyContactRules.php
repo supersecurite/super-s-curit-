@@ -19,7 +19,6 @@ final class MarketingCompanyContactRules
     public static function rules(): array
     {
         return [
-            'company_role' => ['nullable', 'string', 'max:255'],
             'company_contacts' => ['nullable', 'array', 'max:30'],
             'company_contacts.*.type' => [
                 'required',

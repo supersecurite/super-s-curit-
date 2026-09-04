@@ -87,8 +87,7 @@ class MarketingListController extends Controller
 
         $availableContacts = MarketingContact::query()
             ->whereNotIn('id', $marketingList->contacts()->pluck('marketing_contacts.id'))
-            ->orderBy('last_name')
-            ->orderBy('first_name')
+            ->orderBy('name')
             ->limit(500)
             ->get()
             ->map(fn (MarketingContact $contact) => $contact->toAdminArray())

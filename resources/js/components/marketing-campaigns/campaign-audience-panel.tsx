@@ -137,12 +137,11 @@ export default function CampaignAudiencePanel({
                                         : (contact.email ?? 'Sans e-mail')}
                                 </p>
                             </div>
-                            <Badge
-                                variant={contact.is_eligible ? 'secondary' : 'outline'}
-                                className="shrink-0 text-[10px]"
-                            >
-                                {contact.is_eligible ? 'OK' : 'Exclu'}
-                            </Badge>
+                            {!contact.is_eligible ? (
+                                <Badge variant="outline" className="shrink-0 text-[10px]">
+                                    Exclu
+                                </Badge>
+                            ) : null}
                         </li>
                     ))}
                 </ul>

@@ -5,10 +5,11 @@ import { edit, show, update } from '@/routes/marketing-clients';
 
 type ContactData = {
     uuid: string;
-    first_name: string | null;
-    last_name: string | null;
+    name: string | null;
     email: string | null;
     phone: string | null;
+    is_company?: boolean;
+    company_name?: string | null;
     tags: string[];
     marketing_consent: boolean;
     notes: string | null;

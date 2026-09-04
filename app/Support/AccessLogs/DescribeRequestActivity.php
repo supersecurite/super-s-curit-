@@ -260,7 +260,7 @@ final class DescribeRequestActivity
         }
 
         if ($model instanceof MarketingContact) {
-            $name = trim($model->first_name.' '.$model->last_name);
+            $name = trim((string) $model->name);
 
             return $name !== '' ? $name : ($model->email ?? $model->phone);
         }

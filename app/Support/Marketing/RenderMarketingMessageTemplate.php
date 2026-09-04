@@ -16,7 +16,6 @@ final class RenderMarketingMessageTemplate
         'email',
         'telephone',
         'entreprise',
-        'role_entreprise',
         'adresse',
     ];
 
@@ -35,13 +34,14 @@ final class RenderMarketingMessageTemplate
      */
     private static function plainVariableReplacements(MarketingContact $contact): array
     {
+        [$givenName, $familyName] = $contact->nameParts();
+
         return [
-            '{{prenom}}' => $contact->first_name ?? '',
-            '{{nom}}' => $contact->last_name ?? '',
+            '{{prenom}}' => $givenName,
+            '{{nom}}' => $familyName !== '' ? $familyName : $givenName,
             '{{email}}' => $contact->email ?? '',
             '{{telephone}}' => $contact->phone ?? '',
             '{{entreprise}}' => $contact->company_name ?? '',
-            '{{role_entreprise}}' => $contact->company_role ?? '',
             '{{adresse}}' => $contact->address ?? '',
         ];
     }
@@ -51,13 +51,15 @@ final class RenderMarketingMessageTemplate
      */
     private static function htmlVariableReplacements(MarketingContact $contact): array
     {
+        [$givenName, $familyName] = $contact->nameParts();
+        $displayName = $familyName !== '' ? $familyName : $givenName;
+
         return [
-            '{{prenom}}' => e($contact->first_name ?? ''),
-            '{{nom}}' => e($contact->last_name ?? ''),
+            '{{prenom}}' => e($givenName),
+            '{{nom}}' => e($displayName),
             '{{email}}' => e($contact->email ?? ''),
             '{{telephone}}' => e($contact->phone ?? ''),
             '{{entreprise}}' => e($contact->company_name ?? ''),
-            '{{role_entreprise}}' => e($contact->company_role ?? ''),
             '{{adresse}}' => e($contact->address ?? ''),
         ];
     }

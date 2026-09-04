@@ -4,22 +4,31 @@ namespace App\Services\Marketing;
 
 use App\DataTransferObjects\MarketingContactImportResult;
 use App\Models\MarketingContact;
+use App\Models\MarketingList;
 use App\Support\InternationalPhoneNumber;
-use App\Support\Marketing\CompanyContactLegacyConverter;
-use App\Support\Marketing\MarketingCompanyContactRules;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class MarketingContactImportService
 {
+    /** @var list<string> */
+    public const TEMPLATE_HEADERS = [
+        'nom',
+        'email',
+        'telephone',
+        'groupe',
+        'adresse',
+        'consentement',
+    ];
+
     /**
      * Importe des contacts depuis un fichier CSV (séparateur auto-détecté , ou ;).
      *
-     * Colonnes reconnues : prenom/first_name, nom/last_name, email, telephone/phone/tel,
-     * entreprise/company_name, role_entreprise/company_role, contacts_entreprise/company_contacts
-     * (JSON plat), adresse/address.
+     * Colonnes reconnues : nom (ou prenom + nom), email, telephone/phone/tel,
+     * groupe/liste, adresse/address, consentement.
      * Les doublons (e-mail ou téléphone déjà présents) sont ignorés et rapportés.
+     * Si un groupe est spécifié et n'existe pas, il est automatiquement créé.
      */
     public function import(UploadedFile $file): MarketingContactImportResult
     {
@@ -65,26 +74,19 @@ class MarketingContactImportService
 
             $data = $this->extractRowData($row, $columnMap);
             $data['phone'] = InternationalPhoneNumber::normalize($data['phone'] ?? null) ?? $data['phone'];
-            $data['company_contacts'] = $this->normalizeImportedCompanyContacts($data['company_contacts'] ?? []);
 
             $validator = Validator::make($data, [
-                'first_name' => ['nullable', 'string', 'max:255'],
-                'last_name' => ['nullable', 'string', 'max:255'],
+                'name' => ['required', 'string', 'max:255'],
                 'email' => ['nullable', 'email', 'max:255'],
                 'phone' => ['nullable', 'string', 'regex:/^\+[1-9]\d{1,14}$/'],
-                'company_name' => ['nullable', 'string', 'max:255'],
+                'group_name' => ['nullable', 'string', 'max:255'],
                 'address' => ['nullable', 'string', 'max:5000'],
                 'marketing_consent' => ['sometimes', 'boolean'],
-                ...MarketingCompanyContactRules::rules(),
             ], [
+                'name.required' => 'Le nom est obligatoire.',
                 'email.email' => 'Adresse e-mail invalide.',
-                'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636).',
-                ...MarketingCompanyContactRules::messages(),
+                'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636 ou +224612345678).',
             ]);
-
-            $validator->after(function ($validation) use ($data): void {
-                MarketingCompanyContactRules::validateChannelValues($validation, $data['company_contacts'] ?? []);
-            });
 
             if ($validator->fails()) {
                 $result->errors[] = [
@@ -96,7 +98,6 @@ class MarketingContactImportService
             }
 
             $validated = $validator->validated();
-            $validated['company_contacts'] = MarketingCompanyContactRules::normalize($validated['company_contacts'] ?? []);
 
             if (empty($validated['email']) && empty($validated['phone'])) {
                 $result->errors[] = [
@@ -120,24 +121,27 @@ class MarketingContactImportService
                 continue;
             }
 
-            $isCompany = filled($validated['company_name'] ?? null)
-                || filled($validated['company_role'] ?? null)
-                || ($validated['company_contacts'] ?? []) !== [];
-
-            MarketingContact::query()->create([
-                'first_name' => $validated['first_name'] ?? null,
-                'last_name' => $validated['last_name'] ?? null,
+            $contact = MarketingContact::query()->create([
+                'name' => $validated['name'],
                 'email' => $validated['email'] ?? null,
                 'phone' => $validated['phone'] ?? null,
-                'is_company' => $isCompany,
-                'company_name' => $isCompany ? ($validated['company_name'] ?? null) : null,
-                'company_role' => $isCompany ? ($validated['company_role'] ?? null) : null,
-                'company_contacts' => $isCompany && ($validated['company_contacts'] ?? []) !== []
-                    ? $validated['company_contacts']
-                    : null,
+                'is_company' => false,
                 'address' => $validated['address'] ?? null,
                 'marketing_consent' => (bool) ($validated['marketing_consent'] ?? false),
             ]);
+
+            if (! empty($validated['group_name'])) {
+                $groupName = trim((string) $validated['group_name']);
+
+                if ($groupName !== '') {
+                    $list = MarketingList::query()->firstOrCreate(
+                        ['name' => $groupName],
+                        ['description' => 'Créé automatiquement lors de l\'import CSV']
+                    );
+
+                    $contact->lists()->syncWithoutDetaching([$list->id]);
+                }
+            }
 
             $result->added++;
         }
@@ -146,19 +150,6 @@ class MarketingContactImportService
 
         return $result;
     }
-
-    /** @var list<string> */
-    public const TEMPLATE_HEADERS = [
-        'prenom',
-        'nom',
-        'email',
-        'telephone',
-        'entreprise',
-        'role_entreprise',
-        'contacts_entreprise',
-        'adresse',
-        'consentement',
-    ];
 
     /**
      * Contenu CSV du modèle d'import (UTF-8 avec BOM pour Excel).
@@ -173,16 +164,10 @@ class MarketingContactImportService
 
         fputcsv($handle, self::TEMPLATE_HEADERS);
         fputcsv($handle, [
-            'Aissata',
-            'Diallo',
+            'Aissata Diallo',
             'aissata@example.com',
             '+224612345678',
-            'Super Sécurité Guinée',
-            'Directrice commerciale',
-            json_encode([
-                ['type' => 'email', 'value' => 'compta@example.com', 'label' => 'Compta'],
-                ['type' => 'whatsapp', 'value' => '+224600000002', 'label' => null],
-            ], JSON_UNESCAPED_UNICODE),
+            'Clients VIP',
             'Immeuble Kaloum, Conakry',
             'oui',
         ]);
@@ -213,12 +198,11 @@ class MarketingContactImportService
             match (true) {
                 in_array($normalized, ['prenom', 'first_name', 'firstname'], true) => $map['first_name'] = $index,
                 in_array($normalized, ['nom', 'last_name', 'lastname'], true) => $map['last_name'] = $index,
+                in_array($normalized, ['nom_complet', 'full_name', 'name', 'contact'], true) => $map['name'] = $index,
                 in_array($normalized, ['email', 'e_mail', 'mail'], true) => $map['email'] = $index,
                 in_array($normalized, ['telephone', 'phone', 'tel', 'mobile'], true) => $map['phone'] = $index,
+                in_array($normalized, ['groupe', 'group', 'liste', 'list', 'groupe_nom', 'liste_diffusion'], true) => $map['group_name'] = $index,
                 in_array($normalized, ['consentement', 'marketing_consent', 'consent'], true) => $map['marketing_consent'] = $index,
-                in_array($normalized, ['entreprise', 'societe', 'company', 'company_name', 'nom_entreprise'], true) => $map['company_name'] = $index,
-                in_array($normalized, ['role_entreprise', 'role', 'company_role', 'fonction'], true) => $map['company_role'] = $index,
-                in_array($normalized, ['contacts_entreprise', 'company_contacts', 'contacts_societe'], true) => $map['company_contacts'] = $index,
                 in_array($normalized, ['adresse', 'address'], true) => $map['address'] = $index,
                 default => null,
             };
@@ -235,21 +219,33 @@ class MarketingContactImportService
     private function extractRowData(array $row, array $columnMap): array
     {
         $data = [
-            'first_name' => null,
-            'last_name' => null,
+            'name' => null,
             'email' => null,
             'phone' => null,
-            'company_name' => null,
-            'company_role' => null,
-            'company_contacts' => [],
+            'group_name' => null,
             'address' => null,
             'marketing_consent' => false,
         ];
+
+        $firstName = null;
+        $lastName = null;
 
         foreach ($columnMap as $field => $index) {
             $value = isset($row[$index]) ? trim((string) $row[$index]) : '';
 
             if ($value === '') {
+                continue;
+            }
+
+            if ($field === 'first_name') {
+                $firstName = $value;
+
+                continue;
+            }
+
+            if ($field === 'last_name') {
+                $lastName = $value;
+
                 continue;
             }
 
@@ -265,49 +261,17 @@ class MarketingContactImportService
                 continue;
             }
 
-            if ($field === 'company_contacts') {
-                $decoded = json_decode($value, true);
-
-                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                    $data[$field] = $decoded;
-                } else {
-                    $data[$field] = CompanyContactLegacyConverter::convert($value);
-                }
-
-                continue;
-            }
-
             $data[$field] = $value;
         }
 
-        return $data;
-    }
-
-    /**
-     * @param  array<int, mixed>  $contacts
-     * @return array<int, mixed>
-     */
-    private function normalizeImportedCompanyContacts(array $contacts): array
-    {
-        foreach ($contacts as $index => $channel) {
-            if (! is_array($channel)) {
-                continue;
-            }
-
-            $type = (string) ($channel['type'] ?? '');
-
-            if (! in_array($type, ['phone', 'whatsapp'], true)) {
-                continue;
-            }
-
-            $normalized = InternationalPhoneNumber::normalize($channel['value'] ?? null);
-
-            if ($normalized !== null) {
-                $contacts[$index]['value'] = $normalized;
+        if (empty($data['name'])) {
+            if ($firstName !== null || $lastName !== null) {
+                $combined = trim(($firstName ?? '').' '.($lastName ?? ''));
+                $data['name'] = $combined !== '' ? $combined : null;
             }
         }
 
-        return $contacts;
+        return $data;
     }
 
     /**

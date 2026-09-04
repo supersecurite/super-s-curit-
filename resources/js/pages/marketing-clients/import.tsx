@@ -41,9 +41,9 @@ export default function MarketingClientsImport() {
                 <div className="max-w-xl rounded-xl border bg-card p-6">
                     <h2 className="mb-2 text-sm font-semibold">Modèle CSV</h2>
                     <p className="text-muted-foreground mb-4 text-sm">
-                        Colonnes : prenom, nom, email, telephone, entreprise,
-                        role_entreprise, contacts_entreprise (JSON plat :
-                        type/value/label), adresse, consentement (oui/non).
+                        Colonnes : nom, email, telephone, groupe (optionnel, créé
+                        automatiquement s&apos;il n&apos;existe pas), adresse,
+                        consentement (oui/non).
                         Au moins un e-mail ou un téléphone E.164 (+224…) par ligne.
                     </p>
                     <Button variant="outline" asChild>

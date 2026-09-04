@@ -44,7 +44,7 @@ class MarketingCampaignController extends Controller
         $query = MarketingCampaign::query()
             ->with([
                 'lists:id,uuid,name',
-                'audienceContacts:id,uuid,first_name,last_name',
+                'audienceContacts:id,uuid,name',
                 'template:id,uuid,name',
             ])
             ->withCount('sends')
@@ -130,7 +130,7 @@ class MarketingCampaignController extends Controller
 
         $marketingCampaign->load([
             'lists:id,uuid,name',
-            'audienceContacts:id,uuid,first_name,last_name,email,phone',
+            'audienceContacts:id,uuid,name,email,phone',
             'template:id,uuid,name,meta_template_name,meta_template_language',
             'whatsappAccount:id,uuid,name',
             'emailAccount:id,uuid,name,from_address,from_name,daily_send_limit',
@@ -138,7 +138,7 @@ class MarketingCampaignController extends Controller
         $marketingCampaign->loadCount('sends');
 
         $sends = $marketingCampaign->sends()
-            ->with('contact:id,uuid,first_name,last_name')
+            ->with('contact:id,uuid,name')
             ->orderByDesc('created_at')
             ->paginate(20)
             ->withQueryString()
@@ -162,7 +162,7 @@ class MarketingCampaignController extends Controller
 
         $marketingCampaign->load([
             'lists:id,uuid,name',
-            'audienceContacts:id,uuid,first_name,last_name,email,phone',
+            'audienceContacts:id,uuid,name,email,phone',
             'template:id,uuid,name,meta_template_name,meta_template_language',
             'whatsappAccount:id,uuid,name',
             'emailAccount:id,uuid,name,from_address,from_name,daily_send_limit',
@@ -259,7 +259,7 @@ class MarketingCampaignController extends Controller
         $contacts = $fromLists
             ->concat($direct)
             ->unique('id')
-            ->sortBy([['last_name', 'asc'], ['first_name', 'asc']])
+            ->sortBy('name')
             ->values()
             ->map(fn (MarketingContact $contact) => [
                 'uuid' => $contact->uuid,
@@ -296,8 +296,7 @@ class MarketingCampaignController extends Controller
             ?? MarketingCampaignChannel::Email;
 
         $contacts = $marketingList->contacts()
-            ->orderBy('last_name')
-            ->orderBy('first_name')
+            ->orderBy('name')
             ->get()
             ->map(fn ($contact) => [
                 'uuid' => $contact->uuid,
@@ -362,10 +361,9 @@ class MarketingCampaignController extends Controller
     private function contactOptions(): array
     {
         return MarketingContact::query()
-            ->orderBy('last_name')
-            ->orderBy('first_name')
+            ->orderBy('name')
             ->limit(500)
-            ->get(['id', 'uuid', 'first_name', 'last_name', 'email', 'phone'])
+            ->get(['id', 'uuid', 'name', 'email', 'phone'])
             ->map(fn (MarketingContact $contact) => [
                 'uuid' => $contact->uuid,
                 'full_name' => $contact->full_name,
