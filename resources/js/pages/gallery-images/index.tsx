@@ -1,10 +1,11 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Images, Plus, Search, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useTrans } from '@/hooks/use-trans';
 import {
     create,
     destroy,
@@ -45,8 +46,18 @@ type PageProps = {
 };
 
 export default function GalleryImagesIndex() {
+    const { t } = useTrans();
     const { galleryImages, services, filters, canCreate } =
         usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('gallery_images.title', 'Galerie'),
+                href: index.url(),
+            },
+        ],
+    });
 
     const applyFilters = (updates: Record<string, string | undefined>) => {
         const next = { ...filters, ...updates };
@@ -64,24 +75,29 @@ export default function GalleryImagesIndex() {
 
     return (
         <>
-            <Head title="Galerie" />
+            <Head title={t('gallery_images.title', 'Galerie')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                            Galerie
+                            {t('gallery_images.title', 'Galerie')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Gérez les images affichées sur la page galerie et
-                            les pages services.
+                            {t(
+                                'gallery_images.subtitle',
+                                'Gérez les images affichées sur la page galerie et les pages services.',
+                            )}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" />
-                                Ajouter une image
+                                {t(
+                                    'gallery_images.create_button',
+                                    'Ajouter une image',
+                                )}
                             </Link>
                         </Button>
                     ) : null}
@@ -92,7 +108,10 @@ export default function GalleryImagesIndex() {
                         <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             type="search"
-                            placeholder="Rechercher par légende ou alt..."
+                            placeholder={t(
+                                'gallery_images.search_placeholder',
+                                'Rechercher par légende ou alt…',
+                            )}
                             defaultValue={filters.search ?? ''}
                             onChange={(event) =>
                                 debouncedSearch(event.target.value)
@@ -102,8 +121,20 @@ export default function GalleryImagesIndex() {
                     </div>
                     <SearchableSelect
                         options={[
-                            { value: 'all', label: 'Tous les rattachements' },
-                            { value: 'general', label: 'Galerie générale' },
+                            {
+                                value: 'all',
+                                label: t(
+                                    'gallery_images.filter_attachment_all',
+                                    'Tous les rattachements',
+                                ),
+                            },
+                            {
+                                value: 'general',
+                                label: t(
+                                    'gallery_images.filter_general',
+                                    'Galerie générale',
+                                ),
+                            },
                             ...services.map((service) => ({
                                 value: service.value,
                                 label: service.label,
@@ -115,14 +146,38 @@ export default function GalleryImagesIndex() {
                                 service: service === 'all' ? undefined : service,
                             })
                         }
-                        placeholder="Rattachement"
-                        searchPlaceholder="Rechercher..."
+                        placeholder={t(
+                            'gallery_images.filter_attachment',
+                            'Rattachement',
+                        )}
+                        searchPlaceholder={t(
+                            'common.search_ellipsis',
+                            'Rechercher…',
+                        )}
                     />
                     <SearchableSelect
                         options={[
-                            { value: 'all', label: 'Tous les statuts' },
-                            { value: 'published', label: 'Publiées' },
-                            { value: 'draft', label: 'Non publiées' },
+                            {
+                                value: 'all',
+                                label: t(
+                                    'common.all_statuses',
+                                    'Tous les statuts',
+                                ),
+                            },
+                            {
+                                value: 'published',
+                                label: t(
+                                    'gallery_images.published_label',
+                                    'Publiée',
+                                ),
+                            },
+                            {
+                                value: 'draft',
+                                label: t(
+                                    'gallery_images.unpublished_label',
+                                    'Brouillon',
+                                ),
+                            },
                         ]}
                         value={filters.status ?? 'all'}
                         onChange={(status) =>
@@ -130,8 +185,11 @@ export default function GalleryImagesIndex() {
                                 status: status === 'all' ? undefined : status,
                             })
                         }
-                        placeholder="Statut"
-                        searchPlaceholder="Rechercher..."
+                        placeholder={t('common.status', 'Statut')}
+                        searchPlaceholder={t(
+                            'common.search_ellipsis',
+                            'Rechercher…',
+                        )}
                     />
                 </div>
 
@@ -160,11 +218,19 @@ export default function GalleryImagesIndex() {
                                             }
                                         >
                                             {image.is_published
-                                                ? 'Publiée'
-                                                : 'Brouillon'}
+                                                ? t(
+                                                      'gallery_images.published_label',
+                                                      'Publiée',
+                                                  )
+                                                : t(
+                                                      'gallery_images.unpublished_label',
+                                                      'Brouillon',
+                                                  )}
                                         </Badge>
                                         <span className="text-muted-foreground text-xs">
-                                            Ordre {image.sort_order}
+                                            {t('gallery_images.order_label', {
+                                                order: image.sort_order,
+                                            })}
                                         </span>
                                     </div>
                                     <div>
@@ -185,7 +251,10 @@ export default function GalleryImagesIndex() {
                                                 <Link
                                                     href={edit.url(image.id)}
                                                 >
-                                                    Modifier
+                                                    {t(
+                                                        'common.modify',
+                                                        'Modifier',
+                                                    )}
                                                 </Link>
                                             </Button>
                                         ) : null}
@@ -196,7 +265,10 @@ export default function GalleryImagesIndex() {
                                                 onClick={() => {
                                                     if (
                                                         confirm(
-                                                            'Supprimer cette image ?',
+                                                            t(
+                                                                'gallery_images.delete_confirm',
+                                                                'Supprimer cette image ?',
+                                                            ),
                                                         )
                                                     ) {
                                                         router.delete(
@@ -219,7 +291,10 @@ export default function GalleryImagesIndex() {
                     <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center">
                         <Images className="text-muted-foreground size-10" />
                         <p className="text-muted-foreground">
-                            Aucune image dans la galerie.
+                            {t(
+                                'gallery_images.empty_list',
+                                'Aucune image dans la galerie.',
+                            )}
                         </p>
                     </div>
                 )}
@@ -227,7 +302,3 @@ export default function GalleryImagesIndex() {
         </>
     );
 }
-
-GalleryImagesIndex.layout = {
-    breadcrumbs: [{ title: 'Galerie', href: index.url() }],
-};

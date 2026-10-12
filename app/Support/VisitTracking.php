@@ -41,6 +41,7 @@ class VisitTracking
         'marketing-whatsapp-accounts',
         'access-logs',
         'marketing',
+        'backoffice',
     ];
 
     /** Auth pages (Fortify) — excluded from analytics. */

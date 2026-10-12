@@ -26,10 +26,10 @@ class ProfileUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse e-mail est obligatoire.',
-            'email.email' => 'L\'adresse e-mail n\'est pas valide.',
-            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
+            'name.required' => bt('validation.name_required'),
+            'email.required' => bt('validation.email_required'),
+            'email.email' => bt('validation.email_email'),
+            'email.unique' => bt('validation.email_unique'),
         ];
     }
 
@@ -39,9 +39,9 @@ class ProfileUpdateRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'nom',
-            'email' => 'e-mail',
-            'phone' => 'téléphone',
+            'name' => bt('validation.attr_name'),
+            'email' => bt('validation.attr_email'),
+            'phone' => bt('validation.attr_phone'),
         ];
     }
 }

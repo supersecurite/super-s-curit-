@@ -81,12 +81,12 @@ class GalleryImageController extends Controller
 
         GalleryImage::query()->create($validated);
 
-        return redirect()
-            ->route('gallery-images.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Image ajoutée à la galerie.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.gallery_image_created'),
+        ]);
+
+        return to_route('gallery-images.index');
     }
 
     public function show(GalleryImage $galleryImage): RedirectResponse
@@ -124,12 +124,12 @@ class GalleryImageController extends Controller
 
         $galleryImage->update($validated);
 
-        return redirect()
-            ->route('gallery-images.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Image de galerie mise à jour.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.gallery_image_updated'),
+        ]);
+
+        return to_route('gallery-images.index');
     }
 
     public function destroy(GalleryImage $galleryImage): RedirectResponse
@@ -142,11 +142,11 @@ class GalleryImageController extends Controller
 
         $galleryImage->delete();
 
-        return redirect()
-            ->route('gallery-images.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Image supprimée de la galerie.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.gallery_image_deleted'),
+        ]);
+
+        return to_route('gallery-images.index');
     }
 }

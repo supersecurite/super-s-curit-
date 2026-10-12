@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import {
     Activity,
     ArrowDown,
@@ -33,6 +33,7 @@ import TrafficChart, {
 } from '@/components/analytics/traffic-chart';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTrans } from '@/hooks/use-trans';
 import { index } from '@/routes/analytics';
 
 /* ------------------------------------------------------------------ */
@@ -363,6 +364,7 @@ const DEVICE_LABELS: Record<string, string> = {
 };
 
 export default function AnalyticsIndex() {
+    const { t } = useTrans();
     const {
         period,
         dateFilter,
@@ -382,6 +384,12 @@ export default function AnalyticsIndex() {
         hourlyStats,
         timezone,
     } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: t('analytics.title', 'Analytics'), href: index.url() },
+        ],
+    });
 
     const peakWeekday = useMemo(
         () => weekdayStats.find((d) => d.is_peak) ?? null,
@@ -473,7 +481,7 @@ export default function AnalyticsIndex() {
 
     return (
         <>
-            <Head title="Analytics" />
+            <Head title={t('analytics.title', 'Analytics')} />
 
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-4">
                 {/* Header */}
@@ -481,10 +489,14 @@ export default function AnalyticsIndex() {
                     <div>
                         <h1 className="font-heading text-primary flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <BarChart3 className="size-6" aria-hidden />
-                            Analytics
+                            {t('analytics.title', 'Analytics')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Trafic réel — hors bots · {periodLabel}
+                            {t(
+                                'analytics.subtitle_period',
+                                'Trafic réel — hors bots · :period',
+                                { period: periodLabel },
+                            )}
                         </p>
                     </div>
                     <div
@@ -1035,7 +1047,3 @@ export default function AnalyticsIndex() {
         </>
     );
 }
-
-AnalyticsIndex.layout = {
-    breadcrumbs: [{ title: 'Analytics', href: '/analytics' }],
-};

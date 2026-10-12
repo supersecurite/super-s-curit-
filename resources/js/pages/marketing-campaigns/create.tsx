@@ -1,5 +1,6 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import MarketingCampaignForm from '@/components/marketing-campaigns/marketing-campaign-form';
+import { useTrans } from '@/hooks/use-trans';
 import { create, index, store } from '@/routes/marketing-campaigns';
 
 type ListOption = {
@@ -56,6 +57,7 @@ type PageProps = {
 };
 
 export default function MarketingCampaignsCreate() {
+    const { t } = useTrans();
     const {
         errors,
         lockedChannel,
@@ -70,8 +72,20 @@ export default function MarketingCampaignsCreate() {
     } = usePage<PageProps>().props;
 
     const isWhatsApp = lockedChannel === 'whatsapp';
-    const title = isWhatsApp ? 'Nouvelle campagne WhatsApp' : 'Nouvelle campagne e-mail';
+    const title = isWhatsApp
+        ? t('marketing_campaigns.create_whatsapp', 'Nouvelle campagne WhatsApp')
+        : t('marketing_campaigns.create_email', 'Nouvelle campagne e-mail');
     const listHref = index.url({ query: { channel: lockedChannel } });
+    const listTitle = isWhatsApp
+        ? t('marketing_campaigns.title_whatsapp', 'Campagnes WhatsApp')
+        : t('marketing_campaigns.title_email', 'Campagnes e-mail');
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: listTitle, href: listHref },
+            { title, href: create.url() },
+        ],
+    });
 
     return (
         <>
@@ -82,14 +96,23 @@ export default function MarketingCampaignsCreate() {
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">{title}</h1>
                     <p className="text-muted-foreground mt-1 text-sm">
                         {isWhatsApp
-                            ? 'Préparez une campagne WhatsApp (template Meta) vers des groupes et/ou des contacts.'
-                            : 'Préparez une campagne e-mail vers des groupes et/ou des contacts.'}
+                            ? t(
+                                  'marketing_campaigns.create_subtitle_whatsapp',
+                                  'Préparez une campagne WhatsApp (template Meta) vers des groupes et/ou des contacts.',
+                              )
+                            : t(
+                                  'marketing_campaigns.create_subtitle_email',
+                                  'Préparez une campagne e-mail vers des groupes et/ou des contacts.',
+                              )}
                     </p>
                 </div>
 
                 <MarketingCampaignForm
                     submitUrl={store.url()}
-                    submitLabel="Créer la campagne"
+                    submitLabel={t(
+                        'marketing_campaigns.submit_create',
+                        'Créer la campagne',
+                    )}
                     cancelHref={listHref}
                     errors={errors}
                     lockedChannel={lockedChannel}
@@ -106,10 +129,3 @@ export default function MarketingCampaignsCreate() {
         </>
     );
 }
-
-MarketingCampaignsCreate.layout = {
-    breadcrumbs: [
-        { title: 'Campagnes', href: index.url({ query: { channel: 'email' } }) },
-        { title: 'Nouvelle campagne', href: create.url() },
-    ],
-};

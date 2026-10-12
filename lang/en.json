@@ -145,9 +145,18 @@
             "hero_description": "Protect your employees, your assets and the continuity of your operations",
             "hero_image_alt": "Business security — Super Sécurité Guinea",
             "hero_stats": [
-                { "label": "Surveillance", "value": "24/7" },
-                { "label": "Coverage", "value": "Conakry & All of Guinea" },
-                { "label": "Professionalism", "value": "Qualified and supervised agents" }
+                {
+                    "label": "Surveillance",
+                    "value": "24/7"
+                },
+                {
+                    "label": "Coverage",
+                    "value": "Conakry & All of Guinea"
+                },
+                {
+                    "label": "Professionalism",
+                    "value": "Qualified and supervised agents"
+                }
             ],
             "intro": [
                 "In an environment where the risks of theft, intrusion, vandalism and unauthorised access are increasingly present, the security of your business cannot be left to chance.",
@@ -164,12 +173,30 @@
             ],
             "sections_title": "Our security services for businesses",
             "sections": [
-                { "title": "Access control", "description": "Management and filtering of entries and exits, identity verification and visitor guidance to ensure secure access to your facilities." },
-                { "title": "Premises surveillance", "description": "Permanent protection of offices, shops, warehouses and sensitive areas against the risks of intrusion, theft or damage." },
-                { "title": "Security patrols", "description": "Regular patrols day and night to detect any anomaly and prevent incidents before they occur." },
-                { "title": "Incident management", "description": "Rapid response and application of appropriate procedures in the event of intrusion, incident or emergency." },
-                { "title": "Vehicle control", "description": "Verification and monitoring of vehicles entering and leaving the site to strengthen the security of your access points." },
-                { "title": "Protocols & reporting", "description": "Clear instructions, time-stamped patrols, visitor logs and regular reports tailored to your operational and contractual requirements." }
+                {
+                    "title": "Access control",
+                    "description": "Management and filtering of entries and exits, identity verification and visitor guidance to ensure secure access to your facilities."
+                },
+                {
+                    "title": "Premises surveillance",
+                    "description": "Permanent protection of offices, shops, warehouses and sensitive areas against the risks of intrusion, theft or damage."
+                },
+                {
+                    "title": "Security patrols",
+                    "description": "Regular patrols day and night to detect any anomaly and prevent incidents before they occur."
+                },
+                {
+                    "title": "Incident management",
+                    "description": "Rapid response and application of appropriate procedures in the event of intrusion, incident or emergency."
+                },
+                {
+                    "title": "Vehicle control",
+                    "description": "Verification and monitoring of vehicles entering and leaving the site to strengthen the security of your access points."
+                },
+                {
+                    "title": "Protocols & reporting",
+                    "description": "Clear instructions, time-stamped patrols, visitor logs and regular reports tailored to your operational and contractual requirements."
+                }
             ],
             "gallery_title": "Our business interventions",
             "gallery_description": "A visual overview of our security services, patrols and access control in professional premises."
@@ -183,9 +210,18 @@
             "hero_description": "Protect your family and your living environment with complete peace of mind",
             "hero_image_alt": "Residential security — Super Sécurité Guinea",
             "hero_stats": [
-                { "label": "Residences", "value": "Villas & buildings" },
-                { "label": "Surveillance", "value": "Day and night" },
-                { "label": "Availability", "value": "24/7" }
+                {
+                    "label": "Residences",
+                    "value": "Villas & buildings"
+                },
+                {
+                    "label": "Surveillance",
+                    "value": "Day and night"
+                },
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                }
             ],
             "intro": [
                 "Home security is not something you can improvise. Whether you own a villa, manage a building or oversee a private residence, ensuring a safe environment for occupants and property is a responsibility we take seriously.",
@@ -201,12 +237,30 @@
             ],
             "sections_title": "Our residential security solutions",
             "sections": [
-                { "title": "24/7 guarding", "description": "Continuous presence of security agents to ensure permanent protection of your residence, day and night, without interruption." },
-                { "title": "Visitor control", "description": "Rigorous management of entries and exits, visitor registration and systematic access verification to prevent any unauthorised intrusion." },
-                { "title": "Access surveillance", "description": "Protection of sensitive points — gates, car parks, passageways — to neutralise any intrusion risk from the perimeter." },
-                { "title": "Security patrols", "description": "Regular patrols around and inside the perimeter to detect any suspicious activity before it becomes an incident." },
-                { "title": "Incident management", "description": "Immediate reaction and structured intervention in the event of an abnormal situation, intrusion or threatening behaviour." },
-                { "title": "Enhanced night surveillance", "description": "Increased vigilance in the evening and at night on access points, car parks and common areas, when residences are most exposed." }
+                {
+                    "title": "24/7 guarding",
+                    "description": "Continuous presence of security agents to ensure permanent protection of your residence, day and night, without interruption."
+                },
+                {
+                    "title": "Visitor control",
+                    "description": "Rigorous management of entries and exits, visitor registration and systematic access verification to prevent any unauthorised intrusion."
+                },
+                {
+                    "title": "Access surveillance",
+                    "description": "Protection of sensitive points — gates, car parks, passageways — to neutralise any intrusion risk from the perimeter."
+                },
+                {
+                    "title": "Security patrols",
+                    "description": "Regular patrols around and inside the perimeter to detect any suspicious activity before it becomes an incident."
+                },
+                {
+                    "title": "Incident management",
+                    "description": "Immediate reaction and structured intervention in the event of an abnormal situation, intrusion or threatening behaviour."
+                },
+                {
+                    "title": "Enhanced night surveillance",
+                    "description": "Increased vigilance in the evening and at night on access points, car parks and common areas, when residences are most exposed."
+                }
             ],
             "gallery_title": "Residential security",
             "gallery_description": "Discover our interventions in residential settings to ensure the tranquillity and security of your homes."
@@ -220,9 +274,18 @@
             "hero_description": "Protect your projects, your teams and your equipment",
             "hero_image_alt": "Construction site security — Super Sécurité Guinea",
             "hero_stats": [
-                { "label": "Sectors", "value": "Construction & infrastructure" },
-                { "label": "Surveillance", "value": "Patrols and access control" },
-                { "label": "Availability", "value": "24/7" }
+                {
+                    "label": "Sectors",
+                    "value": "Construction & infrastructure"
+                },
+                {
+                    "label": "Surveillance",
+                    "value": "Patrols and access control"
+                },
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                }
             ],
             "intro": [
                 "Construction sites are particularly vulnerable areas: material theft, intrusions, vandalism, uncontrolled movement of people and vehicles — the risks are constant and can directly impact your deadlines and costs.",
@@ -239,12 +302,30 @@
             ],
             "sections_title": "Our security services for construction sites",
             "sections": [
-                { "title": "Access control", "description": "Rigorous management of entries and exits of personnel, visitors and suppliers to maintain a controlled site at all times." },
-                { "title": "Site surveillance", "description": "Permanent protection of work areas, stored materials and equipment against theft, damage and unauthorised access." },
-                { "title": "Security patrols", "description": "Regular patrols day and night to detect any anomaly and intervene before an incident occurs." },
-                { "title": "Vehicle control", "description": "Systematic verification of trucks, machinery and vehicles entering and leaving the site to prevent any suspicious movement." },
-                { "title": "Incident management", "description": "Rapid, structured and documented intervention in the event of intrusion, incident or abnormal situation on the site." },
-                { "title": "Site coordination", "description": "Liaison with the site manager and prompt reporting of anomalies to avoid slowing down project progress." }
+                {
+                    "title": "Access control",
+                    "description": "Rigorous management of entries and exits of personnel, visitors and suppliers to maintain a controlled site at all times."
+                },
+                {
+                    "title": "Site surveillance",
+                    "description": "Permanent protection of work areas, stored materials and equipment against theft, damage and unauthorised access."
+                },
+                {
+                    "title": "Security patrols",
+                    "description": "Regular patrols day and night to detect any anomaly and intervene before an incident occurs."
+                },
+                {
+                    "title": "Vehicle control",
+                    "description": "Systematic verification of trucks, machinery and vehicles entering and leaving the site to prevent any suspicious movement."
+                },
+                {
+                    "title": "Incident management",
+                    "description": "Rapid, structured and documented intervention in the event of intrusion, incident or abnormal situation on the site."
+                },
+                {
+                    "title": "Site coordination",
+                    "description": "Liaison with the site manager and prompt reporting of anomalies to avoid slowing down project progress."
+                }
             ],
             "gallery_title": "Secured construction sites",
             "gallery_description": "Discover real images of our guarding and security interventions on various construction sites."
@@ -258,9 +339,18 @@
             "hero_description": "Protection adapted to the demands of the mining industry",
             "hero_image_alt": "Loader and dump truck on mining site — Super Sécurité Guinea",
             "hero_stats": [
-                { "label": "Sectors", "value": "Mining & sensitive sites" },
-                { "label": "Protocols", "value": "Strict and field-adapted" },
-                { "label": "Expertise", "value": "Security in high-risk environments" }
+                {
+                    "label": "Sectors",
+                    "value": "Mining & sensitive sites"
+                },
+                {
+                    "label": "Protocols",
+                    "value": "Strict and field-adapted"
+                },
+                {
+                    "label": "Expertise",
+                    "value": "Security in high-risk environments"
+                }
             ],
             "intro": [
                 "Guinea holds a strategic position in the global mining industry, driven by its significant bauxite, gold and other mineral resources. This wealth comes with major security challenges: intrusions, theft, sabotage, operational disruptions — the risks are real and the consequences potentially severe.",
@@ -276,12 +366,30 @@
             ],
             "sections_title": "Our security services for mining sites",
             "sections": [
-                { "title": "Access control", "description": "Rigorous management of entries and exits of personnel, visitors and subcontractors to secure the entire site perimeter." },
-                { "title": "Base camp surveillance", "description": "Protection of staff accommodation areas to ensure a safe, stable and controlled living environment outside working hours." },
-                { "title": "Vehicle control", "description": "Systematic inspection of vehicles entering and leaving the site to prevent any attempt at theft or introduction of unauthorised items." },
-                { "title": "Infrastructure security", "description": "Protection of offices, workshops, warehouses and sensitive areas against any attempt at intrusion, damage or sabotage." },
-                { "title": "Security patrols", "description": "Continuous patrols across the entire site to maintain active surveillance and deter any malicious behaviour." },
-                { "title": "Incident management", "description": "Immediate application of security procedures and structured escalation of alerts for a rapid and traceable response." }
+                {
+                    "title": "Access control",
+                    "description": "Rigorous management of entries and exits of personnel, visitors and subcontractors to secure the entire site perimeter."
+                },
+                {
+                    "title": "Base camp surveillance",
+                    "description": "Protection of staff accommodation areas to ensure a safe, stable and controlled living environment outside working hours."
+                },
+                {
+                    "title": "Vehicle control",
+                    "description": "Systematic inspection of vehicles entering and leaving the site to prevent any attempt at theft or introduction of unauthorised items."
+                },
+                {
+                    "title": "Infrastructure security",
+                    "description": "Protection of offices, workshops, warehouses and sensitive areas against any attempt at intrusion, damage or sabotage."
+                },
+                {
+                    "title": "Security patrols",
+                    "description": "Continuous patrols across the entire site to maintain active surveillance and deter any malicious behaviour."
+                },
+                {
+                    "title": "Incident management",
+                    "description": "Immediate application of security procedures and structured escalation of alerts for a rapid and traceable response."
+                }
             ],
             "gallery_title": "Mining areas & sensitive sites",
             "gallery_description": "A visual overview of our security and surveillance services on complex mining installations.",
@@ -551,9 +659,18 @@
             "description": "Field missions, experience reports, practical advice and updates.",
             "image_alt": "Super Sécurité news — private security",
             "stats": [
-                { "label": "Content", "value": "Articles & reports" },
-                { "label": "Area", "value": "Conakry and region" },
-                { "label": "Expertise", "value": "Private security" }
+                {
+                    "label": "Content",
+                    "value": "Articles & reports"
+                },
+                {
+                    "label": "Area",
+                    "value": "Conakry and region"
+                },
+                {
+                    "label": "Expertise",
+                    "value": "Private security"
+                }
             ]
         },
         "conseils": {
@@ -564,9 +681,18 @@
             "description": "Clear guides and practical recommendations to protect businesses, residences, construction sites and sensitive areas — written by our teams.",
             "image_alt": "Super Sécurité security tips",
             "stats": [
-                { "label": "Topics", "value": "Prevention & surveillance" },
-                { "label": "Reading", "value": "Practical guides" },
-                { "label": "Audience", "value": "Professionals & individuals" }
+                {
+                    "label": "Topics",
+                    "value": "Prevention & surveillance"
+                },
+                {
+                    "label": "Reading",
+                    "value": "Practical guides"
+                },
+                {
+                    "label": "Audience",
+                    "value": "Professionals & individuals"
+                }
             ]
         },
         "devenir_agent": {
@@ -577,9 +703,18 @@
             "description": "Qualified agents, diverse missions and career growth within the Super Sécurité network in Conakry and region. Apply now.",
             "image_alt": "Super Sécurité agent recruitment — Conakry and region",
             "stats": [
-                { "label": "Missions", "value": "Corporate & field" },
-                { "label": "Availability", "value": "24/7" },
-                { "label": "Area", "value": "Conakry and region" }
+                {
+                    "label": "Missions",
+                    "value": "Corporate & field"
+                },
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                },
+                {
+                    "label": "Area",
+                    "value": "Conakry and region"
+                }
             ]
         },
         "contact": {
@@ -590,9 +725,18 @@
             "description": "Looking for a guarding, surveillance or private security solution in Guinea? Describe your needs and our teams will contact you as soon as possible with a tailored solution.",
             "image_alt": "Contact Super Sécurité — Lambanyi, Conakry",
             "stats": [
-                { "label": "Response", "value": "Within 24 business hours" },
-                { "label": "Office", "value": "Lambanyi, Conakry" },
-                { "label": "Services", "value": "4 areas of expertise" }
+                {
+                    "label": "Response",
+                    "value": "Within 24 business hours"
+                },
+                {
+                    "label": "Office",
+                    "value": "Lambanyi, Conakry"
+                },
+                {
+                    "label": "Services",
+                    "value": "4 areas of expertise"
+                }
             ]
         },
         "about": {
@@ -603,9 +747,18 @@
             "description": "Field experience, responsiveness and 24/7 availability — Super Sécurité protects businesses and individuals with a certified, committed team close to your needs in Conakry and region.",
             "image_alt": "Super Sécurité — private security",
             "stats": [
-                { "label": "Availability", "value": "24/7" },
-                { "label": "Area", "value": "Conakry and region" },
-                { "label": "Commitment", "value": "Certified team" }
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                },
+                {
+                    "label": "Area",
+                    "value": "Conakry and region"
+                },
+                {
+                    "label": "Commitment",
+                    "value": "Certified team"
+                }
             ]
         },
         "galerie": {
@@ -616,9 +769,18 @@
             "description": "Photos of our teams in action: businesses, residences, construction sites and mining areas across Guinea.",
             "image_alt": "Super Sécurité gallery — field missions",
             "stats": [
-                { "label": "Services", "value": "4 areas of expertise" },
-                { "label": "Area", "value": "Conakry and region" },
-                { "label": "Field", "value": "Real photos" }
+                {
+                    "label": "Services",
+                    "value": "4 areas of expertise"
+                },
+                {
+                    "label": "Area",
+                    "value": "Conakry and region"
+                },
+                {
+                    "label": "Field",
+                    "value": "Real photos"
+                }
             ]
         }
     },
@@ -633,9 +795,18 @@
             "secondary_cta": "Our services",
             "image_alt": "Super Sécurité — trusted private security partner in Guinea",
             "stats": [
-                { "label": "Availability", "value": "24/7" },
-                { "label": "Coverage", "value": "Conakry & All of Guinea" },
-                { "label": "Expertise", "value": "Guarding & Private Security" }
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                },
+                {
+                    "label": "Coverage",
+                    "value": "Conakry & All of Guinea"
+                },
+                {
+                    "label": "Expertise",
+                    "value": "Guarding & Private Security"
+                }
             ],
             "nav_label": "Trust"
         },
@@ -646,9 +817,18 @@
             "primary_cta": "Discover",
             "image_alt": "Business security — Super Sécurité",
             "stats": [
-                { "label": "Surveillance", "value": "24/7" },
-                { "label": "Coverage", "value": "Conakry & All of Guinea" },
-                { "label": "Professionalism", "value": "Qualified and supervised agents" }
+                {
+                    "label": "Surveillance",
+                    "value": "24/7"
+                },
+                {
+                    "label": "Coverage",
+                    "value": "Conakry & All of Guinea"
+                },
+                {
+                    "label": "Professionalism",
+                    "value": "Qualified and supervised agents"
+                }
             ],
             "nav_label": "Business"
         },
@@ -660,9 +840,18 @@
             "secondary_cta": "Discover",
             "image_alt": "Residential security — Super Sécurité",
             "stats": [
-                { "label": "Residences", "value": "Villas & buildings" },
-                { "label": "Surveillance", "value": "Day and night" },
-                { "label": "Availability", "value": "24/7" }
+                {
+                    "label": "Residences",
+                    "value": "Villas & buildings"
+                },
+                {
+                    "label": "Surveillance",
+                    "value": "Day and night"
+                },
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                }
             ],
             "nav_label": "Residential"
         },
@@ -674,9 +863,18 @@
             "secondary_cta": "Learn more",
             "image_alt": "Construction site security — Super Sécurité",
             "stats": [
-                { "label": "Sectors", "value": "Construction & infrastructure" },
-                { "label": "Surveillance", "value": "Patrols and access control" },
-                { "label": "Availability", "value": "24/7" }
+                {
+                    "label": "Sectors",
+                    "value": "Construction & infrastructure"
+                },
+                {
+                    "label": "Surveillance",
+                    "value": "Patrols and access control"
+                },
+                {
+                    "label": "Availability",
+                    "value": "24/7"
+                }
             ],
             "nav_label": "Construction"
         },
@@ -688,9 +886,18 @@
             "secondary_cta": "Learn more",
             "image_alt": "Mining areas — Super Sécurité",
             "stats": [
-                { "label": "Sectors", "value": "Mining & sensitive sites" },
-                { "label": "Protocols", "value": "Strict and field-adapted" },
-                { "label": "Expertise", "value": "Security in high-risk environments" }
+                {
+                    "label": "Sectors",
+                    "value": "Mining & sensitive sites"
+                },
+                {
+                    "label": "Protocols",
+                    "value": "Strict and field-adapted"
+                },
+                {
+                    "label": "Expertise",
+                    "value": "Security in high-risk environments"
+                }
             ],
             "nav_label": "Mining"
         }
@@ -787,5 +994,19 @@
         "photo_count_plural": ":count photos displayed (out of :total)",
         "video_count_singular": ":count video displayed (out of :total)",
         "video_count_plural": ":count videos displayed (out of :total)"
+    },
+    "share": {
+        "title": "Share",
+        "native": "Share…",
+        "copy_link": "Copy link",
+        "copied": "Copied",
+        "link_copied": "Link copied to clipboard",
+        "copy_failed": "Unable to copy link",
+        "failed": "Sharing failed",
+        "whatsapp": "WhatsApp",
+        "facebook": "Facebook",
+        "linkedin": "LinkedIn",
+        "x": "X",
+        "email": "Email"
     }
 }

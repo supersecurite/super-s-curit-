@@ -20,8 +20,11 @@ class StoreSecurityTipRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string', 'max:1000'],
+            'excerpt_en' => ['nullable', 'string', 'max:1000'],
             'content' => ['nullable', 'string'],
+            'content_en' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:2048'],
             'category' => ['nullable', 'string', 'max:255'],
             'tags' => ['nullable', 'array'],
@@ -37,9 +40,9 @@ class StoreSecurityTipRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Le titre est obligatoire.',
-            'image.image' => 'Le fichier doit être une image.',
-            'image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
+            'title.required' => bt('validation.title_required'),
+            'image.image' => bt('validation.image_image'),
+            'image.max' => bt('validation.image_max'),
         ];
     }
 
@@ -49,14 +52,14 @@ class StoreSecurityTipRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title' => 'titre',
-            'excerpt' => 'résumé',
-            'content' => 'contenu',
-            'image' => 'image',
-            'category' => 'catégorie',
-            'tags' => 'tags',
-            'featured' => 'à la une',
-            'published_at' => 'date de publication',
+            'title' => bt('validation.attr_title'),
+            'excerpt' => bt('validation.attr_excerpt'),
+            'content' => bt('validation.attr_content'),
+            'image' => bt('validation.attr_image'),
+            'category' => bt('validation.attr_category'),
+            'tags' => bt('validation.attr_tags'),
+            'featured' => bt('validation.attr_featured'),
+            'published_at' => bt('validation.attr_published_at'),
         ];
     }
 }

@@ -79,9 +79,11 @@ class SecurityTipController extends Controller
             ->values()
             ->all();
 
+        $public = $securityTip->toPublicArray(includeContent: true);
+
         return Inertia::render('marketing/conseils-securite/show', [
-            'securityTip' => $securityTip->toPublicArray(),
-            'securityTipContent' => $securityTip->content,
+            'securityTip' => $public,
+            'securityTipContent' => $public['content'] ?? null,
             'relatedSecurityTips' => $relatedSecurityTips,
         ]);
     }

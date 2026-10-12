@@ -35,7 +35,7 @@ class UpdateSecurityAgentApplicationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'status.required' => 'Le statut est obligatoire.',
+            'status.required' => bt('validation.status_required'),
         ];
     }
 
@@ -45,8 +45,8 @@ class UpdateSecurityAgentApplicationRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'status' => 'statut',
-            'internal_notes' => 'notes internes',
+            'status' => bt('validation.attr_status'),
+            'internal_notes' => bt('validation.attr_internal_notes'),
         ];
     }
 }

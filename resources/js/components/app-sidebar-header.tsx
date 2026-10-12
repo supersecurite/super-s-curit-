@@ -1,3 +1,4 @@
+import { BackofficeLocaleSwitcher } from '@/components/backoffice-locale-switcher';
 import { NavUser } from '@/components/nav-user';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
@@ -8,6 +9,7 @@ export function AppSidebarHeader() {
                 <SidebarTrigger className="-ml-1" />
             </div>
             <div className="flex min-w-0 items-center gap-2">
+                <BackofficeLocaleSwitcher />
                 <NavUser variant="header" />
             </div>
         </header>

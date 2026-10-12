@@ -97,11 +97,11 @@ class StoreMarketingContactRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom est obligatoire.',
-            'email.unique' => 'Un contact avec cet e-mail existe déjà.',
-            'phone.unique' => 'Un contact avec ce téléphone existe déjà.',
-            'phone.regex' => 'Le téléphone doit être au format international avec indicatif (ex. +1 (555) 670-8636).',
-            'list_uuids.*.exists' => 'Un des groupes sélectionnés est introuvable.',
+            'name.required' => bt('validation.name_required'),
+            'email.unique' => bt('validation.contact_email_exists'),
+            'phone.unique' => bt('validation.contact_phone_exists'),
+            'phone.regex' => bt('validation.phone_international'),
+            'list_uuids.*.exists' => bt('validation.list_not_found'),
             ...MarketingCompanyContactRules::messages(),
         ];
     }

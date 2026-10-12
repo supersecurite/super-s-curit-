@@ -20,6 +20,7 @@ type ArticleDetail = {
     read_time: number;
     formatted_read_time: string;
     published_at_formatted: string | null;
+    is_locale_fallback?: boolean;
 };
 
 type RelatedArticle = {
@@ -45,7 +46,7 @@ export default function MarketingArticleShow() {
     return (
         <>
             <SeoHead />
-            <CmsLocaleNotice />
+            <CmsLocaleNotice show={article.is_locale_fallback !== false} />
             <Head title={article.title} />
 
             <section className="marketing-section-band py-12 md:py-16">

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import InputError from '@/components/input-error';
+import { useTrans } from '@/hooks/use-trans';
 import { index, show, update } from '@/routes/candidatures-agents';
 
 type ApplicationDetail = {
@@ -50,6 +51,7 @@ type PageProps = {
 };
 
 export default function CandidaturesAgentsShow() {
+    const { t } = useTrans();
     const { application, statusOptions, canUpdate } =
         usePage<PageProps>().props;
 
@@ -60,7 +62,10 @@ export default function CandidaturesAgentsShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Candidatures agents', href: index.url() },
+            {
+                title: t('applications.title', 'Candidatures agents'),
+                href: index.url(),
+            },
             {
                 title: application.full_name,
                 href: show.url(application.uuid),
@@ -75,7 +80,13 @@ export default function CandidaturesAgentsShow() {
 
     return (
         <>
-            <Head title={`Candidature — ${application.full_name}`} />
+            <Head
+                title={t(
+                    'applications.show_title',
+                    'Candidature — :name',
+                    { name: application.full_name },
+                )}
+            />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
@@ -85,7 +96,7 @@ export default function CandidaturesAgentsShow() {
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" />
-                            Retour à la liste
+                            {t('applications.back_to_list', 'Retour à la liste')}
                         </Link>
                         <h1 className="font-heading flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <User className="size-6" />

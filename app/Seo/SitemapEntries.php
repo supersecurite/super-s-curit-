@@ -45,6 +45,7 @@ class SitemapEntries
                 'image' => $article->image_url ?? config('seo.default_og_image'),
                 'sources' => ['database/articles'],
                 'lastmod' => $article->updated_at?->toAtomString(),
+                'has_english' => filled($article->title_en),
             ])
             ->all();
 
@@ -59,6 +60,7 @@ class SitemapEntries
                 'image' => $securityTip->image_url ?? config('seo.default_og_image'),
                 'sources' => ['database/security_tips'],
                 'lastmod' => $securityTip->updated_at?->toAtomString(),
+                'has_english' => filled($securityTip->title_en),
             ])
             ->all();
 
@@ -98,11 +100,32 @@ class SitemapEntries
             }
         }
 
-        // Articles / conseils : uniquement les URLs FR (contenu éditorial non traduit).
         foreach ([...$articlePages, ...$securityTipPages] as $entry) {
             if (! in_array($entry['path'], $staticPaths, true)) {
                 $localizedStatic[] = $entry;
                 $staticPaths[] = $entry['path'];
+            }
+
+            if (! ($entry['has_english'] ?? false)) {
+                continue;
+            }
+
+            foreach (LocaleUrl::supported() as $locale) {
+                if (LocaleUrl::isDefault($locale)) {
+                    continue;
+                }
+
+                $localizedPath = LocaleUrl::localizePath($entry['path'], $locale);
+
+                if (in_array($localizedPath, $staticPaths, true)) {
+                    continue;
+                }
+
+                $localizedStatic[] = [
+                    ...$entry,
+                    'path' => $localizedPath,
+                ];
+                $staticPaths[] = $localizedPath;
             }
         }
 

@@ -142,12 +142,12 @@ class StoreMarketingCampaignRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom de la campagne est requis.',
-            'whatsapp_account_id.required' => 'Un compte WhatsApp actif est requis.',
-            'marketing_email_account_id.required' => 'Un compte e-mail actif est requis.',
-            'marketing_message_template_id.required' => 'Un template est requis.',
-            'subject.required' => 'L\'objet est requis.',
-            'body.required' => 'Le contenu du message est requis.',
+            'name.required' => bt('validation.campaign_name_required'),
+            'whatsapp_account_id.required' => bt('validation.whatsapp_account_required'),
+            'marketing_email_account_id.required' => bt('validation.email_account_required'),
+            'marketing_message_template_id.required' => bt('validation.template_required'),
+            'subject.required' => bt('validation.subject_required'),
+            'body.required' => bt('validation.body_required'),
         ];
     }
 }

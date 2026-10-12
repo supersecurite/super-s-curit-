@@ -98,7 +98,7 @@ class MarketingContactController extends Controller
 
         $action->handle($validated);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact ajouté avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.contact_created')]);
 
         return to_route('marketing-clients.index');
     }
@@ -151,7 +151,7 @@ class MarketingContactController extends Controller
 
         $action->handle($marketingClient, $validated);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact mis à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.contact_updated')]);
 
         return to_route('marketing-clients.show', $marketingClient);
     }
@@ -162,7 +162,7 @@ class MarketingContactController extends Controller
 
         $action->handle($marketingClient);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact supprimé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.contact_deleted')]);
 
         return to_route('marketing-clients.index');
     }
@@ -199,12 +199,11 @@ class MarketingContactController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => sprintf(
-                'Import terminé : %d ajout(s), %d ignoré(s), %d erreur(s).',
-                $result->added,
-                $result->skipped,
-                count($result->errors),
-            ),
+            'message' => bt('toasts.contact_imported', [
+                'added' => $result->added,
+                'skipped' => $result->skipped,
+                'errors' => count($result->errors),
+            ]),
         ]);
 
         return redirect()

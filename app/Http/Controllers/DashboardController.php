@@ -94,9 +94,9 @@ class DashboardController extends Controller
         $hour = (int) now()->format('H');
 
         $salutation = match (true) {
-            $hour < 12 => 'Bonjour',
-            $hour < 18 => 'Bon après-midi',
-            default => 'Bonsoir',
+            $hour < 12 => bt('dashboard.greeting_morning'),
+            $hour < 18 => bt('dashboard.greeting_afternoon'),
+            default => bt('dashboard.greeting_evening'),
         };
 
         return $salutation.', '.$name;

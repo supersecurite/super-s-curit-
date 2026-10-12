@@ -52,7 +52,7 @@ class MarketingEmailAccountController extends Controller
     ): RedirectResponse {
         $account = $action->handle($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Compte e-mail créé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.email_account_created')]);
 
         return to_route('marketing-email-accounts.edit', $account);
     }
@@ -75,7 +75,7 @@ class MarketingEmailAccountController extends Controller
     ): RedirectResponse {
         $action->handle($marketing_email_account, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Compte e-mail mis à jour.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.email_account_updated')]);
 
         return to_route('marketing-email-accounts.edit', $marketing_email_account);
     }
@@ -88,7 +88,7 @@ class MarketingEmailAccountController extends Controller
 
         $action->handle($marketing_email_account);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Compte e-mail supprimé.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.email_account_deleted')]);
 
         return to_route('marketing-email-accounts.index');
     }

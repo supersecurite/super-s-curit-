@@ -65,9 +65,9 @@ class UpdateMarketingEmailAccountRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'from_address.required' => 'L\'adresse d\'expéditeur est requise.',
-            'smtp_host.required' => 'Le serveur SMTP est requis.',
-            'smtp_port.required' => 'Le port SMTP est requis.',
+            'from_address.required' => bt('validation.from_address_required'),
+            'smtp_host.required' => bt('validation.smtp_host_required'),
+            'smtp_port.required' => bt('validation.smtp_port_required'),
         ];
     }
 }

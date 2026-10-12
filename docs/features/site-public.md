@@ -1,6 +1,6 @@
 # Site public marketing
 
-**Statut :** ✅ Complet (i18n phase 1)
+**Statut :** ✅ Complet (i18n phase 2 — backoffice UI + CMS éditorial)
 
 ## Vue d’ensemble
 
@@ -37,8 +37,8 @@ Visiteurs anonymes. Tracking visites actif (hors pages exclues).
 - `resources/js/layouts/marketing-layout.tsx`
 - `resources/js/components/marketing/`
 
-## Limites & dette (phase 2)
+## Limites & dette
 
-- Backoffice UI non traduit.
-- Pas de traduction éditoriale articles / conseils (bandeau « contenu FR » sous `/en`).
-- Segments d’URL encore en français sous `/en/...` (`/en/a-propos`).
+- Backoffice bilingue : toasts `bt()`, messages Form Requests, UI via `lang/{locale}/backoffice.json` + `useTrans` — [ADR-0006](../decisions/0006-backoffice-locale-session.md).
+- Segments d’URL encore en français sous `/en/...` (`/en/a-propos`) — hors phase 2.
+- Formulaires publics (contact, devenir agent) : messages de validation encore FR (hors périmètre BO).

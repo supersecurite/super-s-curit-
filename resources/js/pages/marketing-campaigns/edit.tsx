@@ -1,5 +1,6 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import MarketingCampaignForm from '@/components/marketing-campaigns/marketing-campaign-form';
+import { useTrans } from '@/hooks/use-trans';
 import { edit, index, show, update } from '@/routes/marketing-campaigns';
 
 type ListOption = {
@@ -68,6 +69,7 @@ type PageProps = {
 };
 
 export default function MarketingCampaignsEdit() {
+    const { t } = useTrans();
     const {
         campaign,
         lockedChannel,
@@ -81,22 +83,44 @@ export default function MarketingCampaignsEdit() {
     } = usePage<PageProps>().props;
 
     const isWhatsApp = lockedChannel === 'whatsapp';
+    const listTitle = isWhatsApp
+        ? t('marketing_campaigns.title_whatsapp', 'Campagnes WhatsApp')
+        : t('marketing_campaigns.title_email', 'Campagnes e-mail');
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: listTitle,
+                href: index.url({ query: { channel: lockedChannel } }),
+            },
+            {
+                title: campaign.name,
+                href: show.url(campaign.uuid),
+            },
+            {
+                title: t('common.modify', 'Modifier'),
+                href: edit.url(campaign.uuid),
+            },
+        ],
+    });
 
     return (
         <>
-            <Head title={`Modifier — ${campaign.name}`} />
+            <Head
+                title={`${t('marketing_campaigns.edit', 'Modifier la campagne')} — ${campaign.name}`}
+            />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Modifier la campagne {isWhatsApp ? 'WhatsApp' : 'e-mail'}
+                        {t('marketing_campaigns.edit', 'Modifier la campagne')}
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">{campaign.name}</p>
                 </div>
 
                 <MarketingCampaignForm
                     submitUrl={update.url(campaign.uuid)}
-                    submitLabel="Enregistrer"
+                    submitLabel={t('common.save', 'Enregistrer')}
                     cancelHref={show.url(campaign.uuid)}
                     errors={errors}
                     campaign={campaign}
@@ -113,10 +137,3 @@ export default function MarketingCampaignsEdit() {
         </>
     );
 }
-
-MarketingCampaignsEdit.layout = {
-    breadcrumbs: [
-        { title: 'Campagnes', href: index.url() },
-        { title: 'Modifier', href: edit.url('') },
-    ],
-};

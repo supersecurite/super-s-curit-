@@ -4,6 +4,7 @@ import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import { CompanyChannelsDisplay } from '@/components/marketing-clients/company-channels-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTrans } from '@/hooks/use-trans';
 import { destroy, edit, index, show } from '@/routes/marketing-clients';
 import { show as showList } from '@/routes/marketing-lists';
 import type { MarketingCompanyChannel } from '@/types/marketing-company-contact';
@@ -54,12 +55,16 @@ type PageProps = {
 };
 
 export default function MarketingClientsShow() {
+    const { t } = useTrans();
     const { contact, lists, canUpdate, canDelete } =
         usePage<PageProps>().props;
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Contacts marketing', href: index.url() },
+            {
+                title: t('marketing_contacts.title', 'Contacts marketing'),
+                href: index.url(),
+            },
             { title: contact.full_name, href: show.url(contact.uuid) },
         ],
     });
@@ -76,7 +81,10 @@ export default function MarketingClientsShow() {
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" aria-hidden />
-                            Retour à la liste
+                            {t(
+                                'marketing_contacts.back_to_list',
+                                'Retour à la liste',
+                            )}
                         </Link>
                         <h1 className="font-heading flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <Contact className="size-6" aria-hidden />
@@ -84,12 +92,26 @@ export default function MarketingClientsShow() {
                         </h1>
                         <div className="mt-2 flex flex-wrap gap-2">
                             <Badge variant={contact.is_company ? 'default' : 'secondary'}>
-                                {contact.is_company ? 'Entreprise' : 'Particulier'}
+                                {contact.is_company
+                                    ? t(
+                                          'marketing_contacts.company',
+                                          'Entreprise',
+                                      )
+                                    : t(
+                                          'marketing_contacts.individual',
+                                          'Particulier',
+                                      )}
                             </Badge>
                             <Badge variant={contact.marketing_consent ? 'default' : 'outline'}>
                                 {contact.marketing_consent
-                                    ? 'Consentement accordé'
-                                    : 'Sans consentement'}
+                                    ? t(
+                                          'marketing_contacts.consent_granted',
+                                          'Consentement accordé',
+                                      )
+                                    : t(
+                                          'marketing_contacts.consent_denied',
+                                          'Sans consentement',
+                                      )}
                             </Badge>
                         </div>
                     </div>
@@ -99,16 +121,23 @@ export default function MarketingClientsShow() {
                             <Button asChild>
                                 <Link href={edit.url(contact.uuid)}>
                                     <Pencil className="size-4" aria-hidden />
-                                    Modifier
+                                    {t('common.modify', 'Modifier')}
                                 </Link>
                             </Button>
                         ) : null}
                         {canDelete ? (
                             <ConfirmDeleteDialog
-                                title="Supprimer ce contact ?"
-                                description={`Le contact « ${contact.full_name} » sera définitivement supprimé.`}
+                                title={t(
+                                    'marketing_contacts.delete_confirm',
+                                    'Supprimer ce contact ?',
+                                )}
+                                description={t(
+                                    'marketing_contacts.delete_description',
+                                    'Le contact « :name » sera définitivement supprimé.',
+                                    { name: contact.full_name },
+                                )}
                                 deleteUrl={destroy.url(contact.uuid)}
-                                triggerLabel="Supprimer"
+                                triggerLabel={t('common.delete', 'Supprimer')}
                                 triggerVariant="outline"
                                 triggerClassName="text-destructive hover:text-destructive"
                             />
@@ -118,26 +147,37 @@ export default function MarketingClientsShow() {
 
                 <div className="grid gap-4 lg:grid-cols-2">
                     <section className="app-panel space-y-4 p-4">
-                        <h2 className="font-semibold">Coordonnées</h2>
+                        <h2 className="font-semibold">
+                            {t(
+                                'marketing_contacts.coordinates_heading',
+                                'Coordonnées',
+                            )}
+                        </h2>
                         <dl className="space-y-3 text-sm">
                             <div className="flex items-start gap-3">
                                 <Mail className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                 <div>
-                                    <dt className="text-muted-foreground">E-mail</dt>
+                                    <dt className="text-muted-foreground">
+                                        {t('common.email_label', 'E-mail')}
+                                    </dt>
                                     <dd>{contact.email ?? '—'}</dd>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <Phone className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                 <div>
-                                    <dt className="text-muted-foreground">Téléphone</dt>
+                                    <dt className="text-muted-foreground">
+                                        {t('common.phone', 'Téléphone')}
+                                    </dt>
                                     <dd>{contact.phone ?? '—'}</dd>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <Tag className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                 <div>
-                                    <dt className="text-muted-foreground">Tags</dt>
+                                    <dt className="text-muted-foreground">
+                                        {t('marketing_contacts.tags', 'Tags')}
+                                    </dt>
                                     <dd className="mt-1 flex flex-wrap gap-1">
                                         {contact.tags.length > 0 ? (
                                              contact.tags.map((tag) => (
@@ -155,7 +195,12 @@ export default function MarketingClientsShow() {
                                 <div className="flex items-start gap-3">
                                     <MapPin className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                     <div>
-                                        <dt className="text-muted-foreground">Adresse</dt>
+                                        <dt className="text-muted-foreground">
+                                            {t(
+                                                'marketing_contacts.address',
+                                                'Adresse',
+                                            )}
+                                        </dt>
                                         <dd className="whitespace-pre-wrap">
                                             {contact.address ?? '—'}
                                         </dd>
@@ -167,12 +212,19 @@ export default function MarketingClientsShow() {
 
                     {contact.is_company ? (
                         <section className="app-panel space-y-4 p-4">
-                            <h2 className="font-semibold">Entreprise</h2>
+                            <h2 className="font-semibold">
+                                {t(
+                                    'marketing_contacts.company_heading',
+                                    'Entreprise',
+                                )}
+                            </h2>
                             <dl className="space-y-3 text-sm">
                                 <div className="flex items-start gap-3">
                                     <Building2 className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                     <div>
-                                        <dt className="text-muted-foreground">Nom</dt>
+                                        <dt className="text-muted-foreground">
+                                            {t('common.name', 'Nom')}
+                                        </dt>
                                         <dd>{contact.company_name ?? '—'}</dd>
                                     </div>
                                 </div>
@@ -180,7 +232,10 @@ export default function MarketingClientsShow() {
                                     <Users className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                     <div className="min-w-0 flex-1">
                                         <dt className="text-muted-foreground mb-2">
-                                            Canaux entreprise
+                                            {t(
+                                                'marketing_contacts.company_channels',
+                                                'Canaux entreprise',
+                                            )}
                                         </dt>
                                         <dd>
                                             <CompanyChannelsDisplay
@@ -193,7 +248,12 @@ export default function MarketingClientsShow() {
                                 <div className="flex items-start gap-3">
                                     <MapPin className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                                     <div>
-                                        <dt className="text-muted-foreground">Adresse</dt>
+                                        <dt className="text-muted-foreground">
+                                            {t(
+                                                'marketing_contacts.address',
+                                                'Adresse',
+                                            )}
+                                        </dt>
                                         <dd className="whitespace-pre-wrap">
                                             {contact.address ?? '—'}
                                         </dd>
@@ -204,7 +264,12 @@ export default function MarketingClientsShow() {
                     ) : null}
 
                     <section className="app-panel space-y-4 p-4 lg:col-span-2">
-                        <h2 className="font-semibold">Groupes</h2>
+                        <h2 className="font-semibold">
+                            {t(
+                                'marketing_contacts.lists_header',
+                                'Groupes',
+                            )}
+                        </h2>
                         {lists.length > 0 ? (
                             <ul className="space-y-2">
                                 {lists.map((list) => (
@@ -215,7 +280,13 @@ export default function MarketingClientsShow() {
                                         >
                                             <span className="font-medium">{list.name}</span>
                                             <span className="text-muted-foreground">
-                                                {list.contacts_count} contact(s)
+                                                {t(
+                                                    'marketing_contacts.lists_contacts_count',
+                                                    ':count contact(s)',
+                                                    {
+                                                        count: list.contacts_count,
+                                                    },
+                                                )}
                                             </span>
                                         </Link>
                                     </li>
@@ -223,7 +294,10 @@ export default function MarketingClientsShow() {
                             </ul>
                         ) : (
                             <p className="text-muted-foreground text-sm">
-                                Ce contact n&apos;appartient à aucun groupe.
+                                {t(
+                                    'marketing_contacts.no_lists',
+                                    "Ce contact n'appartient à aucun groupe.",
+                                )}
                             </p>
                         )}
                     </section>
@@ -231,7 +305,12 @@ export default function MarketingClientsShow() {
 
                 {contact.notes ? (
                     <section className="app-panel p-4">
-                        <h2 className="mb-2 font-semibold">Notes</h2>
+                        <h2 className="mb-2 font-semibold">
+                            {t(
+                                'marketing_contacts.notes_heading',
+                                'Notes',
+                            )}
+                        </h2>
                         <p className="text-muted-foreground whitespace-pre-wrap text-sm">
                             {contact.notes}
                         </p>
@@ -239,19 +318,18 @@ export default function MarketingClientsShow() {
                 ) : null}
 
                 <p className="text-muted-foreground text-xs">
-                    Créé le {contact.created_at_formatted ?? '—'}
+                    {t('marketing_contacts.created_at', 'Créé le :date', {
+                        date: contact.created_at_formatted ?? '—',
+                    })}
                     {contact.updated_at_formatted
-                        ? ` · Modifié le ${contact.updated_at_formatted}`
+                        ? ` · ${t(
+                              'marketing_contacts.updated_at',
+                              'Modifié le :date',
+                              { date: contact.updated_at_formatted },
+                          )}`
                         : ''}
                 </p>
             </div>
         </>
     );
 }
-
-MarketingClientsShow.layout = {
-    breadcrumbs: [
-        { title: 'Contacts marketing', href: index.url() },
-        { title: 'Détail', href: show.url('') },
-    ],
-};

@@ -78,12 +78,12 @@ class PartnerController extends Controller
 
         Partner::query()->create($validated);
 
-        return redirect()
-            ->route('partners.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Partenaire ajouté avec succès.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.partner_created'),
+        ]);
+
+        return to_route('partners.index');
     }
 
     public function show(Partner $partner): RedirectResponse
@@ -120,12 +120,12 @@ class PartnerController extends Controller
 
         $partner->update($validated);
 
-        return redirect()
-            ->route('partners.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Partenaire mis à jour avec succès.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.partner_updated'),
+        ]);
+
+        return to_route('partners.index');
     }
 
     public function destroy(Partner $partner): RedirectResponse
@@ -138,11 +138,11 @@ class PartnerController extends Controller
 
         $partner->delete();
 
-        return redirect()
-            ->route('partners.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Partenaire supprimé avec succès.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.partner_deleted'),
+        ]);
+
+        return to_route('partners.index');
     }
 }

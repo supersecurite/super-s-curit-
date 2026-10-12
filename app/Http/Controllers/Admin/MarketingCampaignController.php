@@ -122,7 +122,7 @@ class MarketingCampaignController extends Controller
     ): RedirectResponse {
         $campaign = $action->handle($request->validated(), $request->user());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Campagne créée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.campaign_created')]);
 
         return to_route('marketing-campaigns.show', $campaign);
     }
@@ -195,7 +195,7 @@ class MarketingCampaignController extends Controller
     ): RedirectResponse {
         $action->handle($marketingCampaign, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Campagne mise à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.campaign_updated')]);
 
         return to_route('marketing-campaigns.show', $marketingCampaign);
     }
@@ -209,7 +209,7 @@ class MarketingCampaignController extends Controller
         $channel = $marketingCampaign->channel->value;
         $action->handle($marketingCampaign);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Campagne supprimée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.campaign_deleted')]);
 
         return to_route('marketing-campaigns.index', ['channel' => $channel]);
     }
@@ -228,8 +228,8 @@ class MarketingCampaignController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => $isScheduled
-                ? 'Campagne planifiée — elle sera lancée automatiquement à la date choisie.'
-                : 'Campagne lancée — les envois sont en cours.',
+                ? bt('toasts.campaign_scheduled')
+                : bt('toasts.campaign_launched'),
             'sound' => 'success',
         ]);
 
@@ -247,8 +247,8 @@ class MarketingCampaignController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => $count > 0
-                ? "Relance effectuée : {$count} envoi(s) échoué(s) replacé(s) en file d'attente."
-                : 'Aucun envoi en échec à relancer.',
+                ? bt('toasts.campaign_retried', ['count' => $count])
+                : bt('toasts.campaign_retry_empty'),
             'sound' => 'success',
         ]);
 

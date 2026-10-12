@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { FileText, Pencil, Plus, Search } from 'lucide-react';
 import { useMemo } from 'react';
 import {
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useTrans } from '@/hooks/use-trans';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
 import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
@@ -61,10 +62,22 @@ type PageProps = {
 };
 
 export default function MarketingTemplatesIndex() {
+    const { t } = useTrans();
     const { templates, channel, filters, canCreate, whatsappAccounts = [] } = usePage<PageProps>().props;
     const activeChannel = channel === 'whatsapp' ? 'whatsapp' : 'email';
     const isWhatsApp = activeChannel === 'whatsapp';
-    const title = isWhatsApp ? 'Templates WhatsApp' : 'Templates e-mail';
+    const title = isWhatsApp
+        ? t('marketing_templates.title_whatsapp', 'Templates WhatsApp')
+        : t('marketing_templates.title_email', 'Templates e-mail');
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title,
+                href: index.url({ query: { channel: activeChannel } }),
+            },
+        ],
+    });
 
     const applyFilters = (
         updates: Partial<TableSortState & { search?: string; channel?: string; page?: number }>,
@@ -91,22 +104,31 @@ export default function MarketingTemplatesIndex() {
         const renderActions = (template: TemplateRow) => (
             <>
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={show.url(template.uuid)}>Voir</Link>
+                    <Link href={show.url(template.uuid)}>
+                        {t('common.view', 'Voir')}
+                    </Link>
                 </Button>
                 {template.can_update ? (
                     <Button variant="outline" size="sm" asChild>
                         <Link href={edit.url(template.uuid)}>
                             <Pencil className="size-4" aria-hidden />
-                            Modifier
+                            {t('common.modify', 'Modifier')}
                         </Link>
                     </Button>
                 ) : null}
                 {template.can_delete ? (
                     <ConfirmDeleteDialog
-                        title="Supprimer ce template ?"
-                        description={`Le template « ${template.name} » sera définitivement supprimé.`}
+                        title={t(
+                            'marketing_templates.delete_confirm',
+                            'Supprimer ce template ?',
+                        )}
+                        description={t(
+                            'marketing_templates.delete_description_full',
+                            'Le template « :name » sera définitivement supprimé.',
+                            { name: template.name },
+                        )}
                         deleteUrl={destroy.url(template.uuid)}
-                        triggerLabel="Supprimer"
+                        triggerLabel={t('common.delete', 'Supprimer')}
                         triggerVariant="outline"
                         triggerSize="sm"
                         triggerClassName="text-destructive hover:text-destructive"
@@ -181,7 +203,7 @@ export default function MarketingTemplatesIndex() {
                 cell: renderActions,
             },
         ];
-    }, [isWhatsApp]);
+    }, [isWhatsApp, t]);
 
     return (
         <>
@@ -196,8 +218,14 @@ export default function MarketingTemplatesIndex() {
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             {isWhatsApp
-                                ? 'Templates WhatsApp uniquement — importez vos modèles approuvés Meta ou créez-en de nouveaux.'
-                                : 'Templates e-mail uniquement — variables dynamiques pour les campagnes.'}
+                                ? t(
+                                      'marketing_templates.subtitle_whatsapp',
+                                      'Templates WhatsApp uniquement — importez vos modèles approuvés Meta ou créez-en de nouveaux.',
+                                  )
+                                : t(
+                                      'marketing_templates.subtitle_email',
+                                      'Templates e-mail uniquement — variables dynamiques pour les campagnes.',
+                                  )}
                         </p>
                     </div>
                     {canCreate ? (
@@ -208,7 +236,15 @@ export default function MarketingTemplatesIndex() {
                             <Button asChild>
                                 <Link href={create.url({ query: { channel: activeChannel } })}>
                                     <Plus className="size-4" aria-hidden />
-                                    Nouveau template {isWhatsApp ? 'WhatsApp' : 'e-mail'}
+                                    {isWhatsApp
+                                        ? t(
+                                              'marketing_templates.create_whatsapp',
+                                              'Nouveau template WhatsApp',
+                                          )
+                                        : t(
+                                              'marketing_templates.create_email',
+                                              'Nouveau template e-mail',
+                                          )}
                                 </Link>
                             </Button>
                         </div>
@@ -218,7 +254,10 @@ export default function MarketingTemplatesIndex() {
                 <BackofficeFiltersBar>
                     <div className="relative min-w-0 flex-1 lg:min-w-[240px]">
                         <Label htmlFor="templates-search" className="sr-only">
-                            Rechercher
+                            {t(
+                                'marketing_templates.search_label',
+                                'Rechercher',
+                            )}
                         </Label>
                         <Search
                             className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2"
@@ -228,7 +267,10 @@ export default function MarketingTemplatesIndex() {
                             id="templates-search"
                             type="search"
                             defaultValue={filters.search ?? ''}
-                            placeholder="Titre, objet, contenu…"
+                            placeholder={t(
+                                'marketing_templates.search_placeholder_extended',
+                                'Titre, objet, contenu…',
+                            )}
                             className="pl-9"
                             onChange={(event) => debouncedSearch(event.target.value)}
                         />
@@ -240,7 +282,17 @@ export default function MarketingTemplatesIndex() {
                         rows={templates.data}
                         columns={columns}
                         getRowKey={(template) => template.uuid}
-                        emptyMessage={`Aucun template ${isWhatsApp ? 'WhatsApp' : 'e-mail'}.`}
+                        emptyMessage={
+                            isWhatsApp
+                                ? t(
+                                      'marketing_templates.empty_whatsapp',
+                                      'Aucun template WhatsApp.',
+                                  )
+                                : t(
+                                      'marketing_templates.empty_email',
+                                      'Aucun template e-mail.',
+                                  )
+                        }
                         minWidth="640px"
                         sort={filters}
                         onSort={handleSort}
@@ -249,14 +301,13 @@ export default function MarketingTemplatesIndex() {
 
                 <IndexTablePagination
                     paginated={templates}
-                    itemLabel="template(s)"
+                    itemLabel={t(
+                        'marketing_templates.item_label',
+                        'template(s)',
+                    )}
                     buildPageUrl={buildPageUrl}
                 />
             </div>
         </>
     );
 }
-
-MarketingTemplatesIndex.layout = {
-    breadcrumbs: [{ title: 'Templates', href: index.url({ query: { channel: 'email' } }) }],
-};

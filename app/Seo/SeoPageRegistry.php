@@ -5,6 +5,7 @@ namespace App\Seo;
 use App\Models\Article;
 use App\Models\SecurityTip;
 use App\Support\LocaleUrl;
+use App\Support\LocalizedCmsContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -100,14 +101,15 @@ class SeoPageRegistry
                 ->first();
 
             if ($article !== null) {
-                $description = $article->excerpt
-                    ?? Str::limit(Article::extractTextFromContent($article->content), 160);
+                $localized = LocalizedCmsContent::for($article);
+                $description = $localized['excerpt']
+                    ?? Str::limit(Article::extractTextFromContent($localized['content']), 160);
 
                 return [
-                    'title' => $article->title.' | '.config('seo.site_name'),
+                    'title' => $localized['title'].' | '.config('seo.site_name'),
                     'description' => $description,
                     'og_image' => $article->image_url ?? config('seo.default_og_image'),
-                    'og_image_alt' => $article->title.' — '.config('seo.site_name'),
+                    'og_image_alt' => $localized['title'].' — '.config('seo.site_name'),
                     'og_type' => 'article',
                     'schema_type' => 'Article',
                 ];
@@ -121,14 +123,15 @@ class SeoPageRegistry
                 ->first();
 
             if ($securityTip !== null) {
-                $description = $securityTip->excerpt
-                    ?? Str::limit(SecurityTip::extractTextFromContent($securityTip->content), 160);
+                $localized = LocalizedCmsContent::for($securityTip);
+                $description = $localized['excerpt']
+                    ?? Str::limit(SecurityTip::extractTextFromContent($localized['content']), 160);
 
                 return [
-                    'title' => $securityTip->title.' | '.config('seo.site_name'),
+                    'title' => $localized['title'].' | '.config('seo.site_name'),
                     'description' => $description,
                     'og_image' => $securityTip->image_url ?? config('seo.default_og_image'),
-                    'og_image_alt' => $securityTip->title.' — '.config('seo.site_name'),
+                    'og_image_alt' => $localized['title'].' — '.config('seo.site_name'),
                     'og_type' => 'article',
                     'schema_type' => 'Article',
                 ];

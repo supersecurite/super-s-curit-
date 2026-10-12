@@ -1,6 +1,7 @@
 import { Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useContentShare } from '@/hooks/use-content-share';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 
 type ContentShareLinksProps = {
@@ -31,10 +32,12 @@ export default function ContentShareLinks({
     variant = 'app',
     className,
 }: ContentShareLinksProps) {
+    const { t } = useTrans();
     const { absoluteUrl, actions, canNativeShare, nativeShare } =
         useContentShare(title, url, description);
 
     const isMarketing = variant === 'marketing';
+    const shareLabel = t('share.title', 'Partager');
 
     return (
         <div
@@ -55,7 +58,7 @@ export default function ContentShareLinks({
                             : 'text-foreground',
                     )}
                 >
-                    Partager
+                    {t('share.title', 'Partager')}
                 </p>
                 {canNativeShare ? (
                     <Button
@@ -65,7 +68,7 @@ export default function ContentShareLinks({
                         onClick={() => void nativeShare()}
                     >
                         <Share2 className="size-4" />
-                        Partager…
+                        {t('share.native', 'Partager…')}
                     </Button>
                 ) : null}
             </div>

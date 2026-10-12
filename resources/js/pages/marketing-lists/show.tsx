@@ -5,6 +5,7 @@ import RemoveContactDialog from '@/components/marketing-lists/remove-contact-dia
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTrans } from '@/hooks/use-trans';
 import { destroy, edit, index, show } from '@/routes/marketing-lists';
 
 type ContactRow = {
@@ -37,6 +38,7 @@ type PageProps = {
 };
 
 export default function MarketingListsShow() {
+    const { t } = useTrans();
     const {
         list,
         contacts,
@@ -47,7 +49,7 @@ export default function MarketingListsShow() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Groupes', href: index.url() },
+            { title: t('marketing_lists.title', 'Groupes'), href: index.url() },
             { title: list.name, href: show.url(list.uuid) },
         ],
     });
@@ -64,7 +66,10 @@ export default function MarketingListsShow() {
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" aria-hidden />
-                            Retour à la liste
+                            {t(
+                                'marketing_lists.back_to_list',
+                                'Retour à la liste',
+                            )}
                         </Link>
                         <h1 className="font-heading flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <List className="size-6" aria-hidden />
@@ -76,7 +81,11 @@ export default function MarketingListsShow() {
                             </p>
                         ) : null}
                         <Badge variant="secondary" className="mt-3">
-                            {list.contacts_count} contact(s)
+                            {t(
+                                'marketing_lists.contacts_count_badge',
+                                ':count contact(s)',
+                                { count: list.contacts_count },
+                            )}
                         </Badge>
                     </div>
 
@@ -90,17 +99,27 @@ export default function MarketingListsShow() {
                                 <Button variant="outline" asChild>
                                     <Link href={edit.url(list.uuid)}>
                                         <Pencil className="size-4" aria-hidden />
-                                        Modifier les infos
+                                        {t(
+                                            'marketing_lists.edit_infos',
+                                            'Modifier les infos',
+                                        )}
                                     </Link>
                                 </Button>
                             </>
                         ) : null}
                         {canDelete ? (
                             <ConfirmDeleteDialog
-                                title="Supprimer ce groupe ?"
-                                description={`Le groupe « ${list.name} » sera supprimé. Les contacts ne seront pas effacés.`}
+                                title={t(
+                                    'marketing_lists.delete_confirm',
+                                    'Supprimer ce groupe ?',
+                                )}
+                                description={t(
+                                    'marketing_lists.delete_description_preserve_contacts',
+                                    'Le groupe « :name » sera supprimé. Les contacts ne seront pas effacés.',
+                                    { name: list.name },
+                                )}
                                 deleteUrl={destroy.url(list.uuid)}
-                                triggerLabel="Supprimer"
+                                triggerLabel={t('common.delete', 'Supprimer')}
                                 triggerVariant="outline"
                                 triggerClassName="text-destructive hover:text-destructive"
                             />
@@ -113,12 +132,18 @@ export default function MarketingListsShow() {
                         <table className="w-full min-w-[520px] text-left text-sm">
                             <thead className="bg-muted/50 border-b text-xs uppercase tracking-wide text-muted-foreground">
                                 <tr>
-                                    <th className="px-4 py-3 font-medium">Nom</th>
-                                    <th className="px-4 py-3 font-medium">E-mail</th>
-                                    <th className="px-4 py-3 font-medium">Téléphone</th>
+                                    <th className="px-4 py-3 font-medium">
+                                        {t('common.name', 'Nom')}
+                                    </th>
+                                    <th className="px-4 py-3 font-medium">
+                                        {t('common.email_label', 'E-mail')}
+                                    </th>
+                                    <th className="px-4 py-3 font-medium">
+                                        {t('common.phone', 'Téléphone')}
+                                    </th>
                                     {canUpdate ? (
                                         <th className="px-4 py-3 text-right font-medium">
-                                            Action
+                                            {t('common.actions', 'Actions')}
                                         </th>
                                     ) : null}
                                 </tr>
@@ -130,7 +155,10 @@ export default function MarketingListsShow() {
                                             colSpan={canUpdate ? 4 : 3}
                                             className="text-muted-foreground px-4 py-8 text-center"
                                         >
-                                            Aucun contact dans ce groupe.
+                                            {t(
+                                                'marketing_lists.empty_contacts',
+                                                'Aucun contact dans ce groupe.',
+                                            )}
                                             {canUpdate ? (
                                                 <span className="mt-1 block">
                                                     Utilisez « Ajouter des contacts » pour commencer.
@@ -206,10 +234,3 @@ export default function MarketingListsShow() {
         </>
     );
 }
-
-MarketingListsShow.layout = {
-    breadcrumbs: [
-        { title: 'Groupes', href: index.url() },
-        { title: 'Détail', href: show.url('') },
-    ],
-};

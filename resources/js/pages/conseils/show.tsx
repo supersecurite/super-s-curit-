@@ -14,6 +14,7 @@ import ContentRenderer from '@/components/lexical-editor/content-renderer';
 import ContentShareLinks from '@/components/content-share-links';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import { edit, index, show } from '@/routes/conseils';
 
@@ -69,11 +70,12 @@ function statusBadgeVariant(
 }
 
 export default function ConseilsShow() {
+    const { t } = useTrans();
     const { securityTip, publicUrl } = usePage<PageProps>().props;
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Conseils', href: index.url() },
+            { title: t('tips.title', 'Conseils'), href: index.url() },
             { title: securityTip.title, href: show.url(securityTip.slug) },
         ],
     });
@@ -89,7 +91,7 @@ export default function ConseilsShow() {
                         className="text-muted-foreground hover:text-super-securite-accent mb-6 inline-flex items-center gap-1 text-sm font-medium transition-colors"
                     >
                         <ChevronLeft className="size-4" />
-                        Retour aux conseils
+                        {t('tips.back_to_list', 'Retour aux conseils')}
                     </Link>
 
                     <div
@@ -109,7 +111,7 @@ export default function ConseilsShow() {
                             {securityTip.featured ? (
                                 <Badge>
                                     <Star className="mr-1 size-3" />
-                                    À la une
+                                    {t('tips.featured_badge', 'À la une')}
                                 </Badge>
                             ) : null}
                             <Badge
@@ -122,8 +124,8 @@ export default function ConseilsShow() {
                                 )}
                             >
                                 {securityTip.is_own
-                                    ? 'Mon conseil'
-                                    : 'Autre auteur'}
+                                    ? t('tips.my_tip', 'Mon conseil')
+                                    : t('tips.other_author', 'Autre auteur')}
                             </Badge>
                             {securityTip.created_by ? (
                                 <span className="text-muted-foreground inline-flex items-center gap-1.5 text-sm">
@@ -142,7 +144,7 @@ export default function ConseilsShow() {
                                         rel="noopener noreferrer"
                                     >
                                         <ExternalLink className="size-4" />
-                                        Voir en ligne
+                                        {t('tips.view_online', 'Voir en ligne')}
                                     </a>
                                 </Button>
                             ) : null}
@@ -150,7 +152,7 @@ export default function ConseilsShow() {
                                 <Button size="sm" asChild>
                                     <Link href={edit.url(securityTip.slug)}>
                                         <Edit2 className="size-4" />
-                                        Modifier
+                                        {t('common.modify', 'Modifier')}
                                     </Link>
                                 </Button>
                             ) : null}

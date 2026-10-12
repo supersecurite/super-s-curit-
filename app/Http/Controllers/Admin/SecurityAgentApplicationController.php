@@ -147,7 +147,7 @@ class SecurityAgentApplicationController extends Controller
 
         $candidaturesAgent->save();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Candidature mise à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.application_updated')]);
 
         return to_route('candidatures-agents.show', $candidaturesAgent);
     }

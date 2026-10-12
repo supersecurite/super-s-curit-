@@ -28,8 +28,8 @@ class ImportMarketingContactsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => 'Veuillez sélectionner un fichier CSV.',
-            'file.mimes' => 'Le fichier doit être au format CSV.',
+            'file.required' => bt('validation.csv_required'),
+            'file.mimes' => bt('validation.csv_file'),
         ];
     }
 }

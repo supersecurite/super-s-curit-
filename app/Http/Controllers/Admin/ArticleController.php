@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Articles\CreateArticle;
+use App\Actions\Articles\UpdateArticle;
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreArticleRequest;
@@ -96,8 +98,11 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function store(StoreArticleRequest $request, ArticleStatusTransition $statusTransition): RedirectResponse
-    {
+    public function store(
+        StoreArticleRequest $request,
+        ArticleStatusTransition $statusTransition,
+        CreateArticle $createArticle,
+    ): RedirectResponse {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
         $canApprove = $request->user()->canApproveArticles();
@@ -116,17 +121,14 @@ class ArticleController extends Controller
 
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
-        $validated['created_by_id'] = $request->user()->id;
 
         if (! $canApprove) {
             unset($validated['published_at']);
         }
 
-        $article = new Article($validated);
-        $statusTransition->apply($article, $status, $request->user());
-        $article->save();
+        $createArticle->handle($validated, $request->user(), $statusTransition, $status);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Actualité créée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.article_created')]);
 
         return to_route('articles.index');
     }
@@ -167,8 +169,12 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function update(UpdateArticleRequest $request, Article $article, ArticleStatusTransition $statusTransition): RedirectResponse
-    {
+    public function update(
+        UpdateArticleRequest $request,
+        Article $article,
+        ArticleStatusTransition $statusTransition,
+        UpdateArticle $updateArticle,
+    ): RedirectResponse {
         $validated = $request->validated();
         $user = $request->user();
         $canApprove = $user->canApproveArticles();
@@ -201,15 +207,9 @@ class ArticleController extends Controller
             unset($validated['published_at']);
         }
 
-        $article->fill($validated);
+        $updateArticle->handle($article, $validated, $user, $status, $statusTransition);
 
-        if ($article->status !== $status) {
-            $statusTransition->apply($article, $status, $user);
-        }
-
-        $article->save();
-
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Actualité mise à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.article_updated')]);
 
         return to_route('articles.index');
     }
@@ -220,7 +220,7 @@ class ArticleController extends Controller
 
         $article->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Actualité archivée avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.article_archived')]);
 
         return to_route('articles.index');
     }

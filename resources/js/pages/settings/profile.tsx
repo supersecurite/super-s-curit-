@@ -1,4 +1,4 @@
-import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Form, Head, Link, setLayoutProps, usePage } from '@inertiajs/react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import InternationalPhoneInput from '@/components/ui/international-phone-input';
 import { Label } from '@/components/ui/label';
+import { useTrans } from '@/hooks/use-trans';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import type { Auth } from '@/types';
@@ -15,12 +16,12 @@ type PageProps = {
     auth: Auth;
 };
 
-function formatDate(value: string | null): string {
+function formatDate(value: string | null, locale: string): string {
     if (!value) {
         return '—';
     }
 
-    return new Intl.DateTimeFormat('fr-FR', {
+    return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'fr-FR', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
@@ -34,8 +35,22 @@ export default function Profile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
+    const { t, locale } = useTrans();
     const { auth } = usePage<PageProps>().props;
     const user = auth.user;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('settings.nav_settings', 'Paramètres'),
+                href: edit(),
+            },
+            {
+                title: t('settings.nav_profile', 'Profil'),
+                href: edit(),
+            },
+        ],
+    });
 
     if (!user) {
         return null;
@@ -43,36 +58,43 @@ export default function Profile({
 
     return (
         <>
-            <Head title="Mon profil" />
+            <Head title={t('settings.profile_title', 'Mon profil')} />
 
-            <h1 className="sr-only">Mon profil</h1>
+            <h1 className="sr-only">{t('settings.profile_title', 'Mon profil')}</h1>
 
             <div className="bg-white p-5 rounded-xl mx-auto flex min-h-[calc(100svh-12rem)] w-full max-w-6xl flex-col justify-center py-8">
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Informations personnelles"
-                    description="Mettez à jour vos coordonnées de contact"
+                    title={t('settings.profile_heading', 'Informations personnelles')}
+                    description={t(
+                        'settings.profile_description',
+                        'Mettez à jour vos coordonnées de contact',
+                    )}
                 />
 
                 <div className="app-panel space-y-3 p-4 text-sm">
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-muted-foreground">Rôle</span>
+                        <span className="text-muted-foreground">{t('common.role', 'Rôle')}</span>
                         <Badge variant="secondary">{user.role_label}</Badge>
                     </div>
                     <div className="grid gap-2 sm:grid-cols-2">
                         <div>
-                            <p className="text-muted-foreground">Membre depuis</p>
+                            <p className="text-muted-foreground">
+                                {t('settings.member_since', 'Membre depuis')}
+                            </p>
                             <p className="font-medium">
-                                {formatDate(user.created_at)}
+                                {formatDate(user.created_at, locale)}
                             </p>
                         </div>
                         <div>
-                            <p className="text-muted-foreground">E-mail vérifié</p>
+                            <p className="text-muted-foreground">
+                                {t('settings.email_verified', 'E-mail vérifié')}
+                            </p>
                             <p className="font-medium">
                                 {user.email_verified_at
-                                    ? formatDate(user.email_verified_at)
-                                    : 'Non vérifié'}
+                                    ? formatDate(user.email_verified_at, locale)
+                                    : t('settings.not_verified', 'Non vérifié')}
                             </p>
                         </div>
                     </div>
@@ -88,7 +110,9 @@ export default function Profile({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Nom complet</Label>
+                                <Label htmlFor="name">
+                                    {t('settings.full_name', 'Nom complet')}
+                                </Label>
 
                                 <Input
                                     id="name"
@@ -97,7 +121,10 @@ export default function Profile({
                                     name="name"
                                     required
                                     autoComplete="name"
-                                    placeholder="Votre nom complet"
+                                    placeholder={t(
+                                        'settings.full_name_placeholder',
+                                        'Votre nom complet',
+                                    )}
                                 />
 
                                 <InputError
@@ -107,7 +134,9 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-mail</Label>
+                                <Label htmlFor="email">
+                                    {t('common.email_label', 'E-mail')}
+                                </Label>
 
                                 <Input
                                     id="email"
@@ -117,7 +146,10 @@ export default function Profile({
                                     name="email"
                                     required
                                     autoComplete="username"
-                                    placeholder="votre@email.com"
+                                    placeholder={t(
+                                        'auth.email_placeholder',
+                                        'votre@email.com',
+                                    )}
                                 />
 
                                 <InputError
@@ -127,7 +159,9 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="phone">Téléphone</Label>
+                                <Label htmlFor="phone">
+                                    {t('common.phone', 'Téléphone')}
+                                </Label>
 
                                 <InternationalPhoneInput
                                     id="phone"
@@ -148,24 +182,29 @@ export default function Profile({
                                 user.email_verified_at === null && (
                                     <div>
                                         <p className="-mt-4 text-sm text-muted-foreground">
-                                            Votre adresse e-mail n&apos;est pas
-                                            vérifiée.{' '}
+                                            {t(
+                                                'settings.email_unverified_hint',
+                                                "Votre adresse e-mail n'est pas vérifiée.",
+                                            )}{' '}
                                             <Link
                                                 href={send()}
                                                 as="button"
                                                 className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current!"
                                             >
-                                                Cliquez ici pour renvoyer
-                                                l&apos;e-mail de vérification.
+                                                {t(
+                                                    'settings.resend_verification',
+                                                    "Cliquez ici pour renvoyer l'e-mail de vérification.",
+                                                )}
                                             </Link>
                                         </p>
 
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                Un nouveau lien de vérification a
-                                                été envoyé à votre adresse
-                                                e-mail.
+                                                {t(
+                                                    'settings.verification_sent_profile',
+                                                    'Un nouveau lien de vérification a été envoyé à votre adresse e-mail.',
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -176,7 +215,7 @@ export default function Profile({
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Enregistrer
+                                    {t('settings.save_profile', 'Enregistrer')}
                                 </Button>
                             </div>
                         </>
@@ -187,10 +226,3 @@ export default function Profile({
         </>
     );
 }
-
-Profile.layout = {
-    breadcrumbs: [
-        { title: 'Paramètres', href: edit() },
-        { title: 'Profil', href: edit() },
-    ],
-};

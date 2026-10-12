@@ -42,9 +42,9 @@ class StoreGalleryImageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'image.required' => 'L’image est obligatoire.',
-            'image.image' => 'Le fichier doit être une image.',
-            'alt.required' => 'Le texte alternatif est obligatoire.',
+            'image.required' => bt('validation.image_required'),
+            'image.image' => bt('validation.image_image'),
+            'alt.required' => bt('validation.alt_text_required'),
         ];
     }
 }

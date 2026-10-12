@@ -44,8 +44,8 @@ class UpdateGalleryImageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'image.image' => 'Le fichier doit être une image.',
-            'alt.required' => 'Le texte alternatif est obligatoire.',
+            'image.image' => bt('validation.image_image'),
+            'alt.required' => bt('validation.alt_text_required'),
         ];
     }
 }

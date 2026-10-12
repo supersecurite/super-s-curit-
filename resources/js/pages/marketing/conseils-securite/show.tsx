@@ -23,6 +23,7 @@ type SecurityTipDetail = {
     read_time: number;
     formatted_read_time: string;
     published_at_formatted: string | null;
+    is_locale_fallback?: boolean;
 };
 
 type RelatedSecurityTip = {
@@ -48,7 +49,7 @@ export default function MarketingConseilsSecuriteShow() {
     return (
         <>
             <SeoHead />
-            <CmsLocaleNotice />
+            <CmsLocaleNotice show={securityTip.is_locale_fallback !== false} />
             <Head title={securityTip.title} />
 
             <section className="marketing-section-band py-12 md:py-16">

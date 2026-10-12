@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { RotateCcw, Search } from 'lucide-react';
 import { AccessLogClientMeta } from '@/components/access-logs/access-log-client-meta';
 import { AccessLogDescription } from '@/components/access-logs/access-log-description';
@@ -12,6 +13,7 @@ import {
     IndexTablePagination,
     SortableColumnHeader,
 } from '@/components/backoffice/responsive-data-table';
+import { useTrans } from '@/hooks/use-trans';
 import { hasActiveAccessLogFilters } from '@/lib/access-log-query';
 import { cn } from '@/lib/utils';
 
@@ -112,6 +114,8 @@ export function AccessLogsTable({
     onPageChange,
     onResetFilters,
 }: AccessLogsTableProps) {
+    const { t } = useTrans();
+
     const debouncedSearch = useDebouncedCallback((search: string) => {
         onFiltersChange({ search: search || undefined, page: 1 });
     }, 400);
@@ -125,35 +129,71 @@ export function AccessLogsTable({
         label: `${user.name} (${user.email})`,
     }));
 
-    const kindOptions = [
-        { value: '', label: 'Tous les types' },
-        { value: 'visit', label: 'Consultations' },
-        { value: 'action', label: 'Actions' },
-    ];
+    const kindOptions = useMemo(
+        () => [
+            {
+                value: '',
+                label: t('access_logs.filter_all_types', 'Tous les types'),
+            },
+            {
+                value: 'visit',
+                label: t('access_logs.filter_visits', 'Consultations'),
+            },
+            {
+                value: 'action',
+                label: t('access_logs.filter_actions', 'Actions'),
+            },
+        ],
+        [t],
+    );
 
-    const countryOptions = [
-        { value: '', label: 'Tous les pays' },
-        ...filterOptions.countries.map((country) => ({
-            value: country.code,
-            label: country.label,
-        })),
-    ];
+    const countryOptions = useMemo(
+        () => [
+            {
+                value: '',
+                label: t('access_logs.filter_all_countries', 'Tous les pays'),
+            },
+            ...filterOptions.countries.map((country) => ({
+                value: country.code,
+                label: country.label,
+            })),
+        ],
+        [filterOptions.countries, t],
+    );
 
-    const browserOptions = [
-        { value: '', label: 'Tous les navigateurs' },
-        ...filterOptions.browsers.map((browser) => ({
-            value: browser,
-            label: browser,
-        })),
-    ];
+    const browserOptions = useMemo(
+        () => [
+            {
+                value: '',
+                label: t(
+                    'access_logs.filter_all_browsers',
+                    'Tous les navigateurs',
+                ),
+            },
+            ...filterOptions.browsers.map((browser) => ({
+                value: browser,
+                label: browser,
+            })),
+        ],
+        [filterOptions.browsers, t],
+    );
 
-    const methodOptions = [
-        { value: '', label: 'Toutes les méthodes' },
-        ...filterOptions.methods.map((method) => ({
-            value: method,
-            label: method,
-        })),
-    ];
+    const methodOptions = useMemo(
+        () => [
+            {
+                value: '',
+                label: t(
+                    'access_logs.filter_all_methods',
+                    'Toutes les méthodes',
+                ),
+            },
+            ...filterOptions.methods.map((method) => ({
+                value: method,
+                label: method,
+            })),
+        ],
+        [filterOptions.methods, t],
+    );
 
     const handleSort = (column: string) => {
         const nextDirection =
@@ -243,7 +283,13 @@ export function AccessLogsTable({
                                 onFiltersChange({ user: value || undefined, page: 1 })
                             }
                             options={[
-                                { value: '', label: 'Tous les utilisateurs' },
+                                {
+                                    value: '',
+                                    label: t(
+                                        'access_logs.filter_all_users',
+                                        'Tous les utilisateurs',
+                                    ),
+                                },
                                 ...userOptions,
                             ]}
                             placeholder="Filtrer par utilisateur"

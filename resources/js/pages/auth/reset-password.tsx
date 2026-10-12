@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { useTrans } from '@/hooks/use-trans';
 import { update } from '@/routes/password';
 
 type Props = {
@@ -20,16 +21,23 @@ export default function ResetPassword({
     passwordRules,
     welcome = false,
 }: Props) {
-    setLayoutProps({
-        title: welcome ? 'Choisir votre mot de passe' : 'Réinitialiser le mot de passe',
-        description: welcome
-            ? 'Bienvenue ! Définissez le mot de passe de votre compte.'
-            : 'Saisissez votre nouveau mot de passe ci-dessous',
-    });
+    const { t } = useTrans();
+
+    const title = welcome
+        ? t('auth.reset_welcome_title', 'Choisir votre mot de passe')
+        : t('auth.reset_title', 'Réinitialiser le mot de passe');
+    const description = welcome
+        ? t(
+              'auth.reset_welcome_description',
+              'Bienvenue ! Définissez le mot de passe de votre compte.',
+          )
+        : t('auth.reset_description', 'Saisissez votre nouveau mot de passe ci-dessous');
+
+    setLayoutProps({ title, description });
 
     return (
         <>
-            <Head title={welcome ? 'Choisir votre mot de passe' : 'Réinitialiser le mot de passe'} />
+            <Head title={title} />
 
             <Form
                 {...update.form()}
@@ -39,7 +47,7 @@ export default function ResetPassword({
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="email">E-mail</Label>
+                            <Label htmlFor="email">{t('auth.email', 'E-mail')}</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -56,14 +64,14 @@ export default function ResetPassword({
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Mot de passe</Label>
+                            <Label htmlFor="password">{t('auth.password', 'Mot de passe')}</Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
                                 autoFocus
-                                placeholder="Mot de passe"
+                                placeholder={t('auth.password_placeholder', 'Mot de passe')}
                                 passwordrules={passwordRules}
                             />
                             <InputError message={errors.password} />
@@ -71,14 +79,17 @@ export default function ResetPassword({
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                Confirmer le mot de passe
+                                {t('auth.password_confirm', 'Confirmer le mot de passe')}
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder="Confirmer le mot de passe"
+                                placeholder={t(
+                                    'auth.password_confirm_placeholder',
+                                    'Confirmer le mot de passe',
+                                )}
                                 passwordrules={passwordRules}
                             />
                             <InputError
@@ -95,8 +106,8 @@ export default function ResetPassword({
                         >
                             {processing && <Spinner />}
                             {welcome
-                                ? 'Enregistrer mon mot de passe'
-                                : 'Réinitialiser le mot de passe'}
+                                ? t('auth.reset_welcome_submit', 'Enregistrer mon mot de passe')
+                                : t('auth.reset_submit', 'Réinitialiser')}
                         </Button>
                     </div>
                 )}

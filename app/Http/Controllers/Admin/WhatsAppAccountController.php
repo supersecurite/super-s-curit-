@@ -50,7 +50,7 @@ class WhatsAppAccountController extends Controller
     {
         $account = $action->handle($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Compte WhatsApp créé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.whatsapp_account_created')]);
 
         return to_route('marketing-whatsapp-accounts.edit', $account);
     }
@@ -73,7 +73,7 @@ class WhatsAppAccountController extends Controller
     ): RedirectResponse {
         $action->handle($whatsapp_account, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Compte WhatsApp mis à jour.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.whatsapp_account_updated')]);
 
         return to_route('marketing-whatsapp-accounts.edit', $whatsapp_account);
     }
@@ -84,7 +84,7 @@ class WhatsAppAccountController extends Controller
 
         $action->handle($whatsapp_account);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Compte WhatsApp supprimé.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.whatsapp_account_deleted')]);
 
         return to_route('marketing-whatsapp-accounts.index');
     }

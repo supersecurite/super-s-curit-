@@ -1,5 +1,6 @@
 import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import GalleryImageForm from '@/components/gallery-images/gallery-image-form';
+import { useTrans } from '@/hooks/use-trans';
 import { edit, index, update } from '@/routes/gallery-images';
 import type { GalleryServiceOption } from '@/types/gallery';
 
@@ -20,6 +21,7 @@ type PageProps = {
 };
 
 export default function GalleryImagesEdit() {
+    const { t } = useTrans();
     const { errors, services, galleryImage } = usePage<PageProps>().props;
     const imageLabel =
         galleryImage.alt.trim() ||
@@ -28,7 +30,10 @@ export default function GalleryImagesEdit() {
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Galerie', href: index.url() },
+            {
+                title: t('gallery_images.title', 'Galerie'),
+                href: index.url(),
+            },
             {
                 title: imageLabel,
                 href: edit.url(galleryImage.id),
@@ -38,22 +43,24 @@ export default function GalleryImagesEdit() {
 
     return (
         <>
-            <Head title="Modifier image galerie" />
+            <Head title={t('gallery_images.edit', 'Modifier image galerie')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Modifier l’image
+                        {t('gallery_images.edit_h1', "Modifier l'image")}
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Mettez à jour les informations ou remplacez le fichier
-                        image.
+                        {t(
+                            'gallery_images.edit_subtitle',
+                            'Mettez à jour les informations ou remplacez le fichier image.',
+                        )}
                     </p>
                 </div>
 
                 <GalleryImageForm
                     submitUrl={update.url(galleryImage.id)}
-                    submitLabel="Enregistrer"
+                    submitLabel={t('common.save', 'Enregistrer')}
                     cancelHref={index.url()}
                     services={services}
                     errors={errors}

@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureUserHasBackofficePermission;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RecordAccessLog;
+use App\Http\Middleware\SetBackofficeLocale;
 use App\Http\Middleware\SetLocaleFromUrl;
 use App\Http\Middleware\TrackVisit;
 use Illuminate\Foundation\Application;
@@ -24,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'sidebar_state',
             'super_securite_vid',
             'locale',
+            'backoffice_locale',
         ]);
 
         $middleware->alias([
@@ -37,6 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
+            SetBackofficeLocale::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
             RecordAccessLog::class,

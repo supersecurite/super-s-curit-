@@ -4,6 +4,7 @@ import ArticleForm, {
     type StatusOption,
 } from '@/components/articles/article-form';
 import ContentShareLinks from '@/components/content-share-links';
+import { useTrans } from '@/hooks/use-trans';
 import { edit, index, update } from '@/routes/articles';
 
 type PageProps = {
@@ -16,24 +17,25 @@ type PageProps = {
 };
 
 export default function ArticlesEdit() {
+    const { t } = useTrans();
     const { article, statusOptions, canApprove, canFeature, publicUrl, errors } =
         usePage<PageProps>().props;
 
     setLayoutProps({
         breadcrumbs: [
-            { title: 'Actualités', href: index.url() },
+            { title: t('articles.title', 'Actualités'), href: index.url() },
             { title: article.title, href: edit.url(article.slug) },
         ],
     });
 
     return (
         <>
-            <Head title={`Modifier — ${article.title}`} />
+            <Head title={`${t('articles.edit', "Modifier l'article")} — ${article.title}`} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Modifier l&apos;actualité
+                        {t('articles.edit', "Modifier l'article")}
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
                         {article.title}

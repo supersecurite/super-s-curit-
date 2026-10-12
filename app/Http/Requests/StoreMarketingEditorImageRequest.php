@@ -33,10 +33,10 @@ class StoreMarketingEditorImageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'image.required' => 'Une image est requise.',
-            'image.image' => 'Le fichier doit être une image.',
-            'image.max' => 'L\'image ne peut pas dépasser 5 Mo.',
-            'image.mimes' => 'Formats acceptés : JPEG, PNG, GIF, WebP.',
+            'image.required' => bt('validation.image_required_alt'),
+            'image.image' => bt('validation.image_image'),
+            'image.max' => bt('validation.image_max_5mb'),
+            'image.mimes' => bt('validation.image_mimes'),
         ];
     }
 }

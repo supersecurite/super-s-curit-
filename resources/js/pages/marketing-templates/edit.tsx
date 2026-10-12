@@ -1,5 +1,6 @@
 import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import MarketingMessageTemplateForm from '@/components/marketing-templates/marketing-message-template-form';
+import { useTrans } from '@/hooks/use-trans';
 import { edit, index, show, update } from '@/routes/marketing-templates';
 
 type PageProps = {
@@ -15,34 +16,40 @@ type PageProps = {
 };
 
 export default function MarketingTemplatesEdit() {
+    const { t } = useTrans();
     const { template, errors, variables } = usePage<PageProps>().props;
 
     setLayoutProps({
         breadcrumbs: [
             {
-                title: 'Templates',
+                title: t('marketing_templates.title', 'Templates'),
                 href: index.url({ query: { channel: template.channel } }),
             },
             { title: template.name, href: show.url(template.uuid) },
-            { title: 'Modifier', href: edit.url(template.uuid) },
+            {
+                title: t('common.modify', 'Modifier'),
+                href: edit.url(template.uuid),
+            },
         ],
     });
 
     return (
         <>
-            <Head title={`Modifier — ${template.name}`} />
+            <Head
+                title={`${t('marketing_templates.edit', 'Modifier le template')} — ${template.name}`}
+            />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                        Modifier le template
+                        {t('marketing_templates.edit', 'Modifier le template')}
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">{template.name}</p>
                 </div>
 
                 <MarketingMessageTemplateForm
                     submitUrl={update.url(template.uuid)}
-                    submitLabel="Enregistrer"
+                    submitLabel={t('common.save', 'Enregistrer')}
                     cancelHref={show.url(template.uuid)}
                     errors={errors}
                     template={template}

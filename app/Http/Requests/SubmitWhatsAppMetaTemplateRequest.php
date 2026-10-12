@@ -43,15 +43,15 @@ class SubmitWhatsAppMetaTemplateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom technique du modèle Meta est requis.',
-            'name.regex' => 'Le nom Meta ne doit contenir que des lettres minuscules, chiffres et tirets du bas (_).',
-            'category.required' => 'La catégorie Meta est requise.',
-            'category.in' => 'La catégorie doit être MARKETING, UTILITY ou AUTHENTICATION.',
-            'language.required' => 'La langue du modèle est requise.',
-            'body_text.required' => 'Le texte du corps du modèle est requis.',
-            'body_text.max' => 'Le texte du corps ne doit pas dépasser 1024 caractères (limite Meta).',
-            'header_text.max' => 'L\'en-tête ne doit pas dépasser 60 caractères (limite Meta).',
-            'footer_text.max' => 'Le pied de page ne doit pas dépasser 60 caractères (limite Meta).',
+            'name.required' => bt('validation.meta_name_required_alt'),
+            'name.regex' => bt('validation.meta_name_format'),
+            'category.required' => bt('validation.meta_category_required'),
+            'category.in' => bt('validation.meta_category_in'),
+            'language.required' => bt('validation.meta_language_required_alt'),
+            'body_text.required' => bt('validation.meta_body_required'),
+            'body_text.max' => bt('validation.meta_body_max'),
+            'header_text.max' => bt('validation.meta_header_max'),
+            'footer_text.max' => bt('validation.meta_footer_max'),
         ];
     }
 }

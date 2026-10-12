@@ -1,10 +1,11 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Plus, Search, Trash2, Video } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useTrans } from '@/hooks/use-trans';
 import {
     create,
     destroy,
@@ -46,8 +47,18 @@ type PageProps = {
 };
 
 export default function GalleryVideosIndex() {
+    const { t } = useTrans();
     const { galleryVideos, services, filters, canCreate } =
         usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('gallery_videos.title', 'Vidéos galerie'),
+                href: index.url(),
+            },
+        ],
+    });
 
     const applyFilters = (updates: Record<string, string | undefined>) => {
         const next = { ...filters, ...updates };
@@ -65,24 +76,29 @@ export default function GalleryVideosIndex() {
 
     return (
         <>
-            <Head title="Vidéos galerie" />
+            <Head title={t('gallery_videos.title', 'Vidéos galerie')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                            Vidéos galerie
+                            {t('gallery_videos.title', 'Vidéos galerie')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Gérez les vidéos YouTube affichées sur la page
-                            galerie publique.
+                            {t(
+                                'gallery_videos.subtitle',
+                                'Gérez les vidéos YouTube affichées sur la page galerie publique.',
+                            )}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" />
-                                Ajouter une vidéo
+                                {t(
+                                    'gallery_videos.create_button',
+                                    'Ajouter une vidéo',
+                                )}
                             </Link>
                         </Button>
                     ) : null}
@@ -93,7 +109,10 @@ export default function GalleryVideosIndex() {
                         <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             type="search"
-                            placeholder="Rechercher par titre ou description..."
+                            placeholder={t(
+                                'gallery_videos.search_placeholder',
+                                'Rechercher par titre ou description…',
+                            )}
                             defaultValue={filters.search ?? ''}
                             onChange={(event) =>
                                 debouncedSearch(event.target.value)
@@ -103,8 +122,20 @@ export default function GalleryVideosIndex() {
                     </div>
                     <SearchableSelect
                         options={[
-                            { value: 'all', label: 'Tous les rattachements' },
-                            { value: 'general', label: 'Galerie générale' },
+                            {
+                                value: 'all',
+                                label: t(
+                                    'gallery_videos.filter_attachment_all',
+                                    'Tous les rattachements',
+                                ),
+                            },
+                            {
+                                value: 'general',
+                                label: t(
+                                    'gallery_videos.filter_general',
+                                    'Galerie générale',
+                                ),
+                            },
                             ...services.map((service) => ({
                                 value: service.value,
                                 label: service.label,
@@ -116,14 +147,38 @@ export default function GalleryVideosIndex() {
                                 service: service === 'all' ? undefined : service,
                             })
                         }
-                        placeholder="Rattachement"
-                        searchPlaceholder="Rechercher..."
+                        placeholder={t(
+                            'gallery_videos.filter_attachment',
+                            'Rattachement',
+                        )}
+                        searchPlaceholder={t(
+                            'common.search_ellipsis',
+                            'Rechercher…',
+                        )}
                     />
                     <SearchableSelect
                         options={[
-                            { value: 'all', label: 'Tous les statuts' },
-                            { value: 'published', label: 'Publiées' },
-                            { value: 'draft', label: 'Non publiées' },
+                            {
+                                value: 'all',
+                                label: t(
+                                    'common.all_statuses',
+                                    'Tous les statuts',
+                                ),
+                            },
+                            {
+                                value: 'published',
+                                label: t(
+                                    'gallery_images.published_label',
+                                    'Publiée',
+                                ),
+                            },
+                            {
+                                value: 'draft',
+                                label: t(
+                                    'gallery_images.unpublished_label',
+                                    'Brouillon',
+                                ),
+                            },
                         ]}
                         value={filters.status ?? 'all'}
                         onChange={(status) =>
@@ -131,8 +186,11 @@ export default function GalleryVideosIndex() {
                                 status: status === 'all' ? undefined : status,
                             })
                         }
-                        placeholder="Statut"
-                        searchPlaceholder="Rechercher..."
+                        placeholder={t('common.status', 'Statut')}
+                        searchPlaceholder={t(
+                            'common.search_ellipsis',
+                            'Rechercher…',
+                        )}
                     />
                 </div>
 
@@ -167,11 +225,19 @@ export default function GalleryVideosIndex() {
                                             }
                                         >
                                             {video.is_published
-                                                ? 'Publiée'
-                                                : 'Brouillon'}
+                                                ? t(
+                                                      'gallery_images.published_label',
+                                                      'Publiée',
+                                                  )
+                                                : t(
+                                                      'gallery_images.unpublished_label',
+                                                      'Brouillon',
+                                                  )}
                                         </Badge>
                                         <span className="text-muted-foreground text-xs">
-                                            Ordre {video.sort_order}
+                                            {t('gallery_images.order_label', {
+                                                order: video.sort_order,
+                                            })}
                                         </span>
                                     </div>
                                     <div>
@@ -194,7 +260,10 @@ export default function GalleryVideosIndex() {
                                                 <Link
                                                     href={edit.url(video.id)}
                                                 >
-                                                    Modifier
+                                                    {t(
+                                                        'common.modify',
+                                                        'Modifier',
+                                                    )}
                                                 </Link>
                                             </Button>
                                         ) : null}
@@ -205,7 +274,10 @@ export default function GalleryVideosIndex() {
                                                 onClick={() => {
                                                     if (
                                                         confirm(
-                                                            'Supprimer cette vidéo ?',
+                                                            t(
+                                                                'gallery_videos.delete_confirm',
+                                                                'Supprimer cette vidéo ?',
+                                                            ),
                                                         )
                                                     ) {
                                                         router.delete(
@@ -228,7 +300,10 @@ export default function GalleryVideosIndex() {
                     <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center">
                         <Video className="text-muted-foreground size-10" />
                         <p className="text-muted-foreground">
-                            Aucune vidéo dans la galerie.
+                            {t(
+                                'gallery_videos.empty_list',
+                                'Aucune vidéo dans la galerie.',
+                            )}
                         </p>
                     </div>
                 )}
@@ -236,7 +311,3 @@ export default function GalleryVideosIndex() {
         </>
     );
 }
-
-GalleryVideosIndex.layout = {
-    breadcrumbs: [{ title: 'Vidéos galerie', href: index.url() }],
-};

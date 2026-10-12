@@ -1,4 +1,4 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { History } from 'lucide-react';
 import {
     AccessLogsTable,
@@ -7,6 +7,7 @@ import {
     type PaginatedAccessLogs,
     type AccessLogUserOption,
 } from '@/components/access-logs/access-logs-table';
+import { useTrans } from '@/hooks/use-trans';
 import { index } from '@/routes/access-logs';
 
 type PageProps = {
@@ -23,6 +24,7 @@ type PageProps = {
 };
 
 export default function AccessLogsIndex() {
+    const { t } = useTrans();
     const {
         logs,
         users,
@@ -31,6 +33,15 @@ export default function AccessLogsIndex() {
         accessLogFilterUsers = [],
         accessLogFilterOptions,
     } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('access_logs.title', "Journal d'accès"),
+                href: index.url(),
+            },
+        ],
+    });
 
     const filterUsers = users.length > 0 ? users : accessLogFilterUsers;
     const resolvedFilterOptions =
@@ -55,17 +66,19 @@ export default function AccessLogsIndex() {
 
     return (
         <>
-            <Head title="Journal d'accès" />
+            <Head title={t('access_logs.title', "Journal d'accès")} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                         <History className="size-6" aria-hidden />
-                        Journal d'accès
+                        {t('access_logs.title', "Journal d'accès")}
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Qui a fait quoi, quand, depuis quel poste — consultations et
-                        modifications backoffice.
+                        {t(
+                            'access_logs.subtitle',
+                            "Historique des actions authentifiées dans le backoffice.",
+                        )}
                     </p>
                 </div>
 
@@ -81,7 +94,3 @@ export default function AccessLogsIndex() {
         </>
     );
 }
-
-AccessLogsIndex.layout = {
-    breadcrumbs: [{ title: 'Journal d\'accès', href: index.url() }],
-};

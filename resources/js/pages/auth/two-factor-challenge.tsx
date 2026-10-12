@@ -10,9 +10,11 @@ import {
     InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
+import { useTrans } from '@/hooks/use-trans';
 import { store } from '@/routes/two-factor/login';
 
 export default function TwoFactorChallenge() {
+    const { t } = useTrans();
     const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
     const [code, setCode] = useState<string>('');
 
@@ -23,20 +25,30 @@ export default function TwoFactorChallenge() {
     }>(() => {
         if (showRecoveryInput) {
             return {
-                title: 'Recovery code',
-                description:
-                    'Please confirm access to your account by entering one of your emergency recovery codes.',
-                toggleText: 'login using an authentication code',
+                title: t('auth.two_factor_recovery_title', 'Code de secours'),
+                description: t(
+                    'auth.two_factor_recovery_description',
+                    "Confirmez l'accès à votre compte en saisissant l'un de vos codes de secours.",
+                ),
+                toggleText: t(
+                    'auth.two_factor_toggle_to_code',
+                    "utiliser un code d'authentification",
+                ),
             };
         }
 
         return {
-            title: 'Authentication code',
-            description:
-                'Enter the authentication code provided by your authenticator application.',
-            toggleText: 'login using a recovery code',
+            title: t('auth.two_factor_code_title', "Code d'authentification"),
+            description: t(
+                'auth.two_factor_code_description',
+                "Saisissez le code fourni par votre application d'authentification.",
+            ),
+            toggleText: t(
+                'auth.two_factor_toggle_to_recovery',
+                'utiliser un code de secours',
+            ),
         };
-    }, [showRecoveryInput]);
+    }, [showRecoveryInput, t]);
 
     setLayoutProps({
         title: authConfigContent.title,
@@ -51,7 +63,12 @@ export default function TwoFactorChallenge() {
 
     return (
         <>
-            <Head title="Two-factor authentication" />
+            <Head
+                title={t(
+                    'auth.two_factor_title',
+                    'Authentification à deux facteurs',
+                )}
+            />
 
             <div className="space-y-6">
                 <Form
@@ -67,7 +84,10 @@ export default function TwoFactorChallenge() {
                                     <Input
                                         name="recovery_code"
                                         type="text"
-                                        placeholder="Enter recovery code"
+                                        placeholder={t(
+                                            'auth.two_factor_recovery_placeholder',
+                                            'Code de secours',
+                                        )}
                                         autoFocus={showRecoveryInput}
                                         required
                                     />
@@ -109,11 +129,13 @@ export default function TwoFactorChallenge() {
                                 className="w-full"
                                 disabled={processing}
                             >
-                                Continue
+                                {t('auth.two_factor_continue', 'Continuer')}
                             </Button>
 
                             <div className="text-center text-sm text-muted-foreground">
-                                <span>or you can </span>
+                                <span>
+                                    {t('auth.two_factor_or', 'ou vous pouvez ')}
+                                </span>
                                 <button
                                     type="button"
                                     className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"

@@ -55,8 +55,8 @@ class UpdateGalleryVideoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'youtube_url.required' => 'Le lien YouTube est obligatoire.',
-            'title.required' => 'Le titre est obligatoire.',
+            'youtube_url.required' => bt('validation.youtube_required'),
+            'title.required' => bt('validation.title_required'),
         ];
     }
 }

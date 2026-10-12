@@ -71,7 +71,7 @@ class UserController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => 'Utilisateur créé. Un e-mail de bienvenue a été envoyé (lien valable 15 min).',
+            'message' => bt('toasts.user_created'),
         ]);
 
         return to_route('users.index');
@@ -119,7 +119,7 @@ class UserController extends Controller
             $user->syncBackofficePermissions($request->validated('permissions') ?? []);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Utilisateur mis à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.user_updated')]);
 
         return redirect()->back();
     }
@@ -130,7 +130,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Utilisateur supprimé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.user_deleted')]);
 
         return to_route('users.index');
     }
@@ -143,7 +143,7 @@ class UserController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => 'E-mail de bienvenue renvoyé (lien valable 15 min).',
+            'message' => bt('toasts.user_welcome_resent'),
         ]);
 
         return back();
@@ -157,7 +157,7 @@ class UserController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => 'Lien de réinitialisation envoyé (valable 15 min).',
+            'message' => bt('toasts.user_password_reset_sent'),
         ]);
 
         return back();

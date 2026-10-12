@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import {
     Calendar,
     CheckCircle2,
@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import { create, destroy, edit, index, show } from '@/routes/conseils';
 import { show as conseilsPublicShow } from '@/routes/conseils-securite';
@@ -77,11 +78,6 @@ type PageProps = {
     statuses: StatusOption[];
 };
 
-const tabs: { value: SecurityTipTab; label: string; icon: typeof LayoutList }[] = [
-    { value: 'all', label: 'Tous les conseils', icon: LayoutList },
-    { value: 'pending', label: 'En attente de validation', icon: Clock },
-];
-
 function statusBadgeVariant(
     status: string,
 ): 'default' | 'secondary' | 'outline' | 'destructive' {
@@ -98,6 +94,7 @@ function statusBadgeVariant(
 }
 
 export default function ConseilsIndex() {
+    const { t } = useTrans();
     const {
         securityTips,
         filters,
@@ -108,6 +105,19 @@ export default function ConseilsIndex() {
         statuses,
         canCreate,
     } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [{ title: t('tips.title', 'Conseils'), href: index.url() }],
+    });
+
+    const tabs: { value: SecurityTipTab; label: string; icon: typeof LayoutList }[] = [
+        { value: 'all', label: t('tips.tab_all', 'Tous les conseils'), icon: LayoutList },
+        {
+            value: 'pending',
+            label: t('tips.tab_pending', 'En attente de validation'),
+            icon: Clock,
+        },
+    ];
 
     const applyFilters = (updates: Record<string, string | undefined>) => {
         const next = { ...filters, ...updates };
@@ -137,7 +147,7 @@ export default function ConseilsIndex() {
     const handleDelete = (securityTip: SecurityTipRow) => {
         if (
             !window.confirm(
-                `Archiver le conseil « ${securityTip.title} » ? Il ne sera plus visible publiquement.`,
+                t('tips.delete_confirm', { title: securityTip.title }),
             )
         ) {
             return;
@@ -148,31 +158,37 @@ export default function ConseilsIndex() {
 
     return (
         <>
-            <Head title="Conseils de sécurité" />
+            <Head title={t('tips.title', 'Conseils de sécurité')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 className="font-heading flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <Shield className="size-6" aria-hidden />
-                            Conseils de sécurité
+                            {t('tips.title', 'Conseils de sécurité')}
                             {canApprove && pendingCount > 0 ? (
                                 <Badge variant="destructive" className="text-xs">
-                                    {pendingCount} en attente
+                                    {pendingCount} {t('common.pending', 'en attente')}
                                 </Badge>
                             ) : null}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             {canApprove
-                                ? 'Gérez, validez et publiez les conseils du site.'
-                                : 'Consultez tous les conseils et gérez vos propres contenus.'}
+                                ? t(
+                                      'tips.subtitle_approver',
+                                      'Gérez, validez et publiez les conseils du site.',
+                                  )
+                                : t(
+                                      'tips.subtitle_contributor',
+                                      'Consultez tous les conseils et gérez vos propres contenus.',
+                                  )}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouveau conseil
+                                {t('tips.create', 'Nouveau conseil')}
                             </Link>
                         </Button>
                     ) : null}
@@ -221,14 +237,20 @@ export default function ConseilsIndex() {
                         <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             className="pl-9"
-                            placeholder="Rechercher par titre..."
+                            placeholder={t(
+                                'tips.search_placeholder',
+                                'Rechercher un conseil…',
+                            )}
                             defaultValue={filters.search ?? ''}
                             onChange={(e) => debouncedSearch(e.target.value)}
                         />
                     </div>
                     <SearchableSelect
                         options={[
-                            { value: 'all', label: 'Toutes les catégories' },
+                            {
+                                value: 'all',
+                                label: t('common.all_categories', 'Toutes les catégories'),
+                            },
                             ...categories.map((category) => ({
                                 value: category,
                                 label: category,
@@ -236,13 +258,16 @@ export default function ConseilsIndex() {
                         ]}
                         value={filters.category ?? 'all'}
                         onChange={(category) => applyFilters({ category })}
-                        placeholder="Catégorie"
-                        searchPlaceholder="Rechercher une catégorie..."
+                        placeholder={t('tips.category', 'Catégorie')}
+                        searchPlaceholder={t('common.search_ellipsis', 'Rechercher…')}
                     />
                     {tab === 'all' ? (
                         <SearchableSelect
                             options={[
-                                { value: 'all', label: 'Tous les statuts' },
+                                {
+                                    value: 'all',
+                                    label: t('common.all_statuses', 'Tous les statuts'),
+                                },
                                 ...statuses.map((status) => ({
                                     value: status.value,
                                     label: status.label,
@@ -250,21 +275,23 @@ export default function ConseilsIndex() {
                             ]}
                             value={filters.status ?? 'all'}
                             onChange={(status) => applyFilters({ status })}
-                            placeholder="Statut"
-                            searchPlaceholder="Rechercher un statut..."
+                            placeholder={t('tips.status', 'Statut')}
+                            searchPlaceholder={t('common.search_ellipsis', 'Rechercher…')}
                         />
                     ) : null}
                 </div>
 
                 <div className="text-muted-foreground flex flex-wrap items-center gap-3 text-xs">
-                    <span className="font-medium text-foreground">Légende :</span>
+                    <span className="font-medium text-foreground">
+                        {t('tips.legend', 'Légende :')}
+                    </span>
                     <span className="inline-flex items-center gap-2 rounded-md border border-super-securite-accent/30 bg-super-securite-accent/5 px-2.5 py-1">
                         <span className="size-2 rounded-full bg-super-securite-accent" />
-                        Mes conseils
+                        {t('tips.legend_mine', 'Mes conseils')}
                     </span>
                     <span className="inline-flex items-center gap-2 rounded-md border border-dashed border-slate-300/90 bg-slate-50/70 px-2.5 py-1">
                         <span className="size-2 rounded-full bg-slate-400" />
-                        Conseils des autres auteurs
+                        {t('tips.legend_others', 'Conseils des autres auteurs')}
                     </span>
                 </div>
 
@@ -272,10 +299,10 @@ export default function ConseilsIndex() {
                     <div className="app-panel p-8 text-center">
                         <CheckCircle2 className="text-muted-foreground mx-auto size-10" />
                         <p className="mt-3 font-medium">
-                            Aucun conseil en attente de validation
+                            {t('tips.empty_pending', 'Aucun conseil en attente de validation')}
                         </p>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Tous les conseils ont été traités.
+                            {t('tips.empty_pending_hint', 'Tous les conseils ont été traités.')}
                         </p>
                     </div>
                 ) : (
@@ -530,7 +557,3 @@ export default function ConseilsIndex() {
         </>
     );
 }
-
-ConseilsIndex.layout = {
-    breadcrumbs: [{ title: 'Conseils', href: index.url() }],
-};

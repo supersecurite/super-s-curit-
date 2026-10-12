@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\SecurityTips\CreateSecurityTip;
+use App\Actions\SecurityTips\UpdateSecurityTip;
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSecurityTipRequest;
@@ -96,8 +98,11 @@ class SecurityTipController extends Controller
         ]);
     }
 
-    public function store(StoreSecurityTipRequest $request, SecurityTipStatusTransition $statusTransition): RedirectResponse
-    {
+    public function store(
+        StoreSecurityTipRequest $request,
+        SecurityTipStatusTransition $statusTransition,
+        CreateSecurityTip $createSecurityTip,
+    ): RedirectResponse {
         $validated = $request->validated();
         $status = ArticleStatus::PendingApproval;
         $canApprove = $request->user()->canApproveConseils();
@@ -116,17 +121,14 @@ class SecurityTipController extends Controller
 
         $validated['featured'] = $featured;
         $validated['tags'] = $validated['tags'] ?? [];
-        $validated['created_by_id'] = $request->user()->id;
 
         if (! $canApprove) {
             unset($validated['published_at']);
         }
 
-        $securityTip = new SecurityTip($validated);
-        $statusTransition->apply($securityTip, $status, $request->user());
-        $securityTip->save();
+        $createSecurityTip->handle($validated, $request->user(), $statusTransition, $status);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Conseil créé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.tip_created')]);
 
         return to_route('conseils.index');
     }
@@ -167,8 +169,12 @@ class SecurityTipController extends Controller
         ]);
     }
 
-    public function update(UpdateSecurityTipRequest $request, SecurityTip $conseil, SecurityTipStatusTransition $statusTransition): RedirectResponse
-    {
+    public function update(
+        UpdateSecurityTipRequest $request,
+        SecurityTip $conseil,
+        SecurityTipStatusTransition $statusTransition,
+        UpdateSecurityTip $updateSecurityTip,
+    ): RedirectResponse {
         $validated = $request->validated();
         $user = $request->user();
         $canApprove = $user->canApproveConseils();
@@ -201,15 +207,9 @@ class SecurityTipController extends Controller
             unset($validated['published_at']);
         }
 
-        $conseil->fill($validated);
+        $updateSecurityTip->handle($conseil, $validated, $user, $status, $statusTransition);
 
-        if ($conseil->status !== $status) {
-            $statusTransition->apply($conseil, $status, $user);
-        }
-
-        $conseil->save();
-
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Conseil mis à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.tip_updated')]);
 
         return to_route('conseils.index');
     }
@@ -220,7 +220,7 @@ class SecurityTipController extends Controller
 
         $conseil->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Conseil archivé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.tip_archived')]);
 
         return to_route('conseils.index');
     }

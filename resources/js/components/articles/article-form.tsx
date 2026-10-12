@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
+import { useTrans } from '@/hooks/use-trans';
 
 export type StatusOption = {
     value: string;
@@ -18,8 +19,11 @@ export type ArticleFormData = {
     id?: number;
     slug: string;
     title: string;
+    title_en?: string | null;
     excerpt: string;
+    excerpt_en?: string | null;
     content: string;
+    content_en?: string | null;
     category: string;
     tags: string[];
     featured: boolean;
@@ -51,12 +55,16 @@ export default function ArticleForm({
     cancelHref,
     errors = {},
 }: ArticleFormProps) {
+    const { t } = useTrans();
     const isEditing = method === 'put';
     const showStatusField = isEditing && statusOptions.length > 0;
     const [formData, setFormData] = useState({
         title: article?.title ?? '',
+        title_en: article?.title_en ?? '',
         excerpt: article?.excerpt ?? '',
+        excerpt_en: article?.excerpt_en ?? '',
         content: article?.content ?? '',
+        content_en: article?.content_en ?? '',
         category: article?.category ?? '',
         tags: (article?.tags ?? []).join(', '),
         featured: article?.featured ?? false,
@@ -66,6 +74,7 @@ export default function ArticleForm({
             : '',
         image: null as File | null,
     });
+    const [localeTab, setLocaleTab] = useState<'fr' | 'en'>('fr');
     const [imagePreview, setImagePreview] = useState<string | null>(
         article?.image_url ?? null,
     );
@@ -101,11 +110,14 @@ export default function ArticleForm({
         }
 
         payload.append('title', formData.title);
+        payload.append('title_en', formData.title_en);
         if (showStatusField) {
             payload.append('status', formData.status);
         }
         payload.append('excerpt', formData.excerpt);
+        payload.append('excerpt_en', formData.excerpt_en);
         payload.append('content', formData.content);
+        payload.append('content_en', formData.content_en);
         payload.append('category', formData.category);
         if (canFeature) {
             payload.append('featured', formData.featured ? '1' : '0');
@@ -136,44 +148,116 @@ export default function ArticleForm({
             <div className="grid gap-6 lg:grid-cols-3">
                 <div className="space-y-6 lg:col-span-2">
                     <div className="app-panel space-y-4 p-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="title">Titre</Label>
-                            <Input
-                                id="title"
-                                value={formData.title}
-                                onChange={(e) =>
-                                    updateField('title', e.target.value)
+                        <div className="inline-flex gap-1 rounded-lg bg-muted p-1">
+                            <button
+                                type="button"
+                                onClick={() => setLocaleTab('fr')}
+                                className={
+                                    localeTab === 'fr'
+                                        ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
+                                        : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
                                 }
-                                required
-                            />
-                            <InputError message={errors.title} />
+                            >
+                                {t('articles.locale_fr', 'Français')}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setLocaleTab('en')}
+                                className={
+                                    localeTab === 'en'
+                                        ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
+                                        : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
+                                }
+                            >
+                                {t('articles.locale_en', 'English')}
+                            </button>
                         </div>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="excerpt">Résumé</Label>
-                            <textarea
-                                id="excerpt"
-                                rows={3}
-                                value={formData.excerpt}
-                                onChange={(e) =>
-                                    updateField('excerpt', e.target.value)
-                                }
-                                className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-                            />
-                            <InputError message={errors.excerpt} />
-                        </div>
+                        {localeTab === 'fr' ? (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="title">{t('articles.form_title', 'Titre')}</Label>
+                                    <Input
+                                        id="title"
+                                        value={formData.title}
+                                        onChange={(e) =>
+                                            updateField('title', e.target.value)
+                                        }
+                                        required
+                                    />
+                                    <InputError message={errors.title} />
+                                </div>
 
-                        <div className="grid gap-2">
-                            <Label>Contenu</Label>
-                            <Editor
-                                key={article?.id ?? 'new'}
-                                initialContent={article?.content ?? ''}
-                                onChange={(content) =>
-                                    updateField('content', content)
-                                }
-                            />
-                            <InputError message={errors.content} />
-                        </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="excerpt">{t('articles.form_excerpt_label', 'Résumé')}</Label>
+                                    <textarea
+                                        id="excerpt"
+                                        rows={3}
+                                        value={formData.excerpt}
+                                        onChange={(e) =>
+                                            updateField('excerpt', e.target.value)
+                                        }
+                                        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    />
+                                    <InputError message={errors.excerpt} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label>{t('articles.form_content', 'Contenu')}</Label>
+                                    <Editor
+                                        key={`${article?.id ?? 'new'}-fr`}
+                                        initialContent={article?.content ?? ''}
+                                        onChange={(content) =>
+                                            updateField('content', content)
+                                        }
+                                    />
+                                    <InputError message={errors.content} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="title_en">{t('articles.form_title_en', 'Title (English)')}</Label>
+                                    <Input
+                                        id="title_en"
+                                        value={formData.title_en}
+                                        onChange={(e) =>
+                                            updateField('title_en', e.target.value)
+                                        }
+                                    />
+                                    <InputError message={errors.title_en} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="excerpt_en">{t('articles.form_excerpt_en', 'Excerpt (English)')}</Label>
+                                    <textarea
+                                        id="excerpt_en"
+                                        rows={3}
+                                        value={formData.excerpt_en}
+                                        onChange={(e) =>
+                                            updateField(
+                                                'excerpt_en',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    />
+                                    <InputError message={errors.excerpt_en} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label>{t('articles.form_content_en', 'Content (English)')}</Label>
+                                    <Editor
+                                        key={`${article?.id ?? 'new'}-en`}
+                                        initialContent={article?.content_en ?? ''}
+                                        onChange={(content) =>
+                                            updateField('content_en', content)
+                                        }
+                                    />
+                                    <InputError message={errors.content_en} />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -181,7 +265,7 @@ export default function ArticleForm({
                     {showStatusField ? (
                         <div className="app-panel space-y-4 p-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="status">Statut</Label>
+                                <Label htmlFor="status">{t('articles.form_status', 'Statut')}</Label>
                                 <SearchableSelect
                                     id="status"
                                     options={statusOptions}
@@ -189,8 +273,8 @@ export default function ArticleForm({
                                     onChange={(status) =>
                                         updateField('status', status)
                                     }
-                                    placeholder="Sélectionner un statut"
-                                    searchPlaceholder="Rechercher..."
+                                    placeholder={t('articles.form_status_placeholder', 'Sélectionner un statut')}
+                                    searchPlaceholder={t('common.search_ellipsis', 'Rechercher…')}
                                     disabled={
                                         !canApprove &&
                                         formData.status === 'published'
@@ -198,12 +282,12 @@ export default function ArticleForm({
                                 />
                                 <p className="text-muted-foreground text-xs">
                                     {canApprove
-                                        ? 'Modifiez le statut pour valider, refuser ou republier l\'article.'
+                                        ? t('articles.status_hint_approver', "Modifiez le statut pour valider, refuser ou republier l'article.")
                                         : formData.status === 'published'
-                                          ? 'Article publié : seul un administrateur peut modifier le statut.'
+                                          ? t('articles.status_hint_published', "Article publié : seul un administrateur peut modifier le statut.")
                                           : formData.status === 'rejected'
-                                            ? 'Repassez en brouillon ou soumettez à nouveau pour validation.'
-                                            : 'Enregistrez en brouillon ou soumettez pour validation.'}
+                                            ? t('articles.status_hint_rejected', 'Repassez en brouillon ou soumettez à nouveau pour validation.')
+                                            : t('articles.status_hint_default', 'Enregistrez en brouillon ou soumettez pour validation.')}
                                 </p>
                                 <InputError message={errors.status} />
                             </div>
@@ -211,22 +295,24 @@ export default function ArticleForm({
                     ) : (
                         <div className="app-panel space-y-2 p-6">
                             <p className="text-sm font-medium">
-                                Soumission automatique
+                                {t('articles.auto_submit_title', 'Soumission automatique')}
                             </p>
                             <p className="text-muted-foreground text-xs">
-                                L&apos;article sera enregistré en attente de
-                                validation par un administrateur.
+                                {t(
+                                    'articles.auto_submit_hint',
+                                    "L'article sera enregistré en attente de validation par un administrateur.",
+                                )}
                             </p>
                         </div>
                     )}
 
                     <div className="app-panel space-y-4 p-6">
-                        <Label htmlFor="image">Image principale</Label>
+                        <Label htmlFor="image">{t('articles.form_image_main', 'Image principale')}</Label>
                         {imagePreview ? (
                             <div className="relative overflow-hidden rounded-lg">
                                 <img
                                     src={imagePreview}
-                                    alt="Aperçu"
+                                    alt={t('articles.form_preview_alt', 'Aperçu')}
                                     className="h-48 w-full object-cover"
                                 />
                                 <Button
@@ -239,7 +325,7 @@ export default function ArticleForm({
                                         updateField('image', null);
                                     }}
                                 >
-                                    Retirer
+                                    {t('common.remove', 'Retirer')}
                                 </Button>
                             </div>
                         ) : (
@@ -255,7 +341,7 @@ export default function ArticleForm({
 
                     <div className="app-panel space-y-4 p-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="category">Catégorie</Label>
+                            <Label htmlFor="category">{t('articles.form_category', 'Catégorie')}</Label>
                             <Input
                                 id="category"
                                 value={formData.category}
@@ -267,14 +353,14 @@ export default function ArticleForm({
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="tags">Tags</Label>
+                            <Label htmlFor="tags">{t('articles.form_tags', 'Tags')}</Label>
                             <Input
                                 id="tags"
                                 value={formData.tags}
                                 onChange={(e) =>
                                     updateField('tags', e.target.value)
                                 }
-                                placeholder="Séparez les tags par des virgules"
+                                placeholder={t('articles.form_tags_placeholder', 'Séparez les tags par des virgules')}
                             />
                             <InputError message={errors.tags} />
                         </div>
@@ -297,7 +383,7 @@ export default function ArticleForm({
                                         formData.status !== 'published'
                                     }
                                 />
-                                <Label htmlFor="featured">Mettre à la une</Label>
+                                <Label htmlFor="featured">{t('articles.form_featured_label', 'Mettre à la une')}</Label>
                             </div>
                             <InputError message={errors.featured} />
                         </div>
@@ -307,7 +393,7 @@ export default function ArticleForm({
                         <div className="app-panel space-y-4 p-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="published_at">
-                                    Date de publication
+                                    {t('articles.form_published_at', 'Date de publication')}
                                 </Label>
                                 <Input
                                     id="published_at"
@@ -329,11 +415,11 @@ export default function ArticleForm({
 
             <div className="flex justify-end gap-3">
                 <Button type="button" variant="outline" asChild>
-                    <Link href={cancelHref}>Annuler</Link>
+                    <Link href={cancelHref}>{t('common.cancel', 'Annuler')}</Link>
                 </Button>
                 <Button type="submit" disabled={processing}>
                     <Save className="size-4" aria-hidden />
-                    {processing ? 'Enregistrement...' : submitLabel}
+                    {processing ? t('articles.saving', 'Enregistrement…') : submitLabel}
                 </Button>
             </div>
         </form>

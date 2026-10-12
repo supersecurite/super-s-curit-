@@ -39,10 +39,10 @@ class StoreUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse e-mail est obligatoire.',
-            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
-            'role.required' => 'Le rôle est obligatoire.',
+            'name.required' => bt('validation.name_required'),
+            'email.required' => bt('validation.email_required'),
+            'email.unique' => bt('validation.email_unique'),
+            'role.required' => bt('validation.role_required'),
         ];
     }
 
@@ -52,10 +52,10 @@ class StoreUserRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'nom',
-            'email' => 'e-mail',
-            'phone' => 'téléphone',
-            'role' => 'rôle',
+            'name' => bt('validation.attr_name'),
+            'email' => bt('validation.attr_email'),
+            'phone' => bt('validation.attr_phone'),
+            'role' => bt('validation.attr_role'),
         ];
     }
 

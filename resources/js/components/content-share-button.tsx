@@ -9,6 +9,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useContentShare } from '@/hooks/use-content-share';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 
 type ContentShareButtonProps = {
@@ -39,12 +40,14 @@ export default function ContentShareButton({
     variant = 'app',
     className,
 }: ContentShareButtonProps) {
+    const { t } = useTrans();
     const { actions, canNativeShare, nativeShare } = useContentShare(
         title,
         url,
         description,
     );
     const isMarketing = variant === 'marketing';
+    const shareLabel = t('share.title', 'Partager');
 
     return (
         <DropdownMenu>
@@ -53,7 +56,7 @@ export default function ContentShareButton({
                     type="button"
                     variant="ghost"
                     size="icon"
-                    title="Partager"
+                    title={shareLabel}
                     className={cn(
                         isMarketing &&
                             'text-super-securite-muted hover:text-super-securite-accent hover:bg-super-securite-accent/10',
@@ -62,16 +65,16 @@ export default function ContentShareButton({
                     onClick={(event) => event.stopPropagation()}
                 >
                     <Share2 className="size-4" />
-                    <span className="sr-only">Partager</span>
+                    <span className="sr-only">{shareLabel}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuLabel>Partager</DropdownMenuLabel>
+                <DropdownMenuLabel>{shareLabel}</DropdownMenuLabel>
                 {canNativeShare ? (
                     <>
                         <DropdownMenuItem onClick={() => void nativeShare()}>
                             <Share2 className="size-4" />
-                            Partager…
+                            {t('share.native', 'Partager…')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                     </>

@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Contact, Plus, Search, Upload, Pencil } from 'lucide-react';
 import { useMemo } from 'react';
 import {
@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { useTrans } from '@/hooks/use-trans';
 import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
     create,
@@ -53,8 +54,18 @@ type PageProps = {
 };
 
 export default function MarketingClientsIndex() {
+    const { t } = useTrans();
     const { contacts, filters, canCreate, canImport } =
         usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('marketing_contacts.title', 'Contacts marketing'),
+                href: index.url(),
+            },
+        ],
+    });
 
     const applyFilters = (updates: Partial<TableSortState & { search?: string; page?: number }>) => {
         const next = { ...filters, ...updates };
@@ -79,25 +90,38 @@ export default function MarketingClientsIndex() {
         const renderActions = (contact: ContactRow) => (
             <>
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={show.url(contact.uuid)}>Voir</Link>
+                    <Link href={show.url(contact.uuid)}>
+                        {t('common.view', 'Voir')}
+                    </Link>
                 </Button>
                 {contact.can_update ? (
                     <Button variant="outline" size="sm" asChild>
                         <Link href={edit.url(contact.uuid)}>
                             <Pencil className="size-4" aria-hidden />
-                            Modifier
+                            {t('common.modify', 'Modifier')}
                         </Link>
                     </Button>
                 ) : null}
                 {contact.can_delete ? (
                     <ConfirmDeleteDialog
-                        title="Supprimer ce contact ?"
-                        description={`Le contact « ${contact.full_name} » sera définitivement supprimé.`}
+                        title={t(
+                            'marketing_contacts.delete_confirm',
+                            'Supprimer ce contact ?',
+                        )}
+                        description={t(
+                            'marketing_contacts.delete_description',
+                            'Le contact « :name » sera définitivement supprimé.',
+                            { name: contact.full_name },
+                        )}
                         deleteUrl={destroy.url(contact.uuid)}
                         triggerSize="sm"
                         triggerVariant="outline"
                         triggerClassName="text-destructive hover:text-destructive"
-                        aria-label={`Supprimer ${contact.full_name}`}
+                        aria-label={t(
+                            'marketing_contacts.delete_aria',
+                            'Supprimer :name',
+                            { name: contact.full_name },
+                        )}
                     />
                 ) : null}
             </>
@@ -106,7 +130,7 @@ export default function MarketingClientsIndex() {
         return [
             {
                 id: 'name',
-                header: 'Nom',
+                header: t('common.name', 'Nom'),
                 sortKey: 'full_name',
                 sortable: true,
                 mobileRole: 'title',
@@ -121,7 +145,7 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'email',
-                header: 'E-mail',
+                header: t('common.email_label', 'E-mail'),
                 sortKey: 'email',
                 sortable: true,
                 mobileRole: 'meta',
@@ -129,7 +153,7 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'phone',
-                header: 'Téléphone',
+                header: t('common.phone', 'Téléphone'),
                 sortKey: 'phone',
                 sortable: true,
                 mobileRole: 'meta',
@@ -138,7 +162,7 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'company',
-                header: 'Entreprise',
+                header: t('marketing_contacts.company', 'Entreprise'),
                 sortKey: 'company_name',
                 sortable: true,
                 mobileRole: 'subtitle',
@@ -147,7 +171,7 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'tags',
-                header: 'Tags',
+                header: t('marketing_contacts.tags', 'Tags'),
                 mobileRole: 'meta',
                 cell: (contact) =>
                     contact.tags.length > 0 ? (
@@ -164,7 +188,7 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'consent',
-                header: 'Consentement',
+                header: t('marketing_contacts.consent', 'Consentement'),
                 sortKey: 'marketing_consent',
                 sortable: true,
                 mobileRole: 'meta',
@@ -174,13 +198,15 @@ export default function MarketingClientsIndex() {
                             contact.marketing_consent ? 'default' : 'outline'
                         }
                     >
-                        {contact.marketing_consent ? 'Oui' : 'Non'}
+                        {contact.marketing_consent
+                            ? t('common.yes', 'Oui')
+                            : t('common.no', 'Non')}
                     </Badge>
                 ),
             },
             {
                 id: 'lists',
-                header: 'Groupes',
+                header: t('marketing_contacts.lists_header', 'Groupes'),
                 sortKey: 'lists_count',
                 sortable: true,
                 mobileRole: 'meta',
@@ -188,28 +214,33 @@ export default function MarketingClientsIndex() {
             },
             {
                 id: 'actions',
-                header: 'Actions',
+                header: t('common.actions', 'Actions'),
                 mobileRole: 'actions',
                 headerClassName: 'text-right',
                 className: 'text-right',
                 cell: renderActions,
             },
         ];
-    }, []);
+    }, [t]);
 
     return (
         <>
-            <Head title="Contacts marketing" />
+            <Head
+                title={t('marketing_contacts.title', 'Contacts marketing')}
+            />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <Contact className="size-6" aria-hidden />
-                            Contacts marketing
+                            {t('marketing_contacts.title', 'Contacts marketing')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Gérez votre base de contacts pour les futures campagnes.
+                            {t(
+                                'marketing_contacts.subtitle',
+                                'Gérez votre base de contacts pour les futures campagnes.',
+                            )}
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -217,7 +248,10 @@ export default function MarketingClientsIndex() {
                             <Button variant="outline" asChild>
                                 <Link href={importPage.url()}>
                                     <Upload className="size-4" aria-hidden />
-                                    Importer CSV
+                                    {t(
+                                        'marketing_contacts.import_csv',
+                                        'Importer CSV',
+                                    )}
                                 </Link>
                             </Button>
                         ) : null}
@@ -225,7 +259,10 @@ export default function MarketingClientsIndex() {
                             <Button asChild>
                                 <Link href={create.url()}>
                                     <Plus className="size-4" aria-hidden />
-                                    Nouveau contact
+                                    {t(
+                                        'marketing_contacts.create',
+                                        'Nouveau contact',
+                                    )}
                                 </Link>
                             </Button>
                         ) : null}
@@ -235,13 +272,16 @@ export default function MarketingClientsIndex() {
                 <BackofficeFiltersBar>
                     <div className="relative min-w-0 flex-1 lg:min-w-[240px]">
                         <Label htmlFor="contacts-search" className="sr-only">
-                            Recherche
+                            {t('common.search', 'Rechercher')}
                         </Label>
                         <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             id="contacts-search"
                             type="search"
-                            placeholder="Rechercher par nom, e-mail ou téléphone…"
+                            placeholder={t(
+                                'marketing_contacts.search_placeholder',
+                                'Rechercher par nom, e-mail ou téléphone…',
+                            )}
                             defaultValue={filters.search ?? ''}
                             onChange={(event) =>
                                 debouncedSearch(event.target.value)
@@ -256,7 +296,10 @@ export default function MarketingClientsIndex() {
                         rows={contacts.data}
                         columns={columns}
                         getRowKey={(contact) => contact.uuid}
-                        emptyMessage="Aucun contact pour le moment."
+                        emptyMessage={t(
+                            'marketing_contacts.empty',
+                            'Aucun contact pour le moment.',
+                        )}
                         minWidth="860px"
                         sort={filters}
                         onSort={handleSort}
@@ -265,14 +308,13 @@ export default function MarketingClientsIndex() {
 
                 <IndexTablePagination
                     paginated={contacts}
-                    itemLabel="contact(s)"
+                    itemLabel={t(
+                        'marketing_contacts.item_label',
+                        'contact(s)',
+                    )}
                     buildPageUrl={buildPageUrl}
                 />
             </div>
         </>
     );
 }
-
-MarketingClientsIndex.layout = {
-    breadcrumbs: [{ title: 'Contacts marketing', href: index.url() }],
-};

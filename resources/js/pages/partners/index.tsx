@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Handshake, Plus, Search, Trash2 } from 'lucide-react';
 import { useMemo } from 'react';
 import {
@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { useTrans } from '@/hooks/use-trans';
 import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
     create,
@@ -54,7 +55,12 @@ type PageProps = {
 };
 
 export default function PartnersIndex() {
+    const { t } = useTrans();
     const { partners, filters, canCreate } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [{ title: t('partners.title', 'Partenaires'), href: index.url() }],
+    });
 
     const applyFilters = (
         updates: Partial<TableSortState & { search?: string; status?: string; page?: number }>,
@@ -82,7 +88,9 @@ export default function PartnersIndex() {
             <>
                 {partner.can_update ? (
                     <Button variant="outline" size="sm" asChild>
-                        <Link href={edit.url(partner.uuid)}>Modifier</Link>
+                        <Link href={edit.url(partner.uuid)}>
+                            {t('common.modify', 'Modifier')}
+                        </Link>
                     </Button>
                 ) : null}
                 {partner.can_delete ? (
@@ -91,13 +99,19 @@ export default function PartnersIndex() {
                         size="sm"
                         className="text-destructive hover:text-destructive"
                         onClick={() => {
-                            if (confirm('Supprimer ce partenaire ?')) {
+                            if (
+                                confirm(
+                                    t('partners.delete_confirm', {
+                                        name: partner.name,
+                                    }),
+                                )
+                            ) {
                                 router.delete(destroy.url(partner.uuid));
                             }
                         }}
                     >
                         <Trash2 className="size-4" aria-hidden />
-                        Supprimer
+                        {t('common.delete', 'Supprimer')}
                     </Button>
                 ) : null}
             </>
@@ -106,7 +120,7 @@ export default function PartnersIndex() {
         return [
             {
                 id: 'logo',
-                header: 'Logo',
+                header: t('partners.logo', 'Logo'),
                 mobileRole: 'meta',
                 cell: (partner) => (
                     <div className="flex h-12 w-24 items-center justify-center rounded-md border bg-muted/30 p-2">
@@ -120,7 +134,7 @@ export default function PartnersIndex() {
             },
             {
                 id: 'name',
-                header: 'Nom',
+                header: t('common.name', 'Nom'),
                 sortKey: 'name',
                 sortable: true,
                 mobileRole: 'title',
@@ -128,17 +142,19 @@ export default function PartnersIndex() {
             },
             {
                 id: 'status',
-                header: 'Statut',
+                header: t('common.status', 'Statut'),
                 mobileRole: 'meta',
                 cell: (partner) => (
                     <Badge variant={partner.is_published ? 'default' : 'outline'}>
-                        {partner.is_published ? 'Actif' : 'Inactif'}
+                        {partner.is_published
+                            ? t('common.active', 'Actif')
+                            : t('common.inactive', 'Inactif')}
                     </Badge>
                 ),
             },
             {
                 id: 'sort_order',
-                header: 'Ordre',
+                header: t('common.order', 'Ordre'),
                 sortKey: 'sort_order',
                 sortable: true,
                 mobileRole: 'meta',
@@ -147,7 +163,7 @@ export default function PartnersIndex() {
             },
             {
                 id: 'updated_at',
-                header: 'Modifié le',
+                header: t('common.updated_at', 'Modifié le'),
                 sortKey: 'updated_at',
                 sortable: true,
                 mobileRole: 'meta',
@@ -156,36 +172,38 @@ export default function PartnersIndex() {
             },
             {
                 id: 'actions',
-                header: 'Actions',
+                header: t('common.actions', 'Actions'),
                 mobileRole: 'actions',
                 headerClassName: 'text-right',
                 className: 'text-right',
                 cell: renderActions,
             },
         ];
-    }, []);
+    }, [t]);
 
     return (
         <>
-            <Head title="Partenaires" />
+            <Head title={t('partners.title', 'Partenaires')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="font-heading flex items-center gap-2 text-2xl font-semibold tracking-tight">
                             <Handshake className="size-6" aria-hidden />
-                            Partenaires
+                            {t('partners.title', 'Partenaires')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Gérez les partenaires affichés sur le défilement de la page
-                            d&apos;accueil.
+                            {t(
+                                'partners.subtitle',
+                                'Logos et liens des partenaires affichés sur le site.',
+                            )}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" aria-hidden />
-                                Ajouter un partenaire
+                                {t('partners.create', 'Nouveau partenaire')}
                             </Link>
                         </Button>
                     ) : null}
@@ -194,13 +212,16 @@ export default function PartnersIndex() {
                 <BackofficeFiltersBar>
                     <div className="relative min-w-0 flex-1">
                         <Label htmlFor="partners-search" className="sr-only">
-                            Recherche
+                            {t('common.search', 'Rechercher')}
                         </Label>
                         <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                         <Input
                             id="partners-search"
                             type="search"
-                            placeholder="Rechercher par nom…"
+                            placeholder={t(
+                                'partners.search_placeholder',
+                                'Rechercher un partenaire…',
+                            )}
                             defaultValue={filters.search ?? ''}
                             onChange={(event) =>
                                 debouncedSearch(event.target.value)
@@ -209,12 +230,17 @@ export default function PartnersIndex() {
                         />
                     </div>
                     <div className="min-w-0 sm:max-w-xs">
-                        <Label className="mb-1 block text-sm">Statut</Label>
+                        <Label className="mb-1 block text-sm">
+                            {t('common.status', 'Statut')}
+                        </Label>
                         <SearchableSelect
                             options={[
-                                { value: 'all', label: 'Tous les statuts' },
-                                { value: 'published', label: 'Actifs' },
-                                { value: 'draft', label: 'Inactifs' },
+                                {
+                                    value: 'all',
+                                    label: t('common.all_statuses', 'Tous les statuts'),
+                                },
+                                { value: 'published', label: t('common.active_plural', 'Actifs') },
+                                { value: 'draft', label: t('common.inactive_plural', 'Inactifs') },
                             ]}
                             value={filters.status ?? 'all'}
                             onChange={(status) =>
@@ -222,8 +248,8 @@ export default function PartnersIndex() {
                                     status: status === 'all' ? undefined : status,
                                 })
                             }
-                            placeholder="Statut"
-                            searchPlaceholder="Rechercher…"
+                            placeholder={t('common.status', 'Statut')}
+                            searchPlaceholder={t('common.search_ellipsis', 'Rechercher…')}
                         />
                     </div>
                 </BackofficeFiltersBar>
@@ -236,7 +262,7 @@ export default function PartnersIndex() {
                         emptyMessage={
                             <span className="inline-flex flex-col items-center gap-2">
                                 <Handshake className="size-8 opacity-60" />
-                                Aucun partenaire trouvé.
+                                {t('partners.empty', 'Aucun partenaire pour le moment.')}
                             </span>
                         }
                         minWidth="760px"
@@ -254,7 +280,3 @@ export default function PartnersIndex() {
         </>
     );
 }
-
-PartnersIndex.layout = {
-    breadcrumbs: [{ title: 'Partenaires', href: index.url() }],
-};

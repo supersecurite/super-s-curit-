@@ -67,7 +67,7 @@ class HandleInertiaRequests extends Middleware
             'locale' => $locale,
             'locales' => LocaleUrl::supported(),
             'localeLabels' => config('locales.labels', []),
-            'translations' => LocaleTranslations::forLocale($locale),
+            'translations' => LocaleTranslations::forRequest($request, $locale),
             'pageMeta' => $pageMeta,
             'pageFaqs' => $pageFaqs,
             'name' => config('app.name'),

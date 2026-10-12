@@ -5,13 +5,16 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useTrans } from '@/hooks/use-trans';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
 export default function ForgotPassword({ status }: { status?: string }) {
+    const { t } = useTrans();
+
     return (
         <>
-            <Head title="Mot de passe oublié" />
+            <Head title={t('auth.forgot_title', 'Mot de passe oublié')} />
 
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
@@ -24,7 +27,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-mail</Label>
+                                <Label htmlFor="email">{t('auth.email', 'E-mail')}</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -46,7 +49,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     {processing && (
                                         <LoaderCircle className="h-4 w-4 animate-spin" />
                                     )}
-                                    Envoyer le lien de réinitialisation
+                                    {t('auth.send_reset_link', 'Envoyer le lien')}
                                 </Button>
                             </div>
                         </>
@@ -54,8 +57,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </Form>
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
-                    <span>Ou retourner à la</span>
-                    <TextLink href={login()}>connexion</TextLink>
+                    <TextLink href={login()}>{t('auth.login_title', 'Connexion')}</TextLink>
                 </div>
             </div>
         </>

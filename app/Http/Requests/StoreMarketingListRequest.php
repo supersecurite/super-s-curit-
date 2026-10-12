@@ -29,7 +29,7 @@ class StoreMarketingListRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom de la liste est obligatoire.',
+            'name.required' => bt('validation.list_name_required'),
         ];
     }
 }

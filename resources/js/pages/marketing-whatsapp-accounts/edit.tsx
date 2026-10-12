@@ -1,6 +1,7 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import WhatsAppAccountForm from '@/components/marketing-whatsapp-accounts/whatsapp-account-form';
+import { useTrans } from '@/hooks/use-trans';
 import { destroy, edit, index, update } from '@/routes/marketing-whatsapp-accounts';
 
 type DriverOption = { value: string; label: string };
@@ -27,24 +28,53 @@ type PageProps = {
 };
 
 export default function MarketingWhatsAppAccountsEdit() {
+    const { t } = useTrans();
     const { account, drivers, errors, canDelete } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t(
+                    'marketing_whatsapp_accounts.title',
+                    'Comptes WhatsApp',
+                ),
+                href: index.url(),
+            },
+            {
+                title: account.name,
+                href: edit.url(account.uuid),
+            },
+        ],
+    });
 
     return (
         <>
-            <Head title={`Modifier — ${account.name}`} />
+            <Head
+                title={`${t('marketing_whatsapp_accounts.edit', 'Modifier le compte')} — ${account.name}`}
+            />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                         <h1 className="font-heading text-2xl font-semibold tracking-tight">
-                            Modifier le compte
+                            {t(
+                                'marketing_whatsapp_accounts.edit_heading',
+                                'Modifier le compte',
+                            )}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">{account.name}</p>
                     </div>
                     {canDelete ? (
                         <ConfirmDeleteDialog
-                            title="Supprimer ce compte ?"
-                            description={`Le compte « ${account.name} » sera définitivement supprimé.`}
+                            title={t(
+                                'marketing_whatsapp_accounts.delete_confirm',
+                                'Supprimer ce compte ?',
+                            )}
+                            description={t(
+                                'marketing_whatsapp_accounts.delete_description',
+                                'Le compte « :name » sera définitivement supprimé.',
+                                { name: account.name },
+                            )}
                             deleteUrl={destroy.url(account.uuid)}
                             triggerVariant="outline"
                             triggerClassName="text-destructive hover:text-destructive"
@@ -54,7 +84,7 @@ export default function MarketingWhatsAppAccountsEdit() {
 
                 <WhatsAppAccountForm
                     submitUrl={update.url(account.uuid)}
-                    submitLabel="Enregistrer"
+                    submitLabel={t('common.save', 'Enregistrer')}
                     cancelHref={index.url()}
                     errors={errors}
                     drivers={drivers}
@@ -65,10 +95,3 @@ export default function MarketingWhatsAppAccountsEdit() {
         </>
     );
 }
-
-MarketingWhatsAppAccountsEdit.layout = {
-    breadcrumbs: [
-        { title: 'Comptes WhatsApp', href: index.url() },
-        { title: 'Modifier', href: edit.url('') },
-    ],
-};

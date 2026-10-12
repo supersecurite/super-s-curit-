@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Pencil, Plus, Trash2, Users } from 'lucide-react';
 import { useMemo } from 'react';
 import {
@@ -10,6 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { useTrans } from '@/hooks/use-trans';
 import { create, destroy, edit, index } from '@/routes/users';
 
 type UserRow = {
@@ -52,7 +53,12 @@ function roleBadgeVariant(role: string): 'default' | 'secondary' | 'outline' {
 }
 
 export default function UsersIndex() {
+    const { t } = useTrans();
     const { users, filters, canCreate } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [{ title: t('users.title', 'Utilisateurs'), href: index.url() }],
+    });
 
     const applyFilters = (updates: Partial<TableSortState & { page?: number }>) => {
         const next = { ...filters, ...updates };
@@ -70,7 +76,10 @@ export default function UsersIndex() {
     const handleDelete = (user: UserRow) => {
         if (
             !window.confirm(
-                `Supprimer l'utilisateur « ${user.name} » ? Cette action est irréversible.`,
+                t('users.delete_confirm', 'Supprimer cet utilisateur ?').replace(
+                    ':name',
+                    user.name,
+                ),
             )
         ) {
             return;
@@ -86,7 +95,7 @@ export default function UsersIndex() {
                     <Button variant="outline" size="sm" asChild>
                         <Link href={edit.url(user.uuid)}>
                             <Pencil className="size-4" aria-hidden />
-                            Modifier
+                            {t('common.modify', 'Modifier')}
                         </Link>
                     </Button>
                 ) : null}
@@ -98,7 +107,7 @@ export default function UsersIndex() {
                         onClick={() => handleDelete(user)}
                     >
                         <Trash2 className="size-4" aria-hidden />
-                        Supprimer
+                        {t('common.delete', 'Supprimer')}
                     </Button>
                 ) : null}
             </>
@@ -107,7 +116,7 @@ export default function UsersIndex() {
         return [
             {
                 id: 'name',
-                header: 'Nom',
+                header: t('common.name', 'Nom'),
                 sortKey: 'name',
                 sortable: true,
                 mobileRole: 'title',
@@ -115,7 +124,7 @@ export default function UsersIndex() {
             },
             {
                 id: 'email',
-                header: 'E-mail',
+                header: t('common.email_label', 'E-mail'),
                 sortKey: 'email',
                 sortable: true,
                 mobileRole: 'meta',
@@ -123,7 +132,7 @@ export default function UsersIndex() {
             },
             {
                 id: 'phone',
-                header: 'Téléphone',
+                header: t('common.phone', 'Téléphone'),
                 sortKey: 'phone',
                 sortable: true,
                 mobileRole: 'meta',
@@ -132,7 +141,7 @@ export default function UsersIndex() {
             },
             {
                 id: 'role',
-                header: 'Rôle',
+                header: t('common.role', 'Rôle'),
                 sortKey: 'role',
                 sortable: true,
                 mobileRole: 'meta',
@@ -151,35 +160,38 @@ export default function UsersIndex() {
             },
             {
                 id: 'actions',
-                header: 'Actions',
+                header: t('common.actions', 'Actions'),
                 mobileRole: 'actions',
                 headerClassName: 'text-right',
                 className: 'text-right',
                 cell: renderActions,
             },
         ];
-    }, []);
+    }, [t]);
 
     return (
         <>
-            <Head title="Utilisateurs" />
+            <Head title={t('users.title', 'Utilisateurs')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <Users className="size-6" aria-hidden />
-                            Utilisateurs
+                            {t('users.title', 'Utilisateurs')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Gérez les comptes et les rôles d&apos;accès.
+                            {t(
+                                'users.subtitle',
+                                "Gérez les comptes et les rôles d'accès.",
+                            )}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouvel utilisateur
+                                {t('users.create', 'Nouvel utilisateur')}
                             </Link>
                         </Button>
                     ) : null}
@@ -190,7 +202,7 @@ export default function UsersIndex() {
                         rows={users.data}
                         columns={columns}
                         getRowKey={(user) => String(user.id)}
-                        emptyMessage="Aucun utilisateur pour le moment."
+                        emptyMessage={t('users.empty', 'Aucun utilisateur.')}
                         minWidth="720px"
                         sort={filters}
                         onSort={handleSort}
@@ -199,14 +211,10 @@ export default function UsersIndex() {
 
                 <IndexTablePagination
                     paginated={users}
-                    itemLabel="utilisateur(s)"
+                    itemLabel={t('users.item_label', 'utilisateur(s)')}
                     buildPageUrl={(page) => index.url({ query: { ...filters, page } })}
                 />
             </div>
         </>
     );
 }
-
-UsersIndex.layout = {
-    breadcrumbs: [{ title: 'Utilisateurs', href: index.url() }],
-};

@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import { useEffect } from 'react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { home } from '@/routes';
+import { BackofficeLocaleSwitcher } from '@/components/backoffice-locale-switcher';
 import type { AuthLayoutProps } from '@/types';
 
 export default function AuthSimpleLayout({
@@ -22,6 +23,9 @@ export default function AuthSimpleLayout({
 
     return (
         <div className="app-site flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+            <div className="absolute top-4 right-4 md:top-6 md:right-6">
+                <BackofficeLocaleSwitcher />
+            </div>
             <div className="w-full max-w-sm">
                 <div className="app-auth-card flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">

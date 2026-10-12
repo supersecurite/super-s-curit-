@@ -18,8 +18,11 @@ export type SecurityTipFormData = {
     id?: number;
     slug: string;
     title: string;
+    title_en?: string | null;
     excerpt: string;
+    excerpt_en?: string | null;
     content: string;
+    content_en?: string | null;
     category: string;
     tags: string[];
     featured: boolean;
@@ -55,8 +58,11 @@ export default function SecurityTipForm({
     const showStatusField = isEditing && statusOptions.length > 0;
     const [formData, setFormData] = useState({
         title: securityTip?.title ?? '',
+        title_en: securityTip?.title_en ?? '',
         excerpt: securityTip?.excerpt ?? '',
+        excerpt_en: securityTip?.excerpt_en ?? '',
         content: securityTip?.content ?? '',
+        content_en: securityTip?.content_en ?? '',
         category: securityTip?.category ?? '',
         tags: (securityTip?.tags ?? []).join(', '),
         featured: securityTip?.featured ?? false,
@@ -66,6 +72,7 @@ export default function SecurityTipForm({
             : '',
         image: null as File | null,
     });
+    const [localeTab, setLocaleTab] = useState<'fr' | 'en'>('fr');
     const [imagePreview, setImagePreview] = useState<string | null>(
         securityTip?.image_url ?? null,
     );
@@ -101,11 +108,14 @@ export default function SecurityTipForm({
         }
 
         payload.append('title', formData.title);
+        payload.append('title_en', formData.title_en);
         if (showStatusField) {
             payload.append('status', formData.status);
         }
         payload.append('excerpt', formData.excerpt);
+        payload.append('excerpt_en', formData.excerpt_en);
         payload.append('content', formData.content);
+        payload.append('content_en', formData.content_en);
         payload.append('category', formData.category);
         if (canFeature) {
             payload.append('featured', formData.featured ? '1' : '0');
@@ -136,44 +146,118 @@ export default function SecurityTipForm({
             <div className="grid gap-6 lg:grid-cols-3">
                 <div className="space-y-6 lg:col-span-2">
                     <div className="app-panel space-y-4 p-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="title">Titre</Label>
-                            <Input
-                                id="title"
-                                value={formData.title}
-                                onChange={(e) =>
-                                    updateField('title', e.target.value)
+                        <div className="inline-flex gap-1 rounded-lg bg-muted p-1">
+                            <button
+                                type="button"
+                                onClick={() => setLocaleTab('fr')}
+                                className={
+                                    localeTab === 'fr'
+                                        ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
+                                        : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
                                 }
-                                required
-                            />
-                            <InputError message={errors.title} />
+                            >
+                                Français
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setLocaleTab('en')}
+                                className={
+                                    localeTab === 'en'
+                                        ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
+                                        : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
+                                }
+                            >
+                                English
+                            </button>
                         </div>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="excerpt">Résumé</Label>
-                            <textarea
-                                id="excerpt"
-                                rows={3}
-                                value={formData.excerpt}
-                                onChange={(e) =>
-                                    updateField('excerpt', e.target.value)
-                                }
-                                className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-                            />
-                            <InputError message={errors.excerpt} />
-                        </div>
+                        {localeTab === 'fr' ? (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="title">Titre</Label>
+                                    <Input
+                                        id="title"
+                                        value={formData.title}
+                                        onChange={(e) =>
+                                            updateField('title', e.target.value)
+                                        }
+                                        required
+                                    />
+                                    <InputError message={errors.title} />
+                                </div>
 
-                        <div className="grid gap-2">
-                            <Label>Contenu</Label>
-                            <Editor
-                                key={securityTip?.id ?? 'new'}
-                                initialContent={securityTip?.content ?? ''}
-                                onChange={(content) =>
-                                    updateField('content', content)
-                                }
-                            />
-                            <InputError message={errors.content} />
-                        </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="excerpt">Résumé</Label>
+                                    <textarea
+                                        id="excerpt"
+                                        rows={3}
+                                        value={formData.excerpt}
+                                        onChange={(e) =>
+                                            updateField('excerpt', e.target.value)
+                                        }
+                                        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    />
+                                    <InputError message={errors.excerpt} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label>Contenu</Label>
+                                    <Editor
+                                        key={`${securityTip?.id ?? 'new'}-fr`}
+                                        initialContent={securityTip?.content ?? ''}
+                                        onChange={(content) =>
+                                            updateField('content', content)
+                                        }
+                                    />
+                                    <InputError message={errors.content} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="title_en">Title (English)</Label>
+                                    <Input
+                                        id="title_en"
+                                        value={formData.title_en}
+                                        onChange={(e) =>
+                                            updateField('title_en', e.target.value)
+                                        }
+                                    />
+                                    <InputError message={errors.title_en} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="excerpt_en">Excerpt (English)</Label>
+                                    <textarea
+                                        id="excerpt_en"
+                                        rows={3}
+                                        value={formData.excerpt_en}
+                                        onChange={(e) =>
+                                            updateField(
+                                                'excerpt_en',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    />
+                                    <InputError message={errors.excerpt_en} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label>Content (English)</Label>
+                                    <Editor
+                                        key={`${securityTip?.id ?? 'new'}-en`}
+                                        initialContent={
+                                            securityTip?.content_en ?? ''
+                                        }
+                                        onChange={(content) =>
+                                            updateField('content_en', content)
+                                        }
+                                    />
+                                    <InputError message={errors.content_en} />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

@@ -18,6 +18,7 @@ import UserForm, {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import { edit, index, update } from '@/routes/users';
 
@@ -32,32 +33,6 @@ type PageProps = {
     permissionGroups: PermissionGroup[];
     tab: UserFormTab;
 };
-
-const tabs: {
-    value: UserFormTab;
-    label: string;
-    icon: typeof User;
-    description: string;
-}[] = [
-    {
-        value: 'profile',
-        label: 'Profil',
-        icon: User,
-        description: 'Identité et rôle',
-    },
-    {
-        value: 'permissions',
-        label: 'Permissions',
-        icon: Shield,
-        description: 'Accès backoffice',
-    },
-    {
-        value: 'security',
-        label: 'Sécurité',
-        icon: KeyRound,
-        description: 'E-mails et mot de passe',
-    },
-];
 
 function roleBadgeVariant(
     role: string,
@@ -82,12 +57,12 @@ function userInitials(name: string): string {
         .join('');
 }
 
-function formatCreatedAt(value: string | null): string | null {
+function formatCreatedAt(value: string | null, locale: string): string | null {
     if (!value) {
         return null;
     }
 
-    return new Date(value).toLocaleDateString('fr-FR', {
+    return new Date(value).toLocaleDateString(locale === 'en' ? 'en-US' : 'fr-FR', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
@@ -95,9 +70,36 @@ function formatCreatedAt(value: string | null): string | null {
 }
 
 export default function UsersEdit() {
+    const { t, locale } = useTrans();
     const { user, roles, permissionGroups, tab } = usePage<PageProps>().props;
     const [processing, setProcessing] = useState(false);
-    const createdAt = formatCreatedAt(user.created_at);
+    const createdAt = formatCreatedAt(user.created_at, locale);
+
+    const tabs: {
+        value: UserFormTab;
+        label: string;
+        icon: typeof User;
+        description: string;
+    }[] = [
+        {
+            value: 'profile',
+            label: t('users.tab_profile', 'Profil'),
+            icon: User,
+            description: t('users.tab_profile_desc', 'Identité et rôle'),
+        },
+        {
+            value: 'permissions',
+            label: t('users.tab_permissions', 'Permissions'),
+            icon: Shield,
+            description: t('users.tab_permissions_desc', 'Accès backoffice'),
+        },
+        {
+            value: 'security',
+            label: t('users.tab_security', 'Sécurité'),
+            icon: KeyRound,
+            description: t('users.tab_security_desc', 'E-mails et mot de passe'),
+        },
+    ];
 
     useEffect(() => {
         const form = document.getElementById('user-edit-form');
@@ -125,7 +127,7 @@ export default function UsersEdit() {
     setLayoutProps({
         breadcrumbs: [
             {
-                title: 'Utilisateurs',
+                title: t('users.title', 'Utilisateurs'),
                 href: index.url(),
             },
             {
@@ -137,7 +139,7 @@ export default function UsersEdit() {
                       {
                           title:
                               tabs.find((item) => item.value === tab)
-                                  ?.label ?? 'Profil',
+                                  ?.label ?? t('settings.profile_title', 'Profil'),
                           href: edit.url(user.uuid, { query: { tab } }),
                       },
                   ]

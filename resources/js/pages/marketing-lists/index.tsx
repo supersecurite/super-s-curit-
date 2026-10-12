@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { List, Pencil, Plus, Search } from 'lucide-react';
 import { useMemo } from 'react';
 import {
@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { useTrans } from '@/hooks/use-trans';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
 import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
@@ -46,7 +47,17 @@ type PageProps = {
 };
 
 export default function MarketingListsIndex() {
+    const { t } = useTrans();
     const { lists, filters, canCreate } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('marketing_lists.title', 'Groupes'),
+                href: index.url(),
+            },
+        ],
+    });
 
     const applyFilters = (updates: Partial<TableSortState & { search?: string; page?: number }>) => {
         const next = { ...filters, ...updates };
@@ -71,25 +82,38 @@ export default function MarketingListsIndex() {
         const renderActions = (list: ListRow) => (
             <>
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={show.url(list.uuid)}>Voir</Link>
+                    <Link href={show.url(list.uuid)}>
+                        {t('common.view', 'Voir')}
+                    </Link>
                 </Button>
                 {list.can_update ? (
                     <Button variant="outline" size="sm" asChild>
                         <Link href={edit.url(list.uuid)}>
                             <Pencil className="size-4" aria-hidden />
-                            Modifier
+                            {t('common.modify', 'Modifier')}
                         </Link>
                     </Button>
                 ) : null}
                 {list.can_delete ? (
                     <ConfirmDeleteDialog
-                        title="Supprimer ce groupe ?"
-                        description={`Le groupe « ${list.name} » sera supprimé.`}
+                        title={t(
+                            'marketing_lists.delete_confirm',
+                            'Supprimer ce groupe ?',
+                        )}
+                        description={t(
+                            'marketing_lists.delete_description',
+                            'Le groupe « :name » sera supprimé.',
+                            { name: list.name },
+                        )}
                         deleteUrl={destroy.url(list.uuid)}
                         triggerSize="sm"
                         triggerVariant="outline"
                         triggerClassName="text-destructive hover:text-destructive"
-                        aria-label={`Supprimer ${list.name}`}
+                        aria-label={t(
+                            'marketing_lists.delete_aria',
+                            'Supprimer :name',
+                            { name: list.name },
+                        )}
                     />
                 ) : null}
             </>
@@ -98,7 +122,7 @@ export default function MarketingListsIndex() {
         return [
             {
                 id: 'name',
-                header: 'Nom',
+                header: t('common.name', 'Nom'),
                 sortKey: 'name',
                 sortable: true,
                 mobileRole: 'title',
@@ -113,7 +137,7 @@ export default function MarketingListsIndex() {
             },
             {
                 id: 'description',
-                header: 'Description',
+                header: t('common.description', 'Description'),
                 sortKey: 'description',
                 sortable: true,
                 mobileRole: 'subtitle',
@@ -122,7 +146,7 @@ export default function MarketingListsIndex() {
             },
             {
                 id: 'contacts',
-                header: 'Contacts',
+                header: t('nav.contacts', 'Contacts'),
                 sortKey: 'contacts_count',
                 sortable: true,
                 mobileRole: 'meta',
@@ -130,35 +154,38 @@ export default function MarketingListsIndex() {
             },
             {
                 id: 'actions',
-                header: 'Actions',
+                header: t('common.actions', 'Actions'),
                 mobileRole: 'actions',
                 headerClassName: 'text-right',
                 className: 'text-right',
                 cell: renderActions,
             },
         ];
-    }, []);
+    }, [t]);
 
     return (
         <>
-            <Head title="Groupes" />
+            <Head title={t('marketing_lists.title', 'Groupes')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <List className="size-6" aria-hidden />
-                            Groupes
+                            {t('marketing_lists.title', 'Groupes')}
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
-                            Organisez vos contacts en audiences pour les campagnes.
+                            {t(
+                                'marketing_lists.subtitle',
+                                'Organisez vos contacts en audiences pour les campagnes.',
+                            )}
                         </p>
                     </div>
                     {canCreate ? (
                         <Button asChild>
                             <Link href={create.url()}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouveau groupe
+                                {t('marketing_lists.create', 'Nouveau groupe')}
                             </Link>
                         </Button>
                     ) : null}
@@ -173,7 +200,10 @@ export default function MarketingListsIndex() {
                         <Input
                             id="lists-search"
                             type="search"
-                            placeholder="Rechercher un groupe…"
+                            placeholder={t(
+                                'marketing_lists.search_placeholder',
+                                'Rechercher un groupe…',
+                            )}
                             defaultValue={filters.search ?? ''}
                             onChange={(event) =>
                                 debouncedSearch(event.target.value)
@@ -188,7 +218,10 @@ export default function MarketingListsIndex() {
                         rows={lists.data}
                         columns={columns}
                         getRowKey={(list) => list.uuid}
-                        emptyMessage="Aucun groupe pour le moment."
+                        emptyMessage={t(
+                            'marketing_lists.empty',
+                            'Aucun groupe pour le moment.',
+                        )}
                         minWidth="640px"
                         sort={filters}
                         onSort={handleSort}
@@ -204,7 +237,3 @@ export default function MarketingListsIndex() {
         </>
     );
 }
-
-MarketingListsIndex.layout = {
-    breadcrumbs: [{ title: 'Groupes', href: index.url() }],
-};

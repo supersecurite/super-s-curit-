@@ -158,8 +158,8 @@ final class MarketingCompanyContactRules
     public static function messages(): array
     {
         return [
-            'company_contacts.*.type' => 'Le type de canal est invalide (email, phone, whatsapp).',
-            'company_contacts.*.value.required' => 'La valeur du canal est requise.',
+            'company_contacts.*.type' => bt('validation.company_channel_type'),
+            'company_contacts.*.value.required' => bt('validation.company_channel_value_required'),
         ];
     }
 
@@ -188,7 +188,7 @@ final class MarketingCompanyContactRules
             $field = "company_contacts.{$channelIndex}.value";
 
             if ($type === MarketingCompanyContactChannel::Email && ! filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                $validator->errors()->add($field, 'Adresse e-mail invalide.');
+                $validator->errors()->add($field, bt('validation.company_channel_email_invalid'));
 
                 continue;
             }
@@ -197,7 +197,7 @@ final class MarketingCompanyContactRules
                 in_array($type, [MarketingCompanyContactChannel::Phone, MarketingCompanyContactChannel::WhatsApp], true)
                 && ! InternationalPhoneNumber::isValid($value)
             ) {
-                $validator->errors()->add($field, 'Le numéro doit être au format international avec indicatif (ex. +1 (555) 670-8636).');
+                $validator->errors()->add($field, bt('validation.company_channel_phone_invalid'));
             }
         }
     }

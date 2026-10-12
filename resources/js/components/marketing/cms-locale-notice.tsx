@@ -1,12 +1,17 @@
 import { useTrans } from '@/hooks/use-trans';
 
+type CmsLocaleNoticeProps = {
+    /** When false, hide even under /en (e.g. article already translated). */
+    show?: boolean;
+};
+
 /**
- * Bandeau phase 1 : contenu CMS encore en français sous les URLs /en.
+ * Bandeau : contenu CMS encore en français sous les URLs /en.
  */
-export default function CmsLocaleNotice() {
+export default function CmsLocaleNotice({ show = true }: CmsLocaleNoticeProps) {
     const { t, locale } = useTrans();
 
-    if (locale !== 'en') {
+    if (locale !== 'en' || ! show) {
         return null;
     }
 

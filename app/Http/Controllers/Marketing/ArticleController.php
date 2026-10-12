@@ -79,9 +79,11 @@ class ArticleController extends Controller
             ->values()
             ->all();
 
+        $public = $article->toPublicArray(includeContent: true);
+
         return Inertia::render('marketing/articles/show', [
-            'article' => $article->toPublicArray(),
-            'articleContent' => $article->content,
+            'article' => $public,
+            'articleContent' => $public['content'] ?? null,
             'relatedArticles' => $relatedArticles,
         ]);
     }

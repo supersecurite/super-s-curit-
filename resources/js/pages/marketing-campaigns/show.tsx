@@ -23,6 +23,7 @@ import {
     useMarketingCampaignRealtime,
     type CampaignProgressPayload,
 } from '@/hooks/use-marketing-campaign-realtime';
+import { useTrans } from '@/hooks/use-trans';
 import { destroy, edit, index, retry, show } from '@/routes/marketing-campaigns';
 
 type CampaignStats = {
@@ -145,6 +146,7 @@ function sendDestination(
 }
 
 export default function MarketingCampaignsShow() {
+    const { t } = useTrans();
     const { campaign, sends, canUpdate, canDelete, canSend, canRetry, broadcasting } =
         usePage<PageProps>().props;
     const [liveCampaign, setLiveCampaign] = useState(campaign);
@@ -310,7 +312,15 @@ export default function MarketingCampaignsShow() {
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" aria-hidden />
-                            Retour aux campagnes {isWhatsApp ? 'WhatsApp' : 'e-mail'}
+                            {isWhatsApp
+                                ? t(
+                                      'marketing_campaigns.back_to_campaigns_whatsapp',
+                                      'Retour aux campagnes WhatsApp',
+                                  )
+                                : t(
+                                      'marketing_campaigns.back_to_campaigns_email',
+                                      'Retour aux campagnes e-mail',
+                                  )}
                         </Link>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <Megaphone className="size-6" aria-hidden />
@@ -353,7 +363,15 @@ export default function MarketingCampaignsShow() {
                                     className={`size-4 ${retrying ? 'animate-spin' : ''}`}
                                     aria-hidden
                                 />
-                                {retrying ? 'Relance en cours...' : 'Relancer les échecs'}
+                                {retrying
+                                    ? t(
+                                          'marketing_campaigns.retry_in_progress',
+                                          'Relance en cours…',
+                                      )
+                                    : t(
+                                          'marketing_campaigns.retry_failures',
+                                          'Relancer les échecs',
+                                      )}
                             </Button>
                         ) : null}
                         {canSend ? (
@@ -367,16 +385,23 @@ export default function MarketingCampaignsShow() {
                             <Button variant="outline" asChild>
                                 <Link href={edit.url(campaign.uuid)}>
                                     <Pencil className="size-4" aria-hidden />
-                                    Modifier
+                                    {t('common.modify', 'Modifier')}
                                 </Link>
                             </Button>
                         ) : null}
                         {canDelete ? (
                             <ConfirmDeleteDialog
-                                title="Supprimer cette campagne ?"
-                                description={`La campagne « ${campaign.name} » sera définitivement supprimée.`}
+                                title={t(
+                                    'marketing_campaigns.delete_confirm',
+                                    'Supprimer cette campagne ?',
+                                )}
+                                description={t(
+                                    'marketing_campaigns.delete_description_permanent',
+                                    'La campagne « :name » sera définitivement supprimée.',
+                                    { name: campaign.name },
+                                )}
                                 deleteUrl={destroy.url(campaign.uuid)}
-                                triggerLabel="Supprimer"
+                                triggerLabel={t('common.delete', 'Supprimer')}
                                 triggerVariant="outline"
                                 triggerClassName="text-destructive hover:text-destructive"
                             />
@@ -530,7 +555,14 @@ export default function MarketingCampaignsShow() {
                                 rows={filteredSendsData}
                                 columns={sendColumns}
                                 getRowKey={(send) => send.uuid}
-                                emptyMessage={statusFilter ? `Aucun destinataire avec le statut « ${statusFilter} » sur cette page.` : "Aucun envoi enregistré."}
+                                emptyMessage={
+                                    statusFilter
+                                        ? `Aucun destinataire avec le statut « ${statusFilter} » sur cette page.`
+                                        : t(
+                                              'marketing_campaigns.empty_sends',
+                                              'Aucun envoi enregistré.',
+                                          )
+                                }
                             />
                             <IndexTablePagination
                                 paginated={liveSends}
@@ -544,10 +576,3 @@ export default function MarketingCampaignsShow() {
         </>
     );
 }
-
-MarketingCampaignsShow.layout = {
-    breadcrumbs: [
-        { title: 'Campagnes', href: index.url() },
-        { title: 'Détail', href: show.url('') },
-    ],
-};

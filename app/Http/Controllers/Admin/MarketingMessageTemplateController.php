@@ -105,7 +105,7 @@ class MarketingMessageTemplateController extends Controller
         if ($account === null) {
             return response()->json([
                 'success' => false,
-                'message' => 'Aucun compte WhatsApp actif configuré.',
+                'message' => bt('toasts.whatsapp_no_active_account'),
                 'templates' => [],
             ], 422);
         }
@@ -154,8 +154,8 @@ class MarketingMessageTemplateController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => $count > 1
-                ? "{$count} modèles WhatsApp importés avec succès depuis Meta."
-                : 'Modèle WhatsApp importé avec succès depuis Meta.',
+                ? bt('toasts.template_imported_many', ['count' => $count])
+                : bt('toasts.template_imported_one'),
         ]);
 
         return to_route('marketing-templates.index', ['channel' => 'whatsapp']);
@@ -173,14 +173,14 @@ class MarketingMessageTemplateController extends Controller
 
             Inertia::flash('toast', [
                 'type' => 'success',
-                'message' => "Modèle WhatsApp « {$template->meta_template_name} » soumis avec succès à Meta.",
+                'message' => bt('toasts.template_meta_submitted', ['name' => $template->meta_template_name]),
             ]);
 
             return to_route('marketing-templates.show', $template);
         } catch (Throwable $exception) {
             Inertia::flash('toast', [
                 'type' => 'error',
-                'message' => 'Échec de la soumission Meta : '.$exception->getMessage(),
+                'message' => bt('toasts.template_meta_failed', ['error' => $exception->getMessage()]),
             ]);
 
             return redirect()->back();
@@ -228,14 +228,14 @@ class MarketingMessageTemplateController extends Controller
 
                 Inertia::flash('toast', [
                     'type' => 'success',
-                    'message' => "Modèle WhatsApp « {$template->meta_template_name} » créé et soumis avec succès à Meta.",
+                    'message' => bt('toasts.template_meta_created_submitted', ['name' => $template->meta_template_name]),
                 ]);
 
                 return to_route('marketing-templates.show', $template);
             } catch (Throwable $exception) {
                 Inertia::flash('toast', [
                     'type' => 'error',
-                    'message' => 'Échec de la soumission Meta : '.$exception->getMessage(),
+                    'message' => bt('toasts.template_meta_failed', ['error' => $exception->getMessage()]),
                 ]);
 
                 return redirect()->back()->withInput();
@@ -244,7 +244,7 @@ class MarketingMessageTemplateController extends Controller
 
         $template = $action->handle($validated);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Template créé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.template_created')]);
 
         return to_route('marketing-templates.show', $template);
     }
@@ -278,7 +278,7 @@ class MarketingMessageTemplateController extends Controller
     ): RedirectResponse {
         $action->handle($marketingTemplate, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Template mis à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.template_updated')]);
 
         return to_route('marketing-templates.show', $marketingTemplate);
     }
@@ -294,7 +294,7 @@ class MarketingMessageTemplateController extends Controller
 
         $action->handle($marketingTemplate);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Template supprimé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.template_deleted')]);
 
         $previousUrl = url()->previous();
         $fallbackUrl = route('marketing-templates.index', ['channel' => $channel->value]);

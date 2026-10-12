@@ -33,7 +33,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Candidatures agents | RH | ✅ Complet | `docs/features/candidatures-agents.md` |
 | Utilisateurs & permissions | Acteurs | ✅ Complet | `docs/features/utilisateurs-roles.md` |
 | Rôle `commercial` + droits marketing | Acteurs | ✅ Complet | [ADR-0001](decisions/0001-role-commercial.md) — prérequis module communication |
-| Site marketing public | Public | ✅ Complet | i18n FR/EN phase 1 — [ADR-0005](decisions/0005-i18n-public-url-prefix.md) · `docs/features/site-public.md` |
+| Site marketing public | Public | ✅ Complet | i18n FR/EN phase 2 (backoffice session + CMS `*_en`) — [ADR-0005](decisions/0005-i18n-public-url-prefix.md) · [ADR-0006](decisions/0006-backoffice-locale-session.md) · `docs/features/site-public.md` |
 | Paramètres (profil / sécurité) | Plateforme | ✅ Complet | `docs/features/settings.md` |
 | **Lot 1 — Contacts & listes** | Marketing | ✅ Complet | CDC §5.1 — `docs/features/marketing-clients.md` · seeder `MarketingSeeder` |
 | **Journal d'accès backoffice** | Support | ✅ Complet | `docs/features/access-logs.md` — monitoring sans Nightwatch |
@@ -57,7 +57,7 @@ Dette transverse à surveiller :
 
 - Nouvelles routes backoffice marketing → `VisitTracking::BACKOFFICE_PREFIXES`
 - Dette TypeScript globale (`tsc`) hors périmètre touché
-- i18n phase 2 : backoffice bilingue, traductions CMS articles/conseils, segments URL EN (`/en/about`)
+- i18n : segments URL EN (`/en/about`) ; formulaires publics (contact / candidature) encore FR
 
 ## 4. Module communication — plan d’implémentation
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import {
     Check,
@@ -10,6 +10,7 @@ import {
     Share2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTrans } from '@/hooks/use-trans';
 import {
     buildEmailShareUrl,
     buildFacebookShareUrl,
@@ -33,23 +34,31 @@ export function useContentShare(
     url: string,
     description?: string | null,
 ) {
+    const { t } = useTrans();
     const [copied, setCopied] = useState(false);
     const absoluteUrl = useMemo(() => toAbsoluteShareUrl(url), [url]);
     const canNativeShare =
         typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 
-    const copyLink = async (): Promise<void> => {
+    const copyLink = useCallback(async (): Promise<void> => {
         try {
             await navigator.clipboard.writeText(absoluteUrl);
             setCopied(true);
-            toast.success('Lien copié dans le presse-papiers');
+            toast.success(
+                t(
+                    'share.link_copied',
+                    'Lien copié dans le presse-papiers',
+                ),
+            );
             window.setTimeout(() => setCopied(false), 2000);
         } catch {
-            toast.error('Impossible de copier le lien');
+            toast.error(
+                t('share.copy_failed', 'Impossible de copier le lien'),
+            );
         }
-    };
+    }, [absoluteUrl, t]);
 
-    const nativeShare = async (): Promise<void> => {
+    const nativeShare = useCallback(async (): Promise<void> => {
         try {
             await navigator.share({
                 title,
@@ -61,54 +70,63 @@ export function useContentShare(
                 return;
             }
 
-            toast.error('Le partage a échoué');
+            toast.error(t('share.failed', 'Le partage a échoué'));
         }
-    };
+    }, [absoluteUrl, description, title, t]);
 
-    const actions: ContentShareAction[] = [
-        {
-            id: 'copy',
-            label: copied ? 'Copié' : 'Copier le lien',
-            href: '#',
-            icon: copied ? Check : Copy,
-            onClick: copyLink,
-        },
-        {
-            id: 'whatsapp',
-            label: 'WhatsApp',
-            href: buildWhatsAppShareUrl(absoluteUrl, title),
-            icon: MessageCircle,
-            external: true,
-        },
-        {
-            id: 'facebook',
-            label: 'Facebook',
-            href: buildFacebookShareUrl(absoluteUrl),
-            icon: Facebook,
-            external: true,
-        },
-        {
-            id: 'linkedin',
-            label: 'LinkedIn',
-            href: buildLinkedInShareUrl(absoluteUrl),
-            icon: Linkedin,
-            external: true,
-        },
-        {
-            id: 'x',
-            label: 'X',
-            href: buildXShareUrl(absoluteUrl, title),
-            icon: Share2,
-            external: true,
-        },
-        {
-            id: 'email',
-            label: 'E-mail',
-            href: buildEmailShareUrl(absoluteUrl, title, description ?? undefined),
-            icon: Mail,
-            external: true,
-        },
-    ];
+    const actions: ContentShareAction[] = useMemo(
+        () => [
+            {
+                id: 'copy',
+                label: copied
+                    ? t('share.copied', 'Copié')
+                    : t('share.copy_link', 'Copier le lien'),
+                href: '#',
+                icon: copied ? Check : Copy,
+                onClick: copyLink,
+            },
+            {
+                id: 'whatsapp',
+                label: t('share.whatsapp', 'WhatsApp'),
+                href: buildWhatsAppShareUrl(absoluteUrl, title),
+                icon: MessageCircle,
+                external: true,
+            },
+            {
+                id: 'facebook',
+                label: t('share.facebook', 'Facebook'),
+                href: buildFacebookShareUrl(absoluteUrl),
+                icon: Facebook,
+                external: true,
+            },
+            {
+                id: 'linkedin',
+                label: t('share.linkedin', 'LinkedIn'),
+                href: buildLinkedInShareUrl(absoluteUrl),
+                icon: Linkedin,
+                external: true,
+            },
+            {
+                id: 'x',
+                label: t('share.x', 'X'),
+                href: buildXShareUrl(absoluteUrl, title),
+                icon: Share2,
+                external: true,
+            },
+            {
+                id: 'email',
+                label: t('share.email', 'E-mail'),
+                href: buildEmailShareUrl(
+                    absoluteUrl,
+                    title,
+                    description ?? undefined,
+                ),
+                icon: Mail,
+                external: true,
+            },
+        ],
+        [absoluteUrl, copied, copyLink, description, t, title],
+    );
 
     return {
         absoluteUrl,

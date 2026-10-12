@@ -79,12 +79,12 @@ class GalleryVideoController extends Controller
 
         GalleryVideo::query()->create($validated);
 
-        return redirect()
-            ->route('gallery-videos.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Vidéo ajoutée à la galerie.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.gallery_video_created'),
+        ]);
+
+        return to_route('gallery-videos.index');
     }
 
     public function show(GalleryVideo $galleryVideo): RedirectResponse
@@ -111,12 +111,12 @@ class GalleryVideoController extends Controller
 
         $galleryVideo->update($validated);
 
-        return redirect()
-            ->route('gallery-videos.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Vidéo de galerie mise à jour.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.gallery_video_updated'),
+        ]);
+
+        return to_route('gallery-videos.index');
     }
 
     public function destroy(GalleryVideo $galleryVideo): RedirectResponse
@@ -125,11 +125,11 @@ class GalleryVideoController extends Controller
 
         $galleryVideo->delete();
 
-        return redirect()
-            ->route('gallery-videos.index')
-            ->with('toast', [
-                'type' => 'success',
-                'message' => 'Vidéo supprimée de la galerie.',
-            ]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => bt('toasts.gallery_video_deleted'),
+        ]);
+
+        return to_route('gallery-videos.index');
     }
 }

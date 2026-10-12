@@ -27,6 +27,7 @@ import {
     SidebarSeparator,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { useTrans } from '@/hooks/use-trans';
 import { showNavigationLoader } from '@/lib/navigation-loader';
 import { dashboard, home } from '@/routes';
 import { index as galleryImagesIndex } from '@/routes/gallery-images';
@@ -52,13 +53,7 @@ function hasFeatureAccess(permissions: string[], feature: string): boolean {
     );
 }
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Site web',
-        href: home(),
-        icon: Globe,
-    },
-];
+type Translate = (key: string, fallback?: string) => string;
 
 type SidebarPageProps = {
     auth: Auth;
@@ -77,15 +72,21 @@ function buildNavGroups(
     permissions: string[],
     badges: NavBadges,
     canApprove: { articles: boolean; conseils: boolean },
+    t: Translate,
 ): NavGroup[] {
     const groups: NavGroup[] = [];
+    const articlesLabel = t('nav.articles', 'Actualités');
+    const tipsLabel = t('nav.tips', 'Conseils');
+    const photosLabel = t('nav.photos', 'Photos');
+    const usersLabel = t('nav.users', 'Utilisateurs');
+    const partnersLabel = t('nav.partners', 'Partenaires');
 
     if (hasFeatureAccess(permissions, 'dashboard')) {
         groups.push({
-            title: 'Vue d\'ensemble',
+            title: t('nav.overview', "Vue d'ensemble"),
             items: [
                 {
-                    title: 'Dashboard',
+                    title: t('nav.dashboard', 'Dashboard'),
                     href: dashboard(),
                     icon: LayoutGrid,
                 },
@@ -97,7 +98,7 @@ function buildNavGroups(
 
     if (hasFeatureAccess(permissions, 'articles')) {
         editorialChildren.push({
-            title: 'Actualités',
+            title: articlesLabel,
             href: articlesIndex.url(),
             ...(canApprove.articles && badges.articles > 0
                 ? { badge: badges.articles }
@@ -107,7 +108,7 @@ function buildNavGroups(
 
     if (hasFeatureAccess(permissions, 'conseils')) {
         editorialChildren.push({
-            title: 'Conseils',
+            title: tipsLabel,
             href: conseilsIndex.url(),
             ...(canApprove.conseils && badges.conseils > 0
                 ? { badge: badges.conseils }
@@ -117,10 +118,10 @@ function buildNavGroups(
 
     if (editorialChildren.length > 1) {
         groups.push({
-            title: 'Contenu',
+            title: t('nav.content', 'Contenu'),
             items: [
                 {
-                    title: 'Éditorial',
+                    title: t('nav.editorial', 'Éditorial'),
                     icon: Newspaper,
                     children: editorialChildren,
                 },
@@ -130,11 +131,11 @@ function buildNavGroups(
         const [item] = editorialChildren;
 
         groups.push({
-            title: 'Contenu',
+            title: t('nav.content', 'Contenu'),
             items: [
                 {
                     ...item,
-                    icon: item.title === 'Actualités' ? Newspaper : Shield,
+                    icon: item.title === articlesLabel ? Newspaper : Shield,
                 },
             ],
         });
@@ -144,24 +145,24 @@ function buildNavGroups(
 
     if (hasFeatureAccess(permissions, 'gallery_images')) {
         galleryChildren.push({
-            title: 'Photos',
+            title: photosLabel,
             href: galleryImagesIndex.url(),
         });
     }
 
     if (hasFeatureAccess(permissions, 'gallery_videos')) {
         galleryChildren.push({
-            title: 'Vidéos',
+            title: t('nav.videos', 'Vidéos'),
             href: galleryVideosIndex.url(),
         });
     }
 
     if (galleryChildren.length > 1) {
         groups.push({
-            title: 'Médias',
+            title: t('nav.media', 'Médias'),
             items: [
                 {
-                    title: 'Galerie',
+                    title: t('nav.gallery', 'Galerie'),
                     icon: Images,
                     children: galleryChildren,
                 },
@@ -171,11 +172,11 @@ function buildNavGroups(
         const [item] = galleryChildren;
 
         groups.push({
-            title: 'Médias',
+            title: t('nav.media', 'Médias'),
             items: [
                 {
                     ...item,
-                    icon: item.title === 'Photos' ? Images : Video,
+                    icon: item.title === photosLabel ? Images : Video,
                 },
             ],
         });
@@ -185,21 +186,21 @@ function buildNavGroups(
 
     if (hasFeatureAccess(permissions, 'users')) {
         adminChildren.push({
-            title: 'Utilisateurs',
+            title: usersLabel,
             href: usersIndex.url(),
         });
     }
 
     if (hasFeatureAccess(permissions, 'partners')) {
         adminChildren.push({
-            title: 'Partenaires',
+            title: partnersLabel,
             href: partnersIndex.url(),
         });
     }
 
     if (hasFeatureAccess(permissions, 'agent_applications')) {
         adminChildren.push({
-            title: 'Candidatures agents',
+            title: t('nav.agent_applications', 'Candidatures agents'),
             href: candidaturesAgentsIndex.url(),
             ...(badges.candidatures > 0
                 ? { badge: badges.candidatures }
@@ -209,10 +210,10 @@ function buildNavGroups(
 
     if (adminChildren.length > 1) {
         groups.push({
-            title: 'Administration',
+            title: t('nav.administration', 'Administration'),
             items: [
                 {
-                    title: 'Gestion',
+                    title: t('nav.management', 'Gestion'),
                     icon: Users,
                     children: adminChildren,
                 },
@@ -222,14 +223,14 @@ function buildNavGroups(
         const [item] = adminChildren;
 
         groups.push({
-            title: 'Administration',
+            title: t('nav.administration', 'Administration'),
             items: [
                 {
                     ...item,
                     icon:
-                        item.title === 'Utilisateurs'
+                        item.title === usersLabel
                             ? Users
-                            : item.title === 'Partenaires'
+                            : item.title === partnersLabel
                               ? Handshake
                               : UserPlus,
                 },
@@ -238,61 +239,60 @@ function buildNavGroups(
     }
 
     const marketingChildren: NavItem[] = [];
-    
 
     if (hasFeatureAccess(permissions, 'marketing_clients')) {
         marketingChildren.push({
-            title: 'Contacts',
+            title: t('nav.contacts', 'Contacts'),
             href: marketingClientsIndex.url(),
         });
         marketingChildren.push({
-            title: 'Groupes',
+            title: t('nav.lists', 'Groupes'),
             href: marketingListsIndex.url(),
         });
     }
 
     if (hasFeatureAccess(permissions, 'marketing_campaigns')) {
         marketingChildren.push({
-            title: 'E-mail',
+            title: t('nav.email', 'E-mail'),
             isSectionLabel: true,
         });
         marketingChildren.push({
-            title: 'Templates',
+            title: t('nav.templates', 'Templates'),
             href: marketingTemplatesIndex.url({ query: { channel: 'email' } }),
         });
         marketingChildren.push({
-            title: 'Campagnes',
+            title: t('nav.campaigns', 'Campagnes'),
             href: marketingCampaignsIndex.url({ query: { channel: 'email' } }),
         });
         marketingChildren.push({
-            title: 'Comptes',
+            title: t('nav.accounts', 'Comptes'),
             href: marketingEmailAccountsIndex.url(),
         });
         marketingChildren.push({
-            title: 'WhatsApp',
+            title: t('nav.whatsapp', 'WhatsApp'),
             isSectionLabel: true,
         });
         marketingChildren.push({
-            title: 'Templates',
+            title: t('nav.templates', 'Templates'),
             href: marketingTemplatesIndex.url({ query: { channel: 'whatsapp' } }),
         });
         marketingChildren.push({
-            title: 'Campagnes',
+            title: t('nav.campaigns', 'Campagnes'),
             href: marketingCampaignsIndex.url({ query: { channel: 'whatsapp' } }),
         });
         marketingChildren.push({
-            title: 'Comptes',
+            title: t('nav.accounts', 'Comptes'),
             href: marketingWhatsAppAccountsIndex.url(),
         });
     }
 
     if (marketingChildren.length > 0) {
         groups.push({
-            title: 'Marketing',
+            title: t('nav.marketing', 'Marketing'),
             items: [
                 marketingChildren.length > 1
                     ? {
-                          title: 'Marketing',
+                          title: t('nav.marketing', 'Marketing'),
                           icon: Contact,
                           children: marketingChildren,
                       }
@@ -309,7 +309,7 @@ function buildNavGroups(
 
         if (hasFeatureAccess(permissions, 'analytics')) {
             insightItems.push({
-                title: 'Analytics',
+                title: t('nav.analytics', 'Analytics'),
                 href: analyticsIndex.url(),
                 icon: BarChart3,
             });
@@ -317,14 +317,14 @@ function buildNavGroups(
 
         if (hasFeatureAccess(permissions, 'access_logs')) {
             insightItems.push({
-                title: 'Journal d\'accès',
+                title: t('nav.access_logs', "Journal d'accès"),
                 href: accessLogsIndex.url(),
                 icon: History,
             });
         }
 
         groups.push({
-            title: 'Insights',
+            title: t('nav.insights', 'Insights'),
             items: insightItems,
         });
     }
@@ -334,6 +334,7 @@ function buildNavGroups(
 
 export function AppSidebar() {
     const { isMobile, setOpenMobile } = useSidebar();
+    const { t } = useTrans();
     const {
         auth,
         articlesPendingCount = 0,
@@ -344,6 +345,14 @@ export function AppSidebar() {
     const permissions = auth.user?.permissions ?? [];
     const canApproveArticles = auth.user?.can_approve_articles ?? false;
     const canApproveConseils = auth.user?.can_approve_conseils ?? false;
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: t('nav.website', 'Site web'),
+            href: home(),
+            icon: Globe,
+        },
+    ];
 
     const navGroups = buildNavGroups(
         permissions,
@@ -356,6 +365,7 @@ export function AppSidebar() {
             articles: canApproveArticles,
             conseils: canApproveConseils,
         },
+        t,
     );
 
     const closeMobile = () => {

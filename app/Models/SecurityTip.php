@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ArticleStatus;
+use App\Support\LocalizedCmsContent;
 use App\Support\MarketingMediaUrl;
 use Database\Factories\SecurityTipFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -15,10 +16,13 @@ use Illuminate\Support\Str;
 
 #[Fillable([
     'title',
+    'title_en',
     'slug',
     'status',
     'excerpt',
+    'excerpt_en',
     'content',
+    'content_en',
     'image',
     'category',
     'tags',
@@ -233,11 +237,47 @@ class SecurityTip extends Model
      */
     public function toPublicArray(bool $includeContent = false): array
     {
+        $localized = LocalizedCmsContent::for($this);
+
+        $data = [
+            'id' => $this->id,
+            'title' => $localized['title'],
+            'slug' => $this->slug,
+            'excerpt' => $localized['excerpt'],
+            'image' => $this->image,
+            'image_url' => $this->image_url,
+            'image_source' => $this->image_source,
+            'category' => $this->category,
+            'tags' => $this->tags ?? [],
+            'featured' => $this->featured,
+            'views' => $this->views,
+            'read_time' => $this->read_time,
+            'formatted_read_time' => $this->formatted_read_time,
+            'published_at' => $this->published_at?->toIso8601String(),
+            'published_at_formatted' => $this->published_at?->locale(app()->getLocale())->isoFormat('D MMMM YYYY'),
+            'is_locale_fallback' => $localized['is_fallback'],
+            'has_english' => $localized['has_english'],
+        ];
+
+        if ($includeContent) {
+            $data['content'] = $localized['content'];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toAdminArray(bool $includeContent = false): array
+    {
         $data = [
             'id' => $this->id,
             'title' => $this->title,
+            'title_en' => $this->title_en,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
+            'excerpt_en' => $this->excerpt_en,
             'image' => $this->image,
             'image_url' => $this->image_url,
             'image_source' => $this->image_source,
@@ -249,22 +289,6 @@ class SecurityTip extends Model
             'formatted_read_time' => $this->formatted_read_time,
             'published_at' => $this->published_at?->toIso8601String(),
             'published_at_formatted' => $this->published_at?->locale('fr')->isoFormat('D MMMM YYYY'),
-        ];
-
-        if ($includeContent) {
-            $data['content'] = $this->content;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toAdminArray(bool $includeContent = false): array
-    {
-        return [
-            ...$this->toPublicArray($includeContent),
             'status' => $this->status->value,
             'status_label' => $this->status->label(),
             'created_by' => $this->formatUserReference($this->createdBy),
@@ -279,6 +303,13 @@ class SecurityTip extends Model
             'rejected_at' => $this->rejected_at?->toIso8601String(),
             'rejected_at_formatted' => $this->rejected_at?->locale('fr')->isoFormat('D MMM YYYY à HH:mm'),
         ];
+
+        if ($includeContent) {
+            $data['content'] = $this->content;
+            $data['content_en'] = $this->content_en;
+        }
+
+        return $data;
     }
 
     /**

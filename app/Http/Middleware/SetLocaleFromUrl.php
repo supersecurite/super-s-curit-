@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\BackofficeLocale;
 use App\Support\LocaleUrl;
 use Carbon\Carbon;
 use Closure;
@@ -10,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Fixe la locale applicative pour le site public à partir de l'URL (/en/… → en).
+ *
+ * Ignoré sur backoffice / auth / settings (gérés par SetBackofficeLocale).
  */
 class SetLocaleFromUrl
 {
@@ -18,6 +21,10 @@ class SetLocaleFromUrl
      */
     public function handle(Request $request, Closure $next, ?string $locale = null): Response
     {
+        if (BackofficeLocale::appliesToPath($request->path())) {
+            return $next($request);
+        }
+
         $resolved = $locale ?? $this->localeFromPath($request->path());
 
         if (! LocaleUrl::isSupported($resolved)) {

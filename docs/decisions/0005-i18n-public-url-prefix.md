@@ -25,4 +25,4 @@ Le site marketing doit être bilingue FR / EN avec un SEO correct (URLs distinct
 - Middleware `SetLocaleFromUrl` sur les routes marketing uniquement.
 - Traductions UI via `lang/{locale}.json` partagées Inertia (`locale`, `translations`).
 - Meta SEO EN dans `config/seo_en.php`, mergées par `LocalizedSeo`.
-- Phase 2 : backoffice bilingue, traductions éditoriales CMS, segments d’URL traduits si besoin.
+- Phase 2 : backoffice bilingue ([ADR-0006](0006-backoffice-locale-session.md)), traductions éditoriales CMS, segments d’URL traduits si besoin.

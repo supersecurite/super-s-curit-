@@ -86,11 +86,11 @@ class StoreMarketingMessageTemplateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le titre interne est requis.',
-            'subject.required' => 'L\'objet est requis pour un template e-mail.',
-            'body.required' => 'Le contenu du message est requis pour un template e-mail.',
-            'meta_template_name.required' => 'Le nom du modèle Meta est requis pour WhatsApp.',
-            'meta_template_language.required' => 'La langue du modèle Meta est requise.',
+            'name.required' => bt('validation.template_title_required'),
+            'subject.required' => bt('validation.subject_required_email'),
+            'body.required' => bt('validation.body_required_email'),
+            'meta_template_name.required' => bt('validation.meta_name_required'),
+            'meta_template_language.required' => bt('validation.meta_language_required'),
         ];
     }
 }

@@ -70,7 +70,7 @@ class MarketingListController extends Controller
     {
         $list = $action->handle($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Groupe créé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.list_created')]);
 
         return to_route('marketing-lists.show', $list);
     }
@@ -119,7 +119,7 @@ class MarketingListController extends Controller
     ): RedirectResponse {
         $action->handle($marketingList, $request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Groupe mis à jour avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.list_updated')]);
 
         return to_route('marketing-lists.show', $marketingList);
     }
@@ -130,7 +130,7 @@ class MarketingListController extends Controller
 
         $action->handle($marketingList);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Groupe supprimé avec succès.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.list_deleted')]);
 
         return to_route('marketing-lists.index');
     }
@@ -161,8 +161,8 @@ class MarketingListController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => $count === 1
-                ? 'Contact ajouté au groupe.'
-                : "{$count} contacts ajoutés au groupe.",
+                ? bt('toasts.list_contact_attached')
+                : bt('toasts.list_contacts_attached', ['count' => $count]),
         ]);
 
         return to_route('marketing-lists.show', $marketingList);
@@ -177,7 +177,7 @@ class MarketingListController extends Controller
 
         $action->handle($marketingList, $marketingClient);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Contact retiré du groupe.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => bt('toasts.list_contact_detached')]);
 
         return to_route('marketing-lists.show', $marketingList);
     }

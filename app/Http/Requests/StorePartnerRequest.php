@@ -31,9 +31,9 @@ class StorePartnerRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom du partenaire est obligatoire.',
-            'logo.required' => 'Le logo est obligatoire.',
-            'logo.image' => 'Le fichier doit être une image.',
+            'name.required' => bt('validation.partner_name_required'),
+            'logo.required' => bt('validation.logo_required'),
+            'logo.image' => bt('validation.image_image'),
         ];
     }
 }

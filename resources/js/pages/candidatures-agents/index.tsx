@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Eye, LayoutList, MapPin, Search, UserPlus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
@@ -18,6 +18,7 @@ import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { useTrans } from '@/hooks/use-trans';
 import { index, show } from '@/routes/candidatures-agents';
 
 type ApplicationRow = {
@@ -77,8 +78,18 @@ function statusBadgeVariant(
 }
 
 export default function CandidaturesAgentsIndex() {
+    const { t } = useTrans();
     const { applications, filters, pendingCount, statuses, posts } =
         usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('applications.title', 'Candidatures agents'),
+                href: index.url(),
+            },
+        ],
+    });
 
     const initialLocation = useMemo<LocationValues>(
         () => ({
@@ -221,31 +232,34 @@ export default function CandidaturesAgentsIndex() {
                     <Button variant="outline" size="sm" asChild>
                         <Link href={show.url(application.uuid)}>
                             <Eye className="size-4" aria-hidden />
-                            Voir la fiche
+                            {t('applications.view_record', 'Voir la fiche')}
                         </Link>
                     </Button>
                 ),
             },
         ];
-    }, []);
+    }, [t]);
 
     return (
         <>
-            <Head title="Candidatures agents" />
+            <Head title={t('applications.title', 'Candidatures agents')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
                     <h1 className="font-heading flex flex-wrap items-center gap-2 text-2xl font-semibold tracking-tight">
                         <UserPlus className="size-6" aria-hidden />
-                        Candidatures agents
+                        {t('applications.title', 'Candidatures agents')}
                         {pendingCount > 0 ? (
                             <Badge variant="destructive" className="text-xs">
-                                {pendingCount} en attente
+                                {pendingCount} {t('common.pending', 'en attente')}
                             </Badge>
                         ) : null}
                     </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        Consultez et suivez les agents inscrits sur la plateforme.
+                        {t(
+                            'applications.subtitle',
+                            'Consultez et suivez les agents inscrits sur la plateforme.',
+                        )}
                     </p>
                 </div>
 
@@ -259,7 +273,10 @@ export default function CandidaturesAgentsIndex() {
                             <Input
                                 id="candidatures-search"
                                 className="pl-9"
-                                placeholder="Rechercher par nom, téléphone, e-mail, poste…"
+                                placeholder={t(
+                                    'applications.search_placeholder',
+                                    'Rechercher par nom, téléphone, e-mail, poste…',
+                                )}
                                 defaultValue={filters.search ?? ''}
                                 onChange={(event) =>
                                     debouncedSearch(event.target.value)
@@ -267,10 +284,18 @@ export default function CandidaturesAgentsIndex() {
                             />
                         </div>
                         <div className="min-w-0">
-                            <Label className="mb-1 block text-sm">Statut</Label>
+                            <Label className="mb-1 block text-sm">
+                                {t('common.status', 'Statut')}
+                            </Label>
                             <SearchableSelect
                                 options={[
-                                    { value: 'all', label: 'Tous les statuts' },
+                                    {
+                                        value: 'all',
+                                        label: t(
+                                            'common.all_statuses',
+                                            'Tous les statuts',
+                                        ),
+                                    },
                                     ...statuses.map((status) => ({
                                         value: status.value,
                                         label: status.label,
@@ -283,15 +308,26 @@ export default function CandidaturesAgentsIndex() {
                                             status === 'all' ? undefined : status,
                                     })
                                 }
-                                placeholder="Statut"
-                                searchPlaceholder="Rechercher un statut…"
+                                placeholder={t('common.status', 'Statut')}
+                                searchPlaceholder={t(
+                                    'common.search_ellipsis',
+                                    'Rechercher…',
+                                )}
                             />
                         </div>
                         <div className="min-w-0">
-                            <Label className="mb-1 block text-sm">Poste</Label>
+                            <Label className="mb-1 block text-sm">
+                                {t('applications.post_filter', 'Poste')}
+                            </Label>
                             <SearchableSelect
                                 options={[
-                                    { value: 'all', label: 'Tous les postes' },
+                                    {
+                                        value: 'all',
+                                        label: t(
+                                            'applications.all_posts',
+                                            'Tous les postes',
+                                        ),
+                                    },
                                     ...posts.map((post) => ({
                                         value: post.value,
                                         label: post.label,
@@ -303,8 +339,14 @@ export default function CandidaturesAgentsIndex() {
                                         post: post === 'all' ? undefined : post,
                                     })
                                 }
-                                placeholder="Poste"
-                                searchPlaceholder="Rechercher un poste…"
+                                placeholder={t(
+                                    'applications.post_filter',
+                                    'Poste',
+                                )}
+                                searchPlaceholder={t(
+                                    'common.search_ellipsis',
+                                    'Rechercher…',
+                                )}
                             />
                         </div>
                     </BackofficeFiltersBar>
@@ -312,7 +354,10 @@ export default function CandidaturesAgentsIndex() {
                     <div>
                         <p className="text-muted-foreground mb-3 flex items-center gap-2 text-sm font-medium">
                             <MapPin className="size-4" />
-                            Filtrer par localisation
+                            {t(
+                                'applications.filter_location',
+                                'Filtrer par localisation',
+                            )}
                         </p>
                         <LocationCascadingSelects
                             values={location}
@@ -329,7 +374,10 @@ export default function CandidaturesAgentsIndex() {
                         emptyMessage={
                             <span className="inline-flex flex-col items-center gap-2">
                                 <LayoutList className="size-8 opacity-60" />
-                                Aucune candidature trouvée
+                                {t(
+                                    'applications.empty_found',
+                                    'Aucune candidature trouvée',
+                                )}
                             </span>
                         }
                         minWidth="960px"
@@ -340,13 +388,12 @@ export default function CandidaturesAgentsIndex() {
 
                 <IndexTablePagination
                     paginated={applications}
-                    itemLabel="candidature(s)"
+                    itemLabel={t(
+                        'applications.item_label',
+                        'candidature(s)',
+                    )}
                 />
             </div>
         </>
     );
 }
-
-CandidaturesAgentsIndex.layout = {
-    breadcrumbs: [{ title: 'Candidatures agents', href: index.url() }],
-};

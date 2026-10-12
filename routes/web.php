@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AccessLogController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\BackofficeLocaleController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
 use App\Http\Controllers\Admin\MarketingCampaignController as AdminMarketingCampaignController;
@@ -68,6 +69,9 @@ Route::post('/analytics/duration', [AnalyticsController::class, 'updateDuration'
 Route::get('/analytics/duration', fn () => redirect()->route('analytics.index'));
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::put('backoffice/locale', [BackofficeLocaleController::class, 'update'])
+        ->name('backoffice.locale.update');
+
     Route::get('dashboard', DashboardController::class)
         ->middleware('backoffice.permission:dashboard')
         ->name('dashboard');

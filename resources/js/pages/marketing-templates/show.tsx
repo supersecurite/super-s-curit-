@@ -5,6 +5,7 @@ import ContentRenderer from '@/components/lexical-editor/content-renderer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { variableTokenClassName } from '@/lib/marketing-template-variables';
+import { useTrans } from '@/hooks/use-trans';
 import { destroy, edit, index, show } from '@/routes/marketing-templates';
 
 type TemplateData = {
@@ -28,12 +29,13 @@ type PageProps = {
 };
 
 export default function MarketingTemplatesShow() {
+    const { t } = useTrans();
     const { template, variables, canUpdate, canDelete } = usePage<PageProps>().props;
 
     setLayoutProps({
         breadcrumbs: [
             {
-                title: 'Templates',
+                title: t('marketing_templates.title', 'Templates'),
                 href: index.url({ query: { channel: template.channel } }),
             },
             { title: template.name, href: show.url(template.uuid) },
@@ -52,7 +54,10 @@ export default function MarketingTemplatesShow() {
                             className="text-muted-foreground hover:text-foreground mb-3 inline-flex items-center gap-1 text-sm"
                         >
                             <ArrowLeft className="size-4" aria-hidden />
-                            Retour à la liste
+                            {t(
+                                'marketing_templates.back_to_list',
+                                'Retour à la liste',
+                            )}
                         </Link>
                         <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
                             <FileText className="size-6" aria-hidden />
@@ -68,16 +73,23 @@ export default function MarketingTemplatesShow() {
                             <Button asChild>
                                 <Link href={edit.url(template.uuid)}>
                                     <Pencil className="size-4" aria-hidden />
-                                    Modifier
+                                    {t('common.modify', 'Modifier')}
                                 </Link>
                             </Button>
                         ) : null}
                         {canDelete ? (
                             <ConfirmDeleteDialog
-                                title="Supprimer ce template ?"
-                                description={`Le template « ${template.name} » sera définitivement supprimé.`}
+                                title={t(
+                                    'marketing_templates.delete_confirm',
+                                    'Supprimer ce template ?',
+                                )}
+                                description={t(
+                                    'marketing_templates.delete_description_full',
+                                    'Le template « :name » sera définitivement supprimé.',
+                                    { name: template.name },
+                                )}
                                 deleteUrl={destroy.url(template.uuid)}
-                                triggerLabel="Supprimer"
+                                triggerLabel={t('common.delete', 'Supprimer')}
                                 triggerVariant="outline"
                                 triggerClassName="text-destructive hover:text-destructive"
                             />
@@ -241,10 +253,3 @@ export default function MarketingTemplatesShow() {
         </>
     );
 }
-
-MarketingTemplatesShow.layout = {
-    breadcrumbs: [
-        { title: 'Templates', href: index.url() },
-        { title: 'Détail', href: show.url('') },
-    ],
-};

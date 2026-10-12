@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, setLayoutProps, usePage } from '@inertiajs/react';
 import { Calendar, Megaphone, Pencil, Plus, RotateCcw, Search } from 'lucide-react';
 import { useMemo } from 'react';
 import {
@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { useIndexTableSort, type TableSortState } from '@/hooks/use-index-table-sort';
+import { useTrans } from '@/hooks/use-trans';
 import { withIndexTableQuery } from '@/lib/index-table-query';
 import {
     create,
@@ -100,10 +101,22 @@ function audienceLabel(campaign: CampaignRow): string {
 }
 
 export default function MarketingCampaignsIndex() {
+    const { t } = useTrans();
     const { campaigns, channel, filters, canCreate } = usePage<PageProps>().props;
     const activeChannel = channel === 'whatsapp' ? 'whatsapp' : 'email';
     const isWhatsApp = activeChannel === 'whatsapp';
-    const title = isWhatsApp ? 'Campagnes WhatsApp' : 'Campagnes e-mail';
+    const title = isWhatsApp
+        ? t('marketing_campaigns.title_whatsapp', 'Campagnes WhatsApp')
+        : t('marketing_campaigns.title_email', 'Campagnes e-mail');
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title,
+                href: index.url({ query: { channel: activeChannel } }),
+            },
+        ],
+    });
 
     const applyFilters = (
         updates: Partial<TableSortState & { search?: string; channel?: string; page?: number }>,
@@ -134,10 +147,13 @@ export default function MarketingCampaignsIndex() {
                         variant="outline"
                         size="sm"
                         onClick={() => router.post(retry.url(campaign.uuid), {}, { preserveScroll: true })}
-                        title="Relancer les envois échoués"
+                        title={t(
+                            'marketing_campaigns.retry_failed_title',
+                            'Relancer les envois échoués',
+                        )}
                     >
                         <RotateCcw className="size-4" aria-hidden />
-                        Relancer
+                        {t('marketing_campaigns.retry', 'Relancer')}
                     </Button>
                 ) : null}
                 {campaign.can_send ? (
@@ -146,29 +162,42 @@ export default function MarketingCampaignsIndex() {
                         campaignName={campaign.name}
                         triggerVariant="outline"
                         triggerSize="sm"
-                        triggerLabel="Lancer"
+                        triggerLabel={t('marketing_campaigns.launch', 'Lancer')}
                     />
                 ) : null}
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={show.url(campaign.uuid)}>Voir</Link>
+                    <Link href={show.url(campaign.uuid)}>
+                        {t('common.view', 'Voir')}
+                    </Link>
                 </Button>
                 {campaign.can_update ? (
                     <Button variant="outline" size="sm" asChild>
                         <Link href={edit.url(campaign.uuid)}>
                             <Pencil className="size-4" aria-hidden />
-                            Modifier
+                            {t('common.modify', 'Modifier')}
                         </Link>
                     </Button>
                 ) : null}
                 {campaign.can_delete ? (
                     <ConfirmDeleteDialog
-                        title="Supprimer cette campagne ?"
-                        description={`La campagne « ${campaign.name} » sera supprimée.`}
+                        title={t(
+                            'marketing_campaigns.delete_confirm',
+                            'Supprimer cette campagne ?',
+                        )}
+                        description={t(
+                            'marketing_campaigns.delete_description',
+                            'La campagne « :name » sera supprimée.',
+                            { name: campaign.name },
+                        )}
                         deleteUrl={destroy.url(campaign.uuid)}
                         triggerSize="sm"
                         triggerVariant="outline"
                         triggerClassName="text-destructive hover:text-destructive"
-                        aria-label={`Supprimer ${campaign.name}`}
+                        aria-label={t(
+                            'marketing_campaigns.delete_aria',
+                            'Supprimer :name',
+                            { name: campaign.name },
+                        )}
                     />
                 ) : null}
             </div>
@@ -177,7 +206,7 @@ export default function MarketingCampaignsIndex() {
         return [
             {
                 id: 'name',
-                header: 'Campagne',
+                header: t('marketing_campaigns.column_campaign', 'Campagne'),
                 sortKey: 'name',
                 cell: (campaign) => (
                     <div>
@@ -195,7 +224,7 @@ export default function MarketingCampaignsIndex() {
             },
             {
                 id: 'status',
-                header: 'Statut',
+                header: t('marketing_campaigns.column_status', 'Statut'),
                 sortKey: 'status',
                 cell: (campaign) => (
                     <div className="flex flex-col items-start gap-1">
@@ -211,17 +240,20 @@ export default function MarketingCampaignsIndex() {
             },
             {
                 id: 'audience',
-                header: 'Audience',
+                header: t('marketing_campaigns.column_audience', 'Audience'),
                 cell: (campaign) => audienceLabel(campaign),
             },
             {
                 id: 'sends',
-                header: 'Envois',
+                header: t('marketing_campaigns.column_sends', 'Envois'),
                 cell: (campaign) => campaign.sends_count,
             },
             {
                 id: 'launched_at',
-                header: 'Lancée / Prévue le',
+                header: t(
+                    'marketing_campaigns.column_launched',
+                    'Lancée / Prévue le',
+                ),
                 sortKey: 'launched_at',
                 cell: (campaign) => {
                     if (campaign.launched_at_formatted) {
@@ -245,7 +277,7 @@ export default function MarketingCampaignsIndex() {
                 className: 'text-right',
             },
         ];
-    }, [isWhatsApp]);
+    }, [isWhatsApp, t]);
 
     return (
         <>
@@ -260,8 +292,14 @@ export default function MarketingCampaignsIndex() {
                         </h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             {isWhatsApp
-                                ? 'Campagnes WhatsApp uniquement — templates Meta, accusés de réception et de lecture.'
-                                : 'Campagnes e-mail uniquement — groupes, contacts et suivi d’ouvertures.'}
+                                ? t(
+                                      'marketing_campaigns.subtitle_whatsapp',
+                                      'Campagnes WhatsApp uniquement — templates Meta, accusés de réception et de lecture.',
+                                  )
+                                : t(
+                                      'marketing_campaigns.subtitle_email',
+                                      'Campagnes e-mail uniquement — groupes, contacts et suivi d’ouvertures.',
+                                  )}
                         </p>
                     </div>
 
@@ -269,7 +307,15 @@ export default function MarketingCampaignsIndex() {
                         <Button asChild>
                             <Link href={create.url({ query: { channel: activeChannel } })}>
                                 <Plus className="size-4" aria-hidden />
-                                Nouvelle campagne {isWhatsApp ? 'WhatsApp' : 'e-mail'}
+                                {isWhatsApp
+                                    ? t(
+                                          'marketing_campaigns.create_whatsapp',
+                                          'Nouvelle campagne WhatsApp',
+                                      )
+                                    : t(
+                                          'marketing_campaigns.create_email',
+                                          'Nouvelle campagne e-mail',
+                                      )}
                             </Link>
                         </Button>
                     ) : null}
@@ -278,7 +324,12 @@ export default function MarketingCampaignsIndex() {
                 <BackofficeIndexPanel>
                     <BackofficeFiltersBar>
                         <div className="space-y-1">
-                            <Label htmlFor="search">Rechercher</Label>
+                            <Label htmlFor="search">
+                                {t(
+                                    'marketing_campaigns.search_label',
+                                    'Rechercher',
+                                )}
+                            </Label>
                             <div className="relative">
                                 <Search
                                     className="text-muted-foreground absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
@@ -287,7 +338,17 @@ export default function MarketingCampaignsIndex() {
                                 <Input
                                     id="search"
                                     defaultValue={filters.search ?? ''}
-                                    placeholder={isWhatsApp ? 'Nom…' : 'Nom ou objet…'}
+                                    placeholder={
+                                        isWhatsApp
+                                            ? t(
+                                                  'marketing_campaigns.search_placeholder_whatsapp',
+                                                  'Nom…',
+                                              )
+                                            : t(
+                                                  'marketing_campaigns.search_placeholder_email',
+                                                  'Nom ou objet…',
+                                              )
+                                    }
                                     className="pl-8"
                                     onChange={(event) => debouncedSearch(event.target.value)}
                                 />
@@ -299,7 +360,17 @@ export default function MarketingCampaignsIndex() {
                         rows={campaigns.data}
                         columns={columns}
                         getRowKey={(campaign) => campaign.uuid}
-                        emptyMessage={`Aucune campagne ${isWhatsApp ? 'WhatsApp' : 'e-mail'} pour le moment.`}
+                        emptyMessage={
+                            isWhatsApp
+                                ? t(
+                                      'marketing_campaigns.empty_whatsapp',
+                                      'Aucune campagne WhatsApp pour le moment.',
+                                  )
+                                : t(
+                                      'marketing_campaigns.empty_email',
+                                      'Aucune campagne e-mail pour le moment.',
+                                  )
+                        }
                         minWidth="720px"
                         sort={filters}
                         onSort={handleSort}
@@ -308,14 +379,13 @@ export default function MarketingCampaignsIndex() {
 
                 <IndexTablePagination
                     paginated={campaigns}
-                    itemLabel="campagne(s)"
+                    itemLabel={t(
+                        'marketing_campaigns.item_label',
+                        'campagne(s)',
+                    )}
                     buildPageUrl={buildPageUrl}
                 />
             </div>
         </>
     );
 }
-
-MarketingCampaignsIndex.layout = {
-    breadcrumbs: [{ title: 'Campagnes', href: index.url({ query: { channel: 'email' } }) }],
-};

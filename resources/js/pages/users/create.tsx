@@ -1,8 +1,9 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, setLayoutProps, usePage } from '@inertiajs/react';
 import UserForm, {
     type PermissionGroup,
     type RoleOption,
 } from '@/components/users/user-form';
+import { useTrans } from '@/hooks/use-trans';
 import { create, index, store } from '@/routes/users';
 
 type PageProps = {
@@ -11,7 +12,18 @@ type PageProps = {
 };
 
 export default function UsersCreate() {
+    const { t } = useTrans();
     const { roles, permissionGroups } = usePage<PageProps>().props;
+
+    setLayoutProps({
+        breadcrumbs: [
+            { title: t('users.title', 'Utilisateurs'), href: index.url() },
+            {
+                title: t('users.create', 'Nouvel utilisateur'),
+                href: create.url(),
+            },
+        ],
+    });
 
     return (
         <>
@@ -40,16 +52,3 @@ export default function UsersCreate() {
         </>
     );
 }
-
-UsersCreate.layout = {
-    breadcrumbs: [
-        {
-            title: 'Utilisateurs',
-            href: index.url(),
-        },
-        {
-            title: 'Nouvel utilisateur',
-            href: create.url(),
-        },
-    ],
-};

@@ -31,7 +31,7 @@ class LaunchMarketingCampaignRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'scheduled_at.after' => 'La date de planification doit être dans le futur.',
+            'scheduled_at.after' => bt('validation.schedule_future'),
         ];
     }
 }
