@@ -10,9 +10,10 @@ import MarketingContentFilters from '@/components/marketing/marketing-content-fi
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
 import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import ContentShareButton from '@/components/content-share-button';
+import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
 import SeoHead from '@/components/marketing/seo-head';
 import type { MarketingContentImageSource } from '@/types/marketing-content';
-import { marketingPageHeroes } from '@/data/marketing-page-heroes';
+import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
 import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
 
 type ArticleCard = {
@@ -126,13 +127,15 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
 export default function MarketingArticlesIndex() {
     const { articles, featuredArticles, categories, filters } =
         usePage<PageProps>().props;
+    const hero = useMarketingPageHero('actualites');
 
     return (
         <>
             <SeoHead />
-            <Head title="Actualités" />
+            <CmsLocaleNotice />
+            <Head title={hero.label} />
 
-            <MarketingFullscreenHero {...marketingPageHeroes.actualites} />
+            <MarketingFullscreenHero {...hero} />
 
             <section className="marketing-section-band marketing-below-fold py-16">
                 <div className="container mx-auto max-w-6xl px-4">

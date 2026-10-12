@@ -1,29 +1,28 @@
 import { Link } from '@inertiajs/react';
-import {
-    superSecuriteServices,
-    superSecuriteServicesSection,
-} from '@/data/super-securite-content';
+import { superSecuriteServices } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 import Reveal from '@/components/marketing/reveal';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
+import { useTrans } from '@/hooks/use-trans';
 
 const serviceImages = superSecuriteStock.home.services;
 
 export default function ServiceCards() {
+    const { t } = useTrans();
+    const localized = useLocalizedUrl();
+
     return (
         <section id="services" className="py-16 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-14 max-w-2xl">
                     <p className="marketing-label mb-3">
-                        {superSecuriteServicesSection.sectionLabel}
+                        {t('home.services_label', 'Nos services')}
                     </p>
                     <h2 className="marketing-heading-section">
-                        Nos offres de service de{' '}
-                        <span className="text-black">
-                            sécurité
-                        </span>
+                        {t('home.services_label', 'Nos services')}
                     </h2>
                     <p className="mt-4 text-sm leading-relaxed md:text-base">
-                        {superSecuriteServicesSection.intro}
+                        {t('home.services_intro')}
                     </p>
                 </Reveal>
 
@@ -34,6 +33,14 @@ export default function ServiceCards() {
                             serviceImages[
                                 service.id as keyof typeof serviceImages
                             ];
+                        const title = t(
+                            `services.${service.id}.title`,
+                            service.title,
+                        );
+                        const description = t(
+                            `services.${service.id}.description`,
+                            service.description,
+                        );
 
                         return (
                             <Reveal
@@ -42,14 +49,14 @@ export default function ServiceCards() {
                                 className="h-full"
                             >
                                 <Link
-                                    href={service.path}
+                                    href={localized(service.path)}
                                     className="group flex h-full flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10"
                                 >
                                     <article id={service.id} className="flex h-full flex-col">
                                         <div className="relative aspect-[16/10] overflow-hidden">
                                             <img
                                                 src={image}
-                                                alt={service.title}
+                                                alt={title}
                                                 width={640}
                                                 height={400}
                                                 loading="lazy"
@@ -66,13 +73,13 @@ export default function ServiceCards() {
                                                 />
                                             </div>
                                             <h3 className="font-heading text-xl font-semibold text-super-securite-heading">
-                                                {service.title}
+                                                {title}
                                             </h3>
                                             <p className="mt-3 flex-1 text-sm leading-relaxed">
-                                                {service.description}
+                                                {description}
                                             </p>
                                             <span className="mt-4 text-sm font-semibold text-super-securite-accent">
-                                                En savoir plus →
+                                                {t('common.learn_more', 'En savoir plus')} →
                                             </span>
                                         </div>
                                     </article>

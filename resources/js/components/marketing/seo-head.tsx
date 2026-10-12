@@ -10,6 +10,9 @@ type PageMeta = {
     og_image_type: string;
     og_image_alt: string;
     og_type: string;
+    hreflang?: Record<string, string>;
+    og_locale?: string;
+    og_locale_alternates?: string[];
 };
 
 type PageProps = {
@@ -24,6 +27,14 @@ export default function SeoHead() {
         return null;
     }
 
+    const ogLocale = pageMeta.og_locale ?? seo.locale;
+    const ogLocaleAlternates =
+        pageMeta.og_locale_alternates ?? seo.localeAlternates ?? [];
+    const hreflang = pageMeta.hreflang ?? {
+        [seo.language]: pageMeta.canonical,
+        'x-default': pageMeta.canonical,
+    };
+
     return (
         <Head>
             <title head-key="title">{pageMeta.title}</title>
@@ -33,18 +44,15 @@ export default function SeoHead() {
                 content={pageMeta.description}
             />
             <link head-key="canonical" rel="canonical" href={pageMeta.canonical} />
-            <link
-                head-key="hreflang"
-                rel="alternate"
-                hrefLang={seo.language}
-                href={pageMeta.canonical}
-            />
-            <link
-                head-key="hreflang-x-default"
-                rel="alternate"
-                hrefLang="x-default"
-                href={pageMeta.canonical}
-            />
+            {Object.entries(hreflang).map(([lang, href]) => (
+                <link
+                    key={lang}
+                    head-key={`hreflang-${lang}`}
+                    rel="alternate"
+                    hrefLang={lang}
+                    href={href}
+                />
+            ))}
             <meta head-key="robots" name="robots" content={pageMeta.robots} />
             <meta
                 head-key="author"
@@ -78,7 +86,15 @@ export default function SeoHead() {
             )}
 
             <meta head-key="og:type" property="og:type" content={pageMeta.og_type} />
-            <meta head-key="og:locale" property="og:locale" content={seo.locale} />
+            <meta head-key="og:locale" property="og:locale" content={ogLocale} />
+            {ogLocaleAlternates.map((alternate) => (
+                <meta
+                    key={alternate}
+                    head-key={`og:locale:alternate:${alternate}`}
+                    property="og:locale:alternate"
+                    content={alternate}
+                />
+            ))}
             <meta
                 head-key="og:site_name"
                 property="og:site_name"

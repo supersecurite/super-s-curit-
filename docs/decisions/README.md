@@ -43,3 +43,4 @@ AAAA-MM-JJ
 |---|---|---|
 | [0001](0001-role-commercial.md) | Introduction du rôle `commercial` | Accepted |
 | [0002](0002-marketing-meta-whatsapp-et-email.md) | Marketing e-mail + WhatsApp Meta Cloud API + accusés | Accepted |
+| [0005](0005-i18n-public-url-prefix.md) | i18n site public : préfixe URL `/en` | Accepted |

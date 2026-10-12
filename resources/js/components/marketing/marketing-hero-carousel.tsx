@@ -2,22 +2,25 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import MarketingHeroSlide from '@/components/marketing/marketing-hero-slide';
-import {
-    marketingHeroSlideLabels,
-    marketingHeroSlides,
-} from '@/data/marketing-hero-variants';
+import { useMarketingHeroSlides } from '@/hooks/use-marketing-hero-slides';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 
-const SLIDE_COUNT = marketingHeroSlides.length;
 const AUTO_PLAY_MS = 7000;
 
 export default function MarketingHeroCarousel() {
+    const { slides, labels, carouselAria } = useMarketingHeroSlides();
+    const { t } = useTrans();
+    const slideCount = slides.length;
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
 
-    const goTo = useCallback((index: number) => {
-        setActiveIndex((index + SLIDE_COUNT) % SLIDE_COUNT);
-    }, []);
+    const goTo = useCallback(
+        (index: number) => {
+            setActiveIndex((index + slideCount) % slideCount);
+        },
+        [slideCount],
+    );
 
     const goNext = useCallback(() => {
         goTo(activeIndex + 1);
@@ -41,7 +44,7 @@ export default function MarketingHeroCarousel() {
         <section
             className="marketing-hero-viewport relative min-h-0"
             aria-roledescription="carousel"
-            aria-label="Messages d'accueil Super Sécurité"
+            aria-label={carouselAria}
         >
             <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -52,7 +55,7 @@ export default function MarketingHeroCarousel() {
                     exit={{ opacity: 0, x: -28 }}
                     transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    <MarketingHeroSlide variant={marketingHeroSlides[activeIndex]} />
+                    <MarketingHeroSlide variant={slides[activeIndex]} />
                 </motion.div>
             </AnimatePresence>
 
@@ -62,7 +65,7 @@ export default function MarketingHeroCarousel() {
                         type="button"
                         onClick={goPrevious}
                         className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-super-securite-heading transition-colors duration-200 hover:bg-super-securite-bg focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
-                        aria-label="Slide précédente"
+                        aria-label={t('common.prev_slide', 'Slide précédente')}
                     >
                         <ChevronLeft className="size-4" aria-hidden />
                     </button>
@@ -70,14 +73,14 @@ export default function MarketingHeroCarousel() {
                     <div
                         className="flex items-center gap-1.5 px-1"
                         role="tablist"
-                        aria-label="Sélection de slide"
+                        aria-label={t('common.slide_selection', 'Sélection de slide')}
                     >
-                        {marketingHeroSlideLabels.map((label, index) => {
+                        {labels.map((label, index) => {
                             const isActive = index === activeIndex;
 
                             return (
                                 <button
-                                    key={label}
+                                    key={`${label}-${index}`}
                                     type="button"
                                     role="tab"
                                     aria-selected={isActive}
@@ -98,7 +101,7 @@ export default function MarketingHeroCarousel() {
                         type="button"
                         onClick={goNext}
                         className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-super-securite-heading transition-colors duration-200 hover:bg-super-securite-bg focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
-                        aria-label="Slide suivante"
+                        aria-label={t('common.next_slide', 'Slide suivante')}
                     >
                         <ChevronRight className="size-4" aria-hidden />
                     </button>
@@ -109,8 +112,8 @@ export default function MarketingHeroCarousel() {
                         className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-super-securite-muted transition-colors duration-200 hover:bg-super-securite-bg hover:text-super-securite-heading focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
                         aria-label={
                             isPaused
-                                ? 'Reprendre le défilement automatique'
-                                : 'Mettre en pause le défilement automatique'
+                                ? t('common.resume_autoplay', 'Reprendre le défilement automatique')
+                                : t('common.pause_autoplay', 'Mettre en pause le défilement automatique')
                         }
                         aria-pressed={isPaused}
                     >
@@ -124,8 +127,7 @@ export default function MarketingHeroCarousel() {
             </div>
 
             <p className="sr-only" aria-live="polite">
-                Slide {activeIndex + 1} sur {SLIDE_COUNT} :{' '}
-                {marketingHeroSlideLabels[activeIndex]}
+                Slide {activeIndex + 1} / {slideCount} : {labels[activeIndex]}
             </p>
         </section>
     );

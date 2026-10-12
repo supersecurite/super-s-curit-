@@ -6,6 +6,7 @@ use App\Enums\ServiceId;
 use App\Http\Controllers\Controller;
 use App\Models\GalleryImage;
 use App\Models\GalleryVideo;
+use App\Support\LocaleUrl;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,7 +15,8 @@ class ServiceController extends Controller
 {
     public function show(Request $request): Response
     {
-        $serviceId = basename($request->path());
+        $logicalPath = LocaleUrl::stripLocalePrefix('/'.$request->path());
+        $serviceId = basename($logicalPath);
 
         abort_unless(in_array($serviceId, ServiceId::values(), true), 404);
 

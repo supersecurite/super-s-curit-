@@ -6,7 +6,8 @@ import GalleryBentoGrid from '@/components/marketing/gallery-bento-grid';
 import { useGalleryLightbox } from '@/components/marketing/gallery-lightbox';
 import VideoGallery from '@/components/marketing/video-gallery';
 import SeoHead from '@/components/marketing/seo-head';
-import { marketingPageHeroes } from '@/data/marketing-page-heroes';
+import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
+import { useTrans } from '@/hooks/use-trans';
 import { index as galerieIndex } from '@/routes/galerie';
 import { cn } from '@/lib/utils';
 import type {
@@ -35,6 +36,8 @@ export default function MarketingGalleryIndex() {
         countsVideosByService,
         filters,
     } = usePage<PageProps>().props;
+    const { t } = useTrans();
+    const hero = useMarketingPageHero('galerie');
 
     const [slideIndex, setSlideIndex] = useState(0);
     const [activeTab, setActiveTab] = useState<'photos' | 'videos'>('photos');
@@ -105,8 +108,8 @@ export default function MarketingGalleryIndex() {
                         </AnimatePresence>
                     ) : (
                         <img
-                            src={marketingPageHeroes.galerie.image}
-                            alt={marketingPageHeroes.galerie.imageAlt}
+                            src={hero.image}
+                            alt={hero.imageAlt}
                             width={1920}
                             height={1080}
                             fetchPriority="high"
@@ -143,7 +146,7 @@ export default function MarketingGalleryIndex() {
                                 )}
                             >
                                 <Images className="size-4" />
-                                Photos ({images.length})
+                                {t('galerie.photos_tab', 'Photos')} ({images.length})
                             </button>
                             <button
                                 type="button"
@@ -156,14 +159,16 @@ export default function MarketingGalleryIndex() {
                                 )}
                             >
                                 <Video className="size-4" />
-                                Vidéos ({videos.length})
+                                {t('galerie.videos_tab', 'Vidéos')} ({videos.length})
                             </button>
                         </div>
                     </div>
 
                     <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
-                            <p className="marketing-label mb-2">Filtrer</p>
+                            <p className="marketing-label mb-2">
+                                {t('galerie.filter_label', 'Filtrer')}
+                            </p>
                             <p className="text-sm text-super-securite-muted">
                                 {activeTab === 'photos' ? (
                                     <>

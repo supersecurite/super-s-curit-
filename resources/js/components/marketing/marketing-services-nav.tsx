@@ -1,11 +1,12 @@
 import { Link } from '@inertiajs/react';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { marketingServiceNavLinks } from '@/data/marketing-nav';
+import { useMarketingServiceNavLinks } from '@/data/marketing-nav';
 import {
     isMarketingNavActive,
     isMarketingServicesNavActive,
 } from '@/lib/marketing-nav-active';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 
 type MarketingServicesNavProps = {
@@ -17,6 +18,8 @@ export default function MarketingServicesNav({
 }: MarketingServicesNavProps) {
     const [open, setOpen] = useState(false);
     const active = isMarketingServicesNavActive(pathname);
+    const { t } = useTrans();
+    const serviceNavLinks = useMarketingServiceNavLinks();
 
     useEffect(() => {
         setOpen(false);
@@ -49,7 +52,7 @@ export default function MarketingServicesNav({
                         : 'text-white/80 hover:text-white',
                 )}
             >
-                Services
+                {t('nav.services')}
                 <ChevronDown
                     className={cn(
                         'size-4 transition-transform duration-200',
@@ -74,7 +77,7 @@ export default function MarketingServicesNav({
             >
                 <div className="rounded-2xl border border-super-securite-border bg-super-securite-surface p-2 shadow-xl shadow-black/20">
                     <ul role="menu">
-                        {marketingServiceNavLinks.map((service) => {
+                        {serviceNavLinks.map((service) => {
                             const itemActive = isMarketingNavActive(
                                 service.href,
                                 pathname,

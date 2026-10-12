@@ -11,9 +11,10 @@ import MarketingContentFilters from '@/components/marketing/marketing-content-fi
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
 import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import ContentShareButton from '@/components/content-share-button';
+import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
 import SeoHead from '@/components/marketing/seo-head';
 import type { MarketingContentImageSource } from '@/types/marketing-content';
-import { marketingPageHeroes } from '@/data/marketing-page-heroes';
+import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
 import {
     index as conseilsIndex,
     show as conseilsShow,
@@ -128,13 +129,15 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
 export default function MarketingConseilsSecuriteIndex() {
     const { securityTips, featuredSecurityTips, categories, filters } =
         usePage<PageProps>().props;
+    const hero = useMarketingPageHero('conseils');
 
     return (
         <>
             <SeoHead />
-            <Head title="Conseils de sécurité" />
+            <CmsLocaleNotice />
+            <Head title={hero.label} />
 
-            <MarketingFullscreenHero {...marketingPageHeroes.conseils} />
+            <MarketingFullscreenHero {...hero} />
 
             <section className="marketing-section-band marketing-below-fold py-16">
                 <div className="container mx-auto max-w-6xl px-4">

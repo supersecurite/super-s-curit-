@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/react';
 import SeoHead from '@/components/marketing/seo-head';
 import PageHero from '@/components/marketing/page-hero';
 import Reveal from '@/components/marketing/reveal';
+import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type PageProps = {
@@ -10,31 +11,34 @@ type PageProps = {
 
 export default function PrivacyPage() {
     const { superSecurite } = usePage<PageProps>().props;
+    const { t } = useTrans();
 
     const sections = [
         {
-            title: 'Responsable du traitement',
-            body: `Super Sécurité — ${superSecurite.address}. Contact : ${superSecurite.email}.`,
+            title: t('privacy.controller_title'),
+            body: t('privacy.controller_body')
+                .replace(':address', superSecurite.address)
+                .replace(':email', superSecurite.email),
         },
         {
-            title: 'Données collectées',
-            body: 'Via le formulaire de contact : nom, e-mail, téléphone et contenu du message. Données de navigation anonymisées pour les statistiques du site (pages vues, durée, appareil).',
+            title: t('privacy.data_title'),
+            body: t('privacy.data_body'),
         },
         {
-            title: 'Finalités',
-            body: 'Répondre à vos demandes de devis sécurité, améliorer le site et mesurer l’audience de manière agrégée. Nous ne vendons pas vos données.',
+            title: t('privacy.purpose_title'),
+            body: t('privacy.purpose_body'),
         },
         {
-            title: 'Cookies',
-            body: 'Cookies techniques (session, préférences) et cookie visiteur pour les statistiques internes. Vous pouvez les refuser via les paramètres de votre navigateur.',
+            title: t('privacy.cookies_title'),
+            body: t('privacy.cookies_body'),
         },
         {
-            title: 'Durée de conservation',
-            body: 'Messages de contact : 24 mois maximum sauf obligation légale. Données analytics : agrégées et conservées selon notre politique interne.',
+            title: t('privacy.retention_title'),
+            body: t('privacy.retention_body'),
         },
         {
-            title: 'Vos droits',
-            body: `Accès, rectification ou suppression de vos données sur simple demande à ${superSecurite.email}.`,
+            title: t('privacy.rights_title'),
+            body: t('privacy.rights_body').replace(':email', superSecurite.email),
         },
     ] as const;
 
@@ -43,9 +47,9 @@ export default function PrivacyPage() {
             <SeoHead />
 
             <PageHero
-                label="Légal"
-                title="Politique de confidentialité"
-                description="Transparence sur la collecte et l'utilisation de vos données personnelles."
+                label={t('privacy.label')}
+                title={t('privacy.title')}
+                description={t('privacy.description')}
                 align="center"
             />
 

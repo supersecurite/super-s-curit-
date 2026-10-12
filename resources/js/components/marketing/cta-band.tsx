@@ -1,8 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowRight, Phone } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
-import { superSecuriteContactHeroCopy } from '@/data/super-securite-contact';
-import { contact } from '@/routes';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
+import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type SharedPageProps = {
@@ -11,6 +11,8 @@ type SharedPageProps = {
 
 export default function CtaBand() {
     const { superSecurite } = usePage<SharedPageProps>().props;
+    const { t } = useTrans();
+    const localized = useLocalizedUrl();
 
     return (
         <section className="py-16 md:py-24">
@@ -32,16 +34,19 @@ export default function CtaBand() {
                         <div className="relative flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
                             <div className="max-w-xl">
                                 <p className="marketing-label mb-3">
-                                    {superSecuriteContactHeroCopy.label}
+                                    {t('contact.hero_label', 'Nous contacter')}
                                 </p>
                                 <h2 className="font-heading text-3xl font-bold tracking-tight text-super-securite-heading md:text-4xl">
-                                    {superSecuriteContactHeroCopy.titleLead}{' '}
+                                    {t('contact.hero_title_lead', 'Parlons de votre')}{' '}
                                     <span className="text-black">
-                                        {superSecuriteContactHeroCopy.titleHighlight}
+                                        {t(
+                                            'contact.hero_title_highlight',
+                                            'sécurité',
+                                        )}
                                     </span>
                                 </h2>
                                 <p className="mt-4 text-sm leading-relaxed md:text-base">
-                                    {superSecuriteContactHeroCopy.description}
+                                    {t('contact.hero_description')}
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-3">
@@ -50,13 +55,13 @@ export default function CtaBand() {
                                     className="marketing-cta-primary marketing-magnetic inline-flex items-center gap-2"
                                 >
                                     <Phone className="size-4" />
-                                    Appeler
+                                    {t('home.cta_call', 'Appeler')}
                                 </a>
                                 <Link
-                                    href={contact.url()}
+                                    href={localized('/contact')}
                                     className="marketing-cta-secondary marketing-magnetic group inline-flex items-center gap-2"
                                 >
-                                    Ecrivez-nous
+                                    {t('home.cta_write', 'Ecrivez-nous')}
                                     <ArrowRight
                                         className="size-4 transition-transform duration-200 group-hover:translate-x-1"
                                         aria-hidden

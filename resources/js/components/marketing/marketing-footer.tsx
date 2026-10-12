@@ -3,9 +3,11 @@ import { index as galerieIndex } from '@/routes/galerie';
 import { index as actualitesIndex } from '@/routes/actualites';
 import { index as conseilsIndex } from '@/routes/conseils-securite';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
-import { contact } from '@/routes';
+import { about, contact } from '@/routes';
 import { superSecuriteImages } from '@/data/super-securite-images';
 import { superSecuriteServices } from '@/data/super-securite-content';
+import { useTrans } from '@/hooks/use-trans';
+import { localizePath } from '@/lib/locale-url';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, Youtube } from 'lucide-react';
 
@@ -15,6 +17,8 @@ type SharedPageProps = {
 
 export default function MarketingFooter() {
     const { superSecurite } = usePage<SharedPageProps>().props;
+    const { t, locale } = useTrans();
+    const lp = (path: string) => localizePath(path, locale);
     const year = new Date().getFullYear();
 
     return (
@@ -30,53 +34,53 @@ export default function MarketingFooter() {
                             height={48}
                         />
                         <p className="mt-4 text-sm text-white/50">
-                            {year} — SuperSécurité — Tous droits réservés.
+                            {t('footer.rights').replace(':year', String(year))}
                         </p>
                     </div>
 
                     <div>
                         <h3 className="font-heading text-sm font-semibold text-white">
-                            Qui sommes-nous
+                            {t('footer.who_we_are')}
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
                             <li>
                                 <a
-                                    href="/a-propos"
+                                    href={lp(about.url())}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    Pourquoi nous choisir
+                                    {t('footer.why_choose')}
                                 </a>
                             </li>
                             <li>
                                 <a
-                                    href={actualitesIndex.url()}
+                                    href={lp(actualitesIndex.url())}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    Actualités
+                                    {t('footer.news')}
                                 </a>
                             </li>
                             <li>
                                 <a
-                                    href={conseilsIndex.url()}
+                                    href={lp(conseilsIndex.url())}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    Conseils de sécurité
+                                    {t('footer.tips')}
                                 </a>
                             </li>
                             <li>
                                 <a
-                                    href={galerieIndex.url()}
+                                    href={lp(galerieIndex.url())}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    Galerie
+                                    {t('footer.gallery')}
                                 </a>
                             </li>
                             <li>
                                 <a
-                                    href={devenirAgentIndex.url()}
+                                    href={lp(devenirAgentIndex.url())}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    Rejoignez nous
+                                    {t('footer.join_us')}
                                 </a>
                             </li>
                         </ul>
@@ -84,16 +88,16 @@ export default function MarketingFooter() {
 
                     <div>
                         <h3 className="font-heading text-sm font-semibold text-white">
-                            Services
+                            {t('footer.services')}
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
                             {superSecuriteServices.map((service) => (
                                 <li key={`link-${service.id}`}>
                                     <a
-                                        href={service.path}
+                                        href={lp(service.path)}
                                         className="cursor-pointer transition-colors duration-200 hover:text-white"
                                     >
-                                        {service.title}
+                                        {t(`services.${service.id}.title`, service.title)}
                                     </a>
                                 </li>
                             ))}
@@ -102,12 +106,12 @@ export default function MarketingFooter() {
 
                     <div>
                         <h3 className="font-heading text-sm font-semibold text-white">
-                            Nous contacter
+                            {t('footer.contact_us')}
                         </h3>
                         <ul className="mt-4 space-y-3 text-sm">
                             <li>
                                 <a
-                                    href={`${contact.url()}#faq`}
+                                    href={`${lp(contact.url())}#faq`}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
                                     FAQ
@@ -138,7 +142,7 @@ export default function MarketingFooter() {
                         </ul>
 
                         <h3 className="mt-8 font-heading text-sm font-semibold text-white">
-                            Réseaux
+                            {t('footer.networks')}
                         </h3>
                         <ul className="mt-4 flex flex-col gap-2">
                             {superSecurite.social.facebook && (
@@ -212,16 +216,16 @@ export default function MarketingFooter() {
 
                 <div className="mt-12 flex flex-wrap gap-4 border-t border-white/10 pt-8 text-xs text-white/50">
                     <a
-                        href="/politique-de-confidentialite"
+                        href={lp('/politique-de-confidentialite')}
                         className="hover:text-white"
                     >
-                        Conditions générales et confidentialité
+                        {t('footer.privacy')}
                     </a>
                     <a
-                        href="/mentions-legales"
+                        href={lp('/mentions-legales')}
                         className="hover:text-white"
                     >
-                        Mentions légales
+                        {t('footer.legal')}
                     </a>
                 </div>
             </div>

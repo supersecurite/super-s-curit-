@@ -2,16 +2,18 @@ import { Quote } from 'lucide-react';
 import { superSecuriteTestimonials } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 import Reveal from '@/components/marketing/reveal';
+import { useTrans } from '@/hooks/use-trans';
 
 export default function TestimonialsSection() {
+    const { t } = useTrans();
+
     return (
         <section id="temoignages" className="py-16 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-14 max-w-2xl">
-                    <p className="marketing-label mb-3">Témoignages</p>
+                    <p className="marketing-label mb-3">{t('home.testimonials_label', 'Témoignages')}</p>
                     <h2 className="marketing-heading-section">
-                        De nos{' '}
-                        <span className="text-black">clients</span>
+                        {t('home.testimonials_title', 'Ils nous font confiance')}
                     </h2>
                 </Reveal>
 

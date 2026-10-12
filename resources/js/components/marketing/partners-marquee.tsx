@@ -1,11 +1,13 @@
 import Reveal from '@/components/marketing/reveal';
 import { superSecuritePartners } from '@/data/super-securite-partners';
+import { useTrans } from '@/hooks/use-trans';
 
 type PartnersMarqueeProps = {
     partners?: { name: string; logo: string }[];
 };
 
 export default function PartnersMarquee({ partners = [] }: PartnersMarqueeProps) {
+    const { t } = useTrans();
     const activePartners = partners.length > 0 ? partners : superSecuritePartners;
     const items = [...activePartners, ...activePartners];
 
@@ -16,21 +18,26 @@ export default function PartnersMarquee({ partners = [] }: PartnersMarqueeProps)
         >
             <div className="mx-auto w-full px-4 sm:px-6 lg:px-8">
                 <Reveal className="mx-auto mb-12 max-w-2xl text-center md:mb-14">
-                    <p className="marketing-label mb-3">Partenaires</p>
+                    <p className="marketing-label mb-3">
+                        {t('home.partners_label', 'Partenaires')}
+                    </p>
                     <h2
                         id="partners-heading"
                         className="marketing-heading-section"
                     >
-                        Ils nous font{' '}
+                        {t('home.partners_title_lead', 'Ils nous font')}{' '}
                         <span className="text-super-securite-accent">
-                            confiance
+                            {t('home.partners_title_highlight', 'confiance')}
                         </span>
                     </h2>
                 </Reveal>
 
                 <div
                     className="marketing-marquee-paused relative overflow-hidden rounded-2xl border border-super-securite-border/80 bg-white/90 py-8 shadow-sm shadow-slate-900/5 md:py-12"
-                    aria-label="Logos des partenaires Super Sécurité"
+                    aria-label={t(
+                        'home.partners_aria',
+                        'Logos des partenaires Super Sécurité',
+                    )}
                 >
                     <div
                         className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white via-white/90 to-transparent sm:w-28"

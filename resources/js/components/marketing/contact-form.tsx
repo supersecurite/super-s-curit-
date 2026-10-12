@@ -11,6 +11,7 @@ import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { superSecuriteProjectTypes } from '@/data/super-securite-contact';
+import { useTrans } from '@/hooks/use-trans';
 import { store } from '@/routes/contact';
 
 type SharedPageProps = {
@@ -27,15 +28,20 @@ const fieldClasses =
 
 export default function ContactForm() {
     const { flash, recaptcha } = usePage<SharedPageProps>().props;
+    const { t, tList } = useTrans();
     const [recaptchaToken, setRecaptchaToken] = useState('');
     const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
+    const projectTypes = tList(
+        'contact.project_types',
+        [...superSecuriteProjectTypes],
+    );
     const projectTypeOptions = useMemo(
         () =>
-            superSecuriteProjectTypes.map((type) => ({
+            projectTypes.map((type) => ({
                 value: type,
                 label: type,
             })),
-        [],
+        [projectTypes],
     );
 
     return (
@@ -46,14 +52,17 @@ export default function ContactForm() {
             />
 
             <div className="relative">
-                <p className="marketing-label mb-2">Formulaire de contact</p>
+                <p className="marketing-label mb-2">
+                    {t('contact.form_label', 'Formulaire de contact')}
+                </p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
-                    Décrivez votre besoin de sécurité
+                    {t('contact.form_heading', 'Décrivez votre besoin de sécurité')}
                 </h2>
                 <p className="mt-2 text-sm text-super-securite-muted">
-                    Les champs marqués d&apos;un{' '}
-                    <span className="text-super-securite-accent">*</span> sont
-                    obligatoires.
+                    {t(
+                        'contact.form_required_hint',
+                        'Les champs marqués d\'un * sont obligatoires.',
+                    )}
                 </p>
 
                 {flash.success && (
@@ -86,7 +95,7 @@ export default function ContactForm() {
                                         htmlFor="name"
                                         className="text-super-securite-heading"
                                     >
-                                        Nom complet{' '}
+                                        {t('contact.form_name', 'Nom complet')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -97,7 +106,10 @@ export default function ContactForm() {
                                         required
                                         autoComplete="name"
                                         className={fieldClasses}
-                                        placeholder="Votre nom"
+                                        placeholder={t(
+                                            'contact.form_name_placeholder',
+                                            'Votre nom',
+                                        )}
                                     />
                                     <InputError message={errors.name} />
                                 </div>
@@ -107,7 +119,7 @@ export default function ContactForm() {
                                         htmlFor="email"
                                         className="text-super-securite-heading"
                                     >
-                                        E-mail{' '}
+                                        {t('contact.form_email', 'E-mail')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -119,7 +131,10 @@ export default function ContactForm() {
                                         required
                                         autoComplete="email"
                                         className={fieldClasses}
-                                        placeholder="vous@exemple.com"
+                                        placeholder={t(
+                                            'contact.form_email_placeholder',
+                                            'vous@exemple.com',
+                                        )}
                                     />
                                     <InputError message={errors.email} />
                                 </div>
@@ -131,7 +146,7 @@ export default function ContactForm() {
                                         htmlFor="phone"
                                         className="text-super-securite-heading"
                                     >
-                                        Téléphone{' '}
+                                        {t('contact.form_phone', 'Téléphone')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -143,7 +158,10 @@ export default function ContactForm() {
                                         required
                                         autoComplete="tel"
                                         className={fieldClasses}
-                                        placeholder="+224 ..."
+                                        placeholder={t(
+                                            'contact.form_phone_placeholder',
+                                            '+224 ...',
+                                        )}
                                     />
                                     <InputError message={errors.phone} />
                                 </div>
@@ -153,9 +171,12 @@ export default function ContactForm() {
                                         htmlFor="company"
                                         className="text-super-securite-heading"
                                     >
-                                        Entreprise{' '}
+                                        {t('contact.form_company', 'Entreprise')}{' '}
                                         <span className="text-super-securite-muted">
-                                            (optionnel)
+                                            {t(
+                                                'contact.form_company_optional',
+                                                '(optionnel)',
+                                            )}
                                         </span>
                                     </Label>
                                     <Input
@@ -163,7 +184,10 @@ export default function ContactForm() {
                                         name="company"
                                         autoComplete="organization"
                                         className={fieldClasses}
-                                        placeholder="Nom de votre entreprise"
+                                        placeholder={t(
+                                            'contact.form_company_placeholder',
+                                            'Nom de votre entreprise',
+                                        )}
                                     />
                                     <InputError message={errors.company} />
                                 </div>
@@ -174,14 +198,23 @@ export default function ContactForm() {
                                     htmlFor="project_type"
                                     className="text-super-securite-heading"
                                 >
-                                    Type de projet
+                                    {t(
+                                        'contact.form_project_type',
+                                        'Type de projet',
+                                    )}
                                 </Label>
                                 <SearchableSelect
                                     id="project_type"
                                     name="project_type"
                                     options={projectTypeOptions}
-                                    placeholder="Sélectionner..."
-                                    searchPlaceholder="Rechercher un type..."
+                                    placeholder={t(
+                                        'contact.form_project_placeholder',
+                                        'Sélectionner...',
+                                    )}
+                                    searchPlaceholder={t(
+                                        'contact.form_project_search',
+                                        'Rechercher un type...',
+                                    )}
                                     variant="underline"
                                     triggerClassName={fieldClasses}
                                 />
@@ -193,7 +226,10 @@ export default function ContactForm() {
                                     htmlFor="message"
                                     className="text-super-securite-heading"
                                 >
-                                    Détails du projet{' '}
+                                    {t(
+                                        'contact.form_message',
+                                        'Détails du projet',
+                                    )}{' '}
                                     <span className="text-super-securite-accent">
                                         *
                                     </span>
@@ -204,7 +240,10 @@ export default function ContactForm() {
                                     required
                                     rows={6}
                                     className={fieldClasses}
-                                    placeholder="Décrivez votre projet : objectifs, contexte, délais souhaités..."
+                                    placeholder={t(
+                                        'contact.form_message_placeholder',
+                                        'Décrivez votre projet : objectifs, contexte, délais souhaités...',
+                                    )}
                                 />
                                 <InputError message={errors.message} />
                             </div>
@@ -231,8 +270,10 @@ export default function ContactForm() {
 
                             <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                                 <p className="text-xs text-super-securite-muted">
-                                    Vos informations restent confidentielles et
-                                    ne sont jamais partagées.
+                                    {t(
+                                        'contact.form_privacy',
+                                        'Vos informations restent confidentielles et ne sont jamais partagées.',
+                                    )}
                                 </p>
                                 <button
                                     type="submit"
@@ -245,11 +286,14 @@ export default function ContactForm() {
                                     {processing ? (
                                         <>
                                             <Spinner className="size-4" />
-                                            Envoi en cours...
+                                            {t(
+                                                'contact.form_submitting',
+                                                'Envoi en cours...',
+                                            )}
                                         </>
                                     ) : (
                                         <>
-                                            Envoyer
+                                            {t('contact.form_submit', 'Envoyer')}
                                             <Send
                                                 className="size-4 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
                                                 aria-hidden

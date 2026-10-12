@@ -1,22 +1,25 @@
-import { superSecuritePartners } from '@/data/super-securite-partners';
-import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import Reveal from '@/components/marketing/reveal';
+import { superSecuritePartners } from '@/data/super-securite-partners';
+import { useTrans } from '@/hooks/use-trans';
 
 export default function PartnersSection() {
+    const { t } = useTrans();
+
     return (
         <section id="partenaires" className="py-10 md:py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <Reveal className="mb-12 max-w-2xl text-center mx-auto">
-                    {/* <p className="marketing-label mb-3">Partenaires</p> */}
+                <Reveal className="mx-auto mb-12 max-w-2xl text-center">
                     <h2 className="marketing-heading-section">
-                        Nos{' '}
+                        {t('home.partners_section_lead', 'Nos')}{' '}
                         <span className="text-black">
-                            partenaires
+                            {t('home.partners_section_highlight', 'partenaires')}
                         </span>
                     </h2>
                     <p className="mt-4 text-sm leading-relaxed text-super-securite-muted md:text-base">
-                        Ils nous font confiance pour la sécurité de leurs sites
-                        et événements à {superSecuriteZoneLabel}.
+                        {t(
+                            'home.partners_section_desc',
+                            'Ils nous font confiance pour la sécurité de leurs sites et événements à Conakry et région.',
+                        )}
                     </p>
                 </Reveal>
 

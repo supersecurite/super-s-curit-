@@ -1,6 +1,6 @@
 import { ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
-import { superSecuriteHoursLong } from '@/data/super-securite-hours';
+import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type ContactChannelsProps = {
@@ -8,34 +8,44 @@ type ContactChannelsProps = {
 };
 
 export default function ContactChannels({ superSecurite }: ContactChannelsProps) {
+    const { t } = useTrans();
     const phoneDigits = superSecurite.phone_href.replace(/[^0-9]/g, '');
 
     const channels = [
         {
             icon: Mail,
-            label: 'Email',
+            label: t('contact.form_email', 'Email'),
             value: superSecurite.email,
-            description: 'Réponse rapide à votre demande',
+            description: t(
+                'contact.channel_email_desc',
+                'Réponse rapide à votre demande',
+            ),
             href: `mailto:${superSecurite.email}`,
-            cta: 'Écrire un email',
+            cta: t('contact.channel_email_cta', 'Écrire un email'),
         },
         {
             icon: Phone,
-            label: 'Téléphone',
+            label: t('contact.form_phone', 'Téléphone'),
             value: superSecurite.phone,
-            description: `Disponible ${superSecuriteHoursLong}`,
+            description: t(
+                'contact.channel_phone_desc',
+                'Disponible 24h/24 et 7j/7',
+            ),
             href: superSecurite.phone_href,
-            cta: 'Appeler',
+            cta: t('contact.channel_phone_cta', 'Appeler'),
         },
         {
             icon: MessageCircle,
             label: 'WhatsApp',
             value: superSecurite.phone,
-            description: 'Discussion rapide et fichiers',
+            description: t(
+                'contact.channel_whatsapp_desc',
+                'Discussion rapide et fichiers',
+            ),
             href: `https://wa.me/${phoneDigits}`,
-            cta: 'Ouvrir WhatsApp',
+            cta: t('contact.channel_whatsapp_cta', 'Ouvrir WhatsApp'),
         },
-    ] as const;
+    ];
 
     return (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

@@ -6,7 +6,8 @@ import ContactFaq from '@/components/marketing/contact-faq';
 import ContactForm from '@/components/marketing/contact-form';
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
 import Reveal from '@/components/marketing/reveal';
-import { marketingPageHeroes } from '@/data/marketing-page-heroes';
+import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
+import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type SharedPageProps = {
@@ -15,21 +16,28 @@ type SharedPageProps = {
 
 export default function MarketingContact() {
     const { superSecurite } = usePage<SharedPageProps>().props;
+    const { t } = useTrans();
+    const hero = useMarketingPageHero('contact');
 
     return (
         <>
             <SeoHead />
 
-            <MarketingFullscreenHero {...marketingPageHeroes.contact} />
+            <MarketingFullscreenHero {...hero} />
 
             <section className="py-10 marketing-section-band">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <Reveal className="mb-12 max-w-2xl">
-                        <p className="marketing-label mb-3">Canaux directs</p>
+                        <p className="marketing-label mb-3">
+                            {t('contact.channels_label', 'Canaux directs')}
+                        </p>
                         <h2 className="marketing-heading-section">
-                            Choisissez le moyen{' '}
+                            {t('contact.channels_title_lead', 'Choisissez le moyen')}{' '}
                             <span className="text-black">
-                                qui vous convient
+                                {t(
+                                    'contact.channels_title_highlight',
+                                    'qui vous convient',
+                                )}
                             </span>
                         </h2>
                     </Reveal>
@@ -84,32 +92,32 @@ export default function MarketingContact() {
 
                                 <div className="marketing-card">
                                     <p className="marketing-label mb-3">
-                                        À quoi vous attendre ?
+                                        {t('contact.process_label', 'À quoi vous attendre ?')}
                                     </p>
                                     <h3 className="font-heading text-xl font-semibold text-super-securite-heading">
-                                        Notre processus en 4 étapes
+                                        {t('contact.process_title', 'Notre processus en 4 étapes')}
                                     </h3>
                                     <ol className="mt-6 space-y-5">
                                         {[
                                             {
                                                 step: '01',
-                                                title: 'Réception',
-                                                desc: 'Analyse de votre besoin de sécurité.',
+                                                title: t('contact.step_1_title', 'Réception'),
+                                                desc: t('contact.step_1_desc', 'Analyse de votre besoin de sécurité.'),
                                             },
                                             {
                                                 step: '02',
-                                                title: 'Évaluation',
-                                                desc: 'Visite ou échange pour comprendre le site.',
+                                                title: t('contact.step_2_title', 'Évaluation'),
+                                                desc: t('contact.step_2_desc', 'Visite ou échange pour comprendre le site.'),
                                             },
                                             {
                                                 step: '03',
-                                                title: 'Proposition',
-                                                desc: 'Offre adaptée : effectifs, horaires, protocoles.',
+                                                title: t('contact.step_3_title', 'Proposition'),
+                                                desc: t('contact.step_3_desc', 'Offre adaptée : effectifs, horaires, protocoles.'),
                                             },
                                             {
                                                 step: '04',
-                                                title: 'Déploiement',
-                                                desc: 'Mise en place rapide de nos équipes.',
+                                                title: t('contact.step_4_title', 'Déploiement'),
+                                                desc: t('contact.step_4_desc', 'Mise en place rapide de nos équipes.'),
                                             },
                                         ].map((item) => (
                                             <li
@@ -135,10 +143,10 @@ export default function MarketingContact() {
                                 {superSecurite.rccm && (
                                     <div className="marketing-card bg-super-securite-surface-elevated">
                                         <p className="marketing-label mb-3">
-                                            Informations légales
+                                            {t('contact.legal_info_label', 'Informations légales')}
                                         </p>
                                         <p className="text-sm leading-relaxed text-super-securite-text">
-                                            Super Sécurité · Conakry et région
+                                            {t('contact.legal_info_text', 'Super Sécurité · Conakry et région')}
                                         </p>
                                         <p className="mt-2 font-heading text-sm font-semibold text-super-securite-heading">
                                             RCCM : {superSecurite.rccm}
@@ -148,13 +156,10 @@ export default function MarketingContact() {
 
                                 <div className="marketing-card bg-super-securite-surface-elevated">
                                     <p className="marketing-label mb-3">
-                                        Confidentialité
+                                        {t('contact.privacy_label', 'Confidentialité')}
                                     </p>
                                     <p className="text-sm leading-relaxed text-super-securite-text">
-                                        Vos informations ne sont utilisées que
-                                        pour vous répondre. Nous signons
-                                        volontiers un NDA si votre projet
-                                        l&apos;exige.
+                                        {t('contact.privacy_text', "Vos informations ne sont utilisées que pour vous répondre. Nous signons volontiers un NDA si votre projet l'exige.")}
                                     </p>
                                 </div>
                             </div>

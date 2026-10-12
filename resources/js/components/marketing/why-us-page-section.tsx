@@ -1,8 +1,5 @@
 import Reveal from '@/components/marketing/reveal';
-import {
-    superSecuriteWhyUsDetails,
-    superSecuriteWhyUsModern,
-} from '@/data/super-securite-content';
+import { useWhyUsContent } from '@/hooks/use-why-us-content';
 import type { GalleryVideoPublic } from '@/types/gallery';
 import { cn } from '@/lib/utils';
 
@@ -38,23 +35,23 @@ type WhyUsPageSectionProps = {
 };
 
 export default function WhyUsPageSection({ featuredVideo }: WhyUsPageSectionProps) {
+    const whyUs = useWhyUsContent();
+
     return (
         <section id="pourquoi" className="border-t border-super-securite-border">
             <div className="marketing-section-white py-14 md:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <Reveal className="mx-auto max-w-3xl text-center">
-                        <p className="marketing-label mb-3">
-                            {superSecuriteWhyUsModern.sectionLabel}
-                        </p>
+                        <p className="marketing-label mb-3">{whyUs.sectionLabel}</p>
                         <h2 className="font-heading text-3xl font-bold tracking-tight text-super-securite-heading sm:text-4xl md:text-[2.75rem]">
-                            {superSecuriteWhyUsModern.title}
+                            {whyUs.title}
                         </h2>
                         <p className="mt-5 text-sm leading-relaxed text-super-securite-muted sm:text-base md:text-lg">
-                            {superSecuriteWhyUsModern.intro}
+                            {whyUs.intro}
                         </p>
                     </Reveal>
                 </div>
-            
+
                 {featuredVideo?.embed_url ? (
                     <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
                         <div className="overflow-hidden rounded-2xl border border-super-securite-border/40 bg-slate-950 shadow-lg shadow-slate-900/10">
@@ -75,7 +72,7 @@ export default function WhyUsPageSection({ featuredVideo }: WhyUsPageSectionProp
             </div>
 
             <div>
-                {superSecuriteWhyUsDetails.map((item, index) => {
+                {whyUs.details.map((item, index) => {
                     const isEven = index % 2 === 0;
                     const imageOnLeft = !isEven;
 

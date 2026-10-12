@@ -9,8 +9,11 @@ use App\Models\Article;
 use App\Models\SecurityAgentApplication;
 use App\Models\SecurityTip;
 use App\Models\User;
+use App\Seo\LocalizedSeo;
 use App\Seo\SeoPageRegistry;
 use App\Services\AccessLogs\AccessLogFilterOptions;
+use App\Support\LocaleTranslations;
+use App\Support\LocaleUrl;
 use App\Support\Marketing\BroadcastMarketingCampaignProgress;
 use App\Support\SuperSecuriteSharedData;
 use Illuminate\Http\Request;
@@ -53,13 +56,18 @@ class HandleInertiaRequests extends Middleware
 
         if ($this->shouldSharePageMeta($request)) {
             $pageMeta = $registry->resolve($request);
-            $pageFaqs = $registry->faqsForPath($registry->canonicalPath($request));
+            $pageFaqs = $registry->faqsForPath($registry->logicalPath($request));
         }
 
         $user = $request->user();
+        $locale = app()->getLocale();
 
         return [
             ...parent::share($request),
+            'locale' => $locale,
+            'locales' => LocaleUrl::supported(),
+            'localeLabels' => config('locales.labels', []),
+            'translations' => LocaleTranslations::forLocale($locale),
             'pageMeta' => $pageMeta,
             'pageFaqs' => $pageFaqs,
             'name' => config('app.name'),
@@ -104,8 +112,9 @@ class HandleInertiaRequests extends Middleware
             'seo' => [
                 'siteName' => config('seo.site_name'),
                 'siteUrl' => rtrim((string) config('app.url'), '/'),
-                'locale' => config('seo.locale'),
-                'language' => config('seo.language'),
+                'locale' => LocalizedSeo::ogLocale(),
+                'localeAlternates' => LocaleUrl::ogLocaleAlternates(),
+                'language' => LocalizedSeo::language(),
                 'twitterSite' => config('seo.twitter_site'),
                 'defaultImage' => url(config('seo.default_og_image')),
                 'ogImage' => config('seo.og_image'),
@@ -118,17 +127,17 @@ class HandleInertiaRequests extends Middleware
                     config('super-securite.social.linkedin'),
                     config('super-securite.social.github'),
                 ])),
-                'services' => config('seo.services'),
+                'services' => LocalizedSeo::services(),
                 'knowsAbout' => config('seo.knows_about'),
                 'organization' => [
                     'name' => config('seo.organization.name'),
                     'legalName' => config('seo.organization.legal_name'),
                     'alternateName' => config('seo.organization.alternate_name'),
-                    'slogan' => config('seo.organization.slogan'),
+                    'slogan' => LocalizedSeo::organizationSlogan(),
                     'foundingDate' => config('seo.organization.founding_date'),
                     'founder' => config('seo.organization.founder'),
                     'founderJobTitle' => config('seo.organization.founder_job_title'),
-                    'description' => config('seo.organization.description'),
+                    'description' => LocalizedSeo::organizationDescription(),
                     'email' => config('super-securite.email'),
                     'phone' => config('super-securite.phone'),
                     'areaServed' => config('seo.organization.area_served'),

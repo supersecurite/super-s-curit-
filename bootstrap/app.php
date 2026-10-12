@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureUserHasBackofficePermission;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RecordAccessLog;
+use App\Http\Middleware\SetLocaleFromUrl;
 use App\Http\Middleware\TrackVisit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: [
             'sidebar_state',
             'super_securite_vid',
+            'locale',
         ]);
 
         $middleware->alias([
@@ -30,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(prepend: [
+            SetLocaleFromUrl::class,
             TrackVisit::class,
         ]);
 

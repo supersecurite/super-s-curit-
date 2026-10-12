@@ -336,7 +336,7 @@ class StructuredDataBuilder
             'name' => config('seo.site_name'),
             'alternateName' => config('seo.organization.alternate_name'),
             'description' => config('seo.organization.description'),
-            'inLanguage' => config('seo.language'),
+            'inLanguage' => app()->getLocale(),
             'publisher' => ['@id' => $orgId],
         ];
     }
@@ -365,7 +365,7 @@ class StructuredDataBuilder
             'description' => $pageMeta['description'],
             'isPartOf' => ['@id' => $websiteId],
             'about' => ['@id' => $orgId],
-            'inLanguage' => config('seo.language'),
+            'inLanguage' => app()->getLocale(),
             'primaryImageOfPage' => array_filter([
                 '@type' => 'ImageObject',
                 'url' => $pageMeta['og_image'],

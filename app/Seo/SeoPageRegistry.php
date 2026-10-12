@@ -4,6 +4,7 @@ namespace App\Seo;
 
 use App\Models\Article;
 use App\Models\SecurityTip;
+use App\Support\LocaleUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -20,16 +21,20 @@ class SeoPageRegistry
      *     og_image_alt: string,
      *     og_type: string,
      *     path: string,
+     *     logical_path: string,
      *     schema_type: string,
+     *     hreflang: array<string, string>,
+     *     og_locale: string,
+     *     og_locale_alternates: list<string>,
      * }
      */
     public function resolve(Request $request): array
     {
-        $siteUrl = rtrim((string) config('app.url'), '/');
-        $path = $this->canonicalPath($request);
-        $canonical = $siteUrl.($path === '/' ? '/' : $path);
-        $meta = $this->metaForPath($path);
+        $logicalPath = $this->logicalPath($request);
+        $canonical = LocaleUrl::absolute($logicalPath);
+        $meta = $this->metaForPath($logicalPath);
         $ogImagePath = $meta['og_image'] ?? config('seo.default_og_image');
+        $siteUrl = rtrim((string) config('app.url'), '/');
 
         return [
             'title' => $meta['title'],
@@ -40,8 +45,12 @@ class SeoPageRegistry
             'og_image_type' => $this->mimeTypeForPath($ogImagePath),
             'og_image_alt' => $meta['og_image_alt'] ?? config('seo.site_name').' — sécurité privée à '.config('super-securite.zone_label', 'Conakry et région'),
             'og_type' => $meta['og_type'] ?? 'website',
-            'path' => $path,
+            'path' => LocaleUrl::localizePath($logicalPath),
+            'logical_path' => $logicalPath,
             'schema_type' => $meta['schema_type'] ?? 'WebPage',
+            'hreflang' => LocaleUrl::alternateUrls($logicalPath),
+            'og_locale' => LocalizedSeo::ogLocale(),
+            'og_locale_alternates' => LocaleUrl::ogLocaleAlternates(),
         ];
     }
 
@@ -58,7 +67,9 @@ class SeoPageRegistry
      */
     public function metaForPath(string $path): array
     {
-        $service = collect(config('seo.services', []))->firstWhere('path', $path);
+        $path = LocaleUrl::stripLocalePrefix($path);
+
+        $service = collect(LocalizedSeo::services())->firstWhere('path', $path);
 
         if ($service !== null) {
             return [
@@ -70,7 +81,7 @@ class SeoPageRegistry
             ];
         }
 
-        $page = collect(config('seo.pages', []))->firstWhere('path', $path);
+        $page = collect(LocalizedSeo::pages())->firstWhere('path', $path);
 
         if ($page !== null && isset($page['meta_title'])) {
             return [
@@ -124,7 +135,7 @@ class SeoPageRegistry
             }
         }
 
-        $legal = collect(config('seo.legal_pages', []))->firstWhere('path', $path);
+        $legal = collect(LocalizedSeo::legalPages())->firstWhere('path', $path);
 
         if ($legal !== null) {
             return [
@@ -138,7 +149,7 @@ class SeoPageRegistry
 
         return [
             'title' => config('seo.site_name'),
-            'description' => config('seo.default_description'),
+            'description' => LocalizedSeo::defaultDescription(),
             'og_image' => config('seo.default_og_image'),
             'schema_type' => 'WebPage',
         ];
@@ -149,24 +160,26 @@ class SeoPageRegistry
      */
     public function faqsForPath(string $path): array
     {
+        $path = LocaleUrl::stripLocalePrefix($path);
+
         if ($path === '/contact') {
-            return config('seo.faqs', []);
+            return LocalizedSeo::faqs();
         }
 
-        $service = collect(config('seo.services', []))->firstWhere('path', $path);
-
-        if ($service !== null && ! empty($service['faqs'])) {
-            return $service['faqs'];
-        }
-
-        return [];
+        return LocalizedSeo::serviceFaqs($path);
     }
 
     public function canonicalPath(Request $request): string
     {
-        $path = '/'.ltrim($request->path(), '/');
+        return LocaleUrl::localizePath($this->logicalPath($request));
+    }
 
-        return $path === '/' ? '/' : rtrim($path, '/');
+    public function logicalPath(Request $request): string
+    {
+        $path = '/'.ltrim($request->path(), '/');
+        $path = $path === '/' ? '/' : rtrim($path, '/');
+
+        return LocaleUrl::stripLocalePrefix($path);
     }
 
     public function mimeTypeForPath(string $relativePath): string

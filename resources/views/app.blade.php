@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('seo.language', 'fr') }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +20,11 @@
 
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+        @isset($pageMeta['hreflang'])
+            @foreach ($pageMeta['hreflang'] as $hreflang => $href)
+                <link rel="alternate" hreflang="{{ $hreflang }}" href="{{ $href }}" />
+            @endforeach
+        @endisset
         <x-inertia::head>
             @isset($pageMeta)
                 <title data-inertia head-key="title">{{ $pageMeta['title'] }}</title>
@@ -33,7 +38,10 @@
                 <meta data-inertia head-key="robots" name="robots" content="{{ $pageMeta['robots'] }}" />
                 <meta data-inertia head-key="author" name="author" content="{{ config('seo.organization.founder') }}" />
                 <meta data-inertia head-key="og:type" property="og:type" content="{{ $pageMeta['og_type'] }}" />
-                <meta data-inertia head-key="og:locale" property="og:locale" content="{{ config('seo.locale') }}" />
+                <meta data-inertia head-key="og:locale" property="og:locale" content="{{ \App\Support\LocaleUrl::ogLocale() }}" />
+                @foreach (\App\Support\LocaleUrl::ogLocaleAlternates() as $ogLocaleAlternate)
+                    <meta data-inertia head-key="og:locale:alternate:{{ $ogLocaleAlternate }}" property="og:locale:alternate" content="{{ $ogLocaleAlternate }}" />
+                @endforeach
                 <meta data-inertia head-key="og:site_name" property="og:site_name" content="{{ config('seo.site_name') }}" />
                 <meta data-inertia head-key="og:title" property="og:title" content="{{ $pageMeta['title'] }}" />
                 <meta data-inertia head-key="og:description" property="og:description" content="{{ $pageMeta['description'] }}" />

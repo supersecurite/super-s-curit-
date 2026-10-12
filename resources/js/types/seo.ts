@@ -40,6 +40,7 @@ export type SeoSharedProps = {
     siteName: string;
     siteUrl: string;
     locale: string;
+    localeAlternates?: string[];
     language: string;
     twitterSite: string | null;
     defaultImage: string;

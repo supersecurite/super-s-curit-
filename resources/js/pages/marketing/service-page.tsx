@@ -1,10 +1,8 @@
 import { usePage } from '@inertiajs/react';
 import SeoHead from '@/components/marketing/seo-head';
 import { servicePageLayouts } from '@/components/marketing/service-layouts';
-import {
-    superSecuriteServicePages,
-} from '@/data/super-securite-service-pages';
 import type { SuperSecuriteServiceId } from '@/data/super-securite-services';
+import { useLocalizedServicePage } from '@/hooks/use-localized-service-page';
 
 import type { GalleryImagePublic, GalleryVideoPublic } from '@/types/gallery';
 
@@ -18,7 +16,7 @@ type PageProps = {
 export default function ServicePage() {
     const { serviceId, pageFaqs, galleryImages, galleryVideos } =
         usePage<PageProps>().props;
-    const content = superSecuriteServicePages[serviceId];
+    const content = useLocalizedServicePage(serviceId);
     const Layout = servicePageLayouts[serviceId];
 
     return (

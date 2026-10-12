@@ -1,11 +1,12 @@
-import { marketingServiceNavLinks } from '@/data/marketing-nav';
+import { marketingServicePaths } from '@/data/marketing-nav';
+import { stripLocalePrefix } from '@/lib/locale-url';
 
 export function isMarketingNavActive(
     href: string,
     currentUrl: string,
 ): boolean {
-    const normalizedHref = href.replace(/\/$/, '') || '/';
-    const normalizedCurrent = currentUrl.replace(/\/$/, '') || '/';
+    const normalizedHref = stripLocalePrefix(href).replace(/\/$/, '') || '/';
+    const normalizedCurrent = stripLocalePrefix(currentUrl).replace(/\/$/, '') || '/';
 
     if (normalizedHref === '/') {
         return normalizedCurrent === '/';
@@ -18,9 +19,9 @@ export function isMarketingNavActive(
 }
 
 export function isMarketingServicesNavActive(currentUrl: string): boolean {
-    const pathname = currentUrl.split('?')[0] ?? '/';
+    const pathname = stripLocalePrefix(currentUrl.split('?')[0] ?? '/');
 
-    return marketingServiceNavLinks.some(
-        (service) => pathname === service.href,
+    return marketingServicePaths.some(
+        (servicePath) => pathname === servicePath,
     );
 }

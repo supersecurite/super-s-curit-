@@ -1,5 +1,6 @@
 import { ExternalLink, MapPin } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
+import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type ContactMapSectionProps = {
@@ -7,8 +8,9 @@ type ContactMapSectionProps = {
 };
 
 export default function ContactMapSection({ superSecurite }: ContactMapSectionProps) {
+    const { t } = useTrans();
     const { map, address } = superSecurite;
-    const mapTitle = `Plan d'accès — Super Sécurité, ${address}`;
+    const mapTitle = `${t('contact.map_iframe_title', "Plan d'accès — Super Sécurité")}, ${address}`;
 
     return (
         <section
@@ -18,14 +20,16 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Reveal className="mb-10 max-w-2xl">
-                    <p className="marketing-label mb-3">Localisation</p>
+                    <p className="marketing-label mb-3">
+                        {t('contact.map_label', 'Localisation')}
+                    </p>
                     <h2
                         id="contact-map-heading"
                         className="marketing-heading-section"
                     >
-                        Nous{' '}
+                        {t('contact.map_title_lead', 'Nous')}{' '}
                         <span className="text-black">
-                            trouver
+                            {t('contact.map_title_highlight', 'trouver')}
                         </span>
                     </h2>
                     <p className="mt-4 flex items-start gap-2 text-sm leading-relaxed md:text-base">
@@ -65,7 +69,8 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
                     </div>
                     <p className="mt-4 flex flex-wrap items-center gap-4 text-sm text-super-securite-muted">
                         <span>
-                            Coordonnées : {map.latitude}, {map.longitude}
+                            {t('contact.map_coordinates', 'Coordonnées')} :{' '}
+                            {map.latitude}, {map.longitude}
                         </span>
                         <a
                             href={map.directionsUrl}
@@ -73,7 +78,10 @@ export default function ContactMapSection({ superSecurite }: ContactMapSectionPr
                             rel="noopener noreferrer"
                             className="marketing-cta-secondary inline-flex items-center gap-2 px-4 py-2 text-xs"
                         >
-                            Ouvrir dans Google Maps
+                            {t(
+                                'contact.map_open_maps',
+                                'Ouvrir dans Google Maps',
+                            )}
                             <ExternalLink className="size-3.5" aria-hidden />
                         </a>
                     </p>

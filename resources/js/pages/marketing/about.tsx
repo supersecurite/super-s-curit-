@@ -4,7 +4,7 @@ import CtaBand from '@/components/marketing/cta-band';
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
 import ValuesSection from '@/components/marketing/values-section';
 import WhyUsPageSection from '@/components/marketing/why-us-page-section';
-import { marketingPageHeroes } from '@/data/marketing-page-heroes';
+import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
 import type { GalleryVideoPublic } from '@/types/gallery';
 
 type PageProps = {
@@ -13,12 +13,13 @@ type PageProps = {
 
 export default function MarketingAbout() {
     const { featuredVideo } = usePage<PageProps>().props;
+    const hero = useMarketingPageHero('about');
 
     return (
         <>
             <SeoHead />
 
-            <MarketingFullscreenHero {...marketingPageHeroes.about} />
+            <MarketingFullscreenHero {...hero} />
 
 
             <WhyUsPageSection featuredVideo={featuredVideo} />

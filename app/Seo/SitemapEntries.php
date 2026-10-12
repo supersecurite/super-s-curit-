@@ -4,6 +4,7 @@ namespace App\Seo;
 
 use App\Models\Article;
 use App\Models\SecurityTip;
+use App\Support\LocaleUrl;
 
 class SitemapEntries
 {
@@ -65,13 +66,46 @@ class SitemapEntries
 
         $merged = $pages;
 
-        foreach ([...$servicePages, ...$legal, ...$articlePages, ...$securityTipPages] as $entry) {
+        foreach ([...$servicePages, ...$legal] as $entry) {
             if (! in_array($entry['path'], $existingPaths, true)) {
                 $merged[] = $entry;
                 $existingPaths[] = $entry['path'];
             }
         }
 
-        return $merged;
+        $staticPaths = collect($merged)->pluck('path')->all();
+        $localizedStatic = [];
+
+        foreach ($merged as $entry) {
+            $localizedStatic[] = $entry;
+
+            foreach (LocaleUrl::supported() as $locale) {
+                if (LocaleUrl::isDefault($locale)) {
+                    continue;
+                }
+
+                $localizedPath = LocaleUrl::localizePath($entry['path'], $locale);
+
+                if (in_array($localizedPath, $staticPaths, true)) {
+                    continue;
+                }
+
+                $localizedStatic[] = [
+                    ...$entry,
+                    'path' => $localizedPath,
+                ];
+                $staticPaths[] = $localizedPath;
+            }
+        }
+
+        // Articles / conseils : uniquement les URLs FR (contenu éditorial non traduit).
+        foreach ([...$articlePages, ...$securityTipPages] as $entry) {
+            if (! in_array($entry['path'], $staticPaths, true)) {
+                $localizedStatic[] = $entry;
+                $staticPaths[] = $entry['path'];
+            }
+        }
+
+        return $localizedStatic;
     }
 }

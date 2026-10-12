@@ -1,11 +1,18 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight } from 'lucide-react';
-import { superSecuriteWelcome } from '@/data/super-securite-content';
-import { superSecuriteStock } from '@/data/super-securite-stock';
 import Reveal from '@/components/marketing/reveal';
-import { about } from '@/routes';
+import { superSecuriteStock } from '@/data/super-securite-stock';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
+import { useTrans } from '@/hooks/use-trans';
 
 export default function WelcomeSection() {
+    const { t, tList } = useTrans();
+    const localized = useLocalizedUrl();
+    const paragraphs = tList('home.welcome_paragraphs', [
+        t('home.welcome_p1'),
+        t('home.welcome_p2'),
+        t('home.welcome_p3'),
+    ]);
+
     return (
         <section id="bienvenue" className="py-16 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -24,11 +31,13 @@ export default function WelcomeSection() {
                         </div>
                     </Reveal>
                     <Reveal className="order-1 lg:order-2">
-                        <p className="marketing-label mb-3">Super SÉCURITÉ</p>
+                        <p className="marketing-label mb-3">
+                            {t('home.welcome_label', 'Super SÉCURITÉ')}
+                        </p>
                         <h2 className="marketing-heading-section">
-                            {superSecuriteWelcome.title}
+                            {t('home.welcome_title')}
                         </h2>
-                        {superSecuriteWelcome.paragraphs.map((paragraph) => (
+                        {paragraphs.map((paragraph) => (
                             <p
                                 key={paragraph.slice(0, 40)}
                                 className="mt-4 text-sm leading-relaxed md:text-base"
@@ -36,6 +45,12 @@ export default function WelcomeSection() {
                                 {paragraph}
                             </p>
                         ))}
+                        <Link
+                            href={localized('/a-propos')}
+                            className="marketing-cta-secondary marketing-magnetic mt-6 inline-flex"
+                        >
+                            {t('common.learn_more', 'En savoir plus')}
+                        </Link>
                     </Reveal>
                 </div>
             </div>

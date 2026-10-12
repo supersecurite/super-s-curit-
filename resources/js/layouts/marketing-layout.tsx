@@ -4,11 +4,14 @@ import { Toaster } from '@/components/ui/sonner';
 import BackToTop from '@/components/marketing/back-to-top';
 import MarketingFooter from '@/components/marketing/marketing-footer';
 import MarketingHeader from '@/components/marketing/marketing-header';
+import { useTrans } from '@/hooks/use-trans';
 import { useVisitTracker } from '@/hooks/use-visit-tracker';
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
     useVisitTracker();
     const { url } = usePage();
+    const { locale = 'fr' } = usePage().props as { locale?: string };
+    const { t } = useTrans();
 
     useEffect(() => {
         const hash = url.split('#')[1];
@@ -29,7 +32,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
     }, [url]);
 
     useEffect(() => {
-        document.documentElement.lang = 'fr';
+        document.documentElement.lang = locale;
         document.documentElement.classList.add('marketing-page');
         document.documentElement.classList.remove('dark');
         document.documentElement.style.colorScheme = 'light';
@@ -42,7 +45,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             document.documentElement.style.backgroundColor = '';
             document.documentElement.style.scrollBehavior = '';
         };
-    }, []);
+    }, [locale]);
 
     return (
         <div className="marketing-site flex min-h-screen flex-col">
@@ -50,7 +53,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
                 href="#main-content"
                 className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-super-securite-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
             >
-                Aller au contenu
+                {t('common.skip_to_content', 'Aller au contenu')}
             </a>
             <MarketingHeader />
             <main id="main-content" className="flex-1">

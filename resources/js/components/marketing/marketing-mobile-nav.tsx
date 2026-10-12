@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import {
     ArrowRight,
     ChevronDown,
@@ -23,14 +23,16 @@ import {
 } from '@/components/ui/sheet';
 import { superSecuriteImages } from '@/data/super-securite-images';
 import {
-    marketingPrimaryNavLinks,
-    marketingServiceNavLinks,
+    useMarketingPrimaryNavLinks,
+    useMarketingServiceNavLinks,
 } from '@/data/marketing-nav';
 import {
     isMarketingNavActive,
     isMarketingServicesNavActive,
 } from '@/lib/marketing-nav-active';
 import { cn } from '@/lib/utils';
+import { useTrans } from '@/hooks/use-trans';
+import { localizePath, alternatePath } from '@/lib/locale-url';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
 import { home } from '@/routes';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
@@ -49,11 +51,16 @@ export default function MarketingMobileNav({
     onOpenChange,
 }: MarketingMobileNavProps) {
     const close = () => onOpenChange(false);
+    const { t, locale, locales } = useTrans();
+    const lp = (path: string) => localizePath(path, locale);
     const servicesActive = isMarketingServicesNavActive(pathname);
     const [servicesOpen, setServicesOpen] = useState(servicesActive);
     const scrollRef = useRef<HTMLDivElement>(null);
     const servicesSectionRef = useRef<HTMLLIElement>(null);
-    const otherPrimaryLinks = marketingPrimaryNavLinks.slice(1);
+    const primaryNavLinks = useMarketingPrimaryNavLinks();
+    const serviceNavLinks = useMarketingServiceNavLinks();
+    const otherPrimaryLinks = primaryNavLinks.slice(1);
+    const homeHref = lp(home.url());
 
     useEffect(() => {
         if (servicesActive) {
@@ -92,13 +99,20 @@ export default function MarketingMobileNav({
         };
     }, [servicesOpen, open]);
 
+    function switchLocale(targetLocale: string) {
+        const target = alternatePath(pathname, targetLocale);
+        document.cookie = `locale=${targetLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
+        close();
+        router.visit(target, { preserveState: false });
+    }
+
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
                 <button
                     type="button"
                     className="inline-flex size-14 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-all duration-200 hover:bg-super-securite-accent hover:text-white hover:shadow-lg hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none md:hidden"
-                    aria-label="Ouvrir le menu"
+                    aria-label={t('nav.open_menu')}
                 >
                     <Menu className="size-6" aria-hidden />
                 </button>
@@ -108,7 +122,7 @@ export default function MarketingMobileNav({
                 side="right"
                 className="z-[60] flex h-full w-full max-w-none flex-col gap-0 overflow-hidden border-0 bg-super-securite-surface p-0 sm:max-w-sm [&>button]:hidden"
             >
-                <SheetTitle className="sr-only">Menu de navigation</SheetTitle>
+                <SheetTitle className="sr-only">{t('nav.mobile_title')}</SheetTitle>
 
                 <div className="relative shrink-0 overflow-hidden bg-black px-5 pb-6 pt-5">
                     <div
@@ -122,7 +136,7 @@ export default function MarketingMobileNav({
 
                     <div className="relative mx-auto flex items-start justify-between gap-4">
                         <Link
-                            href={home.url()}
+                            href={homeHref}
                             onClick={close}
                             className="flex min-w-0 flex-col gap-1 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
                         >
@@ -139,7 +153,7 @@ export default function MarketingMobileNav({
                             <button
                                 type="button"
                                 className="inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none"
-                                aria-label="Fermer le menu"
+                                aria-label={t('nav.close_menu')}
                             >
                                 <X className="size-5" aria-hidden />
                             </button>
@@ -153,27 +167,27 @@ export default function MarketingMobileNav({
                 >
                     <nav
                         className="px-5 py-6"
-                        aria-label="Navigation mobile"
+                        aria-label={t('nav.mobile_label')}
                     >
-                    <p className="marketing-label mb-3">Navigation</p>
+                    <p className="marketing-label mb-3">{t('nav.navigation')}</p>
                     <ul className="space-y-2">
                         <li>
                             <Link
-                                href={home.url()}
+                                href={homeHref}
                                 onClick={close}
                                 aria-current={
-                                    isMarketingNavActive(home.url(), pathname)
+                                    isMarketingNavActive(homeHref, pathname)
                                         ? 'page'
                                         : undefined
                                 }
                                 className={cn(
                                     'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
-                                    isMarketingNavActive(home.url(), pathname)
+                                    isMarketingNavActive(homeHref, pathname)
                                         ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
                                         : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
                                 )}
                             >
-                                Accueil
+                                {t('nav.home')}
                                 <ArrowRight
                                     className="size-4 opacity-50"
                                     aria-hidden
@@ -211,11 +225,11 @@ export default function MarketingMobileNav({
                                             )}
                                         >
                                             <span className="flex min-w-0 flex-col items-start gap-0.5 text-left">
-                                                <span>Services</span>
+                                                <span>{t('nav.services')}</span>
                                                 <span className="text-[11px] font-medium tracking-wide text-super-securite-muted uppercase">
                                                     {servicesOpen
-                                                        ? 'Sous-menu ouvert'
-                                                        : `${marketingServiceNavLinks.length} prestations`}
+                                                        ? t('nav.services_submenu_open')
+                                                        : `${serviceNavLinks.length} ${t('nav.services_count')}`}
                                                 </span>
                                             </span>
                                             <ChevronDown
@@ -237,9 +251,9 @@ export default function MarketingMobileNav({
                                         <ul
                                             className="space-y-0.5 border-l-2 border-super-securite-accent/30 bg-super-securite-bg/70 px-2 py-2 pl-3"
                                             role="list"
-                                            aria-label="Sous-menu Services"
+                                            aria-label={t('nav.services_submenu_label')}
                                         >
-                                            {marketingServiceNavLinks.map(
+                                            {serviceNavLinks.map(
                                                 (service) => {
                                                     const active =
                                                         isMarketingNavActive(
@@ -325,8 +339,33 @@ export default function MarketingMobileNav({
                     </nav>
 
                     <div className="space-y-3 border-t border-super-securite-border/80 bg-super-securite-bg p-4 pb-6">
+                    {locales.length > 1 && (
+                        <div
+                            className="flex items-center justify-center gap-2 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3"
+                            role="group"
+                            aria-label={t('language.switch')}
+                        >
+                            {locales.map((loc) => (
+                                <button
+                                    key={loc}
+                                    type="button"
+                                    onClick={() => switchLocale(loc)}
+                                    aria-current={loc === locale ? 'true' : undefined}
+                                    className={cn(
+                                        'cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors duration-200',
+                                        loc === locale
+                                            ? 'bg-super-securite-accent text-white'
+                                            : 'text-super-securite-heading hover:bg-super-securite-accent/10',
+                                    )}
+                                >
+                                    {t(`language.${loc}`, loc.toUpperCase())}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
                     <a
-                        href={devenirAgentIndex.url()}
+                        href={lp(devenirAgentIndex.url())}
                         className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-super-securite-accent px-4 py-3.5 font-heading text-sm font-semibold text-white shadow-lg shadow-super-securite-accent/25 transition-colors duration-200 hover:bg-super-securite-accent-hover focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <span className="inline-flex size-10 items-center justify-center rounded-xl bg-white/15">
@@ -334,9 +373,9 @@ export default function MarketingMobileNav({
                         </span>
                         <span className="flex flex-col items-start gap-0.5">
                             <span className="text-[11px] font-medium tracking-wide text-white/80 uppercase">
-                                Rejoignez-nous
+                                {t('nav.join')}
                             </span>
-                            <span className="text-base">Rejoignez-nous</span>
+                            <span className="text-base">{t('nav.join')}</span>
                         </span>
                     </a>
 

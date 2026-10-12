@@ -1,13 +1,11 @@
-import {
-    superSecuriteAdvantages,
-    superSecuriteWhyUsDetails,
-    superSecuriteWhyUsModern,
-} from '@/data/super-securite-content';
+import { superSecuriteAdvantages } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Check } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
-import { about } from '@/routes';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
+import { useTrans } from '@/hooks/use-trans';
+import { useWhyUsContent } from '@/hooks/use-why-us-content';
 import { cn } from '@/lib/utils';
 
 type WhyUsSectionProps = {
@@ -20,19 +18,21 @@ type WhyUsTone = 'light' | 'dark';
 
 function WhyUsReasonsList({ variant = 'light' }: { variant?: WhyUsTone }) {
     const isDark = variant === 'dark';
+    const whyUs = useWhyUsContent();
+    const localized = useLocalizedUrl();
 
     return (
         <ol className="mt-6 space-y-3">
-            {superSecuriteWhyUsModern.reasons.map((reason, index) => {
-                const anchor = superSecuriteWhyUsDetails[index]?.id;
+            {whyUs.reasons.map((reason, index) => {
+                const anchor = whyUs.details[index]?.id;
 
                 return (
                     <li key={reason}>
                         <Link
                             href={
                                 anchor
-                                    ? `${about.url()}#${anchor}`
-                                    : about.url()
+                                    ? `${localized('/a-propos')}#${anchor}`
+                                    : localized('/a-propos')
                             }
                             className={cn(
                                 'group flex gap-3 text-sm leading-relaxed transition-colors duration-200 md:text-base',
@@ -64,6 +64,8 @@ function WhyUsReasonsList({ variant = 'light' }: { variant?: WhyUsTone }) {
 
 function WhyUsAppFeatures({ variant = 'light' }: { variant?: WhyUsTone }) {
     const isDark = variant === 'dark';
+    const whyUs = useWhyUsContent();
+    const localized = useLocalizedUrl();
 
     return (
         <>
@@ -74,13 +76,13 @@ function WhyUsAppFeatures({ variant = 'light' }: { variant?: WhyUsTone }) {
                         : 'text-sm font-medium text-super-securite-heading md:text-base'
                 }
             >
-                {superSecuriteWhyUsModern.appLead}
+                {whyUs.appLead}
             </p>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-                {superSecuriteWhyUsModern.appFeatures.map((feature) => (
+                {whyUs.appFeatures.map((feature) => (
                     <li key={feature.label}>
                         <Link
-                            href={`${about.url()}#${feature.anchor}`}
+                            href={`${localized('/a-propos')}#${feature.anchor}`}
                             className={cn(
                                 'group flex h-full items-center gap-3 rounded-xl border px-4 py-3.5 text-sm leading-snug transition-colors duration-200 md:text-base',
                                 isDark
@@ -124,16 +126,19 @@ function WhyUsAppFeatures({ variant = 'light' }: { variant?: WhyUsTone }) {
                     isDark ? 'text-white/90' : 'text-super-securite-heading',
                 )}
             >
-                {superSecuriteWhyUsModern.conclusion}
+                {whyUs.conclusion}
             </p>
         </>
     );
 }
 
 function WhyUsAboutButton({ variant = 'light' }: { variant?: WhyUsTone }) {
+    const { t } = useTrans();
+    const localized = useLocalizedUrl();
+
     return (
         <Link
-            href={about.url()}
+            href={localized('/a-propos')}
             className={cn(
                 'marketing-magnetic mt-8 inline-flex items-center gap-2',
                 variant === 'dark'
@@ -141,7 +146,7 @@ function WhyUsAboutButton({ variant = 'light' }: { variant?: WhyUsTone }) {
                     : 'marketing-cta-secondary',
             )}
         >
-            Découvrez
+            {t('common.discover', 'Découvrez')}
             <ArrowRight className="size-4" aria-hidden />
         </Link>
     );
@@ -168,6 +173,12 @@ export default function WhyUsSection({
     showAppFeatures = false,
     showAppSection = false,
 }: WhyUsSectionProps) {
+    const { t, tNode } = useTrans();
+    const whyUs = useWhyUsContent();
+    const advantagesItems = tNode<
+        Array<{ title?: string; description?: string }>
+    >('home.advantages_items', []);
+
     return (
         <section
             id="pourquoi"
@@ -206,19 +217,19 @@ export default function WhyUsSection({
                         <div className="max-w-2xl min-w-0">
                             <Reveal delay={80}>
                                 <p className="marketing-label mb-3 flex items-center gap-2 before:block before:h-px before:w-6 before:bg-super-securite-accent">
-                                    {superSecuriteWhyUsModern.sectionLabel}
+                                    {whyUs.sectionLabel}
                                 </p>
                             </Reveal>
 
                             <Reveal delay={120}>
                                 <h2 className="font-heading text-3xl leading-[1.05] font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-                                    {superSecuriteWhyUsModern.title}
+                                    {whyUs.title}
                                 </h2>
                             </Reveal>
 
                             <Reveal delay={260} className="mt-5 max-w-xl sm:mt-6">
                                 <p className="text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
-                                    {superSecuriteWhyUsModern.intro}
+                                    {whyUs.intro}
                                 </p>
                             </Reveal>
 
@@ -240,13 +251,13 @@ export default function WhyUsSection({
                     {!showCinematicHero ? (
                         <Reveal delay={80} className="mx-auto mb-12 max-w-3xl md:mb-16">
                             <p className="marketing-label mb-3">
-                                {superSecuriteWhyUsModern.sectionLabel}
+                                {whyUs.sectionLabel}
                             </p>
                             <h2 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
-                                {superSecuriteWhyUsModern.title}
+                                {whyUs.title}
                             </h2>
                             <p className="mt-4 text-sm leading-relaxed md:text-base">
-                                {superSecuriteWhyUsModern.intro}
+                                {whyUs.intro}
                             </p>
                             <WhyUsReasonsList />
                         </Reveal>
@@ -263,10 +274,10 @@ export default function WhyUsSection({
                                     {showAppFeatures ? (
                                         <>
                                             <p className="marketing-label mb-3">
-                                                Innovation
+                                                {t('home.innovation_label', 'Innovation')}
                                             </p>
                                             <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
-                                                {superSecuriteWhyUsModern.appSectionTitle}
+                                                {whyUs.appSectionTitle}
                                             </h3>
                                             <div className="mt-6">
                                                 <WhyUsAppFeatures />
@@ -275,16 +286,16 @@ export default function WhyUsSection({
                                     ) : (
                                         <>
                                             <p className="marketing-label mb-3">
-                                                Innovation
+                                                {t('home.innovation_label', 'Innovation')}
                                             </p>
                                             <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
-                                                {superSecuriteWhyUsModern.appSectionTitle}
+                                                {whyUs.appSectionTitle}
                                             </h3>
                                             <p className="mt-4 text-sm leading-relaxed text-super-securite-muted md:text-base">
-                                                Suivez vos sites, signalez un incident
-                                                et échangez avec nos équipes depuis
-                                                votre smartphone. Découvrez toutes les
-                                                fonctionnalités sur notre page dédiée.
+                                                {t(
+                                                    'home.app_teaser',
+                                                    'Suivez vos sites, signalez un incident et échangez avec nos équipes depuis votre smartphone. Découvrez toutes les fonctionnalités sur notre page dédiée.',
+                                                )}
                                             </p>
                                             <WhyUsAboutButton />
                                         </>
@@ -298,15 +309,19 @@ export default function WhyUsSection({
                         delay={80}
                         className="mx-auto mb-10 max-w-2xl text-center md:mb-14"
                     >
-                        <p className="marketing-label mb-2">Nos atouts</p>
+                        <p className="marketing-label mb-2">{t('home.advantages_label', 'Nos atouts')}</p>
                         <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
-                            Ce qui nous distingue
+                            {t('home.advantages_title', 'Ce qui nous distingue')}
                         </h3>
                     </Reveal>
 
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         {superSecuriteAdvantages.map((item, index) => {
                             const Icon = item.icon;
+                            const copy = advantagesItems[index];
+                            const title = copy?.title ?? item.title;
+                            const description =
+                                copy?.description ?? item.description;
 
                             return (
                                 <Reveal key={item.title} delay={index * 100}>
@@ -319,10 +334,10 @@ export default function WhyUsSection({
                                             />
                                         </div>
                                         <h3 className="font-heading text-lg font-semibold text-super-securite-heading">
-                                            {item.title}
+                                            {title}
                                         </h3>
                                         <p className="mt-3 flex-1 text-sm leading-relaxed">
-                                            {item.description}
+                                            {description}
                                         </p>
                                     </article>
                                 </Reveal>

@@ -2,5 +2,790 @@
     "Password updated.": "Mot de passe mis à jour.",
     "Profile updated.": "Profil mis à jour.",
     "Two factor authentication enabled.": "Authentification à deux facteurs activée.",
-    "Two factor authentication disabled.": "Authentification à deux facteurs désactivée."
+    "Two factor authentication disabled.": "Authentification à deux facteurs désactivée.",
+    "nav": {
+        "home": "Accueil",
+        "services": "Services",
+        "why_us": "Pourquoi nous",
+        "news": "Actualités",
+        "tips": "Conseils",
+        "gallery": "Galerie",
+        "contact": "Nous contacter",
+        "join_us": "Rejoignez-nous",
+        "join": "Rejoignez-nous",
+        "main": "Navigation principale",
+        "main_label": "Navigation principale",
+        "menu": "Menu",
+        "open_menu": "Ouvrir le menu",
+        "close_menu": "Fermer le menu",
+        "mobile_title": "Menu de navigation",
+        "mobile_label": "Navigation mobile",
+        "navigation": "Navigation",
+        "services_submenu_open": "Sous-menu ouvert",
+        "services_count": "prestations",
+        "services_submenu_label": "Sous-menu Services",
+        "scroll_progress": "Progression de lecture"
+    },
+    "language": {
+        "label": "Langue",
+        "switch": "Langue",
+        "fr": "FR",
+        "en": "EN",
+        "switch_to_fr": "Passer en français",
+        "switch_to_en": "Switch to English"
+    },
+    "common": {
+        "skip_to_content": "Aller au contenu",
+        "call": "Appeler",
+        "write_us": "Ecrivez-nous",
+        "learn_more": "En savoir plus",
+        "read_more": "Lire la suite",
+        "back": "Retour",
+        "send": "Envoyer",
+        "loading": "Chargement…",
+        "scroll_progress": "Progression de lecture",
+        "discover": "Découvrez",
+        "featured": "À la une"
+    },
+    "articles": {
+        "description": "Missions sur le terrain, retours d'expérience et nouveautés de Super Sécurité.",
+        "view_all": "Voir toutes les actualités",
+        "read": "Lire l'article",
+        "empty": "Aucune actualité publiée pour le moment.",
+        "search_placeholder": "Rechercher un article..."
+    },
+    "tips": {
+        "description": "Des recommandations pratiques pour renforcer la sécurité de vos locaux, événements et équipes.",
+        "view_all": "Voir tous les conseils",
+        "read": "Lire le conseil",
+        "empty": "Aucun conseil publié pour le moment.",
+        "search_placeholder": "Rechercher un conseil..."
+    },
+    "cms": {
+        "french_content_notice": "Contenu disponible en français — la traduction éditoriale arrive bientôt."
+    },
+    "footer": {
+        "rights": ":year — SuperSécurité — Tous droits réservés.",
+        "who_we_are": "Qui sommes-nous",
+        "about_heading": "Qui sommes-nous",
+        "about_link": "Pourquoi nous choisir",
+        "why_choose": "Pourquoi nous choisir",
+        "news": "Actualités",
+        "tips": "Conseils de sécurité",
+        "gallery": "Galerie",
+        "join": "Rejoignez nous",
+        "join_us": "Rejoignez nous",
+        "services": "Services",
+        "services_heading": "Services",
+        "contact_us": "Nous contacter",
+        "contact_heading": "Nous contacter",
+        "faq": "FAQ",
+        "networks": "Réseaux",
+        "social_heading": "Réseaux",
+        "privacy": "Conditions générales et confidentialité",
+        "legal": "Mentions légales"
+    },
+    "home": {
+        "welcome_label": "Super SÉCURITÉ",
+        "welcome_title": "Votre partenaire de confiance en sécurité privée en Guinée",
+        "welcome_p1": "La sécurité est un enjeu majeur pour les entreprises, les résidences, les chantiers et les sites industriels. Chez Super Sécurité, nous mettons à votre disposition des solutions de sécurité fiables, professionnelles et adaptées aux réalités du terrain en Guinée.",
+        "welcome_p2": "Entreprise légalement établie et titulaire de l'ensemble des agréments et autorisations requis pour l'exercice des activités de sécurité privée en République de Guinée, Super Sécurité accompagne ses clients avec le plus haut niveau de professionnalisme et de conformité réglementaire.",
+        "welcome_p3": "Grâce à nos agents qualifiés, à notre encadrement opérationnel rigoureux et à nos outils technologiques modernes, nous assurons la protection des personnes, des biens et des infrastructures stratégiques sur l'ensemble du territoire national.",
+        "services_label": "Nos services",
+        "services_intro": "Super Sécurité accompagne particuliers et professionnels avec des solutions de sécurité, de surveillance et de gardiennage conçues pour protéger les personnes, les biens et les activités.",
+        "why_label": "Pourquoi nous choisir",
+        "why_title": "Une sécurité moderne, transparente et efficace",
+        "why_intro": "Nous combinons l'expertise humaine et la technologie pour offrir à nos clients un service de sécurité performant et réactif.",
+        "articles_label": "Actualités",
+        "articles_title": "Nos dernières actualités",
+        "tips_label": "Conseils",
+        "tips_title": "Conseils de sécurité",
+        "testimonials_label": "Témoignages",
+        "testimonials_title": "Ils nous font confiance",
+        "partners_label": "Partenaires",
+        "partners_title_lead": "Ils nous font",
+        "partners_title_highlight": "confiance",
+        "partners_aria": "Logos des partenaires Super Sécurité",
+        "partners_section_lead": "Nos",
+        "partners_section_highlight": "partenaires",
+        "partners_section_desc": "Ils nous font confiance pour la sécurité de leurs sites et événements à Conakry et région.",
+        "advantages_label": "Nos atouts",
+        "advantages_title": "Ce qui nous distingue",
+        "advantages_items": [
+            {
+                "title": "Expérience et professionnalisme",
+                "description": "Une équipe d'experts en sécurité privée, formée aux standards les plus exigeants du secteur."
+            },
+            {
+                "title": "Rapidité d'intervention",
+                "description": "Réactivité et déploiement rapide pour sécuriser vos sites, chantiers et installations."
+            },
+            {
+                "title": "Disponibilité 24h/24 · 7j/7",
+                "description": "Intervention 24h/24 et 7j/7 pour garantir votre protection et celle de vos biens."
+            },
+            {
+                "title": "Équipe certifiée et formée",
+                "description": "Agents certifiés, habitués aux environnements professionnels, résidentiels, chantiers et miniers."
+            }
+        ],
+        "innovation_label": "Innovation",
+        "app_teaser": "Suivez vos sites, signalez un incident et échangez avec nos équipes depuis votre smartphone. Découvrez toutes les fonctionnalités sur notre page dédiée.",
+        "cta_call": "Appeler",
+        "cta_write": "Ecrivez-nous"
+    },
+    "services": {
+        "nav_label": "Nos services",
+        "entreprise": {
+            "title": "Sécurité entreprise",
+            "description": "Protection de vos locaux professionnels : bureaux, commerces et entrepôts avec des agents qualifiés, disponibles 24h/24 et 7j/7.",
+            "nav_tagline": "Bureaux, commerces et entrepôts",
+            "hero_title_lead": "Sécurité des",
+            "hero_title_highlight": "entreprises",
+            "hero_description": "Protégez vos collaborateurs, vos biens et la continuité de vos activités",
+            "hero_image_alt": "Sécurité des entreprises — Super Sécurité Guinée",
+            "hero_stats": [
+                { "label": "Surveillance", "value": "24h/24 • 7j/7" },
+                { "label": "Couverture", "value": "Conakry & Toute la Guinée" },
+                { "label": "Professionnalisme", "value": "Agents qualifiés et encadrés" }
+            ],
+            "intro": [
+                "Dans un environnement où les risques de vol, d'intrusion, de vandalisme et d'accès non autorisés sont de plus en plus présents, la sécurité de votre entreprise ne peut être laissée au hasard.",
+                "Super Sécurité accompagne les entreprises en Guinée avec des solutions de gardiennage et de surveillance adaptées à leurs besoins spécifiques. Nos équipes interviennent auprès des bureaux, commerces, entrepôts, hôtels, restaurants, sites industriels et autres infrastructures professionnelles pour assurer une protection efficace et continue de vos installations.",
+                "Grâce à une présence dissuasive, des procédures rigoureuses et un suivi permanent, nous sécurisons vos activités tout en préservant votre image et votre tranquillité d'esprit."
+            ],
+            "intro_indicators": [
+                "Banques & institutions financières",
+                "Hôtels & restaurants",
+                "Commerces & supermarchés",
+                "Entrepôts & bases logistiques",
+                "Sites industriels",
+                "Bureaux & sièges sociaux"
+            ],
+            "sections_title": "Nos services de sécurité pour les entreprises",
+            "sections": [
+                { "title": "Contrôle des accès", "description": "Gestion et filtrage des entrées et sorties, vérification des identités et orientation des visiteurs pour garantir un accès sécurisé à vos installations." },
+                { "title": "Surveillance des locaux", "description": "Protection permanente des bureaux, commerces, entrepôts et zones sensibles contre les risques d'intrusion, de vol ou de dégradation." },
+                { "title": "Rondes de sécurité", "description": "Patrouilles régulières de jour comme de nuit pour détecter toute anomalie et prévenir les incidents avant qu'ils ne surviennent." },
+                { "title": "Gestion des incidents", "description": "Intervention rapide et application des procédures adaptées en cas d'intrusion, d'incident ou de situation d'urgence." },
+                { "title": "Contrôle des véhicules", "description": "Vérification et suivi des véhicules entrant et sortant du site pour renforcer la sécurité de vos accès." },
+                { "title": "Protocoles & reporting", "description": "Consignes claires, rondes horodatées, registres de passage et rapports réguliers adaptés à vos exigences opérationnelles et contractuelles." }
+            ],
+            "gallery_title": "Nos interventions entreprise",
+            "gallery_description": "Aperçu en images de nos prestations de sécurisation, patrouilles et contrôle d'accès dans les locaux professionnels."
+        },
+        "residence": {
+            "title": "Sécurité résidence",
+            "description": "Tranquillité d'esprit pour villas, immeubles et résidences grâce à une surveillance rigoureuse et une présence dissuasive.",
+            "nav_tagline": "Villas, immeubles et lotissements",
+            "hero_title_lead": "Sécurité des",
+            "hero_title_highlight": "résidences",
+            "hero_description": "Protégez votre famille et votre cadre de vie en toute sérénité",
+            "hero_image_alt": "Sécurité des résidences — Super Sécurité Guinée",
+            "hero_stats": [
+                { "label": "Résidences", "value": "Villas & immeubles" },
+                { "label": "Surveillance", "value": "Jour et nuit" },
+                { "label": "Disponibilité", "value": "24h/24 • 7j/7" }
+            ],
+            "intro": [
+                "La sécurité de votre domicile ne s'improvise pas. Que vous soyez propriétaire d'une villa, gestionnaire d'immeuble ou responsable d'une résidence privée, garantir un environnement sûr pour les occupants et les biens est une responsabilité que nous prenons au sérieux.",
+                "Super Sécurité vous propose des solutions de gardiennage et de surveillance résidentielle assurées par des agents qualifiés, formés pour allier présence rassurante, discrétion et efficacité opérationnelle."
+            ],
+            "intro_indicators": [
+                "Villas privées",
+                "Immeubles résidentiels",
+                "Cités privées",
+                "Résidences d'expatriés",
+                "Résidences de cadres",
+                "Résidences diplomatiques"
+            ],
+            "sections_title": "Nos solutions de sécurité résidentielle",
+            "sections": [
+                { "title": "Gardiennage 24h/24", "description": "Présence continue d'agents de sécurité pour assurer la protection permanente de votre résidence, de jour comme de nuit, sans interruption." },
+                { "title": "Contrôle des visiteurs", "description": "Gestion rigoureuse des entrées et sorties, enregistrement des visiteurs et vérification systématique des accès pour aucune intrusion non autorisée." },
+                { "title": "Surveillance des accès", "description": "Protection des points sensibles — portails, parkings, zones de passage — pour neutraliser tout risque d'intrusion dès la périphérie." },
+                { "title": "Rondes de sécurité", "description": "Patrouilles régulières autour et à l'intérieur du périmètre pour détecter toute activité suspecte avant qu'elle ne devienne un incident." },
+                { "title": "Gestion des incidents", "description": "Réaction immédiate et intervention structurée en cas de situation anormale, d'intrusion ou de comportement menaçant." },
+                { "title": "Surveillance nocturne renforcée", "description": "Vigilance accrue en soirée et de nuit sur les accès, parkings et parties communes, lorsque les résidences sont les plus exposées." }
+            ],
+            "gallery_title": "Sécurité résidentielle",
+            "gallery_description": "Découvrez nos interventions en milieu résidentiel pour assurer la tranquillité et la sécurité de vos habitations."
+        },
+        "chantiers": {
+            "title": "Sécurité chantiers",
+            "description": "Sécurisation de vos chantiers BTP : protection du matériel, contrôle des accès et rondes régulières sur site.",
+            "nav_tagline": "Sites BTP et matériel",
+            "hero_title_lead": "Sécurité des",
+            "hero_title_highlight": "chantiers",
+            "hero_description": "Protégez vos travaux, vos équipes et vos équipements",
+            "hero_image_alt": "Sécurité des chantiers — Super Sécurité Guinée",
+            "hero_stats": [
+                { "label": "Secteurs", "value": "BTP & infrastructures" },
+                { "label": "Surveillance", "value": "Rondes et contrôle d'accès" },
+                { "label": "Disponibilité", "value": "24h/24 • 7j/7" }
+            ],
+            "intro": [
+                "Les chantiers de construction sont des zones particulièrement vulnérables : vols de matériaux, intrusions, vandalisme, mouvements non contrôlés de personnes et de véhicules — les risques sont constants et peuvent impacter directement vos délais et vos coûts.",
+                "Super Sécurité accompagne les entreprises du BTP en Guinée avec des solutions de gardiennage et de surveillance adaptées aux chantiers de toutes tailles, qu'il s'agisse de travaux publics, de construction immobilière ou d'infrastructures industrielles.",
+                "Notre objectif est clair : assurer la protection continue de vos sites pour que vos équipes travaillent en sécurité et que vos travaux progressent sans interruption."
+            ],
+            "intro_indicators": [
+                "Construction immobilière",
+                "Routes & ponts",
+                "Chantiers industriels",
+                "Chantiers de rénovation",
+                "Complexes résidentiels",
+                "Aménagement urbain"
+            ],
+            "sections_title": "Nos services de sécurité pour chantiers",
+            "sections": [
+                { "title": "Contrôle des accès", "description": "Gestion rigoureuse des entrées et sorties du personnel, des visiteurs et des fournisseurs pour maintenir un site maîtrisé à tout moment." },
+                { "title": "Surveillance du chantier", "description": "Protection permanente des zones de travail, des matériaux stockés et des équipements contre le vol, les dégradations et les accès non autorisés." },
+                { "title": "Rondes de sécurité", "description": "Patrouilles régulières de jour comme de nuit pour détecter toute anomalie et intervenir avant qu'un incident ne se produise." },
+                { "title": "Contrôle des véhicules", "description": "Vérification systématique des camions, engins et véhicules entrant et sortant du site pour prévenir tout mouvement suspect." },
+                { "title": "Gestion des incidents", "description": "Intervention rapide, structurée et documentée en cas d'intrusion, d'incident ou de situation anormale sur le chantier." },
+                { "title": "Coordination chantier", "description": "Liaison avec le chef de chantier et remontée rapide des anomalies pour ne pas ralentir l'avancement des travaux." }
+            ],
+            "gallery_title": "Chantiers sécurisés",
+            "gallery_description": "Découvrez en images nos interventions réelles de gardiennage et sécurisation sur différents chantiers BTP."
+        },
+        "zones-minieres": {
+            "title": "Zones minières",
+            "description": "Surveillance rigoureuse des sites miniers avec des équipes formées aux protocoles de sécurité les plus stricts.",
+            "nav_tagline": "Sites sensibles et industriels",
+            "hero_title_lead": "Sécurité des",
+            "hero_title_highlight": "sites miniers",
+            "hero_description": "Une protection adaptée aux exigences de l'industrie minière",
+            "hero_image_alt": "Chargeuse et camion benne sur site minier — Super Sécurité Guinée",
+            "hero_stats": [
+                { "label": "Secteurs", "value": "Mines & sites sensibles" },
+                { "label": "Protocoles", "value": "Stricts et adaptés au terrain" },
+                { "label": "Expertise", "value": "Sécurité en environnements à haut risque" }
+            ],
+            "intro": [
+                "La Guinée occupe une position stratégique dans l'industrie minière mondiale, portée par ses importantes ressources en bauxite, or et autres minerais. Cette richesse s'accompagne d'enjeux de sécurité majeurs : intrusions, vols, sabotages, perturbations des opérations — les risques sont réels et les conséquences potentiellement lourdes.",
+                "Super Sécurité accompagne les acteurs du secteur minier en Guinée avec des dispositifs de sécurité robustes, pensés pour les environnements exigeants et les contraintes opérationnelles propres aux sites d'extraction et d'exploitation."
+            ],
+            "intro_indicators": [
+                "Mines",
+                "Carrières",
+                "Bases-vie",
+                "Infrastructures portuaires",
+                "Sites d'exploitation",
+                "Zones d'exploration"
+            ],
+            "sections_title": "Nos services de sécurité pour sites miniers",
+            "sections": [
+                { "title": "Contrôle des accès", "description": "Gestion rigoureuse des entrées et sorties du personnel, des visiteurs et des sous-traitants pour sécuriser l'ensemble du périmètre du site." },
+                { "title": "Surveillance des bases-vie", "description": "Protection des zones d'hébergement du personnel pour garantir un cadre de vie sûr, stable et maîtrisé en dehors des heures de travail." },
+                { "title": "Contrôle des véhicules", "description": "Inspection systématique des véhicules entrant et sortant du site afin de prévenir toute tentative de vol ou d'introduction d'éléments non autorisés." },
+                { "title": "Sécurisation des infrastructures", "description": "Protection des bureaux, ateliers, entrepôts et zones sensibles contre toute tentative d'intrusion, de dégradation ou de sabotage." },
+                { "title": "Rondes de sécurité", "description": "Patrouilles continues sur l'ensemble du site pour maintenir une surveillance active et dissuader tout comportement malveillant." },
+                { "title": "Gestion des incidents", "description": "Application immédiate des procédures de sécurité et remontée structurée des alertes pour une réponse rapide et traçable." }
+            ],
+            "gallery_title": "Zones minières & sites sensibles",
+            "gallery_description": "Aperçu en images de nos prestations de sécurisation et de surveillance sur des installations minières complexes.",
+            "highlights_title": "Pourquoi les acteurs miniers choisissent Super Sécurité ?",
+            "highlights": [
+                "Agents expérimentés, formés aux environnements sensibles et isolés",
+                "Supervision terrain dédiée, continue et documentée",
+                "Forte capacité de déploiement sur les sites éloignés",
+                "Respect strict des procédures HSE et des normes de sûreté internationales",
+                "Rapports d'incidents clairs, détaillés et transmis dans les délais",
+                "Présence opérationnelle établie dans les principales zones minières de Guinée"
+            ]
+        }
+    },
+    "about": {
+        "label": "À propos",
+        "title": "Pourquoi Super Sécurité",
+        "mission_who_title": "Qui sommes-nous ?",
+        "mission_who_body": "Super Sécurité est une entreprise de sécurité privée basée à Lambanyi, Conakry. Nous protégeons entreprises, résidences, chantiers et zones minières à Conakry et région avec des solutions de gardiennage et surveillance.",
+        "mission_commitment_title": "Notre engagement",
+        "mission_commitment_body": "Protéger ce qui compte le plus pour vous : vos installations, vos collaborateurs et votre tranquillité d'esprit. Intervention 24h/24 et 7j/7 avec des équipes professionnelles et réactives."
+    },
+    "contact": {
+        "channels_label": "Canaux directs",
+        "channels_title_lead": "Choisissez le moyen",
+        "channels_title_highlight": "qui vous convient",
+        "channel_email_desc": "Réponse rapide à votre demande",
+        "channel_email_cta": "Écrire un email",
+        "channel_phone_desc": "Disponible 24h/24 et 7j/7",
+        "channel_phone_cta": "Appeler",
+        "channel_whatsapp_desc": "Discussion rapide et fichiers",
+        "channel_whatsapp_cta": "Ouvrir WhatsApp",
+        "process_label": "À quoi vous attendre ?",
+        "process_title": "Notre processus en 4 étapes",
+        "step_1_title": "Réception",
+        "step_1_desc": "Analyse de votre besoin de sécurité.",
+        "step_2_title": "Évaluation",
+        "step_2_desc": "Visite ou échange pour comprendre le site.",
+        "step_3_title": "Proposition",
+        "step_3_desc": "Offre adaptée : effectifs, horaires, protocoles.",
+        "step_4_title": "Déploiement",
+        "step_4_desc": "Mise en place rapide de nos équipes.",
+        "legal_info_label": "Informations légales",
+        "legal_info_text": "Super Sécurité · Conakry et région",
+        "privacy_label": "Confidentialité",
+        "privacy_text": "Vos informations ne sont utilisées que pour vous répondre. Nous signons volontiers un NDA si votre projet l'exige.",
+        "form_label": "Formulaire de contact",
+        "form_heading": "Décrivez votre besoin de sécurité",
+        "form_required_hint": "Les champs marqués d'un * sont obligatoires.",
+        "form_title": "Envoyez-nous un message",
+        "form_name": "Nom complet",
+        "form_name_placeholder": "Votre nom",
+        "form_email": "E-mail",
+        "form_email_placeholder": "vous@exemple.com",
+        "form_phone": "Téléphone",
+        "form_phone_placeholder": "+224 ...",
+        "form_company": "Entreprise",
+        "form_company_optional": "(optionnel)",
+        "form_company_placeholder": "Nom de votre entreprise",
+        "form_project_type": "Type de projet",
+        "form_project_placeholder": "Sélectionner...",
+        "form_project_search": "Rechercher un type...",
+        "form_message": "Détails du projet",
+        "form_message_placeholder": "Décrivez votre projet : objectifs, contexte, délais souhaités...",
+        "form_privacy": "Vos informations restent confidentielles et ne sont jamais partagées.",
+        "form_submit": "Envoyer",
+        "form_submitting": "Envoi en cours...",
+        "project_types": [
+            "Sécurité entreprise",
+            "Sécurité résidence",
+            "Sécurité chantiers",
+            "Zones minières",
+            "Vidéo / télésurveillance",
+            "Autre"
+        ],
+        "map_label": "Localisation",
+        "map_title_lead": "Nous",
+        "map_title_highlight": "trouver",
+        "map_title": "Plan d'accès",
+        "map_iframe_title": "Plan d'accès — Super Sécurité",
+        "map_coordinates": "Coordonnées",
+        "map_open_maps": "Ouvrir dans Google Maps",
+        "faq_title": "Questions fréquentes",
+        "faq_title_lead": "Les questions",
+        "faq_title_highlight": "qu'on nous pose",
+        "faq_prefix": "FAQ —",
+        "faq_groups": [
+            {
+                "title": "Entreprise",
+                "faqs": [
+                    {
+                        "question": "Pourquoi faire appel à une société de sécurité privée en Guinée ?",
+                        "answer": "Faire appel à une société de sécurité privée permet de protéger vos locaux, vos équipements, vos collaborateurs et vos visiteurs. En Guinée, les entreprises font souvent face à des enjeux de contrôle d'accès, de surveillance des installations et de prévention des actes de malveillance."
+                    },
+                    {
+                        "question": "Quels types d'entreprises peuvent bénéficier de vos services ?",
+                        "answer": "Nous accompagnons les PME, grandes entreprises, banques, commerces, entrepôts, usines, bureaux administratifs, institutions internationales et organisations opérant en Guinée."
+                    },
+                    {
+                        "question": "Comment vos agents assurent-ils la sécurité des sites ?",
+                        "answer": "Nos agents assurent le contrôle des accès, les rondes de surveillance, l'accueil sécuritaire des visiteurs, le suivi des mouvements sur site et l'application des consignes de sécurité définies avec le client."
+                    },
+                    {
+                        "question": "Vos agents sont-ils formés ?",
+                        "answer": "Oui. Tous nos agents reçoivent une formation adaptée aux exigences du métier de la sécurité privée et sont régulièrement supervisés afin de garantir un haut niveau de professionnalisme."
+                    },
+                    {
+                        "question": "Intervenez-vous en dehors de Conakry ?",
+                        "answer": "Oui. Super Sécurité intervient sur l'ensemble du territoire guinéen selon les besoins de ses clients."
+                    },
+                    {
+                        "question": "Comment obtenir un devis pour la sécurité de mon entreprise ?",
+                        "answer": "Nos équipes réalisent une évaluation de vos besoins afin de proposer une solution personnalisée et un devis adapté à votre activité."
+                    },
+                    {
+                        "question": "Pourquoi choisir une société de sécurité à Conakry pour protéger son entreprise ?",
+                        "answer": "Conakry concentre une grande partie de l'activité économique de la Guinée, avec de nombreux bureaux, commerces, entrepôts et sites industriels. Faire appel à une société de sécurité implantée localement permet de bénéficier d'une meilleure réactivité, d'une connaissance du terrain et d'un accompagnement adapté aux réalités sécuritaires de la capitale guinéenne."
+                    }
+                ]
+            },
+            {
+                "title": "Sécurité minière",
+                "faqs": [
+                    {
+                        "question": "Pourquoi la sécurité est-elle essentielle sur un site minier en Guinée ?",
+                        "answer": "Les sites miniers concentrent des équipements de grande valeur, des matières premières et un important flux de personnel. Une sécurité professionnelle permet de réduire les risques de vol, d'intrusion, de sabotage et d'incidents opérationnels."
+                    },
+                    {
+                        "question": "Avez-vous de l'expérience dans le secteur minier ?",
+                        "answer": "Oui. Nos équipes sont formées aux contraintes spécifiques des sites miniers et aux exigences des entreprises opérant dans ce secteur stratégique en Guinée."
+                    },
+                    {
+                        "question": "Quels services de sécurité proposez-vous pour les mines ?",
+                        "answer": "Nous assurons le contrôle d'accès, la surveillance des installations, la protection des équipements, la gestion des visiteurs, les rondes de sécurité et la supervision opérationnelle."
+                    },
+                    {
+                        "question": "Intervenez-vous dans les zones minières éloignées ?",
+                        "answer": "Oui. Nous pouvons déployer des équipes dans les différentes régions minières de Guinée, notamment à Boké, Boffa, Siguiri, Kankan et dans d'autres zones d'exploitation."
+                    },
+                    {
+                        "question": "Comment assurez-vous le suivi des agents sur les sites miniers ?",
+                        "answer": "Nos superviseurs effectuent des contrôles réguliers et des rapports de suivi peuvent être transmis aux responsables du site."
+                    },
+                    {
+                        "question": "Pouvez-vous fournir un dispositif de sécurité 24h/24 ?",
+                        "answer": "Oui. Nous mettons en place des équipes organisées en rotation afin d'assurer une couverture permanente des sites miniers."
+                    },
+                    {
+                        "question": "Quelle société de sécurité choisir pour un site minier à Boké ou Boffa ?",
+                        "answer": "Les régions de Boké et Boffa abritent certaines des plus importantes exploitations minières de Guinée. La sécurisation de ces sites nécessite une expertise spécifique, une capacité de déploiement en zones éloignées et une parfaite maîtrise des exigences du secteur minier. Super Sécurité accompagne les acteurs miniers avec des solutions adaptées à la protection des installations, du personnel et des équipements."
+                    }
+                ]
+            },
+            {
+                "title": "Sécurité des domiciles et résidences",
+                "faqs": [
+                    {
+                        "question": "Pourquoi faire appel à une société de sécurité pour protéger son domicile ?",
+                        "answer": "La présence d'agents de sécurité contribue à dissuader les intrusions, à contrôler les accès et à renforcer la sécurité des occupants et des biens."
+                    },
+                    {
+                        "question": "Quels types de résidences protégez-vous ?",
+                        "answer": "Nous assurons la sécurité des villas, résidences privées, immeubles résidentiels, résidences diplomatiques et logements de cadres ou d'expatriés."
+                    },
+                    {
+                        "question": "Les agents sont-ils présents de jour comme de nuit ?",
+                        "answer": "Oui. Selon les besoins du client, nous pouvons mettre en place une présence permanente ou des horaires adaptés."
+                    },
+                    {
+                        "question": "Vos agents contrôlent-ils les visiteurs ?",
+                        "answer": "Oui. Nos agents peuvent assurer l'identification des visiteurs, le contrôle des entrées et sorties ainsi que le respect des consignes de sécurité du propriétaire."
+                    },
+                    {
+                        "question": "Puis-je bénéficier d'un service de sécurité temporaire ?",
+                        "answer": "Oui. Nous proposons aussi des prestations ponctuelles pour des absences prolongées ou des périodes à risque."
+                    },
+                    {
+                        "question": "Comment déterminer le nombre d'agents nécessaires ?",
+                        "answer": "Nos équipes réalisent une évaluation du domicile afin de recommander un dispositif adapté à sa configuration et aux risques identifiés."
+                    },
+                    {
+                        "question": "Comment protéger efficacement sa villa ou sa résidence à Conakry ?",
+                        "answer": "La protection d'une résidence à Conakry repose sur plusieurs éléments : contrôle des accès, présence d'agents de sécurité qualifiés, surveillance des visiteurs et application de procédures adaptées. Une solution de sécurité professionnelle permet de renforcer la tranquillité des occupants et de prévenir les risques d'intrusion ou de vol."
+                    }
+                ]
+            },
+            {
+                "title": "Sécurité de chantier",
+                "faqs": [
+                    {
+                        "question": "Pourquoi sécuriser un chantier en Guinée ?",
+                        "answer": "Les chantiers sont fréquemment exposés aux vols de matériaux, aux dégradations et aux intrusions. Une surveillance professionnelle permet de protéger les investissements et de limiter les interruptions de travaux."
+                    },
+                    {
+                        "question": "Quels types de chantiers protégez-vous ?",
+                        "answer": "Nous intervenons sur les chantiers de construction, les projets industriels, les infrastructures publiques, les projets miniers et les programmes immobiliers."
+                    },
+                    {
+                        "question": "Que font vos agents sur un chantier ?",
+                        "answer": "Ils assurent le contrôle des accès, la surveillance des matériaux et équipements, les rondes de sécurité et la gestion des entrées et sorties du personnel."
+                    },
+                    {
+                        "question": "La surveillance est-elle assurée en dehors des heures de travail ?",
+                        "answer": "Oui. Nous proposons une surveillance de nuit, les week-ends et les jours fériés afin de garantir une protection continue."
+                    },
+                    {
+                        "question": "Pouvez-vous intervenir rapidement sur un nouveau chantier ?",
+                        "answer": "Oui. Nos équipes peuvent être déployées rapidement selon la localisation et les besoins du projet."
+                    },
+                    {
+                        "question": "Comment réduire les pertes liées aux vols sur les chantiers ?",
+                        "answer": "La mise en place d'un dispositif de sécurité adapté, associé à des contrôles d'accès et à une surveillance régulière, constitue la solution la plus efficace pour limiter les pertes et sécuriser les actifs du chantier."
+                    },
+                    {
+                        "question": "Comment sécuriser un chantier de construction à Conakry et dans les grandes villes de Guinée ?",
+                        "answer": "Les chantiers de construction sont souvent exposés aux vols de matériaux, aux intrusions et aux actes de vandalisme. La mise en place d'un dispositif de sécurité adapté, comprenant le contrôle des accès, des rondes régulières et une surveillance en dehors des heures de travail, permet de protéger efficacement les investissements et d'assurer la continuité des travaux."
+                    }
+                ]
+            }
+        ],
+        "hero_label": "Nous contacter",
+        "hero_title_lead": "Parlons de votre",
+        "hero_title_highlight": "sécurité",
+        "hero_description": "Vous recherchez une solution de gardiennage, de surveillance ou de sécurité privée en Guinée ? Décrivez-nous vos besoins et nos équipes vous contacteront dans les plus brefs délais pour vous proposer une solution adaptée."
+    },
+    "legal": {
+        "label": "Légal",
+        "title": "Mentions légales",
+        "description": "Informations légales relatives au site supersecurite.com.",
+        "publisher": "Éditeur",
+        "publisher_body": "Super Sécurité — sécurité privée à Conakry et région.",
+        "rccm": "RCCM",
+        "contact": "Contact",
+        "director": "Directeur de publication",
+        "hosting": "Hébergement",
+        "hosting_body": "Hostinger International Ltd. — site accessible via HTTPS."
+    },
+    "privacy": {
+        "label": "Légal",
+        "title": "Politique de confidentialité",
+        "description": "Transparence sur la collecte et l'utilisation de vos données personnelles.",
+        "controller_title": "Responsable du traitement",
+        "controller_body": "Super Sécurité — :address. Contact : :email.",
+        "data_title": "Données collectées",
+        "data_body": "Via le formulaire de contact : nom, e-mail, téléphone et contenu du message. Données de navigation anonymisées pour les statistiques du site (pages vues, durée, appareil).",
+        "purpose_title": "Finalités",
+        "purpose_body": "Répondre à vos demandes de devis sécurité, améliorer le site et mesurer l'audience de manière agrégée. Nous ne vendons pas vos données.",
+        "cookies_title": "Cookies",
+        "cookies_body": "Cookies techniques (session, préférences) et cookie visiteur pour les statistiques internes. Vous pouvez les refuser via les paramètres de votre navigateur.",
+        "retention_title": "Durée de conservation",
+        "retention_body": "Messages de contact : 24 mois maximum sauf obligation légale. Données analytics : agrégées et conservées selon notre politique interne.",
+        "rights_title": "Vos droits",
+        "rights_body": "Accès, rectification ou suppression de vos données sur simple demande à :email."
+    },
+    "devenir_agent": {
+        "cta": "Rejoignez-nous",
+        "title": "Devenir agent",
+        "submit": "Envoyer ma candidature",
+        "thanks_title": "Merci pour votre candidature"
+    },
+    "heroes": {
+        "actualites": {
+            "label": "Veille & terrain",
+            "title_lead": "Restez informés de",
+            "title_highlight": "l'actualité",
+            "title_trail": "sur la sécurité",
+            "description": "Missions sur le terrain, retours d'expérience, conseils pratiques et nouveautés.",
+            "image_alt": "Actualités Super Sécurité — sécurité privée",
+            "stats": [
+                { "label": "Contenus", "value": "Articles & dossiers" },
+                { "label": "Zone", "value": "Conakry et région" },
+                { "label": "Expertise", "value": "Sécurité privée" }
+            ]
+        },
+        "conseils": {
+            "label": "Prévention & bonnes pratiques",
+            "title_lead": "Anticipez les risques avec nos",
+            "title_highlight": "conseils",
+            "title_trail": "sécurité",
+            "description": "Guides clairs et recommandations concrètes pour protéger entreprises, résidences, chantiers et zones sensibles — rédigés par nos équipes.",
+            "image_alt": "Conseils de sécurité Super Sécurité",
+            "stats": [
+                { "label": "Thèmes", "value": "Prévention & surveillance" },
+                { "label": "Lecture", "value": "Guides pratiques" },
+                { "label": "Public", "value": "Pro & particuliers" }
+            ]
+        },
+        "devenir_agent": {
+            "label": "Carrières",
+            "title_lead": "Rejoignez une équipe de",
+            "title_highlight": "professionnels",
+            "title_trail": "de la sécurité",
+            "description": "Agents qualifiés, missions variées et évolution possible au sein du réseau Super Sécurité à Conakry et région. Inscrivez-vous dès maintenant.",
+            "image_alt": "Recrutement agents Super Sécurité — Conakry et région",
+            "stats": [
+                { "label": "Missions", "value": "Entreprise & terrain" },
+                { "label": "Disponibilité", "value": "24h/24 · 7j/7" },
+                { "label": "Zone", "value": "Conakry et région" }
+            ]
+        },
+        "contact": {
+            "label": "Nous contacter",
+            "title_lead": "Parlons de votre",
+            "title_highlight": "sécurité",
+            "title_trail": "",
+            "description": "Vous recherchez une solution de gardiennage, de surveillance ou de sécurité privée en Guinée ? Décrivez-nous vos besoins et nos équipes vous contacteront dans les plus brefs délais pour vous proposer une solution adaptée.",
+            "image_alt": "Contact Super Sécurité — Lambanyi, Conakry",
+            "stats": [
+                { "label": "Réponse", "value": "Sous 24h ouvrées" },
+                { "label": "Bureau", "value": "Lambanyi, Conakry" },
+                { "label": "Services", "value": "4 expertises" }
+            ]
+        },
+        "about": {
+            "label": "POURQUOI",
+            "title_lead": "Choisir Super",
+            "title_highlight": "SÉCURITÉ ?",
+            "title_trail": "",
+            "description": "Expérience terrain, réactivité et disponibilité 24h/24 et 7j/7 — Super Sécurité protège entreprises et particuliers avec une équipe certifiée, engagée et proche de vos enjeux à Conakry et région.",
+            "image_alt": "Super Sécurité — sécurité privée",
+            "stats": [
+                { "label": "Disponibilité", "value": "24h/24 · 7j/7" },
+                { "label": "Zone", "value": "Conakry et région" },
+                { "label": "Engagement", "value": "Équipe certifiée" }
+            ]
+        },
+        "galerie": {
+            "label": "Nos missions en images",
+            "title_lead": "Découvrez notre",
+            "title_highlight": "galerie",
+            "title_trail": "sur le terrain",
+            "description": "Photos de nos équipes en action : entreprises, résidences, chantiers et zones minières partout en Guinée.",
+            "image_alt": "Galerie Super Sécurité — missions sur le terrain",
+            "stats": [
+                { "label": "Services", "value": "4 expertises" },
+                { "label": "Zone", "value": "Conakry et région" },
+                { "label": "Terrain", "value": "Photos réelles" }
+            ]
+        }
+    },
+    "home_hero": {
+        "carousel_aria": "Messages d'accueil Super Sécurité",
+        "excellence": {
+            "label": "Super SÉCURITÉ",
+            "title": "Votre partenaire de confiance pour une",
+            "highlight": "sécurité sans compromis",
+            "description": "Super Sécurité accompagne les entreprises, résidences, chantiers et sites stratégiques à travers toute la Guinée avec des solutions de sécurité fiables, réactives et adaptées à chaque environnement.",
+            "primary_cta": "Nous contacter",
+            "secondary_cta": "Nos offres",
+            "image_alt": "Super Sécurité — partenaire de confiance en sécurité privée en Guinée",
+            "stats": [
+                { "label": "Disponibilité", "value": "24h/24 • 7j/7" },
+                { "label": "Couverture", "value": "Conakry & Toute la Guinée" },
+                { "label": "Expertise", "value": "Gardiennage & Sécurité Privée" }
+            ],
+            "nav_label": "Confiance"
+        },
+        "entreprise": {
+            "title": "Sécurité des entreprises et des",
+            "highlight": "sites professionnels",
+            "description": "Assurez la protection de vos collaborateurs, visiteurs, équipements et infrastructures grâce à des solutions de sécurité adaptées à vos besoins. Nos agents qualifiés veillent à la sécurité de vos bureaux, commerces, entrepôts, restaurants et sites d'exploitation, 24h/24 et 7j/7.",
+            "primary_cta": "Découvrir",
+            "image_alt": "Sécurité entreprise — Super Sécurité",
+            "stats": [
+                { "label": "Surveillance", "value": "24h/24 • 7j/7" },
+                { "label": "Couverture", "value": "Conakry & Toute la Guinée" },
+                { "label": "Professionnalisme", "value": "Agents qualifiés et encadrés" }
+            ],
+            "nav_label": "entreprise"
+        },
+        "residence": {
+            "title": "Offrez à votre famille une",
+            "highlight": "tranquillité d'esprit permanente",
+            "description": "Super Sécurité assure la protection de vos résidences, villas et immeubles grâce à une présence humaine fiable, des contrôles rigoureux et une surveillance continue, de jour comme de nuit.",
+            "primary_cta": "Demander une protection",
+            "secondary_cta": "Découvrir",
+            "image_alt": "Sécurité résidence — Super Sécurité",
+            "stats": [
+                { "label": "Résidences", "value": "Villas & immeubles" },
+                { "label": "Surveillance", "value": "Jour et nuit" },
+                { "label": "Disponibilité", "value": "24h/24 • 7j/7" }
+            ],
+            "nav_label": "résidence"
+        },
+        "chantiers": {
+            "title": "Sécurisez vos chantiers,",
+            "highlight": "protégez vos investissements",
+            "description": "Super Sécurité assure la protection de vos chantiers de construction grâce à des agents qualifiés, un contrôle rigoureux des accès et des rondes régulières. Prévenez les vols, les intrusions et les actes de vandalisme tout au long de vos travaux.",
+            "primary_cta": "Nous contacter",
+            "secondary_cta": "En savoir plus",
+            "image_alt": "Sécurité chantiers — Super Sécurité",
+            "stats": [
+                { "label": "Secteurs", "value": "BTP & infrastructures" },
+                { "label": "Surveillance", "value": "Rondes et contrôle d'accès" },
+                { "label": "Disponibilité", "value": "24h/24 • 7j/7" }
+            ],
+            "nav_label": "chantiers"
+        },
+        "zones-minieres": {
+            "title": "Sécurisation renforcée de vos",
+            "highlight": "sites miniers",
+            "description": "Super Sécurité assure la protection de vos zones minières et sites sensibles grâce à des dispositifs de surveillance avancés, des équipes spécialisées et des protocoles de sécurité stricts adaptés aux environnements à haut risque.",
+            "primary_cta": "Nous contacter",
+            "secondary_cta": "En savoir plus",
+            "image_alt": "Zones minières — Super Sécurité",
+            "stats": [
+                { "label": "Secteurs", "value": "Mines & sites sensibles" },
+                { "label": "Protocoles", "value": "Stricts et adaptés au terrain" },
+                { "label": "Expertise", "value": "Sécurité en environnements à haut risque" }
+            ],
+            "nav_label": "Zones minières"
+        }
+    },
+    "about_values": {
+        "label": "Nos valeurs",
+        "title_lead": "Ce qui nous",
+        "title_highlight": "guide au quotidien",
+        "description": "Quatre principes simples qui structurent chaque décision, de la première discussion à la mise en production sur le terrain.",
+        "image_alt": "Équipe Super Sécurité — nos valeurs sur le terrain",
+        "items": [
+            {
+                "title": "Expérience et professionnalisme",
+                "description": "Des agents et superviseurs formés aux standards de la sécurité privée en environnement sensible."
+            },
+            {
+                "title": "Rapidité d'intervention",
+                "description": "Déploiement rapide sur vos sites, chantiers et événements selon vos contraintes opérationnelles."
+            },
+            {
+                "title": "Disponibilité 24h/24 · 7j/7",
+                "description": "Présence continue 24h/24 et 7j/7 pour protéger vos biens, vos équipes et vos visiteurs."
+            },
+            {
+                "title": "Équipe certifiée et formée",
+                "description": "Personnel qualifié, habitué aux environnements professionnels, résidentiels, chantiers et miniers."
+            }
+        ]
+    },
+    "why_us": {
+        "section_label": "Pourquoi nous choisir",
+        "title": "Une sécurité moderne, transparente et efficace",
+        "intro": "Nous combinons l'expertise humaine et la technologie pour offrir à nos clients un service de sécurité performant et réactif.",
+        "app_section_title": "Notre application mobile",
+        "app_lead": "Notre application dédiée permet notamment à nos clients de :",
+        "conclusion": "Cette approche garantit davantage de transparence, de réactivité et de contrôle.",
+        "reasons": [
+            "Une société de sécurité agréée et conforme à la réglementation guinéenne",
+            "Des agents rigoureusement sélectionnés et formés",
+            "Une supervision permanente pour garantir la qualité du service",
+            "Une application dédiée pour un suivi transparent et en temps réel",
+            "Une présence locale et une grande réactivité partout en Guinée",
+            "Une expertise reconnue dans la sécurité des mines, entreprises, résidences et chantiers"
+        ],
+        "app_features": [
+            "Signaler rapidement un incident ou un manquement",
+            "Suivre le traitement des demandes en temps réel",
+            "Communiquer directement avec nos équipes",
+            "Accéder aux informations et rapports liés à leur site",
+            "Bénéficier d'un meilleur suivi de la qualité de service"
+        ],
+        "details": [
+            {
+                "title": "Une société de sécurité agréée et conforme à la réglementation guinéenne",
+                "description": "Faire appel à Super Sécurité, c'est choisir une entreprise qui exerce légalement ses activités en République de Guinée. Nous disposons des agréments et autorisations requis pour fournir des prestations de sécurité privée aux entreprises, aux résidences, aux chantiers et aux sites industriels. Cette conformité garantit à nos clients un partenaire fiable, responsable et engagé dans le respect des normes professionnelles du secteur.",
+                "image_alt": "Super Sécurité — société de sécurité agréée en Guinée"
+            },
+            {
+                "title": "Des agents rigoureusement sélectionnés et formés",
+                "description": "La qualité de nos services repose sur la compétence de nos agents. Chaque collaborateur est recruté selon des critères stricts de moralité, de discipline et de professionnalisme. Nos agents bénéficient d'une formation adaptée aux réalités du terrain, notamment en matière de contrôle d'accès, de surveillance, de prévention des incidents, de gestion des visiteurs et de relation client. Cette préparation leur permet d'assurer efficacement la sécurité des personnes et des biens qui nous sont confiés.",
+                "image_alt": "Agent de sécurité Super Sécurité en poste"
+            },
+            {
+                "title": "Une supervision permanente pour garantir la qualité du service",
+                "description": "Chez Super Sécurité, nos prestations ne se limitent pas à la présence d'agents sur site. Nos superviseurs effectuent régulièrement des contrôles de terrain afin de vérifier le respect des consignes, la qualité du service rendu et la bonne tenue des postes de sécurité. Ce suivi permanent nous permet d'identifier rapidement les éventuelles anomalies et d'apporter des solutions immédiates afin de maintenir un niveau de sécurité élevé en toutes circonstances.",
+                "image_alt": "Superviseur Super Sécurité sur chantier"
+            },
+            {
+                "title": "Une application dédiée pour un suivi transparent et en temps réel",
+                "description": "Parce que la sécurité moderne doit s'appuyer sur des outils performants, nous mettons à la disposition de nos clients une application dédiée leur permettant de suivre les prestations en temps réel. Grâce à cette plateforme, il est possible de consulter les rapports de ronde, recevoir des notifications, signaler des incidents et communiquer facilement avec nos équipes. Cette transparence renforce la confiance de nos clients et leur offre une meilleure visibilité sur les services réalisés.",
+                "image_alt": "Application mobile Super Sécurité — suivi en temps réel"
+            },
+            {
+                "title": "Une présence locale et une grande réactivité partout en Guinée",
+                "description": "Basée en Guinée, Super Sécurité connaît parfaitement les réalités du terrain et les enjeux sécuritaires auxquels sont confrontés les entreprises et les particuliers. Notre proximité nous permet d'intervenir rapidement en cas de besoin, qu'il s'agisse d'un remplacement d'agent, d'un renforcement temporaire des effectifs ou d'une situation d'urgence. Notre organisation opérationnelle garantit à nos clients une continuité de service et une assistance rapide où qu'ils se trouvent.",
+                "image_alt": "Équipe Super Sécurité — présence locale en Guinée"
+            },
+            {
+                "title": "Une expertise reconnue dans la sécurité des mines, entreprises, résidences et chantiers",
+                "description": "Chaque secteur présente des risques et des exigences spécifiques. Grâce à notre expérience auprès de sociétés minières, d'entreprises, de résidences privées, de commerces et de chantiers, nous sommes en mesure de proposer des solutions adaptées à chaque environnement. Nos équipes mettent en œuvre des procédures éprouvées pour prévenir les intrusions, protéger les biens, contrôler les accès et contribuer à la sérénité de nos clients. Cette expertise multisectorielle fait de Super Sécurité un partenaire de confiance pour tous vos besoins en sécurité privée en Guinée.",
+                "image_alt": "Chargeuse et camion benne sur site minier — Super Sécurité"
+            }
+        ]
+    },
+    "galerie": {
+        "title": "Galerie",
+        "photos_tab": "Photos",
+        "videos_tab": "Vidéos",
+        "filter_label": "Filtrer",
+        "all_filter": "Tous",
+        "general_filter": "Galerie générale",
+        "no_photos": "Aucune image disponible pour ce filtre.",
+        "photo_count_singular": ":count photo affichée (sur :total)",
+        "photo_count_plural": ":count photos affichées (sur :total)",
+        "video_count_singular": ":count vidéo affichée (sur :total)",
+        "video_count_plural": ":count vidéos affichées (sur :total)"
+    }
 }

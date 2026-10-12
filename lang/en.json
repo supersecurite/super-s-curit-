@@ -1,0 +1,791 @@
+{
+    "Password updated.": "Password updated.",
+    "Profile updated.": "Profile updated.",
+    "Two factor authentication enabled.": "Two factor authentication enabled.",
+    "Two factor authentication disabled.": "Two factor authentication disabled.",
+    "nav": {
+        "home": "Home",
+        "services": "Services",
+        "why_us": "Why us",
+        "news": "News",
+        "tips": "Tips",
+        "gallery": "Gallery",
+        "contact": "Contact us",
+        "join_us": "Join us",
+        "join": "Join us",
+        "main": "Main navigation",
+        "main_label": "Main navigation",
+        "menu": "Menu",
+        "open_menu": "Open menu",
+        "close_menu": "Close menu",
+        "mobile_title": "Navigation menu",
+        "mobile_label": "Mobile navigation",
+        "navigation": "Navigation",
+        "services_submenu_open": "Submenu open",
+        "services_count": "services",
+        "services_submenu_label": "Services submenu",
+        "scroll_progress": "Reading progress"
+    },
+    "language": {
+        "label": "Language",
+        "switch": "Language",
+        "fr": "FR",
+        "en": "EN",
+        "switch_to_fr": "Passer en français",
+        "switch_to_en": "Switch to English"
+    },
+    "common": {
+        "skip_to_content": "Skip to content",
+        "call": "Call",
+        "write_us": "Write to us",
+        "learn_more": "Learn more",
+        "read_more": "Read more",
+        "back": "Back",
+        "send": "Send",
+        "loading": "Loading…",
+        "scroll_progress": "Reading progress",
+        "discover": "Discover",
+        "featured": "Featured"
+    },
+    "articles": {
+        "description": "Field missions, experience reports and Super Sécurité updates.",
+        "view_all": "View all news",
+        "read": "Read article",
+        "empty": "No news published yet.",
+        "search_placeholder": "Search for an article..."
+    },
+    "tips": {
+        "description": "Practical recommendations to strengthen the security of your premises, events and teams.",
+        "view_all": "View all tips",
+        "read": "Read tip",
+        "empty": "No tips published yet.",
+        "search_placeholder": "Search for a tip..."
+    },
+    "cms": {
+        "french_content_notice": "Content available in French — editorial translation coming soon."
+    },
+    "footer": {
+        "rights": ":year — SuperSécurité — All rights reserved.",
+        "who_we_are": "Who we are",
+        "about_heading": "Who we are",
+        "about_link": "Why choose us",
+        "why_choose": "Why choose us",
+        "news": "News",
+        "tips": "Security tips",
+        "gallery": "Gallery",
+        "join": "Join us",
+        "join_us": "Join us",
+        "services": "Services",
+        "services_heading": "Services",
+        "contact_us": "Contact us",
+        "contact_heading": "Contact us",
+        "faq": "FAQ",
+        "networks": "Social",
+        "social_heading": "Social",
+        "privacy": "Terms and privacy",
+        "legal": "Legal notice"
+    },
+    "home": {
+        "welcome_label": "Super SECURITY",
+        "welcome_title": "Your trusted private security partner in Guinea",
+        "welcome_p1": "Security is a major concern for businesses, residences, construction sites and industrial facilities. At Super Sécurité, we provide reliable, professional security solutions tailored to real conditions in Guinea.",
+        "welcome_p2": "A legally established company holding all approvals required to operate private security activities in the Republic of Guinea, Super Sécurité supports its clients with the highest standards of professionalism and regulatory compliance.",
+        "welcome_p3": "With qualified officers, rigorous operational supervision and modern technology, we protect people, property and strategic infrastructure nationwide.",
+        "services_label": "Our services",
+        "services_intro": "Super Sécurité supports individuals and professionals with security, surveillance and guarding solutions designed to protect people, property and operations.",
+        "why_label": "Why choose us",
+        "why_title": "Modern, transparent and effective security",
+        "why_intro": "We combine human expertise and technology to deliver high-performing, responsive security services.",
+        "articles_label": "News",
+        "articles_title": "Latest news",
+        "tips_label": "Tips",
+        "tips_title": "Security tips",
+        "testimonials_label": "Testimonials",
+        "testimonials_title": "They trust us",
+        "partners_label": "Partners",
+        "partners_title_lead": "They",
+        "partners_title_highlight": "trust us",
+        "partners_aria": "Super Sécurité partner logos",
+        "partners_section_lead": "Our",
+        "partners_section_highlight": "partners",
+        "partners_section_desc": "They trust us to secure their sites and events in Conakry and the surrounding area.",
+        "advantages_label": "Our strengths",
+        "advantages_title": "What sets us apart",
+        "advantages_items": [
+            {
+                "title": "Experience and professionalism",
+                "description": "A team of private security experts trained to the sector's most demanding standards."
+            },
+            {
+                "title": "Rapid response",
+                "description": "Responsiveness and fast deployment to secure your sites, construction projects and facilities."
+            },
+            {
+                "title": "24/7 availability",
+                "description": "24/7 intervention to protect you and your assets."
+            },
+            {
+                "title": "Certified and trained team",
+                "description": "Certified officers experienced in professional, residential, construction and mining environments."
+            }
+        ],
+        "innovation_label": "Innovation",
+        "app_teaser": "Track your sites, report an incident and talk with our teams from your smartphone. Discover every feature on our dedicated page.",
+        "cta_call": "Call",
+        "cta_write": "Write to us"
+    },
+    "services": {
+        "nav_label": "Our services",
+        "entreprise": {
+            "title": "Business security",
+            "description": "Protect your professional premises: offices, shops and warehouses with qualified officers available 24/7.",
+            "nav_tagline": "Offices, shops and warehouses",
+            "hero_title_lead": "Business",
+            "hero_title_highlight": "security",
+            "hero_description": "Protect your employees, your assets and the continuity of your operations",
+            "hero_image_alt": "Business security — Super Sécurité Guinea",
+            "hero_stats": [
+                { "label": "Surveillance", "value": "24/7" },
+                { "label": "Coverage", "value": "Conakry & All of Guinea" },
+                { "label": "Professionalism", "value": "Qualified and supervised agents" }
+            ],
+            "intro": [
+                "In an environment where the risks of theft, intrusion, vandalism and unauthorised access are increasingly present, the security of your business cannot be left to chance.",
+                "Super Sécurité supports businesses in Guinea with guarding and surveillance solutions tailored to their specific needs. Our teams work with offices, shops, warehouses, hotels, restaurants, industrial sites and other professional infrastructure to ensure effective, continuous protection of your facilities.",
+                "Through a deterrent presence, rigorous procedures and permanent monitoring, we secure your operations while preserving your image and your peace of mind."
+            ],
+            "intro_indicators": [
+                "Banks & financial institutions",
+                "Hotels & restaurants",
+                "Shops & supermarkets",
+                "Warehouses & logistics bases",
+                "Industrial sites",
+                "Offices & headquarters"
+            ],
+            "sections_title": "Our security services for businesses",
+            "sections": [
+                { "title": "Access control", "description": "Management and filtering of entries and exits, identity verification and visitor guidance to ensure secure access to your facilities." },
+                { "title": "Premises surveillance", "description": "Permanent protection of offices, shops, warehouses and sensitive areas against the risks of intrusion, theft or damage." },
+                { "title": "Security patrols", "description": "Regular patrols day and night to detect any anomaly and prevent incidents before they occur." },
+                { "title": "Incident management", "description": "Rapid response and application of appropriate procedures in the event of intrusion, incident or emergency." },
+                { "title": "Vehicle control", "description": "Verification and monitoring of vehicles entering and leaving the site to strengthen the security of your access points." },
+                { "title": "Protocols & reporting", "description": "Clear instructions, time-stamped patrols, visitor logs and regular reports tailored to your operational and contractual requirements." }
+            ],
+            "gallery_title": "Our business interventions",
+            "gallery_description": "A visual overview of our security services, patrols and access control in professional premises."
+        },
+        "residence": {
+            "title": "Residential security",
+            "description": "Peace of mind for villas, buildings and residences thanks to rigorous surveillance and a deterrent presence.",
+            "nav_tagline": "Villas, buildings and estates",
+            "hero_title_lead": "Residential",
+            "hero_title_highlight": "security",
+            "hero_description": "Protect your family and your living environment with complete peace of mind",
+            "hero_image_alt": "Residential security — Super Sécurité Guinea",
+            "hero_stats": [
+                { "label": "Residences", "value": "Villas & buildings" },
+                { "label": "Surveillance", "value": "Day and night" },
+                { "label": "Availability", "value": "24/7" }
+            ],
+            "intro": [
+                "Home security is not something you can improvise. Whether you own a villa, manage a building or oversee a private residence, ensuring a safe environment for occupants and property is a responsibility we take seriously.",
+                "Super Sécurité offers residential guarding and surveillance solutions delivered by qualified agents trained to combine a reassuring presence, discretion and operational efficiency."
+            ],
+            "intro_indicators": [
+                "Private villas",
+                "Residential buildings",
+                "Private estates",
+                "Expatriate residences",
+                "Executive residences",
+                "Diplomatic residences"
+            ],
+            "sections_title": "Our residential security solutions",
+            "sections": [
+                { "title": "24/7 guarding", "description": "Continuous presence of security agents to ensure permanent protection of your residence, day and night, without interruption." },
+                { "title": "Visitor control", "description": "Rigorous management of entries and exits, visitor registration and systematic access verification to prevent any unauthorised intrusion." },
+                { "title": "Access surveillance", "description": "Protection of sensitive points — gates, car parks, passageways — to neutralise any intrusion risk from the perimeter." },
+                { "title": "Security patrols", "description": "Regular patrols around and inside the perimeter to detect any suspicious activity before it becomes an incident." },
+                { "title": "Incident management", "description": "Immediate reaction and structured intervention in the event of an abnormal situation, intrusion or threatening behaviour." },
+                { "title": "Enhanced night surveillance", "description": "Increased vigilance in the evening and at night on access points, car parks and common areas, when residences are most exposed." }
+            ],
+            "gallery_title": "Residential security",
+            "gallery_description": "Discover our interventions in residential settings to ensure the tranquillity and security of your homes."
+        },
+        "chantiers": {
+            "title": "Construction site security",
+            "description": "Secure your construction sites: material protection, access control and regular on-site patrols.",
+            "nav_tagline": "Construction sites and equipment",
+            "hero_title_lead": "Construction site",
+            "hero_title_highlight": "security",
+            "hero_description": "Protect your projects, your teams and your equipment",
+            "hero_image_alt": "Construction site security — Super Sécurité Guinea",
+            "hero_stats": [
+                { "label": "Sectors", "value": "Construction & infrastructure" },
+                { "label": "Surveillance", "value": "Patrols and access control" },
+                { "label": "Availability", "value": "24/7" }
+            ],
+            "intro": [
+                "Construction sites are particularly vulnerable areas: material theft, intrusions, vandalism, uncontrolled movement of people and vehicles — the risks are constant and can directly impact your deadlines and costs.",
+                "Super Sécurité supports construction companies in Guinea with guarding and surveillance solutions adapted to sites of all sizes, whether public works, residential construction or industrial infrastructure.",
+                "Our objective is clear: ensure continuous protection of your sites so that your teams work safely and your projects progress without interruption."
+            ],
+            "intro_indicators": [
+                "Residential construction",
+                "Roads & bridges",
+                "Industrial sites",
+                "Renovation projects",
+                "Residential complexes",
+                "Urban development"
+            ],
+            "sections_title": "Our security services for construction sites",
+            "sections": [
+                { "title": "Access control", "description": "Rigorous management of entries and exits of personnel, visitors and suppliers to maintain a controlled site at all times." },
+                { "title": "Site surveillance", "description": "Permanent protection of work areas, stored materials and equipment against theft, damage and unauthorised access." },
+                { "title": "Security patrols", "description": "Regular patrols day and night to detect any anomaly and intervene before an incident occurs." },
+                { "title": "Vehicle control", "description": "Systematic verification of trucks, machinery and vehicles entering and leaving the site to prevent any suspicious movement." },
+                { "title": "Incident management", "description": "Rapid, structured and documented intervention in the event of intrusion, incident or abnormal situation on the site." },
+                { "title": "Site coordination", "description": "Liaison with the site manager and prompt reporting of anomalies to avoid slowing down project progress." }
+            ],
+            "gallery_title": "Secured construction sites",
+            "gallery_description": "Discover real images of our guarding and security interventions on various construction sites."
+        },
+        "zones-minieres": {
+            "title": "Mining areas",
+            "description": "Strict surveillance of mining sites with teams trained for the most demanding security protocols.",
+            "nav_tagline": "Sensitive and industrial sites",
+            "hero_title_lead": "Mining site",
+            "hero_title_highlight": "security",
+            "hero_description": "Protection adapted to the demands of the mining industry",
+            "hero_image_alt": "Loader and dump truck on mining site — Super Sécurité Guinea",
+            "hero_stats": [
+                { "label": "Sectors", "value": "Mining & sensitive sites" },
+                { "label": "Protocols", "value": "Strict and field-adapted" },
+                { "label": "Expertise", "value": "Security in high-risk environments" }
+            ],
+            "intro": [
+                "Guinea holds a strategic position in the global mining industry, driven by its significant bauxite, gold and other mineral resources. This wealth comes with major security challenges: intrusions, theft, sabotage, operational disruptions — the risks are real and the consequences potentially severe.",
+                "Super Sécurité supports mining sector players in Guinea with robust security systems designed for demanding environments and the operational constraints specific to extraction and exploitation sites."
+            ],
+            "intro_indicators": [
+                "Mines",
+                "Quarries",
+                "Base camps",
+                "Port infrastructure",
+                "Exploitation sites",
+                "Exploration zones"
+            ],
+            "sections_title": "Our security services for mining sites",
+            "sections": [
+                { "title": "Access control", "description": "Rigorous management of entries and exits of personnel, visitors and subcontractors to secure the entire site perimeter." },
+                { "title": "Base camp surveillance", "description": "Protection of staff accommodation areas to ensure a safe, stable and controlled living environment outside working hours." },
+                { "title": "Vehicle control", "description": "Systematic inspection of vehicles entering and leaving the site to prevent any attempt at theft or introduction of unauthorised items." },
+                { "title": "Infrastructure security", "description": "Protection of offices, workshops, warehouses and sensitive areas against any attempt at intrusion, damage or sabotage." },
+                { "title": "Security patrols", "description": "Continuous patrols across the entire site to maintain active surveillance and deter any malicious behaviour." },
+                { "title": "Incident management", "description": "Immediate application of security procedures and structured escalation of alerts for a rapid and traceable response." }
+            ],
+            "gallery_title": "Mining areas & sensitive sites",
+            "gallery_description": "A visual overview of our security and surveillance services on complex mining installations.",
+            "highlights_title": "Why mining operators choose Super Sécurité",
+            "highlights": [
+                "Experienced officers trained for sensitive and remote environments",
+                "Dedicated, continuous and documented field supervision",
+                "Strong deployment capacity on remote sites",
+                "Strict compliance with HSE procedures and international security standards",
+                "Clear, detailed incident reports delivered on time",
+                "Established operational presence in Guinea's main mining areas"
+            ]
+        }
+    },
+    "about": {
+        "label": "About",
+        "title": "Why Super Sécurité",
+        "mission_who_title": "Who are we?",
+        "mission_who_body": "Super Sécurité is a private security company based in Lambanyi, Conakry. We protect businesses, residences, construction sites and mining areas in Conakry and region with guarding and surveillance solutions.",
+        "mission_commitment_title": "Our commitment",
+        "mission_commitment_body": "Protect what matters most to you: your facilities, your teams and your peace of mind. 24/7 response with professional, reactive teams."
+    },
+    "contact": {
+        "channels_label": "Direct channels",
+        "channels_title_lead": "Choose the way",
+        "channels_title_highlight": "that suits you",
+        "channel_email_desc": "Quick response to your request",
+        "channel_email_cta": "Write an email",
+        "channel_phone_desc": "Available 24/7",
+        "channel_phone_cta": "Call",
+        "channel_whatsapp_desc": "Quick chat and file sharing",
+        "channel_whatsapp_cta": "Open WhatsApp",
+        "process_label": "What to expect?",
+        "process_title": "Our 4-step process",
+        "step_1_title": "Reception",
+        "step_1_desc": "Analysis of your security needs.",
+        "step_2_title": "Assessment",
+        "step_2_desc": "Site visit or discussion to understand your requirements.",
+        "step_3_title": "Proposal",
+        "step_3_desc": "Tailored offer: staffing, schedules, protocols.",
+        "step_4_title": "Deployment",
+        "step_4_desc": "Rapid setup of our teams on site.",
+        "legal_info_label": "Legal information",
+        "legal_info_text": "Super Sécurité · Conakry and surroundings",
+        "privacy_label": "Privacy",
+        "privacy_text": "Your information is only used to respond to you. We are happy to sign an NDA if your project requires it.",
+        "form_label": "Contact form",
+        "form_heading": "Describe your security needs",
+        "form_required_hint": "Fields marked with * are required.",
+        "form_title": "Send us a message",
+        "form_name": "Full name",
+        "form_name_placeholder": "Your name",
+        "form_email": "Email",
+        "form_email_placeholder": "you@example.com",
+        "form_phone": "Phone",
+        "form_phone_placeholder": "+224 ...",
+        "form_company": "Company",
+        "form_company_optional": "(optional)",
+        "form_company_placeholder": "Your company name",
+        "form_project_type": "Project type",
+        "form_project_placeholder": "Select...",
+        "form_project_search": "Search a type...",
+        "form_message": "Project details",
+        "form_message_placeholder": "Describe your project: goals, context, preferred timeline...",
+        "form_privacy": "Your information stays confidential and is never shared.",
+        "form_submit": "Send",
+        "form_submitting": "Sending...",
+        "project_types": [
+            "Business security",
+            "Residential security",
+            "Construction site security",
+            "Mining areas",
+            "Video / remote surveillance",
+            "Other"
+        ],
+        "map_label": "Location",
+        "map_title_lead": "Find",
+        "map_title_highlight": "us",
+        "map_title": "Directions",
+        "map_iframe_title": "Directions — Super Sécurité",
+        "map_coordinates": "Coordinates",
+        "map_open_maps": "Open in Google Maps",
+        "faq_title": "Frequently asked questions",
+        "faq_title_lead": "The questions",
+        "faq_title_highlight": "we get asked",
+        "faq_prefix": "FAQ —",
+        "faq_groups": [
+            {
+                "title": "Business",
+                "faqs": [
+                    {
+                        "question": "Why hire a private security company in Guinea?",
+                        "answer": "A private security company helps protect your premises, equipment, employees and visitors. In Guinea, businesses often face access control, facility surveillance and crime prevention challenges."
+                    },
+                    {
+                        "question": "What types of businesses can benefit from your services?",
+                        "answer": "We support SMEs, large companies, banks, retailers, warehouses, factories, administrative offices, international institutions and organisations operating in Guinea."
+                    },
+                    {
+                        "question": "How do your officers secure sites?",
+                        "answer": "Our officers handle access control, security patrols, secure visitor reception, on-site movement monitoring and enforcement of security instructions defined with the client."
+                    },
+                    {
+                        "question": "Are your officers trained?",
+                        "answer": "Yes. All our officers receive training suited to private security requirements and are regularly supervised to maintain a high level of professionalism."
+                    },
+                    {
+                        "question": "Do you operate outside Conakry?",
+                        "answer": "Yes. Super Sécurité operates across Guinea according to client needs."
+                    },
+                    {
+                        "question": "How can I get a quote for business security?",
+                        "answer": "Our teams assess your needs to propose a tailored solution and a quote suited to your activity."
+                    },
+                    {
+                        "question": "Why choose a security company in Conakry to protect a business?",
+                        "answer": "Conakry concentrates a large share of Guinea's economic activity, with many offices, shops, warehouses and industrial sites. Working with a locally based security company means better responsiveness, local knowledge and support adapted to the capital's security realities."
+                    }
+                ]
+            },
+            {
+                "title": "Mining security",
+                "faqs": [
+                    {
+                        "question": "Why is security essential on a mining site in Guinea?",
+                        "answer": "Mining sites concentrate high-value equipment, raw materials and large personnel flows. Professional security reduces risks of theft, intrusion, sabotage and operational incidents."
+                    },
+                    {
+                        "question": "Do you have experience in the mining sector?",
+                        "answer": "Yes. Our teams are trained for the specific constraints of mining sites and the requirements of companies operating in this strategic sector in Guinea."
+                    },
+                    {
+                        "question": "What security services do you offer for mines?",
+                        "answer": "We provide access control, facility surveillance, equipment protection, visitor management, security patrols and operational supervision."
+                    },
+                    {
+                        "question": "Do you operate in remote mining areas?",
+                        "answer": "Yes. We can deploy teams across Guinea's mining regions, including Boké, Boffa, Siguiri, Kankan and other exploitation areas."
+                    },
+                    {
+                        "question": "How do you monitor officers on mining sites?",
+                        "answer": "Our supervisors carry out regular checks, and progress reports can be shared with site managers."
+                    },
+                    {
+                        "question": "Can you provide 24/7 security coverage?",
+                        "answer": "Yes. We set up teams organised in shifts to ensure continuous coverage of mining sites."
+                    },
+                    {
+                        "question": "Which security company should I choose for a mining site in Boké or Boffa?",
+                        "answer": "The Boké and Boffa regions host some of Guinea's largest mining operations. Securing these sites requires specific expertise, remote deployment capacity and strong mastery of mining-sector requirements. Super Sécurité supports mining operators with solutions tailored to protecting facilities, personnel and equipment."
+                    }
+                ]
+            },
+            {
+                "title": "Home and residential security",
+                "faqs": [
+                    {
+                        "question": "Why hire a security company to protect a home?",
+                        "answer": "Security officers help deter intrusions, control access and strengthen the safety of occupants and property."
+                    },
+                    {
+                        "question": "What types of residences do you protect?",
+                        "answer": "We secure villas, private residences, residential buildings, diplomatic residences and housing for executives or expatriates."
+                    },
+                    {
+                        "question": "Are officers present day and night?",
+                        "answer": "Yes. Depending on client needs, we can provide permanent presence or adapted schedules."
+                    },
+                    {
+                        "question": "Do your officers check visitors?",
+                        "answer": "Yes. Our officers can identify visitors, control entries and exits, and enforce the owner's security instructions."
+                    },
+                    {
+                        "question": "Can I get temporary security cover?",
+                        "answer": "Yes. We also offer short-term services for extended absences or higher-risk periods."
+                    },
+                    {
+                        "question": "How do you determine how many officers are needed?",
+                        "answer": "Our teams assess the property to recommend a setup suited to its layout and identified risks."
+                    },
+                    {
+                        "question": "How can I effectively protect a villa or residence in Conakry?",
+                        "answer": "Protecting a residence in Conakry relies on access control, qualified security officers, visitor monitoring and adapted procedures. A professional security solution strengthens occupants' peace of mind and helps prevent intrusion or theft."
+                    }
+                ]
+            },
+            {
+                "title": "Construction site security",
+                "faqs": [
+                    {
+                        "question": "Why secure a construction site in Guinea?",
+                        "answer": "Construction sites are frequently exposed to material theft, damage and intrusions. Professional surveillance protects investments and limits work interruptions."
+                    },
+                    {
+                        "question": "What types of sites do you protect?",
+                        "answer": "We work on construction sites, industrial projects, public infrastructure, mining projects and real-estate programmes."
+                    },
+                    {
+                        "question": "What do your officers do on a construction site?",
+                        "answer": "They handle access control, surveillance of materials and equipment, security patrols and management of staff entries and exits."
+                    },
+                    {
+                        "question": "Is surveillance provided outside working hours?",
+                        "answer": "Yes. We offer night, weekend and public-holiday surveillance to ensure continuous protection."
+                    },
+                    {
+                        "question": "Can you deploy quickly on a new site?",
+                        "answer": "Yes. Our teams can be deployed quickly depending on location and project needs."
+                    },
+                    {
+                        "question": "How can theft-related losses on construction sites be reduced?",
+                        "answer": "An adapted security setup, combined with access controls and regular surveillance, is the most effective way to limit losses and secure site assets."
+                    },
+                    {
+                        "question": "How can a construction site be secured in Conakry and Guinea's major cities?",
+                        "answer": "Construction sites are often exposed to material theft, intrusions and vandalism. An adapted security setup with access control, regular patrols and out-of-hours surveillance effectively protects investments and keeps work on track."
+                    }
+                ]
+            }
+        ],
+        "hero_label": "Contact us",
+        "hero_title_lead": "Let's talk about your",
+        "hero_title_highlight": "security",
+        "hero_description": "Looking for a guarding, surveillance or private security solution in Guinea? Describe your needs and our teams will contact you as soon as possible with a tailored solution."
+    },
+    "legal": {
+        "label": "Legal",
+        "title": "Legal notice",
+        "description": "Legal information about supersecurite.com.",
+        "publisher": "Publisher",
+        "publisher_body": "Super Sécurité — private security in Conakry and region.",
+        "rccm": "RCCM",
+        "contact": "Contact",
+        "director": "Publication director",
+        "hosting": "Hosting",
+        "hosting_body": "Hostinger International Ltd. — site accessible via HTTPS."
+    },
+    "privacy": {
+        "label": "Legal",
+        "title": "Privacy policy",
+        "description": "Transparency about how we collect and use your personal data.",
+        "controller_title": "Data controller",
+        "controller_body": "Super Sécurité — :address. Contact: :email.",
+        "data_title": "Data collected",
+        "data_body": "Via the contact form: name, email, phone and message content. Anonymised browsing data for site statistics (page views, duration, device).",
+        "purpose_title": "Purposes",
+        "purpose_body": "Respond to security quote requests, improve the site and measure audience in aggregated form. We do not sell your data.",
+        "cookies_title": "Cookies",
+        "cookies_body": "Technical cookies (session, preferences) and a visitor cookie for internal statistics. You can refuse them in your browser settings.",
+        "retention_title": "Retention period",
+        "retention_body": "Contact messages: up to 24 months unless legally required. Analytics data: aggregated and retained under our internal policy.",
+        "rights_title": "Your rights",
+        "rights_body": "Access, rectify or delete your data on simple request to :email."
+    },
+    "devenir_agent": {
+        "cta": "Join us",
+        "title": "Become a guard",
+        "submit": "Submit my application",
+        "thanks_title": "Thank you for your application"
+    },
+    "heroes": {
+        "actualites": {
+            "label": "News & field",
+            "title_lead": "Stay informed about",
+            "title_highlight": "the latest news",
+            "title_trail": "on security",
+            "description": "Field missions, experience reports, practical advice and updates.",
+            "image_alt": "Super Sécurité news — private security",
+            "stats": [
+                { "label": "Content", "value": "Articles & reports" },
+                { "label": "Area", "value": "Conakry and region" },
+                { "label": "Expertise", "value": "Private security" }
+            ]
+        },
+        "conseils": {
+            "label": "Prevention & best practices",
+            "title_lead": "Anticipate risks with our",
+            "title_highlight": "security tips",
+            "title_trail": "",
+            "description": "Clear guides and practical recommendations to protect businesses, residences, construction sites and sensitive areas — written by our teams.",
+            "image_alt": "Super Sécurité security tips",
+            "stats": [
+                { "label": "Topics", "value": "Prevention & surveillance" },
+                { "label": "Reading", "value": "Practical guides" },
+                { "label": "Audience", "value": "Professionals & individuals" }
+            ]
+        },
+        "devenir_agent": {
+            "label": "Careers",
+            "title_lead": "Join a team of",
+            "title_highlight": "security professionals",
+            "title_trail": "",
+            "description": "Qualified agents, diverse missions and career growth within the Super Sécurité network in Conakry and region. Apply now.",
+            "image_alt": "Super Sécurité agent recruitment — Conakry and region",
+            "stats": [
+                { "label": "Missions", "value": "Corporate & field" },
+                { "label": "Availability", "value": "24/7" },
+                { "label": "Area", "value": "Conakry and region" }
+            ]
+        },
+        "contact": {
+            "label": "Contact us",
+            "title_lead": "Let's talk about your",
+            "title_highlight": "security",
+            "title_trail": "",
+            "description": "Looking for a guarding, surveillance or private security solution in Guinea? Describe your needs and our teams will contact you as soon as possible with a tailored solution.",
+            "image_alt": "Contact Super Sécurité — Lambanyi, Conakry",
+            "stats": [
+                { "label": "Response", "value": "Within 24 business hours" },
+                { "label": "Office", "value": "Lambanyi, Conakry" },
+                { "label": "Services", "value": "4 areas of expertise" }
+            ]
+        },
+        "about": {
+            "label": "WHY",
+            "title_lead": "Choose Super",
+            "title_highlight": "SÉCURITÉ?",
+            "title_trail": "",
+            "description": "Field experience, responsiveness and 24/7 availability — Super Sécurité protects businesses and individuals with a certified, committed team close to your needs in Conakry and region.",
+            "image_alt": "Super Sécurité — private security",
+            "stats": [
+                { "label": "Availability", "value": "24/7" },
+                { "label": "Area", "value": "Conakry and region" },
+                { "label": "Commitment", "value": "Certified team" }
+            ]
+        },
+        "galerie": {
+            "label": "Our missions in pictures",
+            "title_lead": "Discover our",
+            "title_highlight": "gallery",
+            "title_trail": "in the field",
+            "description": "Photos of our teams in action: businesses, residences, construction sites and mining areas across Guinea.",
+            "image_alt": "Super Sécurité gallery — field missions",
+            "stats": [
+                { "label": "Services", "value": "4 areas of expertise" },
+                { "label": "Area", "value": "Conakry and region" },
+                { "label": "Field", "value": "Real photos" }
+            ]
+        }
+    },
+    "home_hero": {
+        "carousel_aria": "Super Sécurité welcome messages",
+        "excellence": {
+            "label": "Super SECURITY",
+            "title": "Your trusted partner for",
+            "highlight": "uncompromising security",
+            "description": "Super Sécurité supports businesses, residences, construction sites and strategic locations throughout Guinea with reliable, responsive security solutions tailored to every environment.",
+            "primary_cta": "Contact us",
+            "secondary_cta": "Our services",
+            "image_alt": "Super Sécurité — trusted private security partner in Guinea",
+            "stats": [
+                { "label": "Availability", "value": "24/7" },
+                { "label": "Coverage", "value": "Conakry & All of Guinea" },
+                { "label": "Expertise", "value": "Guarding & Private Security" }
+            ],
+            "nav_label": "Trust"
+        },
+        "entreprise": {
+            "title": "Security for businesses and",
+            "highlight": "professional sites",
+            "description": "Ensure the protection of your employees, visitors, equipment and infrastructure with security solutions tailored to your needs. Our qualified agents secure your offices, shops, warehouses, restaurants and operating sites, 24/7.",
+            "primary_cta": "Discover",
+            "image_alt": "Business security — Super Sécurité",
+            "stats": [
+                { "label": "Surveillance", "value": "24/7" },
+                { "label": "Coverage", "value": "Conakry & All of Guinea" },
+                { "label": "Professionalism", "value": "Qualified and supervised agents" }
+            ],
+            "nav_label": "Business"
+        },
+        "residence": {
+            "title": "Give your family lasting",
+            "highlight": "peace of mind",
+            "description": "Super Sécurité protects your residences, villas and buildings with reliable human presence, rigorous checks and continuous surveillance, day and night.",
+            "primary_cta": "Request protection",
+            "secondary_cta": "Discover",
+            "image_alt": "Residential security — Super Sécurité",
+            "stats": [
+                { "label": "Residences", "value": "Villas & buildings" },
+                { "label": "Surveillance", "value": "Day and night" },
+                { "label": "Availability", "value": "24/7" }
+            ],
+            "nav_label": "Residential"
+        },
+        "chantiers": {
+            "title": "Secure your construction sites,",
+            "highlight": "protect your investments",
+            "description": "Super Sécurité protects your construction sites with qualified agents, rigorous access control and regular patrols. Prevent theft, intrusions and vandalism throughout your projects.",
+            "primary_cta": "Contact us",
+            "secondary_cta": "Learn more",
+            "image_alt": "Construction site security — Super Sécurité",
+            "stats": [
+                { "label": "Sectors", "value": "Construction & infrastructure" },
+                { "label": "Surveillance", "value": "Patrols and access control" },
+                { "label": "Availability", "value": "24/7" }
+            ],
+            "nav_label": "Construction"
+        },
+        "zones-minieres": {
+            "title": "Reinforced security for your",
+            "highlight": "mining sites",
+            "description": "Super Sécurité protects your mining areas and sensitive sites with advanced surveillance systems, specialised teams and strict security protocols adapted to high-risk environments.",
+            "primary_cta": "Contact us",
+            "secondary_cta": "Learn more",
+            "image_alt": "Mining areas — Super Sécurité",
+            "stats": [
+                { "label": "Sectors", "value": "Mining & sensitive sites" },
+                { "label": "Protocols", "value": "Strict and field-adapted" },
+                { "label": "Expertise", "value": "Security in high-risk environments" }
+            ],
+            "nav_label": "Mining"
+        }
+    },
+    "about_values": {
+        "label": "Our values",
+        "title_lead": "What guides us",
+        "title_highlight": "every day",
+        "description": "Four simple principles that structure every decision, from the first discussion to field deployment.",
+        "image_alt": "Super Sécurité team — our values in the field",
+        "items": [
+            {
+                "title": "Experience and professionalism",
+                "description": "Agents and supervisors trained to private security standards in sensitive environments."
+            },
+            {
+                "title": "Rapid response",
+                "description": "Fast deployment on your sites, construction projects and events based on your operational constraints."
+            },
+            {
+                "title": "24/7 availability",
+                "description": "Continuous presence 24/7 to protect your assets, teams and visitors."
+            },
+            {
+                "title": "Certified and trained team",
+                "description": "Qualified personnel experienced in professional, residential, construction and mining environments."
+            }
+        ]
+    },
+    "why_us": {
+        "section_label": "Why choose us",
+        "title": "Modern, transparent and effective security",
+        "intro": "We combine human expertise and technology to deliver high-performing, responsive security services.",
+        "app_section_title": "Our mobile app",
+        "app_lead": "Our dedicated app enables our clients to:",
+        "conclusion": "This approach ensures greater transparency, responsiveness and control.",
+        "reasons": [
+            "A licensed security company compliant with Guinean regulations",
+            "Rigorously selected and trained agents",
+            "Permanent supervision to guarantee service quality",
+            "A dedicated app for transparent, real-time monitoring",
+            "Local presence and high responsiveness throughout Guinea",
+            "Recognised expertise in mining, corporate, residential and construction security"
+        ],
+        "app_features": [
+            "Quickly report an incident or issue",
+            "Track request processing in real time",
+            "Communicate directly with our teams",
+            "Access information and reports related to their site",
+            "Benefit from better service quality monitoring"
+        ],
+        "details": [
+            {
+                "title": "A licensed security company compliant with Guinean regulations",
+                "description": "Choosing Super Sécurité means choosing a company that legally operates its activities in the Republic of Guinea. We hold the approvals and authorisations required to provide private security services to businesses, residences, construction sites and industrial facilities. This compliance guarantees our clients a reliable, responsible partner committed to professional industry standards.",
+                "image_alt": "Super Sécurité — licensed security company in Guinea"
+            },
+            {
+                "title": "Rigorously selected and trained agents",
+                "description": "The quality of our services depends on the competence of our agents. Every team member is recruited based on strict moral, discipline and professionalism criteria. Our agents receive training adapted to field realities, including access control, surveillance, incident prevention, visitor management and client relations. This preparation enables them to effectively ensure the security of the people and assets entrusted to us.",
+                "image_alt": "Super Sécurité security agent on duty"
+            },
+            {
+                "title": "Permanent supervision to guarantee service quality",
+                "description": "At Super Sécurité, our services go beyond having agents on site. Our supervisors regularly conduct field inspections to verify compliance with instructions, service quality and proper management of security posts. This permanent monitoring allows us to quickly identify any anomalies and provide immediate solutions to maintain a high level of security at all times.",
+                "image_alt": "Super Sécurité supervisor on construction site"
+            },
+            {
+                "title": "A dedicated app for transparent, real-time monitoring",
+                "description": "Because modern security must rely on high-performance tools, we provide our clients with a dedicated app for real-time service monitoring. Through this platform, clients can view patrol reports, receive notifications, report incidents and communicate easily with our teams. This transparency strengthens client trust and gives them better visibility into the services delivered.",
+                "image_alt": "Super Sécurité mobile app — real-time monitoring"
+            },
+            {
+                "title": "Local presence and high responsiveness throughout Guinea",
+                "description": "Based in Guinea, Super Sécurité has thorough knowledge of the field and the security challenges faced by businesses and individuals. Our proximity enables rapid intervention when needed, whether for agent replacement, temporary staffing reinforcement or emergency situations. Our operational organisation guarantees clients service continuity and swift assistance wherever they are located.",
+                "image_alt": "Super Sécurité team — local presence in Guinea"
+            },
+            {
+                "title": "Recognised expertise in mining, corporate, residential and construction security",
+                "description": "Each sector presents specific risks and requirements. Thanks to our experience with mining companies, businesses, private residences, shops and construction sites, we can offer solutions tailored to every environment. Our teams implement proven procedures to prevent intrusions, protect property, control access and contribute to our clients' peace of mind. This multi-sector expertise makes Super Sécurité a trusted partner for all your private security needs in Guinea.",
+                "image_alt": "Loader and dump truck on mining site — Super Sécurité"
+            }
+        ]
+    },
+    "galerie": {
+        "title": "Gallery",
+        "photos_tab": "Photos",
+        "videos_tab": "Videos",
+        "filter_label": "Filter",
+        "all_filter": "All",
+        "general_filter": "General gallery",
+        "no_photos": "No images available for this filter.",
+        "photo_count_singular": ":count photo displayed (out of :total)",
+        "photo_count_plural": ":count photos displayed (out of :total)",
+        "video_count_singular": ":count video displayed (out of :total)",
+        "video_count_plural": ":count videos displayed (out of :total)"
+    }
+}

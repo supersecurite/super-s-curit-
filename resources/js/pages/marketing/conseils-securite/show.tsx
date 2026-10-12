@@ -3,6 +3,7 @@ import { Calendar, ChevronLeft, Clock, Eye } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
 import ContentShareLinks from '@/components/content-share-links';
 import MarketingContentImage from '@/components/marketing/marketing-content-image';
+import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
 import SeoHead from '@/components/marketing/seo-head';
 import type { MarketingContentImageSource } from '@/types/marketing-content';
 import {
@@ -47,6 +48,7 @@ export default function MarketingConseilsSecuriteShow() {
     return (
         <>
             <SeoHead />
+            <CmsLocaleNotice />
             <Head title={securityTip.title} />
 
             <section className="marketing-section-band py-12 md:py-16">

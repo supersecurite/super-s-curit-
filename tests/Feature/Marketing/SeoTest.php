@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Article;
 use App\Support\BusinessLocation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -43,7 +44,48 @@ test('sitemap.xml lists public marketing pages', function () {
         ->toContain(url('/chantiers'))
         ->toContain(url('/zones-minieres'))
         ->toContain(url('/politique-de-confidentialite'))
-        ->toContain(url('/mentions-legales'));
+        ->toContain(url('/mentions-legales'))
+        ->toContain(url('/en'))
+        ->toContain(url('/en/contact'))
+        ->toContain(url('/en/entreprise'));
+});
+
+test('sitemap lists english static pages but not english article duplicates', function () {
+    $article = Article::factory()->published()->create([
+        'slug' => 'test-article-sitemap-i18n',
+    ]);
+
+    $content = $this->get(route('sitemap'))->assertOk()->getContent();
+
+    expect($content)
+        ->toContain(url('/actualites/'.$article->slug))
+        ->not->toContain(url('/en/actualites/'.$article->slug));
+});
+
+test('english page meta uses localized title and hreflang alternates', function () {
+    $this->get('/en/contact')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('locale', 'en')
+            ->where('seo.language', 'en')
+            ->where('seo.locale', 'en_US')
+            ->where('pageMeta.title', collect(config('seo_en.pages'))->firstWhere('path', '/contact')['meta_title'])
+            ->where('pageMeta.canonical', url('/en/contact'))
+            ->where('pageMeta.hreflang.fr', url('/contact'))
+            ->where('pageMeta.hreflang.en', url('/en/contact'))
+            ->where('pageMeta.hreflang.x-default', url('/contact'))
+        );
+});
+
+test('english contact html includes hreflang link tags', function () {
+    $content = $this->get('/en/contact')->assertOk()->getContent();
+
+    expect($content)
+        ->toContain('hreflang="fr"')
+        ->toContain('hreflang="en"')
+        ->toContain('hreflang="x-default"')
+        ->toContain('property="og:locale"')
+        ->toContain('en_US');
 });
 
 test('service pages are available with seo meta', function (string $routeName, string $serviceId) {
