@@ -56,6 +56,38 @@ final class LocaleTranslations
     }
 
     /**
+     * Résout une clé dot-notation dans lang/{locale}/backoffice.json.
+     *
+     * @param  array<string, string|int|float>  $replace
+     */
+    public static function backoffice(string $key, array $replace = [], ?string $fallback = null): string
+    {
+        $segments = explode('.', $key);
+        $current = self::loadBackoffice();
+
+        foreach ($segments as $segment) {
+            if (! is_array($current) || ! array_key_exists($segment, $current)) {
+                $current = null;
+                break;
+            }
+
+            $current = $current[$segment];
+        }
+
+        $value = is_string($current) ? $current : ($fallback ?? $key);
+
+        foreach ($replace as $search => $replacement) {
+            $value = str_replace(
+                [':'.$search, '{'.$search.'}'],
+                [(string) $replacement, (string) $replacement],
+                $value,
+            );
+        }
+
+        return $value;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private static function loadJson(string $path, string $fallback): array

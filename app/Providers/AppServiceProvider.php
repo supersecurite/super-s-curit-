@@ -21,7 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Garantit les helpers globaux même si `composer dump-autoload` n'a pas été relancé en prod.
+        if (! function_exists('bt') || ! function_exists('localized_route')) {
+            require_once app_path('Support/helpers.php');
+        }
     }
 
     /**
