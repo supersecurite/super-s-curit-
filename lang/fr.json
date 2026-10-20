@@ -648,7 +648,73 @@
         "cta": "Rejoignez-nous",
         "title": "Devenir agent",
         "submit": "Envoyer ma candidature",
-        "thanks_title": "Merci pour votre candidature"
+        "thanks_title": "Merci pour votre candidature",
+        "form": {
+            "badge": "Candidature",
+            "title": "Rejoignez notre réseau",
+            "required_hint": "Les champs marqués d'un * sont obligatoires.",
+            "first_name": "Prénom",
+            "first_name_placeholder": "Votre prénom",
+            "last_name": "Nom",
+            "last_name_placeholder": "Votre nom",
+            "phone": "Téléphone",
+            "phone_placeholder": "+224 6XX XX XX XX",
+            "email": "E-mail",
+            "email_placeholder": "vous@exemple.com",
+            "post": "Poste",
+            "post_placeholder": "Sélectionner un poste...",
+            "post_search_placeholder": "Rechercher un poste...",
+            "post_empty": "Aucun poste trouvé",
+            "experience_years": "Années d'expérience",
+            "experience_years_placeholder": "0",
+            "availability": "Disponibilité",
+            "availability_placeholder": "Sélectionner...",
+            "availability_search_placeholder": "Rechercher...",
+            "availability_empty": "Aucune disponibilité trouvée",
+            "location_title": "Localisation en Guinée",
+            "commune": "Commune",
+            "commune_placeholder": "Rechercher une commune...",
+            "commune_search_placeholder": "Rechercher une commune...",
+            "commune_empty": "Aucune commune trouvée",
+            "address_detail": "Adresse complémentaire",
+            "address_detail_placeholder": "Repère, rue, secteur...",
+            "certifications": "Certifications / formations",
+            "certifications_placeholder": "Permis, CQP, formations sécurité...",
+            "motivation": "Motivation",
+            "motivation_placeholder": "Pourquoi souhaitez-vous rejoindre Super Sécurité ?",
+            "consent": "J'accepte que mes informations soient utilisées par Super Sécurité pour me recontacter dans le cadre du recrutement.",
+            "privacy_notice": "Vos données restent confidentielles et ne sont jamais partagées à des tiers.",
+            "submitting": "Envoi en cours...",
+            "submit": "Envoyer ma candidature"
+        },
+        "posts": {
+            "agent": "Agent de sécurité",
+            "superviseur": "Superviseur",
+            "coordinateur": "Coordinateur",
+            "formateur": "Formateur",
+            "responsable_operations": "Responsable des opérations",
+            "autres": "Autres"
+        },
+        "availability": {
+            "jour": "Jour",
+            "nuit": "Nuit",
+            "24h": "24h/24",
+            "evenementiel": "Événementiel"
+        },
+        "validation": {
+            "first_name_required": "Le prénom est obligatoire.",
+            "last_name_required": "Le nom est obligatoire.",
+            "phone_required": "Le téléphone est obligatoire.",
+            "email_invalid": "L'adresse e-mail n'est pas valide.",
+            "consent_required": "Vous devez accepter le traitement de vos données.",
+            "post_required": "Le poste est obligatoire.",
+            "recaptcha_required": "La vérification anti-robot est requise."
+        },
+        "thank_you": {
+            "title": "Candidature envoyée",
+            "description": "Merci pour votre inscription. Notre équipe RH examinera votre profil et vous contactera si une opportunité correspond à votre localisation et votre expérience.",
+            "home_button": "Retour à l'accueil"
+        }
     },
     "heroes": {
         "actualites": {

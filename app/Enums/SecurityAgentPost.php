@@ -13,6 +13,13 @@ enum SecurityAgentPost: string
 
     public function label(): string
     {
+        $key = 'devenir_agent.posts.'.$this->value;
+        $translated = __($key);
+
+        if ($translated !== $key) {
+            return $translated;
+        }
+
         return match ($this) {
             self::Agent => 'Agent de sécurité',
             self::Superviseur => 'Superviseur',

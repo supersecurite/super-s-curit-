@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSecurityAgentApplicationRequest;
 use App\Mail\SecurityAgentApplicationReceived;
 use App\Models\SecurityAgentApplication;
 use App\Support\GuineaLocationValidator;
+use App\Support\LocaleUrl;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -19,10 +20,10 @@ class SecurityAgentApplicationController extends Controller
     {
         return Inertia::render('marketing/devenir-agent/index', [
             'availabilityOptions' => [
-                ['value' => 'jour', 'label' => 'Jour'],
-                ['value' => 'nuit', 'label' => 'Nuit'],
-                ['value' => '24h', 'label' => '24h/24'],
-                ['value' => 'evenementiel', 'label' => 'Événementiel'],
+                ['value' => 'jour', 'label' => __('devenir_agent.availability.jour')],
+                ['value' => 'nuit', 'label' => __('devenir_agent.availability.nuit')],
+                ['value' => '24h', 'label' => __('devenir_agent.availability.24h')],
+                ['value' => 'evenementiel', 'label' => __('devenir_agent.availability.evenementiel')],
             ],
             'postOptions' => SecurityAgentPost::options(),
         ]);
@@ -46,7 +47,7 @@ class SecurityAgentApplicationController extends Controller
             new SecurityAgentApplicationReceived($application->toAdminArray()),
         );
 
-        return redirect()->route('devenir-agent.merci');
+        return redirect()->route(LocaleUrl::routeName('devenir-agent.merci'));
     }
 
     public function thankYou(): Response

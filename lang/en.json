@@ -646,9 +646,75 @@
     },
     "devenir_agent": {
         "cta": "Join us",
-        "title": "Become a guard",
+        "title": "Become a security guard",
         "submit": "Submit my application",
-        "thanks_title": "Thank you for your application"
+        "thanks_title": "Thank you for your application",
+        "form": {
+            "badge": "Application",
+            "title": "Join our network",
+            "required_hint": "Fields marked with an * are required.",
+            "first_name": "First name",
+            "first_name_placeholder": "Your first name",
+            "last_name": "Last name",
+            "last_name_placeholder": "Your last name",
+            "phone": "Phone",
+            "phone_placeholder": "+224 6XX XX XX XX",
+            "email": "Email",
+            "email_placeholder": "you@example.com",
+            "post": "Position",
+            "post_placeholder": "Select a position...",
+            "post_search_placeholder": "Search a position...",
+            "post_empty": "No position found",
+            "experience_years": "Years of experience",
+            "experience_years_placeholder": "0",
+            "availability": "Availability",
+            "availability_placeholder": "Select...",
+            "availability_search_placeholder": "Search...",
+            "availability_empty": "No availability found",
+            "location_title": "Location in Guinea",
+            "commune": "Municipality",
+            "commune_placeholder": "Search a municipality...",
+            "commune_search_placeholder": "Search a municipality...",
+            "commune_empty": "No municipality found",
+            "address_detail": "Additional address",
+            "address_detail_placeholder": "Landmark, street, area...",
+            "certifications": "Certifications / training",
+            "certifications_placeholder": "Driver's license, vocational qualification, security training...",
+            "motivation": "Motivation",
+            "motivation_placeholder": "Why do you want to join Super Sécurité?",
+            "consent": "I agree that my information may be used by Super Sécurité to contact me regarding recruitment.",
+            "privacy_notice": "Your data remains confidential and is never shared with third parties.",
+            "submitting": "Submitting...",
+            "submit": "Submit my application"
+        },
+        "posts": {
+            "agent": "Security guard",
+            "superviseur": "Supervisor",
+            "coordinateur": "Coordinator",
+            "formateur": "Trainer",
+            "responsable_operations": "Operations manager",
+            "autres": "Other"
+        },
+        "availability": {
+            "jour": "Day",
+            "nuit": "Night",
+            "24h": "24/7",
+            "evenementiel": "Events"
+        },
+        "validation": {
+            "first_name_required": "First name is required.",
+            "last_name_required": "Last name is required.",
+            "phone_required": "Phone number is required.",
+            "email_invalid": "Email address is invalid.",
+            "consent_required": "You must accept the processing of your data.",
+            "post_required": "Position is required.",
+            "recaptcha_required": "Anti-bot verification is required."
+        },
+        "thank_you": {
+            "title": "Application submitted",
+            "description": "Thank you for applying. Our HR team will review your profile and get in touch if an opportunity matches your location and experience.",
+            "home_button": "Back to home"
+        }
     },
     "heroes": {
         "actualites": {
