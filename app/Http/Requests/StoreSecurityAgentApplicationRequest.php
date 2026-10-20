@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\SecurityAgentPost;
 use App\Rules\Recaptcha;
 use App\Support\GuineaLocationValidator;
+use App\Support\LocaleTranslations;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -54,13 +55,13 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'first_name.required' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.first_name_required'),
-            'last_name.required' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.last_name_required'),
-            'phone.required' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.phone_required'),
-            'email.email' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.email_invalid'),
-            'consent.accepted' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.consent_required'),
-            'post.required' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.post_required'),
-            'g-recaptcha-response' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.recaptcha_required'),
+            'first_name.required' => LocaleTranslations::trans('devenir_agent.validation.first_name_required'),
+            'last_name.required' => LocaleTranslations::trans('devenir_agent.validation.last_name_required'),
+            'phone.required' => LocaleTranslations::trans('devenir_agent.validation.phone_required'),
+            'email.email' => LocaleTranslations::trans('devenir_agent.validation.email_invalid'),
+            'consent.accepted' => LocaleTranslations::trans('devenir_agent.validation.consent_required'),
+            'post.required' => LocaleTranslations::trans('devenir_agent.validation.post_required'),
+            'g-recaptcha-response' => LocaleTranslations::trans('devenir_agent.validation.recaptcha_required'),
         ];
     }
 
@@ -70,19 +71,19 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'first_name' => \App\Support\LocaleTranslations::trans('devenir_agent.form.first_name'),
-            'last_name' => \App\Support\LocaleTranslations::trans('devenir_agent.form.last_name'),
-            'phone' => \App\Support\LocaleTranslations::trans('devenir_agent.form.phone'),
-            'email' => \App\Support\LocaleTranslations::trans('devenir_agent.form.email'),
-            'experience_years' => \App\Support\LocaleTranslations::trans('devenir_agent.form.experience_years'),
-            'availability' => \App\Support\LocaleTranslations::trans('devenir_agent.form.availability'),
-            'certifications' => \App\Support\LocaleTranslations::trans('devenir_agent.form.certifications'),
-            'motivation' => \App\Support\LocaleTranslations::trans('devenir_agent.form.motivation'),
-            'post' => \App\Support\LocaleTranslations::trans('devenir_agent.form.post'),
-            'commune_id' => \App\Support\LocaleTranslations::trans('devenir_agent.form.commune'),
-            'address_detail' => \App\Support\LocaleTranslations::trans('devenir_agent.form.address_detail'),
-            'consent' => \App\Support\LocaleTranslations::trans('devenir_agent.form.consent'),
-            'g-recaptcha-response' => \App\Support\LocaleTranslations::trans('devenir_agent.validation.recaptcha_required'),
+            'first_name' => LocaleTranslations::trans('devenir_agent.form.first_name'),
+            'last_name' => LocaleTranslations::trans('devenir_agent.form.last_name'),
+            'phone' => LocaleTranslations::trans('devenir_agent.form.phone'),
+            'email' => LocaleTranslations::trans('devenir_agent.form.email'),
+            'experience_years' => LocaleTranslations::trans('devenir_agent.form.experience_years'),
+            'availability' => LocaleTranslations::trans('devenir_agent.form.availability'),
+            'certifications' => LocaleTranslations::trans('devenir_agent.form.certifications'),
+            'motivation' => LocaleTranslations::trans('devenir_agent.form.motivation'),
+            'post' => LocaleTranslations::trans('devenir_agent.form.post'),
+            'commune_id' => LocaleTranslations::trans('devenir_agent.form.commune'),
+            'address_detail' => LocaleTranslations::trans('devenir_agent.form.address_detail'),
+            'consent' => LocaleTranslations::trans('devenir_agent.form.consent'),
+            'g-recaptcha-response' => LocaleTranslations::trans('devenir_agent.validation.recaptcha_required'),
         ];
     }
 }
