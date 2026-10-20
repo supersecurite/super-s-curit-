@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSecurityAgentApplicationRequest;
 use App\Mail\SecurityAgentApplicationReceived;
 use App\Models\SecurityAgentApplication;
 use App\Support\GuineaLocationValidator;
+use App\Support\LocaleTranslations;
 use App\Support\LocaleUrl;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
@@ -20,10 +21,10 @@ class SecurityAgentApplicationController extends Controller
     {
         return Inertia::render('marketing/devenir-agent/index', [
             'availabilityOptions' => [
-                ['value' => 'jour', 'label' => __('devenir_agent.availability.jour')],
-                ['value' => 'nuit', 'label' => __('devenir_agent.availability.nuit')],
-                ['value' => '24h', 'label' => __('devenir_agent.availability.24h')],
-                ['value' => 'evenementiel', 'label' => __('devenir_agent.availability.evenementiel')],
+                ['value' => 'jour', 'label' => LocaleTranslations::trans('devenir_agent.availability.jour')],
+                ['value' => 'nuit', 'label' => LocaleTranslations::trans('devenir_agent.availability.nuit')],
+                ['value' => '24h', 'label' => LocaleTranslations::trans('devenir_agent.availability.24h')],
+                ['value' => 'evenementiel', 'label' => LocaleTranslations::trans('devenir_agent.availability.evenementiel')],
             ],
             'postOptions' => SecurityAgentPost::options(),
         ]);

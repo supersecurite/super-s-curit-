@@ -3,6 +3,7 @@ import InputError from '@/components/input-error';
 import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { getCommunesForAgentSelect } from '@/data/guinea-localisation';
+import { useTrans } from '@/hooks/use-trans';
 
 type Props = {
     value: string;
@@ -17,6 +18,7 @@ export default function CommuneSearchSelect({
     error,
     fieldClasses,
 }: Props) {
+    const { t } = useTrans();
     const options = useMemo(
         () =>
             getCommunesForAgentSelect().map((option) => ({
@@ -29,7 +31,7 @@ export default function CommuneSearchSelect({
     return (
         <div className="grid gap-2">
             <Label htmlFor="commune_id">
-                Commune{' '}
+                {t('devenir_agent.form.commune', 'Commune')}{' '}
                 <span className="text-super-securite-accent">*</span>
             </Label>
             <SearchableSelect
@@ -38,9 +40,18 @@ export default function CommuneSearchSelect({
                 options={options}
                 value={value}
                 onChange={onChange}
-                placeholder="Rechercher une commune..."
-                searchPlaceholder="Rechercher une commune..."
-                emptyMessage="Aucune commune trouvée"
+                placeholder={t(
+                    'devenir_agent.form.commune_placeholder',
+                    'Rechercher une commune...',
+                )}
+                searchPlaceholder={t(
+                    'devenir_agent.form.commune_search_placeholder',
+                    'Rechercher une commune...',
+                )}
+                emptyMessage={t(
+                    'devenir_agent.form.commune_empty',
+                    'Aucune commune trouvée',
+                )}
                 required
                 variant="underline"
                 triggerClassName={fieldClasses}

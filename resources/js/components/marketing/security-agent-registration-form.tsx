@@ -1,6 +1,6 @@
 import { Form, usePage } from '@inertiajs/react';
-import { CheckCircle2, Send } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Send } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
 import CommuneSearchSelect from '@/components/marketing/commune-search-select';
 import InputError from '@/components/input-error';
 import RecaptchaField, {
@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import { useTrans } from '@/hooks/use-trans';
 import { store } from '@/routes/devenir-agent';
 
 type AvailabilityOption = { value: string; label: string };
@@ -33,9 +34,28 @@ const fieldClasses =
 export default function SecurityAgentRegistrationForm() {
     const { availabilityOptions, postOptions, recaptcha } =
         usePage<PageProps>().props;
+    const { t } = useTrans();
     const [communeId, setCommuneId] = useState('');
     const [recaptchaToken, setRecaptchaToken] = useState('');
     const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
+
+    const localizedPostOptions = useMemo(
+        () =>
+            postOptions.map((opt) => ({
+                value: opt.value,
+                label: t(`devenir_agent.posts.${opt.value}`, opt.label),
+            })),
+        [postOptions, t],
+    );
+
+    const localizedAvailabilityOptions = useMemo(
+        () =>
+            availabilityOptions.map((opt) => ({
+                value: opt.value,
+                label: t(`devenir_agent.availability.${opt.value}`, opt.label),
+            })),
+        [availabilityOptions, t],
+    );
 
     return (
         <div className="marketing-card relative overflow-hidden">
@@ -45,14 +65,17 @@ export default function SecurityAgentRegistrationForm() {
             />
 
             <div className="relative">
-                <p className="marketing-label mb-2">Candidature</p>
+                <p className="marketing-label mb-2">
+                    {t('devenir_agent.form.badge', 'Candidature')}
+                </p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
-                    Rejoignez notre réseau
+                    {t('devenir_agent.form.title', 'Rejoignez notre réseau')}
                 </h2>
                 <p className="mt-2 text-sm text-super-securite-muted">
-                    Les champs marqués d&apos;un{' '}
-                    <span className="text-super-securite-accent">*</span> sont
-                    obligatoires.
+                    {t(
+                        'devenir_agent.form.required_hint',
+                        "Les champs marqués d'un * sont obligatoires.",
+                    )}
                 </p>
 
                 <Form
@@ -91,7 +114,7 @@ export default function SecurityAgentRegistrationForm() {
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="first_name">
-                                        Prénom{' '}
+                                        {t('devenir_agent.form.first_name', 'Prénom')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -99,6 +122,10 @@ export default function SecurityAgentRegistrationForm() {
                                     <Input
                                         id="first_name"
                                         name="first_name"
+                                        placeholder={t(
+                                            'devenir_agent.form.first_name_placeholder',
+                                            'Votre prénom',
+                                        )}
                                         required
                                         className={fieldClasses}
                                     />
@@ -106,7 +133,7 @@ export default function SecurityAgentRegistrationForm() {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="last_name">
-                                        Nom{' '}
+                                        {t('devenir_agent.form.last_name', 'Nom')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -114,6 +141,10 @@ export default function SecurityAgentRegistrationForm() {
                                     <Input
                                         id="last_name"
                                         name="last_name"
+                                        placeholder={t(
+                                            'devenir_agent.form.last_name_placeholder',
+                                            'Votre nom',
+                                        )}
                                         required
                                         className={fieldClasses}
                                     />
@@ -124,7 +155,7 @@ export default function SecurityAgentRegistrationForm() {
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="phone">
-                                        Téléphone{' '}
+                                        {t('devenir_agent.form.phone', 'Téléphone')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -134,18 +165,26 @@ export default function SecurityAgentRegistrationForm() {
                                         name="phone"
                                         type="tel"
                                         required
-                                        placeholder="+224 6XX XX XX XX"
+                                        placeholder={t(
+                                            'devenir_agent.form.phone_placeholder',
+                                            '+224 6XX XX XX XX',
+                                        )}
                                         className={fieldClasses}
                                     />
                                     <InputError message={errors.phone} />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">E-mail</Label>
+                                    <Label htmlFor="email">
+                                        {t('devenir_agent.form.email', 'E-mail')}
+                                    </Label>
                                     <Input
                                         id="email"
                                         name="email"
                                         type="email"
-                                        placeholder="vous@exemple.com"
+                                        placeholder={t(
+                                            'devenir_agent.form.email_placeholder',
+                                            'vous@exemple.com',
+                                        )}
                                         className={fieldClasses}
                                     />
                                     <InputError message={errors.email} />
@@ -155,7 +194,7 @@ export default function SecurityAgentRegistrationForm() {
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="post">
-                                        Poste{' '}
+                                        {t('devenir_agent.form.post', 'Poste')}{' '}
                                         <span className="text-super-securite-accent">
                                             *
                                         </span>
@@ -163,9 +202,19 @@ export default function SecurityAgentRegistrationForm() {
                                     <SearchableSelect
                                         id="post"
                                         name="post"
-                                        options={postOptions}
-                                        placeholder="Sélectionner un poste..."
-                                        searchPlaceholder="Rechercher un poste..."
+                                        options={localizedPostOptions}
+                                        placeholder={t(
+                                            'devenir_agent.form.post_placeholder',
+                                            'Sélectionner un poste...',
+                                        )}
+                                        searchPlaceholder={t(
+                                            'devenir_agent.form.post_search_placeholder',
+                                            'Rechercher un poste...',
+                                        )}
+                                        emptyMessage={t(
+                                            'devenir_agent.form.post_empty',
+                                            'Aucun poste trouvé',
+                                        )}
                                         required
                                         variant="underline"
                                         triggerClassName={fieldClasses}
@@ -174,7 +223,10 @@ export default function SecurityAgentRegistrationForm() {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="experience_years">
-                                        Années d&apos;expérience
+                                        {t(
+                                            'devenir_agent.form.experience_years',
+                                            "Années d'expérience",
+                                        )}
                                     </Label>
                                     <Input
                                         id="experience_years"
@@ -182,6 +234,10 @@ export default function SecurityAgentRegistrationForm() {
                                         type="number"
                                         min={0}
                                         max={50}
+                                        placeholder={t(
+                                            'devenir_agent.form.experience_years_placeholder',
+                                            '0',
+                                        )}
                                         className={fieldClasses}
                                     />
                                     <InputError
@@ -192,14 +248,27 @@ export default function SecurityAgentRegistrationForm() {
 
                             <div className="grid gap-2 sm:max-w-md">
                                 <Label htmlFor="availability">
-                                    Disponibilité
+                                    {t(
+                                        'devenir_agent.form.availability',
+                                        'Disponibilité',
+                                    )}
                                 </Label>
                                 <SearchableSelect
                                     id="availability"
                                     name="availability"
-                                    options={availabilityOptions}
-                                    placeholder="Sélectionner..."
-                                    searchPlaceholder="Rechercher..."
+                                    options={localizedAvailabilityOptions}
+                                    placeholder={t(
+                                        'devenir_agent.form.availability_placeholder',
+                                        'Sélectionner...',
+                                    )}
+                                    searchPlaceholder={t(
+                                        'devenir_agent.form.availability_search_placeholder',
+                                        'Rechercher...',
+                                    )}
+                                    emptyMessage={t(
+                                        'devenir_agent.form.availability_empty',
+                                        'Aucune disponibilité trouvée',
+                                    )}
                                     variant="underline"
                                     triggerClassName={fieldClasses}
                                 />
@@ -208,7 +277,10 @@ export default function SecurityAgentRegistrationForm() {
 
                             <div className="rounded-xl border border-super-securite-border bg-super-securite-surface/50 p-5">
                                 <h3 className="font-heading mb-4 font-semibold text-super-securite-heading">
-                                    Localisation en Guinée
+                                    {t(
+                                        'devenir_agent.form.location_title',
+                                        'Localisation en Guinée',
+                                    )}
                                 </h3>
                                 <CommuneSearchSelect
                                     value={communeId}
@@ -218,12 +290,18 @@ export default function SecurityAgentRegistrationForm() {
                                 />
                                 <div className="mt-5 grid gap-2">
                                     <Label htmlFor="address_detail">
-                                        Adresse complémentaire
+                                        {t(
+                                            'devenir_agent.form.address_detail',
+                                            'Adresse complémentaire',
+                                        )}
                                     </Label>
                                     <Input
                                         id="address_detail"
                                         name="address_detail"
-                                        placeholder="Repère, rue, secteur..."
+                                        placeholder={t(
+                                            'devenir_agent.form.address_detail_placeholder',
+                                            'Repère, rue, secteur...',
+                                        )}
                                         className={fieldClasses}
                                     />
                                     <InputError
@@ -234,26 +312,37 @@ export default function SecurityAgentRegistrationForm() {
 
                             <div className="grid gap-2">
                                 <Label htmlFor="certifications">
-                                    Certifications / formations
+                                    {t(
+                                        'devenir_agent.form.certifications',
+                                        'Certifications / formations',
+                                    )}
                                 </Label>
                                 <Textarea
                                     id="certifications"
                                     name="certifications"
                                     rows={3}
                                     className={fieldClasses}
-                                    placeholder="Permis, CQP, formations sécurité..."
+                                    placeholder={t(
+                                        'devenir_agent.form.certifications_placeholder',
+                                        'Permis, CQP, formations sécurité...',
+                                    )}
                                 />
                                 <InputError message={errors.certifications} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="motivation">Motivation</Label>
+                                <Label htmlFor="motivation">
+                                    {t('devenir_agent.form.motivation', 'Motivation')}
+                                </Label>
                                 <Textarea
                                     id="motivation"
                                     name="motivation"
                                     rows={4}
                                     className={fieldClasses}
-                                    placeholder="Pourquoi souhaitez-vous rejoindre Super Sécurité ?"
+                                    placeholder={t(
+                                        'devenir_agent.form.motivation_placeholder',
+                                        'Pourquoi souhaitez-vous rejoindre Super Sécurité ?',
+                                    )}
                                 />
                                 <InputError message={errors.motivation} />
                             </div>
@@ -267,9 +356,10 @@ export default function SecurityAgentRegistrationForm() {
                                     className="mt-1 size-4 rounded border-super-securite-border"
                                 />
                                 <span>
-                                    J&apos;accepte que mes informations soient
-                                    utilisées par Super Sécurité pour me
-                                    recontacter dans le cadre du recrutement.
+                                    {t(
+                                        'devenir_agent.form.consent',
+                                        "J'accepte que mes informations soient utilisées par Super Sécurité pour me recontacter dans le cadre du recrutement.",
+                                    )}
                                 </span>
                             </label>
                             <InputError message={errors.consent} />
@@ -296,8 +386,10 @@ export default function SecurityAgentRegistrationForm() {
 
                             <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                                 <p className="text-xs text-super-securite-muted">
-                                    Vos données restent confidentielles et ne
-                                    sont jamais partagées à des tiers.
+                                    {t(
+                                        'devenir_agent.form.privacy_notice',
+                                        'Vos données restent confidentielles et ne sont jamais partagées à des tiers.',
+                                    )}
                                 </p>
                                 <button
                                     type="submit"
@@ -310,11 +402,17 @@ export default function SecurityAgentRegistrationForm() {
                                     {processing ? (
                                         <>
                                             <Spinner className="size-4" />
-                                            Envoi en cours...
+                                            {t(
+                                                'devenir_agent.form.submitting',
+                                                'Envoi en cours...',
+                                            )}
                                         </>
                                     ) : (
                                         <>
-                                            Envoyer ma candidature
+                                            {t(
+                                                'devenir_agent.form.submit',
+                                                'Envoyer ma candidature',
+                                            )}
                                             <Send
                                                 className="size-4 transition-transform duration-200 group-hover:translate-x-1"
                                                 aria-hidden

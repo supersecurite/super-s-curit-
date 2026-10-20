@@ -406,6 +406,19 @@ return [
             ],
         ],
         [
+            'path' => '/devenir-agent/merci',
+            'meta_title' => 'Candidature envoyée | Super Sécurité — Conakry et région',
+            'meta_description' => 'Merci pour votre candidature. Notre équipe RH examinera votre profil et vous recontactera.',
+            'schema_type' => 'WebPage',
+            'robots' => 'noindex, nofollow',
+            'changefreq' => 'never',
+            'priority' => 0.1,
+            'image' => '/web-app-manifest-512x512.png',
+            'sources' => [
+                'resources/js/pages/marketing/devenir-agent/merci.tsx',
+            ],
+        ],
+        [
             'path' => '/conseils-securite',
             'meta_title' => 'Conseils de sécurité | Super Sécurité — Conakry',
             'meta_description' => 'Conseils pratiques de Super Sécurité : prévention, gardiennage, surveillance et bonnes pratiques pour protéger vos locaux à Conakry et région.',

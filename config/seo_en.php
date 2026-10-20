@@ -37,6 +37,12 @@ return [
             'og_image_alt' => 'Super Sécurité guard recruitment — Conakry and region',
         ],
         [
+            'path' => '/devenir-agent/merci',
+            'meta_title' => 'Application submitted | Super Sécurité — Conakry and region',
+            'meta_description' => 'Thank you for your application. Our HR team will review your profile and get in touch.',
+            'robots' => 'noindex, nofollow',
+        ],
+        [
             'path' => '/conseils-securite',
             'meta_title' => 'Security tips | Super Sécurité — Conakry',
             'meta_description' => 'Practical security tips from Super Sécurité: prevention, guarding, surveillance and best practices to protect your premises in Conakry and region.',

@@ -1,9 +1,12 @@
 import { Link } from '@inertiajs/react';
 import { CheckCircle2 } from 'lucide-react';
 import SeoHead from '@/components/marketing/seo-head';
-import { home } from '@/routes';
+import { useTrans } from '@/hooks/use-trans';
+import { localizePath } from '@/lib/locale-url';
 
 export default function MarketingDevenirAgentMerci() {
+    const { t, locale } = useTrans();
+
     return (
         <>
             <SeoHead />
@@ -13,19 +16,22 @@ export default function MarketingDevenirAgentMerci() {
                     <div className="marketing-card mx-auto max-w-lg p-10">
                         <CheckCircle2 className="text-super-securite-accent mx-auto size-14" />
                         <h1 className="marketing-heading-section mt-6">
-                            Candidature envoyée
+                            {t('devenir_agent.thank_you.title', 'Candidature envoyée')}
                         </h1>
                         <p className="text-super-securite-muted mt-4 text-sm leading-relaxed">
-                            Merci pour votre inscription. Notre équipe RH
-                            examinera votre profil et vous contactera si une
-                            opportunité correspond à votre localisation et votre
-                            expérience.
+                            {t(
+                                'devenir_agent.thank_you.description',
+                                'Merci pour votre inscription. Notre équipe RH examinera votre profil et vous contactera si une opportunité correspond à votre localisation et votre expérience.',
+                            )}
                         </p>
                         <Link
-                            href={home.url()}
+                            href={localizePath('/', locale)}
                             className="marketing-cta-primary mt-8 inline-flex"
                         >
-                            Retour à l&apos;accueil
+                            {t(
+                                'devenir_agent.thank_you.home_button',
+                                "Retour à l'accueil",
+                            )}
                         </Link>
                     </div>
                 </div>

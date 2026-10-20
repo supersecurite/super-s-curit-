@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use App\Support\LocaleTranslations;
+
 enum SecurityAgentPost: string
 {
     case Agent = 'agent';
@@ -11,13 +13,12 @@ enum SecurityAgentPost: string
     case ResponsableOperations = 'responsable_operations';
     case Autres = 'autres';
 
-    public function label(): string
+    public function label(?string $locale = null): string
     {
-        $key = 'devenir_agent.posts.'.$this->value;
-        $translated = __($key);
+        $resolved = LocaleTranslations::trans('devenir_agent.posts.'.$this->value, [], '', $locale);
 
-        if ($translated !== $key) {
-            return $translated;
+        if ($resolved !== '') {
+            return $resolved;
         }
 
         return match ($this) {
@@ -33,12 +34,12 @@ enum SecurityAgentPost: string
     /**
      * @return list<array{value: string, label: string}>
      */
-    public static function options(): array
+    public static function options(?string $locale = null): array
     {
         return array_map(
             fn (self $post) => [
                 'value' => $post->value,
-                'label' => $post->label(),
+                'label' => $post->label($locale),
             ],
             self::cases(),
         );

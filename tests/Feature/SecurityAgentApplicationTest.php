@@ -116,3 +116,39 @@ test('devenir agent page has seo metadata configured', function () {
             ->where('pageMeta.title', fn ($title) => str_contains($title, 'agent'))
         );
 });
+
+test('public can view agent registration form in english with translated options', function () {
+    $this->get(route('en.devenir-agent.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/devenir-agent/index')
+            ->where('pageMeta.path', '/en/devenir-agent')
+            ->where('availabilityOptions.0.label', 'Day')
+            ->where('postOptions.0.label', 'Security guard')
+        );
+});
+
+test('submitting agent application in english redirects to english thank you page', function () {
+    Mail::fake();
+
+    $this->post(route('en.devenir-agent.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'phone' => '+224612000000',
+        'post' => 'agent',
+        'commune_id' => '104',
+        'consent' => '1',
+    ])->assertRedirect(route('en.devenir-agent.merci'));
+});
+
+test('agent application in english returns localized validation errors', function () {
+    $this->post(route('en.devenir-agent.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'phone' => '+224600000000',
+        'commune_id' => '104',
+        'consent' => '1',
+    ])->assertSessionHasErrors([
+        'post' => 'Position is required.',
+    ]);
+});
