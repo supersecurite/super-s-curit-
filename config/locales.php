@@ -2,7 +2,7 @@
 
 return [
 
-    'default' => env('APP_LOCALE', 'fr'),
+    'default' => 'fr',
 
     'supported' => ['fr', 'en'],
 

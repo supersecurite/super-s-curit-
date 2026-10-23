@@ -83,6 +83,8 @@ final class BackofficeLocale
             }
         }
 
-        return LocaleUrl::defaultLocale();
+        $language = strtolower($request->getLanguages()[0] ?? '');
+
+        return preg_match('/^fr(?:[_-]|$)/', $language) === 1 ? 'fr' : 'en';
     }
 }
