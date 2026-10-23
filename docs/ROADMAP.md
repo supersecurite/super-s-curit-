@@ -141,3 +141,5 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 | 2026-08-31 | Prérequis marketing : rôle `commercial`, permissions `marketing_*`, seeder, tests |
 | 2026-09-01 | Cahier des charges client — 3 lots, 1,5 M GNF, paiement à livraison complète |
 | 2026-09-02 | Lot 3 WhatsApp : comptes multi-config DB, envois Meta, webhook, tests |
+
+- 2026-10-23 : correction de la langue conservée après changement de préférence navigateur (session et cookie).

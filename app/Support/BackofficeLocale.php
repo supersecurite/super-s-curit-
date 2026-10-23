@@ -65,6 +65,18 @@ final class BackofficeLocale
 
     public static function resolveFromRequest(Request $request): string
     {
+        $language = strtolower($request->getLanguages()[0] ?? '');
+        $detected = preg_match('/^fr(?:[_-]|$)/', $language) === 1 ? 'fr' : 'en';
+        $previous = $request->hasSession() ? $request->session()->get('browser_language') : null;
+        if ($request->hasSession()) {
+            $request->session()->put('browser_language', $language);
+            if (is_string($previous) && $previous !== $language) {
+                $request->session()->put(self::SESSION_KEY, $detected);
+
+                return $detected;
+            }
+        }
+
         $candidates = [];
 
         if ($request->hasSession()) {

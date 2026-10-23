@@ -42,3 +42,5 @@ Visiteurs anonymes. Tracking visites actif (hors pages exclues).
 - Backoffice bilingue : toasts `bt()`, messages Form Requests, UI via `lang/{locale}/backoffice.json` + `useTrans` — [ADR-0006](../decisions/0006-backoffice-locale-session.md).
 - Segments d’URL encore en français sous `/en/...` (`/en/a-propos`) — hors phase 2.
 - Formulaires publics (contact, devenir agent) : messages de validation encore FR (hors périmètre BO).
+
+- Changement de langue principale du navigateur : la sélection précédente est invalidée à la prochaine requête. Accueil FR/EN négocié automatiquement ; pages publiques statiques redirigées lors du changement détecté. Le backoffice suit le changement en session.

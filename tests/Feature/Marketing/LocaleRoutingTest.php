@@ -5,8 +5,12 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->withoutVite();
+});
+
 test('french marketing home uses default locale without prefix', function () {
-    $this->get(route('home'))
+    $this->withHeader('Accept-Language', 'fr-FR')->get(route('home'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('marketing/home')
@@ -52,4 +56,25 @@ test('english about page is available', function () {
 test('pourquoi-nous redirects to localized about', function () {
     $this->get('/pourquoi-nous')->assertRedirect('/a-propos');
     $this->get('/en/pourquoi-nous')->assertRedirect('/en/a-propos');
+});
+
+test('browser language changes replace the previous public language', function () {
+    $this->withHeader('Accept-Language', 'en-US')
+        ->withUnencryptedCookie('browser_language', 'fr_fr')
+        ->withUnencryptedCookie('locale', 'fr')
+        ->get('/contact?source=test')->assertRedirect('/en/contact?source=test');
+});
+
+test('french browser returns from english home to french', function () {
+    $this->withHeader('Accept-Language', 'fr-CA')
+        ->withUnencryptedCookie('browser_language', 'en_us')
+        ->withUnencryptedCookie('locale', 'en')
+        ->get('/en')->assertRedirect('/');
+});
+
+test('browser language changes replace the previous backoffice selection', function () {
+    $this->withSession(['browser_language' => 'fr_fr', 'backoffice_locale' => 'fr'])
+        ->withHeader('Accept-Language', 'de-DE')
+        ->get('/login')
+        ->assertInertia(fn (Assert $page) => $page->where('locale', 'en'));
 });

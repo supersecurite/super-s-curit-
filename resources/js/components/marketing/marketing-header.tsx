@@ -181,11 +181,12 @@ export default function MarketingHeader() {
                 <div className="flex items-center gap-2 sm:gap-3">
                     {locales.length > 1 && (
                         <div
-                            className="hidden items-center gap-1 text-xs font-medium md:flex"
+                            className="hidden items-center gap-1 text-xs font-medium md:flex rounded bg-white p-1"
                             role="group"
                             aria-label={t('language.switch')}
                         >
-                            {locales.map((loc) => (
+                            {locales.map((loc, index) => (
+                                <> {index > 0 && <span className="text-xs font-medium">|</span>}
                                 <button
                                     key={loc}
                                     type="button"
@@ -195,11 +196,12 @@ export default function MarketingHeader() {
                                         'cursor-pointer rounded px-1.5 py-0.5 transition-colors duration-200',
                                         loc === locale
                                             ? 'bg-super-securite-accent text-white'
-                                            : 'text-white/60 hover:text-white',
+                                            : 'text-black',
                                     )}
                                 >
                                     {t(`language.${loc}`, loc.toUpperCase())}
                                 </button>
+                                </>
                             ))}
                         </div>
                     )}

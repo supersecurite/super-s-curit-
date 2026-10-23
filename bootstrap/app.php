@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'super_securite_vid',
             'locale',
             'backoffice_locale',
+            'browser_language',
         ]);
 
         $middleware->alias([
