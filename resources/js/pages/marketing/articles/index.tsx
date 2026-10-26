@@ -1,11 +1,7 @@
+import { useTrans } from '@/hooks/use-trans';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import {
-    ArrowRight,
-    Calendar,
-    Clock,
-    Eye,
-    Star,
-} from 'lucide-react';
+import { ArrowRight, Calendar, Clock, Eye, Star } from 'lucide-react';
 import MarketingContentFilters from '@/components/marketing/marketing-content-filters';
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
 import MarketingContentImage from '@/components/marketing/marketing-content-image';
@@ -14,7 +10,10 @@ import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
 import SeoHead from '@/components/marketing/seo-head';
 import type { MarketingContentImageSource } from '@/types/marketing-content';
 import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
-import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
+import {
+    index as actualitesIndex,
+    show as actualitesShow,
+} from '@/routes/actualites';
 
 type ArticleCard = {
     id: number;
@@ -50,6 +49,8 @@ type PageProps = {
 };
 
 function ArticleCardItem({ article }: { article: ArticleCard }) {
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     return (
         <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
             <div className="relative aspect-video overflow-hidden">
@@ -61,8 +62,8 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
-                    <div className="bg-super-securite-surface-elevated flex h-full items-center justify-center">
-                        <span className="text-super-securite-muted text-sm">
+                    <div className="flex h-full items-center justify-center bg-super-securite-surface-elevated">
+                        <span className="text-sm text-super-securite-muted">
                             Super Sécurité
                         </span>
                     </div>
@@ -75,7 +76,7 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
             </div>
 
             <div className="p-6">
-                <div className="text-super-securite-muted mb-3 flex items-center gap-3 text-sm">
+                <div className="mb-3 flex items-center gap-3 text-sm text-super-securite-muted">
                     {article.published_at_formatted ? (
                         <span className="flex items-center gap-1">
                             <Calendar className="size-4" />
@@ -84,37 +85,39 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
                     ) : null}
                     <span className="flex items-center gap-1">
                         <Clock className="size-4" />
-                        {article.read_time} min
+                        {t('public_content.minutes', {
+                            count: article.read_time,
+                        })}
                     </span>
                 </div>
 
-                <h2 className="font-heading group-hover:text-super-securite-accent mb-3 line-clamp-2 text-xl font-semibold text-super-securite-heading transition-colors">
+                <h2 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-super-securite-heading transition-colors group-hover:text-super-securite-accent">
                     {article.title}
                 </h2>
 
                 {article.excerpt ? (
-                    <p className="text-super-securite-muted mb-4 line-clamp-3 text-sm">
+                    <p className="mb-4 line-clamp-3 text-sm text-super-securite-muted">
                         {article.excerpt}
                     </p>
                 ) : null}
 
                 <div className="flex items-center justify-between border-t border-super-securite-border pt-4">
-                    <span className="text-super-securite-muted flex items-center gap-1 text-sm">
+                    <span className="flex items-center gap-1 text-sm text-super-securite-muted">
                         <Eye className="size-4" />
                         {article.views}
                     </span>
                     <div className="flex items-center gap-1">
                         <ContentShareButton
                             title={article.title}
-                            url={actualitesShow.url(article.slug)}
+                            url={lp(actualitesShow.url(article.slug))}
                             description={article.excerpt}
                             variant="marketing"
                         />
                         <Link
-                            href={actualitesShow.url(article.slug)}
-                            className="text-super-securite-accent inline-flex items-center gap-1 text-sm font-semibold"
+                            href={lp(actualitesShow.url(article.slug))}
+                            className="inline-flex items-center gap-1 text-sm font-semibold text-super-securite-accent"
                         >
-                            Lire
+                            {t('public_content.read')}
                             <ArrowRight className="size-4" />
                         </Link>
                     </div>
@@ -125,6 +128,8 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
 }
 
 export default function MarketingArticlesIndex() {
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     const { articles, featuredArticles, categories, filters } =
         usePage<PageProps>().props;
     const hero = useMarketingPageHero('actualites');
@@ -142,15 +147,15 @@ export default function MarketingArticlesIndex() {
                     <MarketingContentFilters
                         filters={filters}
                         categories={categories}
-                        indexUrl={actualitesIndex.url()}
-                        searchPlaceholder="Rechercher un article..."
+                        indexUrl={lp(actualitesIndex.url())}
+                        searchPlaceholder={t('articles.search_placeholder')}
                     />
 
                     {featuredArticles.length > 0 ? (
                         <div className="mb-12">
                             <h2 className="marketing-heading-section mb-6 flex items-center gap-2">
-                                <Star className="text-super-securite-accent size-5" />
-                                À la une
+                                <Star className="size-5 text-super-securite-accent" />
+                                {t('common.featured')}
                             </h2>
                             <div className="grid gap-6 md:grid-cols-3">
                                 {featuredArticles.map((article) => (
@@ -175,7 +180,7 @@ export default function MarketingArticlesIndex() {
                     {articles.data.length === 0 ? (
                         <div className="marketing-card py-12 text-center">
                             <p className="text-super-securite-muted">
-                                Aucune actualité publiée pour le moment.
+                                {t('articles.empty')}
                             </p>
                         </div>
                     ) : null}
@@ -189,9 +194,13 @@ export default function MarketingArticlesIndex() {
                                     disabled={!link.url}
                                     onClick={() => {
                                         if (link.url) {
-                                            router.get(link.url, {}, {
-                                                preserveState: true,
-                                            });
+                                            router.get(
+                                                link.url,
+                                                {},
+                                                {
+                                                    preserveState: true,
+                                                },
+                                            );
                                         }
                                     }}
                                     className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${

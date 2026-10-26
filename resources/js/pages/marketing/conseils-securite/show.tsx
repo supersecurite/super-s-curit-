@@ -1,3 +1,5 @@
+import { useTrans } from '@/hooks/use-trans';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar, ChevronLeft, Clock, Eye } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
@@ -43,6 +45,8 @@ type PageProps = {
 };
 
 export default function MarketingConseilsSecuriteShow() {
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     const { securityTip, securityTipContent, relatedSecurityTips } =
         usePage<PageProps>().props;
 
@@ -55,11 +59,11 @@ export default function MarketingConseilsSecuriteShow() {
             <section className="marketing-section-band py-12 md:py-16">
                 <div className="container mx-auto max-w-4xl px-4">
                     <Link
-                        href={conseilsIndex.url()}
-                        className="text-super-securite-muted hover:text-super-securite-accent mb-8 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                        href={lp(conseilsIndex.url())}
+                        className="mb-8 inline-flex items-center gap-1 text-sm font-medium text-super-securite-muted transition-colors hover:text-super-securite-accent"
                     >
                         <ChevronLeft className="size-4" />
-                        Retour aux conseils
+                        {t('public_content.back_tips')}
                     </Link>
 
                     <article>
@@ -83,18 +87,22 @@ export default function MarketingConseilsSecuriteShow() {
                                     </span>
                                 ) : null}
                                 {securityTip.published_at_formatted ? (
-                                    <span className="text-super-securite-muted flex items-center gap-1">
+                                    <span className="flex items-center gap-1 text-super-securite-muted">
                                         <Calendar className="size-4" />
                                         {securityTip.published_at_formatted}
                                     </span>
                                 ) : null}
-                                <span className="text-super-securite-muted flex items-center gap-1">
+                                <span className="flex items-center gap-1 text-super-securite-muted">
                                     <Clock className="size-4" />
-                                    {securityTip.formatted_read_time}
+                                    {t('public_content.reading', {
+                                        count: securityTip.read_time,
+                                    })}
                                 </span>
-                                <span className="text-super-securite-muted flex items-center gap-1">
+                                <span className="flex items-center gap-1 text-super-securite-muted">
                                     <Eye className="size-4" />
-                                    {securityTip.views} vues
+                                    {t('public_content.views', {
+                                        count: securityTip.views,
+                                    })}
                                 </span>
                             </div>
 
@@ -103,7 +111,7 @@ export default function MarketingConseilsSecuriteShow() {
                             </h1>
 
                             {securityTip.excerpt ? (
-                                <p className="text-super-securite-muted mb-8 text-lg leading-relaxed">
+                                <p className="mb-8 text-lg leading-relaxed text-super-securite-muted">
                                     {securityTip.excerpt}
                                 </p>
                             ) : null}
@@ -113,7 +121,7 @@ export default function MarketingConseilsSecuriteShow() {
                             <div className="mt-10">
                                 <ContentShareLinks
                                     title={securityTip.title}
-                                    url={conseilsShow.url(securityTip.slug)}
+                                    url={lp(conseilsShow.url(securityTip.slug))}
                                     description={securityTip.excerpt}
                                     variant="marketing"
                                 />
@@ -124,13 +132,15 @@ export default function MarketingConseilsSecuriteShow() {
                     {relatedSecurityTips.length > 0 ? (
                         <section className="mt-16">
                             <h2 className="marketing-heading-section mb-8">
-                                Conseils similaires
+                                {t('public_content.related_tips')}
                             </h2>
                             <div className="grid gap-6 md:grid-cols-3">
                                 {relatedSecurityTips.map((related) => (
                                     <Link
                                         key={related.id}
-                                        href={conseilsShow.url(related.slug)}
+                                        href={lp(
+                                            conseilsShow.url(related.slug),
+                                        )}
                                         className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10"
                                     >
                                         {related.image_url ? (
@@ -141,14 +151,14 @@ export default function MarketingConseilsSecuriteShow() {
                                                 className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             />
                                         ) : (
-                                            <div className="bg-super-securite-surface-elevated h-40" />
+                                            <div className="h-40 bg-super-securite-surface-elevated" />
                                         )}
                                         <div className="p-5">
-                                            <h3 className="font-heading group-hover:text-super-securite-accent mb-2 line-clamp-2 font-semibold text-super-securite-heading">
+                                            <h3 className="mb-2 line-clamp-2 font-heading font-semibold text-super-securite-heading group-hover:text-super-securite-accent">
                                                 {related.title}
                                             </h3>
                                             {related.excerpt ? (
-                                                <p className="text-super-securite-muted line-clamp-2 text-sm">
+                                                <p className="line-clamp-2 text-sm text-super-securite-muted">
                                                     {related.excerpt}
                                                 </p>
                                             ) : null}

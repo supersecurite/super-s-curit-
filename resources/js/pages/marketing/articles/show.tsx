@@ -1,3 +1,5 @@
+import { useTrans } from '@/hooks/use-trans';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar, ChevronLeft, Clock, Eye } from 'lucide-react';
 import ContentRenderer from '@/components/lexical-editor/content-renderer';
@@ -6,7 +8,10 @@ import MarketingContentImage from '@/components/marketing/marketing-content-imag
 import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
 import SeoHead from '@/components/marketing/seo-head';
 import type { MarketingContentImageSource } from '@/types/marketing-content';
-import { index as actualitesIndex, show as actualitesShow } from '@/routes/actualites';
+import {
+    index as actualitesIndex,
+    show as actualitesShow,
+} from '@/routes/actualites';
 
 type ArticleDetail = {
     id: number;
@@ -40,6 +45,8 @@ type PageProps = {
 };
 
 export default function MarketingArticleShow() {
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     const { article, articleContent, relatedArticles } =
         usePage<PageProps>().props;
 
@@ -52,11 +59,11 @@ export default function MarketingArticleShow() {
             <section className="marketing-section-band py-12 md:py-16">
                 <div className="container mx-auto max-w-4xl px-4">
                     <Link
-                        href={actualitesIndex.url()}
-                        className="text-super-securite-muted hover:text-super-securite-accent mb-8 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                        href={lp(actualitesIndex.url())}
+                        className="mb-8 inline-flex items-center gap-1 text-sm font-medium text-super-securite-muted transition-colors hover:text-super-securite-accent"
                     >
                         <ChevronLeft className="size-4" />
-                        Retour aux actualités
+                        {t('public_content.back_articles')}
                     </Link>
 
                     <article>
@@ -80,18 +87,22 @@ export default function MarketingArticleShow() {
                                     </span>
                                 ) : null}
                                 {article.published_at_formatted ? (
-                                    <span className="text-super-securite-muted flex items-center gap-1">
+                                    <span className="flex items-center gap-1 text-super-securite-muted">
                                         <Calendar className="size-4" />
                                         {article.published_at_formatted}
                                     </span>
                                 ) : null}
-                                <span className="text-super-securite-muted flex items-center gap-1">
+                                <span className="flex items-center gap-1 text-super-securite-muted">
                                     <Clock className="size-4" />
-                                    {article.formatted_read_time}
+                                    {t('public_content.reading', {
+                                        count: article.read_time,
+                                    })}
                                 </span>
-                                <span className="text-super-securite-muted flex items-center gap-1">
+                                <span className="flex items-center gap-1 text-super-securite-muted">
                                     <Eye className="size-4" />
-                                    {article.views} vues
+                                    {t('public_content.views', {
+                                        count: article.views,
+                                    })}
                                 </span>
                             </div>
 
@@ -100,7 +111,7 @@ export default function MarketingArticleShow() {
                             </h1>
 
                             {article.excerpt ? (
-                                <p className="text-super-securite-muted mb-8 text-lg leading-relaxed">
+                                <p className="mb-8 text-lg leading-relaxed text-super-securite-muted">
                                     {article.excerpt}
                                 </p>
                             ) : null}
@@ -110,7 +121,7 @@ export default function MarketingArticleShow() {
                             <div className="mt-10">
                                 <ContentShareLinks
                                     title={article.title}
-                                    url={actualitesShow.url(article.slug)}
+                                    url={lp(actualitesShow.url(article.slug))}
                                     description={article.excerpt}
                                     variant="marketing"
                                 />
@@ -121,13 +132,15 @@ export default function MarketingArticleShow() {
                     {relatedArticles.length > 0 ? (
                         <section className="mt-16">
                             <h2 className="marketing-heading-section mb-8">
-                                Articles similaires
+                                {t('public_content.related_articles')}
                             </h2>
                             <div className="grid gap-6 md:grid-cols-3">
                                 {relatedArticles.map((related) => (
                                     <Link
                                         key={related.id}
-                                        href={actualitesShow.url(related.slug)}
+                                        href={lp(
+                                            actualitesShow.url(related.slug),
+                                        )}
                                         className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10"
                                     >
                                         {related.image_url ? (
@@ -138,14 +151,14 @@ export default function MarketingArticleShow() {
                                                 className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             />
                                         ) : (
-                                            <div className="bg-super-securite-surface-elevated h-40" />
+                                            <div className="h-40 bg-super-securite-surface-elevated" />
                                         )}
                                         <div className="p-5">
-                                            <h3 className="font-heading group-hover:text-super-securite-accent mb-2 line-clamp-2 font-semibold text-super-securite-heading">
+                                            <h3 className="mb-2 line-clamp-2 font-heading font-semibold text-super-securite-heading group-hover:text-super-securite-accent">
                                                 {related.title}
                                             </h3>
                                             {related.excerpt ? (
-                                                <p className="text-super-securite-muted line-clamp-2 text-sm">
+                                                <p className="line-clamp-2 text-sm text-super-securite-muted">
                                                     {related.excerpt}
                                                 </p>
                                             ) : null}

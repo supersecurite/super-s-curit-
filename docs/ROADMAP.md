@@ -145,3 +145,5 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 - 2026-10-23 : correction de la langue conservée après changement de préférence navigateur (session et cookie).
 
 - 2026-10-26 : chinois simplifié, routes /zh, SEO et traduction des composants et petites interfaces FR/EN/ZH.
+
+- 2026-10-26 : correction des interfaces publiques actualités, conseils, galerie et contact ; navigation et partage conservant la langue FR/EN/ZH, tests de rendu dédiés.

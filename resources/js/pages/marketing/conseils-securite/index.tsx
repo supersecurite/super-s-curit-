@@ -1,12 +1,7 @@
+import { useTrans } from '@/hooks/use-trans';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import {
-    ArrowRight,
-    Calendar,
-    Clock,
-    Eye,
-    Shield,
-    Star,
-} from 'lucide-react';
+import { ArrowRight, Calendar, Clock, Eye, Shield, Star } from 'lucide-react';
 import MarketingContentFilters from '@/components/marketing/marketing-content-filters';
 import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
 import MarketingContentImage from '@/components/marketing/marketing-content-image';
@@ -54,6 +49,8 @@ type PageProps = {
 };
 
 function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     return (
         <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
             <div className="relative aspect-video overflow-hidden">
@@ -65,8 +62,8 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
-                    <div className="bg-super-securite-surface-elevated flex h-full items-center justify-center">
-                        <Shield className="text-super-securite-muted size-10" />
+                    <div className="flex h-full items-center justify-center bg-super-securite-surface-elevated">
+                        <Shield className="size-10 text-super-securite-muted" />
                     </div>
                 )}
                 {tip.category ? (
@@ -77,7 +74,7 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
             </div>
 
             <div className="p-6">
-                <div className="text-super-securite-muted mb-3 flex items-center gap-3 text-sm">
+                <div className="mb-3 flex items-center gap-3 text-sm text-super-securite-muted">
                     {tip.published_at_formatted ? (
                         <span className="flex items-center gap-1">
                             <Calendar className="size-4" />
@@ -86,37 +83,37 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
                     ) : null}
                     <span className="flex items-center gap-1">
                         <Clock className="size-4" />
-                        {tip.read_time} min
+                        {t('public_content.minutes', { count: tip.read_time })}
                     </span>
                 </div>
 
-                <h2 className="font-heading group-hover:text-super-securite-accent mb-3 line-clamp-2 text-xl font-semibold text-super-securite-heading transition-colors">
+                <h2 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-super-securite-heading transition-colors group-hover:text-super-securite-accent">
                     {tip.title}
                 </h2>
 
                 {tip.excerpt ? (
-                    <p className="text-super-securite-muted mb-4 line-clamp-3 text-sm">
+                    <p className="mb-4 line-clamp-3 text-sm text-super-securite-muted">
                         {tip.excerpt}
                     </p>
                 ) : null}
 
                 <div className="flex items-center justify-between border-t border-super-securite-border pt-4">
-                    <span className="text-super-securite-muted flex items-center gap-1 text-sm">
+                    <span className="flex items-center gap-1 text-sm text-super-securite-muted">
                         <Eye className="size-4" />
                         {tip.views}
                     </span>
                     <div className="flex items-center gap-1">
                         <ContentShareButton
                             title={tip.title}
-                            url={conseilsShow.url(tip.slug)}
+                            url={lp(conseilsShow.url(tip.slug))}
                             description={tip.excerpt}
                             variant="marketing"
                         />
                         <Link
-                            href={conseilsShow.url(tip.slug)}
-                            className="text-super-securite-accent inline-flex items-center gap-1 text-sm font-semibold"
+                            href={lp(conseilsShow.url(tip.slug))}
+                            className="inline-flex items-center gap-1 text-sm font-semibold text-super-securite-accent"
                         >
-                            Lire
+                            {t('public_content.read')}
                             <ArrowRight className="size-4" />
                         </Link>
                     </div>
@@ -127,6 +124,8 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
 }
 
 export default function MarketingConseilsSecuriteIndex() {
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     const { securityTips, featuredSecurityTips, categories, filters } =
         usePage<PageProps>().props;
     const hero = useMarketingPageHero('conseils');
@@ -144,15 +143,15 @@ export default function MarketingConseilsSecuriteIndex() {
                     <MarketingContentFilters
                         filters={filters}
                         categories={categories}
-                        indexUrl={conseilsIndex.url()}
-                        searchPlaceholder="Rechercher un conseil..."
+                        indexUrl={lp(conseilsIndex.url())}
+                        searchPlaceholder={t('tips.search_placeholder')}
                     />
 
                     {featuredSecurityTips.length > 0 ? (
                         <div className="mb-12">
                             <h2 className="marketing-heading-section mb-6 flex items-center gap-2">
-                                <Star className="text-super-securite-accent size-5" />
-                                À la une
+                                <Star className="size-5 text-super-securite-accent" />
+                                {t('common.featured')}
                             </h2>
                             <div className="grid gap-6 md:grid-cols-3">
                                 {featuredSecurityTips.map((tip) => (
@@ -174,7 +173,7 @@ export default function MarketingConseilsSecuriteIndex() {
                     {securityTips.data.length === 0 ? (
                         <div className="marketing-card py-12 text-center">
                             <p className="text-super-securite-muted">
-                                Aucun conseil publié pour le moment.
+                                {t('tips.empty')}
                             </p>
                         </div>
                     ) : null}
@@ -188,9 +187,13 @@ export default function MarketingConseilsSecuriteIndex() {
                                     disabled={!link.url}
                                     onClick={() => {
                                         if (link.url) {
-                                            router.get(link.url, {}, {
-                                                preserveState: true,
-                                            });
+                                            router.get(
+                                                link.url,
+                                                {},
+                                                {
+                                                    preserveState: true,
+                                                },
+                                            );
                                         }
                                     }}
                                     className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${

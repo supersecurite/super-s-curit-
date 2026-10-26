@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
 use App\Mail\ContactMessageMailable;
+use App\Support\LocaleTranslations;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 
@@ -17,6 +18,6 @@ class ContactController extends Controller
             new ContactMessageMailable($validated),
         );
 
-        return back()->with('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
+        return back()->with('success', LocaleTranslations::trans('public_content.contact_success'));
     }
 }

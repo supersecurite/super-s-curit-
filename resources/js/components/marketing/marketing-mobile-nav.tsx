@@ -1,4 +1,5 @@
-import { Link, router } from '@inertiajs/react';
+import MarketingLanguageSelect from '@/components/marketing/marketing-language-select';
+import { Link } from '@inertiajs/react';
 import {
     ArrowRight,
     ChevronDown,
@@ -32,7 +33,7 @@ import {
 } from '@/lib/marketing-nav-active';
 import { cn } from '@/lib/utils';
 import { useTrans } from '@/hooks/use-trans';
-import { localizePath, alternatePath } from '@/lib/locale-url';
+import { localizePath } from '@/lib/locale-url';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
 import { home } from '@/routes';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
@@ -51,7 +52,7 @@ export default function MarketingMobileNav({
     onOpenChange,
 }: MarketingMobileNavProps) {
     const close = () => onOpenChange(false);
-    const { t, locale, locales } = useTrans();
+    const { t, locale } = useTrans();
     const lp = (path: string) => localizePath(path, locale);
     const servicesActive = isMarketingServicesNavActive(pathname);
     const [servicesOpen, setServicesOpen] = useState(servicesActive);
@@ -99,13 +100,6 @@ export default function MarketingMobileNav({
         };
     }, [servicesOpen, open]);
 
-    function switchLocale(targetLocale: string) {
-        const target = alternatePath(pathname, targetLocale);
-        document.cookie = `locale=${targetLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
-        close();
-        router.visit(target, { preserveState: false });
-    }
-
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
@@ -122,11 +116,13 @@ export default function MarketingMobileNav({
                 side="right"
                 className="z-[60] flex h-full w-full max-w-none flex-col gap-0 overflow-hidden border-0 bg-super-securite-surface p-0 sm:max-w-sm [&>button]:hidden"
             >
-                <SheetTitle className="sr-only">{t('nav.mobile_title')}</SheetTitle>
+                <SheetTitle className="sr-only">
+                    {t('nav.mobile_title')}
+                </SheetTitle>
 
-                <div className="relative shrink-0 overflow-hidden bg-black px-5 pb-6 pt-5">
+                <div className="relative shrink-0 overflow-hidden bg-black px-5 pt-5 pb-6">
                     <div
-                        className="pointer-events-none absolute -right-8 -top-10 size-40 rounded-full bg-white/5 blur-2xl"
+                        className="pointer-events-none absolute -top-10 -right-8 size-40 rounded-full bg-white/5 blur-2xl"
                         aria-hidden
                     />
                     <div
@@ -169,249 +165,243 @@ export default function MarketingMobileNav({
                         className="px-5 py-6"
                         aria-label={t('nav.mobile_label')}
                     >
-                    <p className="marketing-label mb-3">{t('nav.navigation')}</p>
-                    <ul className="space-y-2">
-                        <li>
-                            <Link
-                                href={homeHref}
-                                onClick={close}
-                                aria-current={
-                                    isMarketingNavActive(homeHref, pathname)
-                                        ? 'page'
-                                        : undefined
-                                }
-                                className={cn(
-                                    'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
-                                    isMarketingNavActive(homeHref, pathname)
-                                        ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
-                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
-                                )}
-                            >
-                                {t('nav.home')}
-                                <ArrowRight
-                                    className="size-4 opacity-50"
-                                    aria-hidden
-                                />
-                            </Link>
-                        </li>
-
-                        <li ref={servicesSectionRef}>
-                            <Collapsible
-                                open={servicesOpen}
-                                onOpenChange={setServicesOpen}
-                            >
-                                <div
+                        <p className="marketing-label mb-3">
+                            {t('nav.navigation')}
+                        </p>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    href={homeHref}
+                                    onClick={close}
+                                    aria-current={
+                                        isMarketingNavActive(homeHref, pathname)
+                                            ? 'page'
+                                            : undefined
+                                    }
                                     className={cn(
-                                        'overflow-hidden rounded-2xl border transition-all duration-200',
-                                        servicesOpen
-                                            ? 'border-super-securite-accent/50 bg-white shadow-md shadow-super-securite-accent/10'
-                                            : servicesActive
-                                              ? 'border-super-securite-accent/30 bg-super-securite-accent/10'
-                                              : 'border-super-securite-border bg-white',
+                                        'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
+                                        isMarketingNavActive(homeHref, pathname)
+                                            ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
+                                            : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
                                     )}
                                 >
-                                    <CollapsibleTrigger asChild>
-                                        <button
-                                            type="button"
-                                            aria-expanded={servicesOpen}
-                                            aria-controls="mobile-services-submenu"
-                                            className={cn(
-                                                'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none',
-                                                servicesOpen
-                                                    ? 'border-b border-super-securite-accent/20 bg-super-securite-accent/8 text-super-securite-accent'
-                                                    : servicesActive
-                                                      ? 'text-super-securite-accent'
-                                                      : 'text-super-securite-heading hover:bg-super-securite-surface/60',
-                                            )}
-                                        >
-                                            <span className="flex min-w-0 flex-col items-start gap-0.5 text-left">
-                                                <span>{t('nav.services')}</span>
-                                                <span className="text-[11px] font-medium tracking-wide text-super-securite-muted uppercase">
-                                                    {servicesOpen
-                                                        ? t('nav.services_submenu_open')
-                                                        : `${serviceNavLinks.length} ${t('nav.services_count')}`}
-                                                </span>
-                                            </span>
-                                            <ChevronDown
-                                                className={cn(
-                                                    'size-4 shrink-0 transition-transform duration-200',
-                                                    servicesOpen
-                                                        ? 'rotate-180 text-super-securite-accent'
-                                                        : 'opacity-60',
-                                                )}
-                                                aria-hidden
-                                            />
-                                        </button>
-                                    </CollapsibleTrigger>
+                                    {t('nav.home')}
+                                    <ArrowRight
+                                        className="size-4 opacity-50"
+                                        aria-hidden
+                                    />
+                                </Link>
+                            </li>
 
-                                    <CollapsibleContent
-                                        id="mobile-services-submenu"
-                                        className="overflow-hidden"
-                                    >
-                                        <ul
-                                            className="space-y-0.5 border-l-2 border-super-securite-accent/30 bg-super-securite-bg/70 px-2 py-2 pl-3"
-                                            role="list"
-                                            aria-label={t('nav.services_submenu_label')}
-                                        >
-                                            {serviceNavLinks.map(
-                                                (service) => {
-                                                    const active =
-                                                        isMarketingNavActive(
-                                                            service.href,
-                                                            pathname,
-                                                        );
-
-                                                    return (
-                                                        <li
-                                                            key={service.href}
-                                                        >
-                                                            <Link
-                                                                href={
-                                                                    service.href
-                                                                }
-                                                                onClick={close}
-                                                                aria-current={
-                                                                    active
-                                                                        ? 'page'
-                                                                        : undefined
-                                                                }
-                                                                className={cn(
-                                                                    'block rounded-xl py-2.5 pr-3 pl-3 transition-colors duration-200',
-                                                                    active
-                                                                        ? 'bg-super-securite-accent/12 text-super-securite-accent'
-                                                                        : 'text-super-securite-heading hover:bg-white/80',
-                                                                )}
-                                                            >
-                                                                <span className="block font-heading text-sm leading-snug font-semibold">
-                                                                    {
-                                                                        service.label
-                                                                    }
-                                                                </span>
-                                                                {service.description ? (
-                                                                    <span className="mt-0.5 block text-xs leading-snug text-super-securite-muted">
-                                                                        {
-                                                                            service.description
-                                                                        }
-                                                                    </span>
-                                                                ) : null}
-                                                            </Link>
-                                                        </li>
-                                                    );
-                                                },
-                                            )}
-                                        </ul>
-                                    </CollapsibleContent>
-                                </div>
-                            </Collapsible>
-                        </li>
-
-                        {otherPrimaryLinks.map((item) => {
-                            const active = isMarketingNavActive(
-                                item.href,
-                                pathname,
-                            );
-
-                            return (
-                                <li key={item.href}>
-                                    <Link
-                                        href={item.href}
-                                        onClick={close}
-                                        aria-current={
-                                            active ? 'page' : undefined
-                                        }
+                            <li ref={servicesSectionRef}>
+                                <Collapsible
+                                    open={servicesOpen}
+                                    onOpenChange={setServicesOpen}
+                                >
+                                    <div
                                         className={cn(
-                                            'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
-                                            active
-                                                ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
-                                                : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
+                                            'overflow-hidden rounded-2xl border transition-all duration-200',
+                                            servicesOpen
+                                                ? 'border-super-securite-accent/50 bg-white shadow-md shadow-super-securite-accent/10'
+                                                : servicesActive
+                                                  ? 'border-super-securite-accent/30 bg-super-securite-accent/10'
+                                                  : 'border-super-securite-border bg-white',
                                         )}
                                     >
-                                        {item.label}
-                                        <ArrowRight
-                                            className="size-4 opacity-50"
-                                            aria-hidden
-                                        />
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                                        <CollapsibleTrigger asChild>
+                                            <button
+                                                type="button"
+                                                aria-expanded={servicesOpen}
+                                                aria-controls="mobile-services-submenu"
+                                                className={cn(
+                                                    'flex w-full cursor-pointer items-center justify-between px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none',
+                                                    servicesOpen
+                                                        ? 'border-b border-super-securite-accent/20 bg-super-securite-accent/8 text-super-securite-accent'
+                                                        : servicesActive
+                                                          ? 'text-super-securite-accent'
+                                                          : 'text-super-securite-heading hover:bg-super-securite-surface/60',
+                                                )}
+                                            >
+                                                <span className="flex min-w-0 flex-col items-start gap-0.5 text-left">
+                                                    <span>
+                                                        {t('nav.services')}
+                                                    </span>
+                                                    <span className="text-[11px] font-medium tracking-wide text-super-securite-muted uppercase">
+                                                        {servicesOpen
+                                                            ? t(
+                                                                  'nav.services_submenu_open',
+                                                              )
+                                                            : `${serviceNavLinks.length} ${t('nav.services_count')}`}
+                                                    </span>
+                                                </span>
+                                                <ChevronDown
+                                                    className={cn(
+                                                        'size-4 shrink-0 transition-transform duration-200',
+                                                        servicesOpen
+                                                            ? 'rotate-180 text-super-securite-accent'
+                                                            : 'opacity-60',
+                                                    )}
+                                                    aria-hidden
+                                                />
+                                            </button>
+                                        </CollapsibleTrigger>
+
+                                        <CollapsibleContent
+                                            id="mobile-services-submenu"
+                                            className="overflow-hidden"
+                                        >
+                                            <ul
+                                                className="space-y-0.5 border-l-2 border-super-securite-accent/30 bg-super-securite-bg/70 px-2 py-2 pl-3"
+                                                role="list"
+                                                aria-label={t(
+                                                    'nav.services_submenu_label',
+                                                )}
+                                            >
+                                                {serviceNavLinks.map(
+                                                    (service) => {
+                                                        const active =
+                                                            isMarketingNavActive(
+                                                                service.href,
+                                                                pathname,
+                                                            );
+
+                                                        return (
+                                                            <li
+                                                                key={
+                                                                    service.href
+                                                                }
+                                                            >
+                                                                <Link
+                                                                    href={
+                                                                        service.href
+                                                                    }
+                                                                    onClick={
+                                                                        close
+                                                                    }
+                                                                    aria-current={
+                                                                        active
+                                                                            ? 'page'
+                                                                            : undefined
+                                                                    }
+                                                                    className={cn(
+                                                                        'block rounded-xl py-2.5 pr-3 pl-3 transition-colors duration-200',
+                                                                        active
+                                                                            ? 'bg-super-securite-accent/12 text-super-securite-accent'
+                                                                            : 'text-super-securite-heading hover:bg-white/80',
+                                                                    )}
+                                                                >
+                                                                    <span className="block font-heading text-sm leading-snug font-semibold">
+                                                                        {
+                                                                            service.label
+                                                                        }
+                                                                    </span>
+                                                                    {service.description ? (
+                                                                        <span className="mt-0.5 block text-xs leading-snug text-super-securite-muted">
+                                                                            {
+                                                                                service.description
+                                                                            }
+                                                                        </span>
+                                                                    ) : null}
+                                                                </Link>
+                                                            </li>
+                                                        );
+                                                    },
+                                                )}
+                                            </ul>
+                                        </CollapsibleContent>
+                                    </div>
+                                </Collapsible>
+                            </li>
+
+                            {otherPrimaryLinks.map((item) => {
+                                const active = isMarketingNavActive(
+                                    item.href,
+                                    pathname,
+                                );
+
+                                return (
+                                    <li key={item.href}>
+                                        <Link
+                                            href={item.href}
+                                            onClick={close}
+                                            aria-current={
+                                                active ? 'page' : undefined
+                                            }
+                                            className={cn(
+                                                'flex items-center justify-between rounded-2xl border px-4 py-3.5 font-heading text-base font-semibold transition-colors duration-200',
+                                                active
+                                                    ? 'border-super-securite-accent/30 bg-super-securite-accent/10 text-super-securite-accent'
+                                                    : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/30',
+                                            )}
+                                        >
+                                            {item.label}
+                                            <ArrowRight
+                                                className="size-4 opacity-50"
+                                                aria-hidden
+                                            />
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     </nav>
 
                     <div className="space-y-3 border-t border-super-securite-border/80 bg-super-securite-bg p-4 pb-6">
-                    {locales.length > 1 && (
-                        <div
-                            className="flex items-center justify-center gap-2 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3"
-                            role="group"
-                            aria-label={t('language.switch')}
-                        >
-                            {locales.map((loc) => (
-                                <button
-                                    key={loc}
-                                    type="button"
-                                    onClick={() => switchLocale(loc)}
-                                    aria-current={loc === locale ? 'true' : undefined}
-                                    className={cn(
-                                        'cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors duration-200',
-                                        loc === locale
-                                            ? 'bg-super-securite-accent text-white'
-                                            : 'text-super-securite-heading hover:bg-super-securite-accent/10',
-                                    )}
-                                >
-                                    {t(`language.${loc}`, loc.toUpperCase())}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                        <MarketingLanguageSelect
+                            className="w-full max-w-none"
+                            onSelected={close}
+                        />
 
-                    <a
-                        href={lp(devenirAgentIndex.url())}
-                        className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-super-securite-accent px-4 py-3.5 font-heading text-sm font-semibold text-white shadow-lg shadow-super-securite-accent/25 transition-colors duration-200 hover:bg-super-securite-accent-hover focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:outline-none"
-                    >
-                        <span className="inline-flex size-10 items-center justify-center rounded-xl bg-white/15">
-                            <Phone className="size-4" aria-hidden />
-                        </span>
-                        <span className="flex flex-col items-start gap-0.5">
-                            <span className="text-[11px] font-medium tracking-wide text-white/80 uppercase">
-                                {t('nav.join')}
+                        <a
+                            href={lp(devenirAgentIndex.url())}
+                            className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-super-securite-accent px-4 py-3.5 font-heading text-sm font-semibold text-white shadow-lg shadow-super-securite-accent/25 transition-colors duration-200 hover:bg-super-securite-accent-hover focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:outline-none"
+                        >
+                            <span className="inline-flex size-10 items-center justify-center rounded-xl bg-white/15">
+                                <Phone className="size-4" aria-hidden />
                             </span>
-                            <span className="text-base">{t('nav.join')}</span>
-                        </span>
-                    </a>
-
-                    <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
-                        <Phone
-                            className="size-4 shrink-0 text-super-securite-accent"
-                            aria-hidden
-                        />
-                        <a
-                            href={superSecurite.phone_href}
-                            className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
-                        >
-                            {superSecurite.phone}
+                            <span className="flex flex-col items-start gap-0.5">
+                                <span className="text-[11px] font-medium tracking-wide text-white/80 uppercase">
+                                    {t('nav.join')}
+                                </span>
+                                <span className="text-base">
+                                    {t('nav.join')}
+                                </span>
+                            </span>
                         </a>
-                    </div>
 
-                    <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
-                        <Mail
-                            className="size-4 shrink-0 text-super-securite-accent"
-                            aria-hidden
-                        />
-                        <a
-                            href={`mailto:${superSecurite.email}`}
-                            className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
-                        >
-                            {superSecurite.email}
-                        </a>
-                    </div>
+                        <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
+                            <Phone
+                                className="size-4 shrink-0 text-super-securite-accent"
+                                aria-hidden
+                            />
+                            <a
+                                href={superSecurite.phone_href}
+                                className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
+                            >
+                                {superSecurite.phone}
+                            </a>
+                        </div>
 
-                    <p className="flex items-start gap-2 px-1 text-xs leading-relaxed text-super-securite-muted">
-                        <MapPin
-                            className="mt-0.5 size-3.5 shrink-0 text-super-securite-accent"
-                            aria-hidden
-                        />
-                        {superSecurite.address}
-                    </p>
+                        <div className="flex items-center gap-3 rounded-xl border border-super-securite-border/80 bg-super-securite-surface px-4 py-3">
+                            <Mail
+                                className="size-4 shrink-0 text-super-securite-accent"
+                                aria-hidden
+                            />
+                            <a
+                                href={`mailto:${superSecurite.email}`}
+                                className="min-w-0 truncate text-sm font-medium text-super-securite-heading transition-colors hover:text-super-securite-accent"
+                            >
+                                {superSecurite.email}
+                            </a>
+                        </div>
+
+                        <p className="flex items-start gap-2 px-1 text-xs leading-relaxed text-super-securite-muted">
+                            <MapPin
+                                className="mt-0.5 size-3.5 shrink-0 text-super-securite-accent"
+                                aria-hidden
+                            />
+                            {superSecurite.address}
+                        </p>
                     </div>
                 </div>
             </SheetContent>

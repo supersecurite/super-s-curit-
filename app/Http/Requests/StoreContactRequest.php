@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\Recaptcha;
+use App\Support\LocaleTranslations;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -44,12 +45,12 @@ class StoreContactRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse e-mail est obligatoire.',
-            'email.email' => 'L\'adresse e-mail n\'est pas valide.',
-            'phone.required' => 'Le numéro de téléphone est obligatoire.',
-            'message.required' => 'Veuillez décrire votre projet.',
-            'g-recaptcha-response' => 'La vérification anti-robot est requise.',
+            'name.required' => LocaleTranslations::trans('public_content.name_required'),
+            'email.required' => LocaleTranslations::trans('public_content.email_required'),
+            'email.email' => LocaleTranslations::trans('public_content.email_invalid'),
+            'phone.required' => LocaleTranslations::trans('public_content.phone_required'),
+            'message.required' => LocaleTranslations::trans('public_content.message_required'),
+            'g-recaptcha-response' => LocaleTranslations::trans('public_content.captcha_required'),
         ];
     }
 

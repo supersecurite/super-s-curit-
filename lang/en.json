@@ -1540,5 +1540,22 @@
         "most_viewed": "Most viewed",
         "least_viewed": "Least viewed",
         "all_categories": "All categories"
+    },
+    "public_content": {
+        "read": "Read",
+        "back_articles": "Back to news",
+        "back_tips": "Back to tips",
+        "related_articles": "Related articles",
+        "related_tips": "Related tips",
+        "views": ":count views",
+        "reading": ":count min read",
+        "minutes": ":count min",
+        "contact_success": "Your message has been sent. We will reply shortly.",
+        "name_required": "Your name is required.",
+        "email_required": "Your email is required.",
+        "email_invalid": "Please enter a valid email address.",
+        "phone_required": "Your phone number is required.",
+        "message_required": "Please describe your project.",
+        "captcha_required": "Please complete the anti-bot verification."
     }
 }

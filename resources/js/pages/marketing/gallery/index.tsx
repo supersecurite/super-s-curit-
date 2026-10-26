@@ -1,3 +1,4 @@
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, router, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Images, Video } from 'lucide-react';
@@ -37,6 +38,7 @@ export default function MarketingGalleryIndex() {
         filters,
     } = usePage<PageProps>().props;
     const { t } = useTrans();
+    const lp = useLocalizedUrl();
     const hero = useMarketingPageHero('galerie');
 
     const [slideIndex, setSlideIndex] = useState(0);
@@ -75,7 +77,7 @@ export default function MarketingGalleryIndex() {
 
     const applyServiceFilter = (service: string) => {
         router.get(
-            galerieIndex.url(),
+            lp(galerieIndex.url()),
             service === 'all' ? {} : { service },
             { preserveState: true, replace: true },
         );
@@ -84,7 +86,7 @@ export default function MarketingGalleryIndex() {
     return (
         <>
             <SeoHead />
-            <Head title="Galerie" />
+            <Head title={t('galerie.title')} />
 
             <section className="marketing-hero-cinematic relative overflow-hidden">
                 <div className="relative mx-auto flex min-h-[90dvh] w-full max-w-[1920px] items-end overflow-hidden lg:items-center">
@@ -134,32 +136,34 @@ export default function MarketingGalleryIndex() {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {/* Tab Switcher */}
                     <div className="mb-10 flex justify-center">
-                        <div className="flex rounded-full bg-super-securite-bg p-1 shadow-md border border-super-securite-border/30">
+                        <div className="flex rounded-full border border-super-securite-border/30 bg-super-securite-bg p-1 shadow-md">
                             <button
                                 type="button"
                                 onClick={() => setActiveTab('photos')}
                                 className={cn(
-                                    "flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 cursor-pointer",
+                                    'flex cursor-pointer items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300',
                                     activeTab === 'photos'
-                                        ? "bg-super-securite-accent text-white shadow-sm"
-                                        : "text-super-securite-heading hover:text-super-securite-accent"
+                                        ? 'bg-super-securite-accent text-white shadow-sm'
+                                        : 'text-super-securite-heading hover:text-super-securite-accent',
                                 )}
                             >
                                 <Images className="size-4" />
-                                {t('galerie.photos_tab', 'Photos')} ({images.length})
+                                {t('galerie.photos_tab', 'Photos')} (
+                                {images.length})
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setActiveTab('videos')}
                                 className={cn(
-                                    "flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 cursor-pointer",
+                                    'flex cursor-pointer items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300',
                                     activeTab === 'videos'
-                                        ? "bg-super-securite-accent text-white shadow-sm"
-                                        : "text-super-securite-heading hover:text-super-securite-accent"
+                                        ? 'bg-super-securite-accent text-white shadow-sm'
+                                        : 'text-super-securite-heading hover:text-super-securite-accent',
                                 )}
                             >
                                 <Video className="size-4" />
-                                {t('galerie.videos_tab', 'Vidéos')} ({videos.length})
+                                {t('galerie.videos_tab', 'Vidéos')} (
+                                {videos.length})
                             </button>
                         </div>
                     </div>
@@ -172,13 +176,27 @@ export default function MarketingGalleryIndex() {
                             <p className="text-sm text-super-securite-muted">
                                 {activeTab === 'photos' ? (
                                     <>
-                                        {images.length} photo{images.length > 1 ? 's' : ''}{' '}
-                                        affichée{images.length > 1 ? 's' : ''} (sur {totalCount})
+                                        {t(
+                                            images.length === 1
+                                                ? 'galerie.photo_count_singular'
+                                                : 'galerie.photo_count_plural',
+                                            {
+                                                count: images.length,
+                                                total: totalCount,
+                                            },
+                                        )}
                                     </>
                                 ) : (
                                     <>
-                                        {videos.length} vidéo{videos.length > 1 ? 's' : ''}{' '}
-                                        affichée{videos.length > 1 ? 's' : ''} (sur {totalVideoCount})
+                                        {t(
+                                            videos.length === 1
+                                                ? 'galerie.video_count_singular'
+                                                : 'galerie.video_count_plural',
+                                            {
+                                                count: videos.length,
+                                                total: totalVideoCount,
+                                            },
+                                        )}
                                     </>
                                 )}
                             </p>
@@ -188,23 +206,32 @@ export default function MarketingGalleryIndex() {
                             <button
                                 type="button"
                                 onClick={() => applyServiceFilter('all')}
-                                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${filters.service === 'all'
-                                    ? 'border-super-securite-accent bg-super-securite-accent text-white'
-                                    : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
-                                    }`}
+                                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                                    filters.service === 'all'
+                                        ? 'border-super-securite-accent bg-super-securite-accent text-white'
+                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
+                                }`}
                             >
-                                Tous ({activeTab === 'photos' ? totalCount : totalVideoCount})
+                                {t('galerie.all_filter')} (
+                                {activeTab === 'photos'
+                                    ? totalCount
+                                    : totalVideoCount}
+                                )
                             </button>
                             <button
                                 type="button"
                                 onClick={() => applyServiceFilter('general')}
-                                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${filters.service === 'general'
-                                    ? 'border-super-securite-accent bg-super-securite-accent text-white'
-                                    : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
-                                    }`}
+                                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                                    filters.service === 'general'
+                                        ? 'border-super-securite-accent bg-super-securite-accent text-white'
+                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
+                                }`}
                             >
-                                Galerie générale (
-                                {activeTab === 'photos' ? (countsByService.general ?? 0) : (countsVideosByService.general ?? 0)})
+                                {t('galerie.general_filter')} (
+                                {activeTab === 'photos'
+                                    ? (countsByService.general ?? 0)
+                                    : (countsVideosByService.general ?? 0)}
+                                )
                             </button>
                             {services.map((service) => (
                                 <button
@@ -213,13 +240,23 @@ export default function MarketingGalleryIndex() {
                                     onClick={() =>
                                         applyServiceFilter(service.value)
                                     }
-                                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${filters.service === service.value
-                                        ? 'border-super-securite-accent bg-super-securite-accent text-white'
-                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
-                                        }`}
+                                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                                        filters.service === service.value
+                                            ? 'border-super-securite-accent bg-super-securite-accent text-white'
+                                            : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
+                                    }`}
                                 >
-                                    {service.label} (
-                                    {activeTab === 'photos' ? (countsByService[service.value] ?? 0) : (countsVideosByService[service.value] ?? 0)})
+                                    {t(
+                                        'services.' + service.value + '.title',
+                                        service.label,
+                                    )}{' '}
+                                    (
+                                    {activeTab === 'photos'
+                                        ? (countsByService[service.value] ?? 0)
+                                        : (countsVideosByService[
+                                              service.value
+                                          ] ?? 0)}
+                                    )
                                 </button>
                             ))}
                         </div>
@@ -235,7 +272,7 @@ export default function MarketingGalleryIndex() {
                             <div className="marketing-card flex flex-col items-center gap-3 py-16 text-center">
                                 <Images className="size-10 text-super-securite-muted" />
                                 <p className="text-super-securite-muted">
-                                    Aucune image disponible pour ce filtre.
+                                    {t('galerie.no_photos')}
                                 </p>
                             </div>
                         )

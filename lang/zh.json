@@ -1544,5 +1544,22 @@
         "most_viewed": "最多浏览",
         "least_viewed": "最少浏览",
         "all_categories": "全部分类"
+    },
+    "public_content": {
+        "read": "阅读",
+        "back_articles": "返回新闻列表",
+        "back_tips": "返回建议列表",
+        "related_articles": "相关文章",
+        "related_tips": "相关建议",
+        "views": ":count 次浏览",
+        "reading": "阅读约 :count 分钟",
+        "minutes": ":count 分钟",
+        "contact_success": "消息已发送，我们会尽快回复。",
+        "name_required": "请输入姓名。",
+        "email_required": "请输入电子邮箱。",
+        "email_invalid": "请输入有效的电子邮箱。",
+        "phone_required": "请输入电话号码。",
+        "message_required": "请描述您的项目。",
+        "captcha_required": "请完成防机器人验证。"
     }
 }

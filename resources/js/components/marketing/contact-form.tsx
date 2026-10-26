@@ -1,3 +1,4 @@
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Form, usePage } from '@inertiajs/react';
 import { CheckCircle2, Send } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
@@ -28,13 +29,13 @@ const fieldClasses =
 
 export default function ContactForm() {
     const { flash, recaptcha } = usePage<SharedPageProps>().props;
-    const { t, tList } = useTrans();
+    const { t, tList, locale } = useTrans();
+    const lp = useLocalizedUrl();
     const [recaptchaToken, setRecaptchaToken] = useState('');
     const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
-    const projectTypes = tList(
-        'contact.project_types',
-        [...superSecuriteProjectTypes],
-    );
+    const projectTypes = tList('contact.project_types', [
+        ...superSecuriteProjectTypes,
+    ]);
     const projectTypeOptions = useMemo(
         () =>
             projectTypes.map((type) => ({
@@ -56,12 +57,15 @@ export default function ContactForm() {
                     {t('contact.form_label', 'Formulaire de contact')}
                 </p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
-                    {t('contact.form_heading', 'Décrivez votre besoin de sécurité')}
+                    {t(
+                        'contact.form_heading',
+                        'Décrivez votre besoin de sécurité',
+                    )}
                 </h2>
                 <p className="mt-2 text-sm text-super-securite-muted">
                     {t(
                         'contact.form_required_hint',
-                        'Les champs marqués d\'un * sont obligatoires.',
+                        "Les champs marqués d'un * sont obligatoires.",
                     )}
                 </p>
 
@@ -79,7 +83,8 @@ export default function ContactForm() {
                 )}
 
                 <Form
-                    {...store.form()}
+                    action={lp(store.url())}
+                    method="post"
                     resetOnSuccess
                     onSuccess={() => {
                         setRecaptchaToken('');
@@ -171,7 +176,10 @@ export default function ContactForm() {
                                         htmlFor="company"
                                         className="text-super-securite-heading"
                                     >
-                                        {t('contact.form_company', 'Entreprise')}{' '}
+                                        {t(
+                                            'contact.form_company',
+                                            'Entreprise',
+                                        )}{' '}
                                         <span className="text-super-securite-muted">
                                             {t(
                                                 'contact.form_company_optional',
@@ -253,7 +261,9 @@ export default function ContactForm() {
                                     <RecaptchaField
                                         ref={recaptchaRef}
                                         siteKey={recaptcha.siteKey}
-                                        language={recaptcha.language}
+                                        language={
+                                            locale === 'zh' ? 'zh-CN' : locale
+                                        }
                                         onChange={setRecaptchaToken}
                                         onExpired={() => setRecaptchaToken('')}
                                     />
@@ -293,7 +303,10 @@ export default function ContactForm() {
                                         </>
                                     ) : (
                                         <>
-                                            {t('contact.form_submit', 'Envoyer')}
+                                            {t(
+                                                'contact.form_submit',
+                                                'Envoyer',
+                                            )}
                                             <Send
                                                 className="size-4 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
                                                 aria-hidden

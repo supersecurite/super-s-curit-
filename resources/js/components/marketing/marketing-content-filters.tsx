@@ -95,9 +95,17 @@ export default function MarketingContentFilters({
                     <ArrowDownUp className="pointer-events-none absolute top-1/2 left-4 z-10 size-4 -translate-y-1/2 text-super-securite-muted" />
                     <SearchableSelect
                         className="pl-7"
-                        options={SORT_OPTIONS.map((option) => ({
+                        options={SORT_OPTIONS.map((option, index) => ({
                             value: option.value,
-                            label: option.label,
+                            label: uiText(
+                                [
+                                    'ui.newest',
+                                    'ui.oldest',
+                                    'ui.most_viewed',
+                                    'ui.least_viewed',
+                                ][index],
+                                option.label,
+                            ),
                         }))}
                         value={currentSortValue(filters)}
                         onChange={(value) => {

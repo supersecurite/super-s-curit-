@@ -1540,5 +1540,22 @@
         "most_viewed": "Plus consultés",
         "least_viewed": "Moins consultés",
         "all_categories": "Toutes les catégories"
+    },
+    "public_content": {
+        "read": "Lire",
+        "back_articles": "Retour aux actualités",
+        "back_tips": "Retour aux conseils",
+        "related_articles": "Articles similaires",
+        "related_tips": "Conseils similaires",
+        "views": ":count vues",
+        "reading": ":count min de lecture",
+        "minutes": ":count min",
+        "contact_success": "Votre message a bien été envoyé. Nous vous répondrons rapidement.",
+        "name_required": "Le nom est obligatoire.",
+        "email_required": "L'adresse e-mail est obligatoire.",
+        "email_invalid": "L'adresse e-mail n'est pas valide.",
+        "phone_required": "Le numéro de téléphone est obligatoire.",
+        "message_required": "Veuillez décrire votre projet.",
+        "captcha_required": "La vérification anti-robot est requise."
     }
 }

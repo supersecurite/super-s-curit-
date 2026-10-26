@@ -1,4 +1,5 @@
-import { Link, router, usePage } from '@inertiajs/react';
+import MarketingLanguageSelect from '@/components/marketing/marketing-language-select';
+import { Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import MarketingMobileNav from '@/components/marketing/marketing-mobile-nav';
 import MarketingServicesNav from '@/components/marketing/marketing-services-nav';
@@ -8,7 +9,7 @@ import { useScrollProgress } from '@/hooks/use-scroll-progress';
 import { useTrans } from '@/hooks/use-trans';
 import { index as devenirAgentIndex } from '@/routes/devenir-agent';
 import { home } from '@/routes';
-import { localizePath, alternatePath } from '@/lib/locale-url';
+import { localizePath } from '@/lib/locale-url';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 import type { User } from '@/types/auth';
 import { isMarketingNavActive } from '@/lib/marketing-nav-active';
@@ -23,7 +24,7 @@ type SharedPageProps = {
 export default function MarketingHeader() {
     const { props, url } = usePage<SharedPageProps>();
     const { superSecurite } = props;
-    const { t, locale, locales } = useTrans();
+    const { t, locale } = useTrans();
     const progress = useScrollProgress();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -72,12 +73,6 @@ export default function MarketingHeader() {
             );
         };
     }, []);
-
-    function switchLocale(targetLocale: string) {
-        const target = alternatePath(pathname, targetLocale);
-        document.cookie = `locale=${targetLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
-        router.visit(target, { preserveState: false });
-    }
 
     return (
         <header
@@ -179,32 +174,7 @@ export default function MarketingHeader() {
                 </ul>
 
                 <div className="flex items-center gap-2 sm:gap-3">
-                    {locales.length > 1 && (
-                        <div
-                            className="hidden items-center gap-1 text-xs font-medium md:flex rounded bg-white p-1"
-                            role="group"
-                            aria-label={t('language.switch')}
-                        >
-                            {locales.map((loc, index) => (
-                                <> {index > 0 && <span className="text-xs font-medium">|</span>}
-                                <button
-                                    key={loc}
-                                    type="button"
-                                    onClick={() => switchLocale(loc)}
-                                    aria-current={loc === locale ? 'true' : undefined}
-                                    className={cn(
-                                        'cursor-pointer rounded px-1.5 py-0.5 transition-colors duration-200',
-                                        loc === locale
-                                            ? 'bg-super-securite-accent text-white'
-                                            : 'text-black',
-                                    )}
-                                >
-                                    {t(`language.${loc}`, loc.toUpperCase())}
-                                </button>
-                                </>
-                            ))}
-                        </div>
-                    )}
+                    <MarketingLanguageSelect className="hidden md:block" />
 
                     <Link
                         href={lp(devenirAgentIndex.url())}
