@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link, usePage } from '@inertiajs/react';
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -33,13 +34,20 @@ const errorIcons: Record<MarketingErrorIcon, LucideIcon> = {
     maintenance: Wrench,
 };
 
-export default function MarketingErrorHero({ config }: MarketingErrorHeroProps) {
+export default function MarketingErrorHero({
+    config,
+}: MarketingErrorHeroProps) {
+    const { t: uiText } = useUiTranslations();
+
     const { superSecurite } = usePage<SharedPageProps>().props;
     const Icon = errorIcons[config.icon];
 
     return (
         <section className="marketing-error-page relative flex min-h-[min(calc(100dvh-11rem),42rem)] items-center justify-center px-4 py-16 sm:py-20">
-            <div className="marketing-error-page-bg absolute inset-0" aria-hidden />
+            <div
+                className="marketing-error-page-bg absolute inset-0"
+                aria-hidden
+            />
 
             <Reveal className="relative w-full max-w-xl text-center">
                 <p
@@ -53,7 +61,7 @@ export default function MarketingErrorHero({ config }: MarketingErrorHeroProps) 
                     {config.hint}
                 </p>
 
-                <h1 className="font-heading uppercase text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
+                <h1 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading uppercase sm:text-3xl">
                     {config.title}
                 </h1>
 
@@ -87,13 +95,19 @@ export default function MarketingErrorHero({ config }: MarketingErrorHeroProps) 
                     )}
                 >
                     <ArrowLeft className="size-4" aria-hidden />
-                    Page précédente
+                    {uiText(
+                        'ui.components.text_0301d410db18',
+                        'Page précédente',
+                    )}
                 </button>
 
                 {superSecurite ? (
                     <div className="mt-10 rounded-2xl border border-dashed border-super-securite-border bg-white/70 px-5 py-4 text-left sm:text-center">
                         <p className="text-xs font-semibold tracking-wide text-super-securite-heading uppercase">
-                            Besoin d&apos;une assistance immédiate ?
+                            {uiText(
+                                'ui.components.text_9c451305249e',
+                                'Besoin d&apos;une assistance immédiate ?',
+                            )}
                         </p>
                         <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
                             <a

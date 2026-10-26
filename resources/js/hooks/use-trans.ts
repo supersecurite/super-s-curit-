@@ -12,7 +12,7 @@ type TransPageProps = {
 export function useTrans() {
     const {
         locale = 'fr',
-        locales = ['fr', 'en'],
+        locales = ['fr', 'en', 'zh'],
         translations = {},
     } = usePage().props as TransPageProps;
 
@@ -22,7 +22,9 @@ export function useTrans() {
         replace?: Record<string, string | number>,
     ): string => {
         const fallback =
-            typeof fallbackOrReplace === 'string' ? fallbackOrReplace : undefined;
+            typeof fallbackOrReplace === 'string'
+                ? fallbackOrReplace
+                : undefined;
         const vars =
             typeof fallbackOrReplace === 'object' && fallbackOrReplace !== null
                 ? fallbackOrReplace
@@ -77,7 +79,10 @@ export function useTrans() {
             }
         }
 
-        if (Array.isArray(current) && current.every((item) => typeof item === 'string')) {
+        if (
+            Array.isArray(current) &&
+            current.every((item) => typeof item === 'string')
+        ) {
             return current as string[];
         }
 

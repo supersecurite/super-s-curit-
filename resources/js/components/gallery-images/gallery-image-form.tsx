@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +35,8 @@ export default function GalleryImageForm({
     galleryImage,
     method = 'post',
 }: GalleryImageFormProps) {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <Form
             action={submitUrl}
@@ -47,14 +50,22 @@ export default function GalleryImageForm({
 
             <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="service_id">Rattachement</Label>
+                    <Label htmlFor="service_id">
+                        {uiText(
+                            'ui.components.text_c750202ef014',
+                            'Rattachement',
+                        )}
+                    </Label>
                     <SearchableSelect
                         id="service_id"
                         name="service_id"
                         options={[
                             {
                                 value: 'general',
-                                label: 'Galerie générale uniquement',
+                                label: uiText(
+                                    'ui.components.text_c40aa566244e',
+                                    'Galerie générale uniquement',
+                                ),
                             },
                             ...services.map((service) => ({
                                 value: service.value,
@@ -62,20 +73,35 @@ export default function GalleryImageForm({
                             })),
                         ]}
                         defaultValue={galleryImage?.service_id ?? 'general'}
-                        placeholder="Sélectionner un rattachement"
-                        searchPlaceholder="Rechercher un service..."
+                        placeholder={uiText(
+                            'ui.components.text_d099472f84f2',
+                            'Sélectionner un rattachement',
+                        )}
+                        searchPlaceholder={uiText(
+                            'ui.components.text_a6ba97261b7b',
+                            'Rechercher un service...',
+                        )}
                     />
-                    <p className="text-muted-foreground text-xs">
-                        Laissez « Galerie générale » pour une image visible
-                        uniquement sur la page /galerie.
+                    <p className="text-xs text-muted-foreground">
+                        {uiText(
+                            'ui.components.text_10174b1e8a59',
+                            'Laissez « Galerie générale » pour une image visible uniquement sur la page /galerie.',
+                        )}
                     </p>
                     {errors.service_id ? (
-                        <p className="text-sm text-destructive">{errors.service_id}</p>
+                        <p className="text-sm text-destructive">
+                            {errors.service_id}
+                        </p>
                     ) : null}
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="sort_order">Ordre d’affichage</Label>
+                    <Label htmlFor="sort_order">
+                        {uiText(
+                            'ui.components.text_2c6271453fa1',
+                            'Ordre d’affichage',
+                        )}
+                    </Label>
                     <Input
                         id="sort_order"
                         name="sort_order"
@@ -84,14 +110,22 @@ export default function GalleryImageForm({
                         defaultValue={galleryImage?.sort_order ?? 0}
                     />
                     {errors.sort_order ? (
-                        <p className="text-sm text-destructive">{errors.sort_order}</p>
+                        <p className="text-sm text-destructive">
+                            {errors.sort_order}
+                        </p>
                     ) : null}
                 </div>
             </div>
 
             <div className="space-y-2">
                 <Label htmlFor="image">
-                    Image {method === 'put' ? '(laisser vide pour conserver)' : ''}
+                    {uiText('ui.components.text_1aa4cb0bcca7', 'Image')}{' '}
+                    {method === 'put'
+                        ? uiText(
+                              'ui.components.text_5ad87f071809',
+                              '(laisser vide pour conserver)',
+                          )
+                        : ''}
                 </Label>
                 {galleryImage?.image_url ? (
                     <img
@@ -107,7 +141,12 @@ export default function GalleryImageForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="alt">Texte alternatif</Label>
+                <Label htmlFor="alt">
+                    {uiText(
+                        'ui.components.text_1902927a35bc',
+                        'Texte alternatif',
+                    )}
+                </Label>
                 <Input
                     id="alt"
                     name="alt"
@@ -120,7 +159,9 @@ export default function GalleryImageForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="caption">Légende</Label>
+                <Label htmlFor="caption">
+                    {uiText('ui.components.text_00738344a3d6', 'Légende')}
+                </Label>
                 <Textarea
                     id="caption"
                     name="caption"
@@ -140,13 +181,18 @@ export default function GalleryImageForm({
                     defaultChecked={galleryImage?.is_published ?? true}
                     className="size-4 rounded border-input"
                 />
-                Publier sur le site
+                {uiText(
+                    'ui.components.text_ee8012606f4d',
+                    'Publier sur le site',
+                )}
             </label>
 
             <div className="flex flex-wrap gap-3">
                 <Button type="submit">{submitLabel}</Button>
                 <Button type="button" variant="outline" asChild>
-                    <a href={cancelHref}>Annuler</a>
+                    <a href={cancelHref}>
+                        {uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
+                    </a>
                 </Button>
             </div>
         </Form>

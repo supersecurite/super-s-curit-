@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
@@ -37,6 +38,8 @@ export default function FilterMultiselect({
     emptyLabel = 'Aucune option',
     align = 'start',
 }: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const [search, setSearch] = useState('');
     const [open, setOpen] = useState(false);
 
@@ -45,7 +48,9 @@ export default function FilterMultiselect({
             return options;
         }
         const needle = search.toLowerCase();
-        return options.filter((opt) => opt.label.toLowerCase().includes(needle));
+        return options.filter((opt) =>
+            opt.label.toLowerCase().includes(needle),
+        );
     }, [options, search]);
 
     const toggle = (value: string) => {
@@ -71,7 +76,10 @@ export default function FilterMultiselect({
                     {Icon && <Icon className="size-3.5" aria-hidden />}
                     <span>{label}</span>
                     {selected.length > 0 ? (
-                        <Badge variant="secondary" className="ml-1 rounded-sm px-1.5 font-normal">
+                        <Badge
+                            variant="secondary"
+                            className="ml-1 rounded-sm px-1.5 font-normal"
+                        >
                             {selected.length}
                         </Badge>
                     ) : null}
@@ -84,16 +92,19 @@ export default function FilterMultiselect({
                 onCloseAutoFocus={(e) => e.preventDefault()}
             >
                 <div className="flex items-center justify-between gap-2 px-2 pt-2">
-                    <DropdownMenuLabel className="px-1 py-0 text-xs font-semibold uppercase tracking-wide">
+                    <DropdownMenuLabel className="px-1 py-0 text-xs font-semibold tracking-wide uppercase">
                         {label}
                     </DropdownMenuLabel>
                     {selected.length > 0 && (
                         <button
                             type="button"
                             onClick={reset}
-                            className="text-muted-foreground hover:text-foreground text-[11px] underline-offset-2 hover:underline"
+                            className="text-[11px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
                         >
-                            Tout effacer
+                            {uiText(
+                                'ui.components.text_54408b8064a2',
+                                'Tout effacer',
+                            )}
                         </button>
                     )}
                 </div>
@@ -108,7 +119,7 @@ export default function FilterMultiselect({
                 <DropdownMenuSeparator />
                 <div className="max-h-72 overflow-y-auto py-1">
                     {filtered.length === 0 ? (
-                        <p className="text-muted-foreground px-3 py-4 text-center text-xs">
+                        <p className="px-3 py-4 text-center text-xs text-muted-foreground">
                             {emptyLabel}
                         </p>
                     ) : (
@@ -119,7 +130,7 @@ export default function FilterMultiselect({
                                     type="button"
                                     key={option.value}
                                     onClick={() => toggle(option.value)}
-                                    className="hover:bg-accent flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm"
+                                    className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-accent"
                                 >
                                     <span
                                         className={`flex size-4 shrink-0 items-center justify-center rounded border ${
@@ -128,9 +139,13 @@ export default function FilterMultiselect({
                                                 : 'border-input'
                                         }`}
                                     >
-                                        {checked && <Check className="size-3" />}
+                                        {checked && (
+                                            <Check className="size-3" />
+                                        )}
                                     </span>
-                                    <span className="truncate">{option.label}</span>
+                                    <span className="truncate">
+                                        {option.label}
+                                    </span>
                                 </button>
                             );
                         })
@@ -147,14 +162,19 @@ type ChipProps = {
 };
 
 export function FilterChip({ label, onRemove }: ChipProps) {
+    const { t: uiText } = useUiTranslations();
+
     return (
-        <span className="border-border bg-card inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs">
+        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-xs">
             <span className="max-w-[160px] truncate">{label}</span>
             <button
                 type="button"
                 onClick={onRemove}
                 className="text-muted-foreground hover:text-foreground"
-                aria-label="Retirer le filtre"
+                aria-label={uiText(
+                    'ui.components.text_18cab2889216',
+                    'Retirer le filtre',
+                )}
             >
                 <X className="size-3" />
             </button>

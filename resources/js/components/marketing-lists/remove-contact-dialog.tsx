@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { UserMinus } from 'lucide-react';
 import { useState } from 'react';
@@ -25,6 +26,8 @@ export default function RemoveContactDialog({
     contactUuid,
     contactName,
 }: RemoveContactDialogProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [open, setOpen] = useState(false);
     const [processing, setProcessing] = useState(false);
 
@@ -53,15 +56,31 @@ export default function RemoveContactDialog({
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Retirer ce contact ?</DialogTitle>
+                    <DialogTitle>
+                        {uiText(
+                            'ui.components.text_9bc297a703b6',
+                            'Retirer ce contact ?',
+                        )}
+                    </DialogTitle>
                     <DialogDescription>
-                        « {contactName} » sera retiré de ce groupe. Le contact restera dans votre base.
+                        « {contactName}{' '}
+                        {uiText(
+                            'ui.components.text_c130fb71d350',
+                            '» sera retiré de ce groupe. Le contact restera dans votre base.',
+                        )}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="gap-2">
                     <DialogClose asChild>
-                        <Button type="button" variant="outline" disabled={processing}>
-                            Annuler
+                        <Button
+                            type="button"
+                            variant="outline"
+                            disabled={processing}
+                        >
+                            {uiText(
+                                'ui.components.text_46ad3916f6a0',
+                                'Annuler',
+                            )}
                         </Button>
                     </DialogClose>
                     <Button
@@ -70,7 +89,15 @@ export default function RemoveContactDialog({
                         disabled={processing}
                         onClick={handleConfirm}
                     >
-                        {processing ? 'Retrait…' : 'Retirer'}
+                        {processing
+                            ? uiText(
+                                  'ui.components.text_adb501676cdc',
+                                  'Retrait…',
+                              )
+                            : uiText(
+                                  'ui.components.text_41e22ed93372',
+                                  'Retirer',
+                              )}
                     </Button>
                 </DialogFooter>
             </DialogContent>

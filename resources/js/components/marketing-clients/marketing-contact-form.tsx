@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { useState } from 'react';
 import CompanyChannelsEditor from '@/components/marketing-clients/company-channels-editor';
@@ -44,8 +45,7 @@ function resolveIsCompany(contact?: MarketingContactFormData): boolean {
     }
 
     return !!(
-        contact?.company_name ||
-        (contact?.company_contacts?.length ?? 0) > 0
+        contact?.company_name || (contact?.company_contacts?.length ?? 0) > 0
     );
 }
 
@@ -58,6 +58,8 @@ export default function MarketingContactForm({
     lists = [],
     method = 'post',
 }: MarketingContactFormProps) {
+    const { t: uiText } = useUiTranslations();
+
     const tagsValue = contact?.tags?.join(', ') ?? '';
     const [isCompany, setIsCompany] = useState(() => resolveIsCompany(contact));
     const [selectedListUuids, setSelectedListUuids] = useState<string[]>([]);
@@ -73,31 +75,53 @@ export default function MarketingContactForm({
                 <input type="hidden" name="_method" value="put" />
             ) : null}
 
-            <input type="hidden" name="is_company" value={isCompany ? '1' : '0'} />
+            <input
+                type="hidden"
+                name="is_company"
+                value={isCompany ? '1' : '0'}
+            />
 
             <label className="flex items-center gap-3 rounded-lg border border-border/60 bg-muted/20 p-4">
                 <Checkbox
                     id="is_company"
                     checked={isCompany}
-                    onCheckedChange={(checked) => setIsCompany(checked === true)}
+                    onCheckedChange={(checked) =>
+                        setIsCompany(checked === true)
+                    }
                 />
                 <div className="space-y-0.5">
-                    <Label htmlFor="is_company" className="cursor-pointer font-medium">
-                        Contact entreprise
+                    <Label
+                        htmlFor="is_company"
+                        className="cursor-pointer font-medium"
+                    >
+                        {uiText(
+                            'ui.components.text_4f4b10298f3b',
+                            'Contact entreprise',
+                        )}
                     </Label>
-                    <p className="text-muted-foreground text-xs">
-                        Cochez pour renseigner les informations de l&apos;entreprise.
+                    <p className="text-xs text-muted-foreground">
+                        {uiText(
+                            'ui.components.text_5e02d2aebe7d',
+                            'Cochez pour renseigner les informations de l&apos;entreprise.',
+                        )}
                     </p>
                 </div>
             </label>
 
             <div className="space-y-4">
                 <h2 className="text-sm font-semibold">
-                    {isCompany ? 'Interlocuteur' : 'Contact'}
+                    {isCompany
+                        ? uiText(
+                              'ui.components.text_fe06934ce995',
+                              'Interlocuteur',
+                          )
+                        : uiText('ui.components.text_2b5c3d26721a', 'Contact')}
                 </h2>
 
                 <div className="space-y-2">
-                    <Label htmlFor="name">Nom</Label>
+                    <Label htmlFor="name">
+                        {uiText('ui.components.text_b2c124536d21', 'Nom')}
+                    </Label>
                     <Input
                         id="name"
                         name="name"
@@ -106,14 +130,25 @@ export default function MarketingContactForm({
                         required
                     />
                     {errors.name ? (
-                        <p className="text-sm text-destructive">{errors.name}</p>
+                        <p className="text-sm text-destructive">
+                            {errors.name}
+                        </p>
                     ) : null}
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="email">
-                            E-mail <span className="text-muted-foreground text-xs font-normal">(optionnel)</span>
+                            {uiText(
+                                'ui.components.text_2550d962e536',
+                                'E-mail',
+                            )}{' '}
+                            <span className="text-xs font-normal text-muted-foreground">
+                                {uiText(
+                                    'ui.components.text_2498aead111a',
+                                    '(optionnel)',
+                                )}
+                            </span>
                         </Label>
                         <Input
                             id="email"
@@ -123,23 +158,35 @@ export default function MarketingContactForm({
                             placeholder="contact@example.com"
                         />
                         {errors.email ? (
-                            <p className="text-sm text-destructive">{errors.email}</p>
+                            <p className="text-sm text-destructive">
+                                {errors.email}
+                            </p>
                         ) : null}
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="phone">Téléphone</Label>
+                        <Label htmlFor="phone">
+                            {uiText(
+                                'ui.components.text_cc4c424b571f',
+                                'Téléphone',
+                            )}
+                        </Label>
                         <InternationalPhoneInput
                             id="phone"
                             name="phone"
                             defaultValue={contact?.phone ?? ''}
                             aria-invalid={Boolean(errors.phone)}
                         />
-                        <p className="text-muted-foreground text-xs">
-                            Choisissez l&apos;indicatif pays, puis saisissez le numéro.
+                        <p className="text-xs text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_bcbbb2dab716',
+                                'Choisissez l&apos;indicatif pays, puis saisissez le numéro.',
+                            )}
                         </p>
                         {errors.phone ? (
-                            <p className="text-sm text-destructive">{errors.phone}</p>
+                            <p className="text-sm text-destructive">
+                                {errors.phone}
+                            </p>
                         ) : null}
                     </div>
                 </div>
@@ -147,10 +194,20 @@ export default function MarketingContactForm({
 
             {isCompany ? (
                 <div className="space-y-4 rounded-lg border border-border/60 bg-muted/20 p-4">
-                    <h2 className="text-sm font-semibold">Entreprise</h2>
+                    <h2 className="text-sm font-semibold">
+                        {uiText(
+                            'ui.components.text_4b000c1c5bff',
+                            'Entreprise',
+                        )}
+                    </h2>
 
                     <div className="space-y-2">
-                        <Label htmlFor="company_name">Nom de l&apos;entreprise</Label>
+                        <Label htmlFor="company_name">
+                            {uiText(
+                                'ui.components.text_eca4e95a8352',
+                                'Nom de l&apos;entreprise',
+                            )}
+                        </Label>
                         <Input
                             id="company_name"
                             name="company_name"
@@ -158,12 +215,19 @@ export default function MarketingContactForm({
                             placeholder="Ex. Super Sécurité SARL"
                         />
                         {errors.company_name ? (
-                            <p className="text-sm text-destructive">{errors.company_name}</p>
+                            <p className="text-sm text-destructive">
+                                {errors.company_name}
+                            </p>
                         ) : null}
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Canaux entreprise</Label>
+                        <Label>
+                            {uiText(
+                                'ui.components.text_c3935ff32c71',
+                                'Canaux entreprise',
+                            )}
+                        </Label>
                         <CompanyChannelsEditor
                             initialValue={contact?.company_contacts}
                             errors={errors}
@@ -173,7 +237,9 @@ export default function MarketingContactForm({
             ) : null}
 
             <div className="space-y-2">
-                <Label htmlFor="address">Adresse</Label>
+                <Label htmlFor="address">
+                    {uiText('ui.components.text_79e5cf20de0b', 'Adresse')}
+                </Label>
                 <Textarea
                     id="address"
                     name="address"
@@ -186,7 +252,12 @@ export default function MarketingContactForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="tags">Tags (séparés par des virgules)</Label>
+                <Label htmlFor="tags">
+                    {uiText(
+                        'ui.components.text_9710864dc44a',
+                        'Tags (séparés par des virgules)',
+                    )}
+                </Label>
                 <Input
                     id="tags"
                     name="tags"
@@ -199,7 +270,9 @@ export default function MarketingContactForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
+                <Label htmlFor="notes">
+                    {uiText('ui.components.text_8a7525b1492f', 'Notes')}
+                </Label>
                 <Textarea
                     id="notes"
                     name="notes"
@@ -213,7 +286,12 @@ export default function MarketingContactForm({
 
             {showLists ? (
                 <div className="space-y-2">
-                    <Label htmlFor="list_uuids">Groupes (optionnel)</Label>
+                    <Label htmlFor="list_uuids">
+                        {uiText(
+                            'ui.components.text_6a84d13cdb50',
+                            'Groupes (optionnel)',
+                        )}
+                    </Label>
                     <SearchableMultiSelect
                         id="list_uuids"
                         name="list_uuids"
@@ -223,15 +301,29 @@ export default function MarketingContactForm({
                         }))}
                         value={selectedListUuids}
                         onChange={setSelectedListUuids}
-                        placeholder="Associer à un ou plusieurs groupes…"
-                        searchPlaceholder="Rechercher un groupe…"
-                        emptyMessage="Aucun groupe disponible"
+                        placeholder={uiText(
+                            'ui.components.text_cd3ee3ba9c98',
+                            'Associer à un ou plusieurs groupes…',
+                        )}
+                        searchPlaceholder={uiText(
+                            'ui.components.text_0302be0df6c4',
+                            'Rechercher un groupe…',
+                        )}
+                        emptyMessage={uiText(
+                            'ui.components.text_498686900a51',
+                            'Aucun groupe disponible',
+                        )}
                     />
-                    <p className="text-muted-foreground text-xs">
-                        Le contact sera ajouté immédiatement aux groupes sélectionnés.
+                    <p className="text-xs text-muted-foreground">
+                        {uiText(
+                            'ui.components.text_551f673371c9',
+                            'Le contact sera ajouté immédiatement aux groupes sélectionnés.',
+                        )}
                     </p>
                     {errors.list_uuids ? (
-                        <p className="text-sm text-destructive">{errors.list_uuids}</p>
+                        <p className="text-sm text-destructive">
+                            {errors.list_uuids}
+                        </p>
                     ) : null}
                 </div>
             ) : null}
@@ -244,13 +336,18 @@ export default function MarketingContactForm({
                     defaultChecked={contact?.marketing_consent ?? false}
                     className="size-4 rounded border-input"
                 />
-                Consentement marketing accordé
+                {uiText(
+                    'ui.components.text_40da761d7aba',
+                    'Consentement marketing accordé',
+                )}
             </label>
 
             <div className="flex flex-wrap gap-3">
                 <Button type="submit">{submitLabel}</Button>
                 <Button type="button" variant="outline" asChild>
-                    <a href={cancelHref}>Annuler</a>
+                    <a href={cancelHref}>
+                        {uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
+                    </a>
                 </Button>
             </div>
         </Form>

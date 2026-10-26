@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { CodeNode } from '@lexical/code';
 import { LinkNode } from '@lexical/link';
 import { ListItemNode, ListNode } from '@lexical/list';
@@ -21,7 +22,9 @@ import {
     type LexicalEditor,
 } from 'lexical';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import ImagePlugin, { ImageNode } from '@/components/lexical-editor/plugins/image-plugin';
+import ImagePlugin, {
+    ImageNode,
+} from '@/components/lexical-editor/plugins/image-plugin';
 import Toolbar from '@/components/lexical-editor/toolbar';
 
 const theme = {
@@ -39,9 +42,14 @@ const theme = {
 };
 
 function Placeholder() {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <div className="pointer-events-none absolute top-[60px] left-3 text-muted-foreground select-none">
-            Commencez à écrire ou glissez des images ici...
+            {uiText(
+                'ui.components.text_a472d3a250f4',
+                'Commencez à écrire ou glissez des images ici...',
+            )}
         </div>
     );
 }
@@ -114,10 +122,9 @@ type EditorProps = {
     initialContent?: string;
 };
 
-export default function Editor({
-    onChange,
-    initialContent = '',
-}: EditorProps) {
+export default function Editor({ onChange, initialContent = '' }: EditorProps) {
+    const { t: uiText } = useUiTranslations();
+
     const mountInitialContent = useRef(initialContent);
 
     const initialConfig = useMemo(
@@ -162,7 +169,10 @@ export default function Editor({
                             <ContentEditable
                                 className="prose min-h-[300px] max-w-none rounded-md p-2 outline-none focus:ring-2 focus:ring-ring/20"
                                 style={{ wordBreak: 'break-word' }}
-                                aria-label="Éditeur de contenu"
+                                aria-label={uiText(
+                                    'ui.components.text_29b9a6851a45',
+                                    'Éditeur de contenu',
+                                )}
                             />
                         }
                         placeholder={<Placeholder />}

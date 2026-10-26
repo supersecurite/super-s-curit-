@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { ArrowDownUp, Search } from 'lucide-react';
 import { SearchableSelect } from '@/components/ui/searchable-select';
@@ -36,6 +37,8 @@ export default function MarketingContentFilters({
     indexUrl,
     searchPlaceholder,
 }: MarketingContentFiltersProps) {
+    const { t: uiText } = useUiTranslations();
+
     const applyFilters = (updates: Partial<MarketingContentFiltersState>) => {
         router.get(
             indexUrl,
@@ -47,7 +50,7 @@ export default function MarketingContentFilters({
     return (
         <div className="mb-10 flex flex-col gap-4 lg:flex-row">
             <div className="relative min-w-0 flex-1">
-                <Search className="text-super-securite-muted absolute top-1/2 left-4 size-4 -translate-y-1/2" />
+                <Search className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-super-securite-muted" />
                 <input
                     type="search"
                     placeholder={searchPlaceholder}
@@ -60,7 +63,13 @@ export default function MarketingContentFilters({
                 <SearchableSelect
                     className="min-w-[12rem]"
                     options={[
-                        { value: 'all', label: 'Toutes les catégories' },
+                        {
+                            value: 'all',
+                            label: uiText(
+                                'ui.all_categories',
+                                'Toutes les catégories',
+                            ),
+                        },
                         ...categories.map((category) => ({
                             value: category,
                             label: category,
@@ -72,12 +81,18 @@ export default function MarketingContentFilters({
                             category: category === 'all' ? undefined : category,
                         })
                     }
-                    placeholder="Catégorie"
-                    searchPlaceholder="Rechercher..."
+                    placeholder={uiText(
+                        'ui.components.text_68a5341fc6bd',
+                        'Catégorie',
+                    )}
+                    searchPlaceholder={uiText(
+                        'ui.components.text_8984247e3f42',
+                        'Rechercher...',
+                    )}
                     triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 h-auto"
                 />
                 <div className="relative min-w-[12rem]">
-                    <ArrowDownUp className="text-super-securite-muted pointer-events-none absolute top-1/2 left-4 z-10 size-4 -translate-y-1/2" />
+                    <ArrowDownUp className="pointer-events-none absolute top-1/2 left-4 z-10 size-4 -translate-y-1/2 text-super-securite-muted" />
                     <SearchableSelect
                         className="pl-7"
                         options={SORT_OPTIONS.map((option) => ({
@@ -90,8 +105,14 @@ export default function MarketingContentFilters({
 
                             applyFilters({ sort_by, sort_direction });
                         }}
-                        placeholder="Trier par"
-                        searchPlaceholder="Rechercher..."
+                        placeholder={uiText(
+                            'ui.components.text_cdcede56427e',
+                            'Trier par',
+                        )}
+                        searchPlaceholder={uiText(
+                            'ui.components.text_8984247e3f42',
+                            'Rechercher...',
+                        )}
                         triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 pl-11 h-auto"
                     />
                 </div>

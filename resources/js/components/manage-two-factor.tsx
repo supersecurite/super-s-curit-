@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -15,6 +16,8 @@ export type Props = {
 };
 
 export default function ManageTwoFactor(props: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const requiresConfirmation = props.requiresConfirmation ?? false;
     const twoFactorEnabled = props.twoFactorEnabled ?? false;
 
@@ -45,18 +48,25 @@ export default function ManageTwoFactor(props: Props) {
     }
 
     return (
-        <div className="bg-white p-5 rounded-xl mx-auto space-y-6">
+        <div className="mx-auto space-y-6 rounded-xl bg-white p-5">
             <Heading
                 variant="small"
-                title="Two-factor authentication"
-                description="Manage your two-factor authentication settings"
+                title={uiText(
+                    'ui.components.text_b6824cc8a91e',
+                    'Authentification à deux facteurs',
+                )}
+                description={uiText(
+                    'ui.components.text_fc7efb90d3ad',
+                    "Gérez vos paramètres d'authentification à deux facteurs",
+                )}
             />
             {twoFactorEnabled ? (
                 <div className="flex flex-col items-start justify-start space-y-4">
                     <p className="text-sm text-muted-foreground">
-                        You will be prompted for a secure, random pin during
-                        login, which you can retrieve from the TOTP-supported
-                        application on your phone.
+                        {uiText(
+                            'ui.components.text_bd85fb60a8d4',
+                            "Lors de la connexion, saisissez le code généré par l'application TOTP de votre téléphone.",
+                        )}
                     </p>
 
                     <div className="relative inline">
@@ -67,7 +77,10 @@ export default function ManageTwoFactor(props: Props) {
                                     type="submit"
                                     disabled={processing}
                                 >
-                                    Disable 2FA
+                                    {uiText(
+                                        'ui.components.text_1c3193f3a0b8',
+                                        'Désactiver la double authentification',
+                                    )}
                                 </Button>
                             )}
                         </Form>
@@ -82,17 +95,20 @@ export default function ManageTwoFactor(props: Props) {
             ) : (
                 <div className="flex flex-col items-start justify-start space-y-4">
                     <p className="text-sm text-muted-foreground">
-                        When you enable two-factor authentication, you will be
-                        prompted for a secure pin during login. This pin can be
-                        retrieved from a TOTP-supported application on your
-                        phone.
+                        {uiText(
+                            'ui.components.text_ddbb473a6a3a',
+                            "Après activation, la connexion demandera un code fourni par l'application TOTP de votre téléphone.",
+                        )}
                     </p>
 
                     <div>
                         {hasSetupData ? (
                             <Button onClick={() => setShowSetupModal(true)}>
                                 <ShieldCheck />
-                                Continue setup
+                                {uiText(
+                                    'ui.components.text_c5702c19da53',
+                                    'Continuer la configuration',
+                                )}
                             </Button>
                         ) : (
                             <Form
@@ -101,7 +117,10 @@ export default function ManageTwoFactor(props: Props) {
                             >
                                 {({ processing }) => (
                                     <Button type="submit" disabled={processing}>
-                                        Enable 2FA
+                                        {uiText(
+                                            'ui.components.text_649b5dc5c210',
+                                            'Activer la double authentification',
+                                        )}
                                     </Button>
                                 )}
                             </Form>

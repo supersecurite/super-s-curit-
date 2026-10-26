@@ -9,9 +9,9 @@ enum MarketingEmailAccountDriver: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.MarketingEmailAccountDriver.'.$this->name, [], match ($this) {
             self::Smtp => 'SMTP',
             self::Log => 'Log (démo locale)',
-        };
+        });
     }
 }

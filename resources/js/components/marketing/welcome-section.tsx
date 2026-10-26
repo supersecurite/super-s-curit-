@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link } from '@inertiajs/react';
 import Reveal from '@/components/marketing/reveal';
 import { superSecuriteStock } from '@/data/super-securite-stock';
@@ -5,6 +6,8 @@ import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { useTrans } from '@/hooks/use-trans';
 
 export default function WelcomeSection() {
+    const { t: uiText } = useUiTranslations();
+
     const { t, tList } = useTrans();
     const localized = useLocalizedUrl();
     const paragraphs = tList('home.welcome_paragraphs', [
@@ -17,11 +20,18 @@ export default function WelcomeSection() {
         <section id="bienvenue" className="py-16 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-                    <Reveal delay={200} variant="fade" className="order-2 lg:order-1">
+                    <Reveal
+                        delay={200}
+                        variant="fade"
+                        className="order-2 lg:order-1"
+                    >
                         <div className="overflow-hidden rounded-3xl">
                             <img
                                 src={superSecuriteStock.home.welcome2}
-                                alt="Équipe Super Sécurité — sécurité privée en Guinée"
+                                alt={uiText(
+                                    'ui.components.text_06b53875dbc3',
+                                    'Équipe Super Sécurité — sécurité privée en Guinée',
+                                )}
                                 width={900}
                                 height={600}
                                 loading="lazy"

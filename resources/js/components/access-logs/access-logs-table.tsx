@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { useMemo } from 'react';
 import { RotateCcw, Search } from 'lucide-react';
 import { AccessLogClientMeta } from '@/components/access-logs/access-log-client-meta';
@@ -114,6 +115,8 @@ export function AccessLogsTable({
     onPageChange,
     onResetFilters,
 }: AccessLogsTableProps) {
+    const { t: uiText } = useUiTranslations();
+
     const { t } = useTrans();
 
     const debouncedSearch = useDebouncedCallback((search: string) => {
@@ -218,32 +221,46 @@ export function AccessLogsTable({
         <div
             className={cn(
                 'rounded-xl border border-border/70 bg-card',
-                embedded ? 'border-0 bg-transparent shadow-none' : 'surface-accent',
+                embedded
+                    ? 'border-0 bg-transparent shadow-none'
+                    : 'surface-accent',
                 loading && 'pointer-events-none opacity-60',
             )}
         >
             <div className="space-y-3 border-b border-border/60 p-4">
                 <BackofficeFiltersBar>
                     <div className="min-w-0 flex-1 lg:min-w-[220px]">
-                        <Label htmlFor={`${idPrefix}-search`}>Recherche globale</Label>
+                        <Label htmlFor={`${idPrefix}-search`}>
+                            {uiText(
+                                'ui.components.text_c18f9a27c52a',
+                                'Recherche globale',
+                            )}
+                        </Label>
                         <div className="relative mt-1">
                             <Search
-                                className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2"
+                                className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
                                 aria-hidden
                             />
                             <Input
                                 id={`${idPrefix}-search`}
                                 key={`search-${filters.search ?? ''}`}
                                 defaultValue={filters.search ?? ''}
-                                placeholder="Description, URL, IP, pays, navigateur…"
+                                placeholder={uiText(
+                                    'ui.components.text_539dd0c037af',
+                                    'Description, URL, IP, pays, navigateur…',
+                                )}
                                 className="pl-9"
-                                onChange={(event) => debouncedSearch(event.target.value)}
+                                onChange={(event) =>
+                                    debouncedSearch(event.target.value)
+                                }
                             />
                         </div>
                     </div>
 
                     <div className="min-w-0">
-                        <Label htmlFor={`${idPrefix}-from`}>Du</Label>
+                        <Label htmlFor={`${idPrefix}-from`}>
+                            {uiText('ui.components.text_0b6722a8adfb', 'Du')}
+                        </Label>
                         <Input
                             id={`${idPrefix}-from`}
                             type="date"
@@ -259,7 +276,9 @@ export function AccessLogsTable({
                     </div>
 
                     <div className="min-w-0">
-                        <Label htmlFor={`${idPrefix}-to`}>Au</Label>
+                        <Label htmlFor={`${idPrefix}-to`}>
+                            {uiText('ui.components.text_3325c2b56f2b', 'Au')}
+                        </Label>
                         <Input
                             id={`${idPrefix}-to`}
                             type="date"
@@ -275,12 +294,20 @@ export function AccessLogsTable({
                     </div>
 
                     <div className="min-w-0 lg:min-w-[200px]">
-                        <Label>Utilisateur</Label>
+                        <Label>
+                            {uiText(
+                                'ui.components.text_721e5b29abab',
+                                'Utilisateur',
+                            )}
+                        </Label>
                         <SearchableSelect
                             className="mt-1"
                             value={filters.user ?? ''}
                             onChange={(value) =>
-                                onFiltersChange({ user: value || undefined, page: 1 })
+                                onFiltersChange({
+                                    user: value || undefined,
+                                    page: 1,
+                                })
                             }
                             options={[
                                 {
@@ -292,70 +319,115 @@ export function AccessLogsTable({
                                 },
                                 ...userOptions,
                             ]}
-                            placeholder="Filtrer par utilisateur"
+                            placeholder={uiText(
+                                'ui.components.text_5b8bb51598d4',
+                                'Filtrer par utilisateur',
+                            )}
                         />
                     </div>
 
                     <div className="min-w-0 lg:min-w-[160px]">
-                        <Label>Type</Label>
+                        <Label>
+                            {uiText('ui.components.text_baaddf70fb5d', 'Type')}
+                        </Label>
                         <SearchableSelect
                             className="mt-1"
                             value={filters.kind ?? ''}
                             onChange={(value) =>
-                                onFiltersChange({ kind: value || undefined, page: 1 })
+                                onFiltersChange({
+                                    kind: value || undefined,
+                                    page: 1,
+                                })
                             }
                             options={kindOptions}
-                            placeholder="Type d'événement"
+                            placeholder={uiText(
+                                'ui.components.text_70e904fb7463',
+                                "Type d'événement",
+                            )}
                         />
                     </div>
                 </BackofficeFiltersBar>
 
                 <BackofficeFiltersBar>
                     <div className="min-w-0 lg:min-w-[160px]">
-                        <Label htmlFor={`${idPrefix}-ip`}>Adresse IP</Label>
+                        <Label htmlFor={`${idPrefix}-ip`}>
+                            {uiText(
+                                'ui.components.text_1d233ecad306',
+                                'Adresse IP',
+                            )}
+                        </Label>
                         <Input
                             id={`${idPrefix}-ip`}
                             key={`ip-${filters.ip ?? ''}`}
                             defaultValue={filters.ip ?? ''}
                             placeholder="192.168.…"
                             className="mt-1"
-                            onChange={(event) => debouncedIp(event.target.value)}
+                            onChange={(event) =>
+                                debouncedIp(event.target.value)
+                            }
                         />
                     </div>
 
                     <div className="min-w-0 lg:min-w-[160px]">
-                        <Label>Pays</Label>
+                        <Label>
+                            {uiText('ui.components.text_fe753ffb9bba', 'Pays')}
+                        </Label>
                         <SearchableSelect
                             className="mt-1"
                             value={filters.country ?? ''}
                             onChange={(value) =>
-                                onFiltersChange({ country: value || undefined, page: 1 })
+                                onFiltersChange({
+                                    country: value || undefined,
+                                    page: 1,
+                                })
                             }
                             options={countryOptions}
-                            placeholder="Filtrer par pays"
+                            placeholder={uiText(
+                                'ui.components.text_8e293de6ed2d',
+                                'Filtrer par pays',
+                            )}
                         />
                     </div>
 
                     <div className="min-w-0 lg:min-w-[160px]">
-                        <Label>Navigateur</Label>
+                        <Label>
+                            {uiText(
+                                'ui.components.text_db2039f22724',
+                                'Navigateur',
+                            )}
+                        </Label>
                         <SearchableSelect
                             className="mt-1"
                             value={filters.browser ?? ''}
                             onChange={(value) =>
-                                onFiltersChange({ browser: value || undefined, page: 1 })
+                                onFiltersChange({
+                                    browser: value || undefined,
+                                    page: 1,
+                                })
                             }
                             options={browserOptions}
-                            placeholder="Filtrer par navigateur"
+                            placeholder={uiText(
+                                'ui.components.text_d0df30ae3c94',
+                                'Filtrer par navigateur',
+                            )}
                         />
                     </div>
 
                     <div className="min-w-0 lg:min-w-[140px]">
-                        <Label>Méthode HTTP</Label>
+                        <Label>
+                            {uiText(
+                                'ui.components.text_9f2278e16cb4',
+                                'Méthode HTTP',
+                            )}
+                        </Label>
                         <SearchableSelect
                             className="mt-1"
                             value={filters.method ?? ''}
                             onChange={(value) =>
-                                onFiltersChange({ method: value || undefined, page: 1 })
+                                onFiltersChange({
+                                    method: value || undefined,
+                                    page: 1,
+                                })
                             }
                             options={methodOptions}
                             placeholder="GET, POST…"
@@ -364,7 +436,12 @@ export function AccessLogsTable({
 
                     {!embedded ? (
                         <div className="min-w-0 lg:min-w-[130px]">
-                            <Label>Par page</Label>
+                            <Label>
+                                {uiText(
+                                    'ui.components.text_974597d958b8',
+                                    'Par page',
+                                )}
+                            </Label>
                             <SearchableSelect
                                 className="mt-1"
                                 value={String(filters.per_page ?? 20)}
@@ -375,7 +452,10 @@ export function AccessLogsTable({
                                     })
                                 }
                                 options={PER_PAGE_OPTIONS}
-                                placeholder="Résultats"
+                                placeholder={uiText(
+                                    'ui.components.text_f113794f5f9a',
+                                    'Résultats',
+                                )}
                             />
                         </div>
                     ) : null}
@@ -385,18 +465,36 @@ export function AccessLogsTable({
                             <Button
                                 type="button"
                                 size="sm"
-                                variant={filters.scope === 'page' ? 'default' : 'outline'}
-                                onClick={() => onFiltersChange({ scope: 'page', page: 1 })}
+                                variant={
+                                    filters.scope === 'page'
+                                        ? 'default'
+                                        : 'outline'
+                                }
+                                onClick={() =>
+                                    onFiltersChange({ scope: 'page', page: 1 })
+                                }
                             >
-                                Cette page
+                                {uiText(
+                                    'ui.components.text_c5c3a25ff1bc',
+                                    'Cette page',
+                                )}
                             </Button>
                             <Button
                                 type="button"
                                 size="sm"
-                                variant={filters.scope !== 'page' ? 'default' : 'outline'}
-                                onClick={() => onFiltersChange({ scope: 'all', page: 1 })}
+                                variant={
+                                    filters.scope !== 'page'
+                                        ? 'default'
+                                        : 'outline'
+                                }
+                                onClick={() =>
+                                    onFiltersChange({ scope: 'all', page: 1 })
+                                }
                             >
-                                Tout le backoffice
+                                {uiText(
+                                    'ui.components.text_53bf932ca44a',
+                                    'Tout le backoffice',
+                                )}
                             </Button>
                         </div>
                     ) : null}
@@ -410,7 +508,10 @@ export function AccessLogsTable({
                             onClick={onResetFilters}
                         >
                             <RotateCcw className="size-4" aria-hidden />
-                            Réinitialiser
+                            {uiText(
+                                'ui.components.text_5b35e0e35591',
+                                'Réinitialiser',
+                            )}
                         </Button>
                     ) : null}
                 </BackofficeFiltersBar>
@@ -422,8 +523,11 @@ export function AccessLogsTable({
                 )}
             >
                 {logs.data.length === 0 ? (
-                    <p className="text-muted-foreground px-4 py-10 text-center text-sm">
-                        Aucune entrée pour ces filtres.
+                    <p className="px-4 py-10 text-center text-sm text-muted-foreground">
+                        {uiText(
+                            'ui.components.text_9043ce493bf6',
+                            'Aucune entrée pour ces filtres.',
+                        )}
                     </p>
                 ) : (
                     <>
@@ -435,14 +539,16 @@ export function AccessLogsTable({
                                 >
                                     <div className="flex items-start justify-between gap-2">
                                         <div>
-                                            <p className="text-muted-foreground text-xs">
-                                                {formatActivityDate(row.visited_at)}
+                                            <p className="text-xs text-muted-foreground">
+                                                {formatActivityDate(
+                                                    row.visited_at,
+                                                )}
                                             </p>
                                             <p className="mt-1 font-medium">
                                                 {row.user_name ?? '—'}
                                             </p>
                                             {row.user_email ? (
-                                                <p className="text-muted-foreground text-xs">
+                                                <p className="text-xs text-muted-foreground">
                                                     {row.user_email}
                                                 </p>
                                             ) : null}
@@ -453,7 +559,7 @@ export function AccessLogsTable({
                                                     ? 'default'
                                                     : 'secondary'
                                             }
-                                            className="shrink-0 font-semibold uppercase tracking-wide"
+                                            className="shrink-0 font-semibold tracking-wide uppercase"
                                         >
                                             {row.kind_label ?? row.kind}
                                         </Badge>
@@ -482,7 +588,10 @@ export function AccessLogsTable({
                                     <tr>
                                         <th className="px-4 py-3 text-left">
                                             <SortableColumnHeader
-                                                label="Date"
+                                                label={uiText(
+                                                    'ui.components.text_99c40ab40592',
+                                                    'Date',
+                                                )}
                                                 column="visited_at"
                                                 sort={filters}
                                                 onSort={handleSort}
@@ -490,7 +599,10 @@ export function AccessLogsTable({
                                         </th>
                                         <th className="px-4 py-3 text-left">
                                             <SortableColumnHeader
-                                                label="Utilisateur"
+                                                label={uiText(
+                                                    'ui.components.text_721e5b29abab',
+                                                    'Utilisateur',
+                                                )}
                                                 column="user"
                                                 sort={filters}
                                                 onSort={handleSort}
@@ -498,7 +610,10 @@ export function AccessLogsTable({
                                         </th>
                                         <th className="px-4 py-3 text-left">
                                             <SortableColumnHeader
-                                                label="Action"
+                                                label={uiText(
+                                                    'ui.components.text_64cff1319d2f',
+                                                    'Action',
+                                                )}
                                                 column="description"
                                                 sort={filters}
                                                 onSort={handleSort}
@@ -506,7 +621,10 @@ export function AccessLogsTable({
                                         </th>
                                         <th className="px-4 py-3 text-left">
                                             <SortableColumnHeader
-                                                label="Origine"
+                                                label={uiText(
+                                                    'ui.components.text_b348af6c7fc0',
+                                                    'Origine',
+                                                )}
                                                 column="ip"
                                                 sort={filters}
                                                 onSort={handleSort}
@@ -520,15 +638,17 @@ export function AccessLogsTable({
                                             key={row.uuid}
                                             className="border-b border-border/40 last:border-0"
                                         >
-                                            <td className="text-muted-foreground px-4 py-3 whitespace-nowrap">
-                                                {formatActivityDate(row.visited_at)}
+                                            <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                                                {formatActivityDate(
+                                                    row.visited_at,
+                                                )}
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="font-medium">
                                                     {row.user_name ?? '—'}
                                                 </div>
                                                 {row.user_email ? (
-                                                    <div className="text-muted-foreground text-xs">
+                                                    <div className="text-xs text-muted-foreground">
                                                         {row.user_email}
                                                     </div>
                                                 ) : null}
@@ -537,28 +657,38 @@ export function AccessLogsTable({
                                                 <div className="flex items-start gap-2">
                                                     <Badge
                                                         variant={
-                                                            row.kind === 'action'
+                                                            row.kind ===
+                                                            'action'
                                                                 ? 'default'
                                                                 : 'secondary'
                                                         }
-                                                        className="font-semibold uppercase tracking-wide"
+                                                        className="font-semibold tracking-wide uppercase"
                                                     >
-                                                        {row.kind_label ?? row.kind}
+                                                        {row.kind_label ??
+                                                            row.kind}
                                                     </Badge>
                                                     <span className="leading-snug text-muted-foreground">
                                                         <AccessLogDescription
-                                                            description={row.description}
+                                                            description={
+                                                                row.description
+                                                            }
                                                             fallback={row.page}
-                                                            userName={row.user_name}
+                                                            userName={
+                                                                row.user_name
+                                                            }
                                                         />
                                                     </span>
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <AccessLogClientMeta
-                                                    country_code={row.country_code}
+                                                    country_code={
+                                                        row.country_code
+                                                    }
                                                     country={row.country}
-                                                    browser_label={row.browser_label}
+                                                    browser_label={
+                                                        row.browser_label
+                                                    }
                                                     ip={row.ip}
                                                     compact={embedded}
                                                 />

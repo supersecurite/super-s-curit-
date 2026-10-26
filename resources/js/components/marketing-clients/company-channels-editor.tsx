@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -32,6 +33,8 @@ export default function CompanyChannelsEditor({
     initialValue,
     errors = {},
 }: CompanyChannelsEditorProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [channels, setChannels] = useState<MarketingCompanyChannel[]>(() =>
         normalizeCompanyChannels(initialValue),
     );
@@ -45,7 +48,9 @@ export default function CompanyChannelsEditor({
     };
 
     const removeChannel = (index: number) => {
-        updateChannels(channels.filter((_, channelIndex) => channelIndex !== index));
+        updateChannels(
+            channels.filter((_, channelIndex) => channelIndex !== index),
+        );
     };
 
     const updateChannel = (
@@ -75,19 +80,25 @@ export default function CompanyChannelsEditor({
                 )}
             />
 
-            <p className="text-muted-foreground text-xs">
-                Canaux supplémentaires de l&apos;entreprise (e-mail, téléphone, WhatsApp)
-                pour les campagnes et mises en copie — l&apos;interlocuteur principal est
-                renseigné ci-dessus.
+            <p className="text-xs text-muted-foreground">
+                {uiText(
+                    'ui.components.text_8aa2357e3830',
+                    'Canaux supplémentaires de l&apos;entreprise (e-mail, téléphone, WhatsApp) pour les campagnes et mises en copie — l&apos;interlocuteur principal est renseigné ci-dessus.',
+                )}
             </p>
 
             {errors.company_contacts ? (
-                <p className="text-sm text-destructive">{errors.company_contacts}</p>
+                <p className="text-sm text-destructive">
+                    {errors.company_contacts}
+                </p>
             ) : null}
 
             {channels.length === 0 ? (
-                <p className="text-muted-foreground text-sm">
-                    Aucun canal entreprise supplémentaire.
+                <p className="text-sm text-muted-foreground">
+                    {uiText(
+                        'ui.components.text_9f1ab72fb876',
+                        'Aucun canal entreprise supplémentaire.',
+                    )}
                 </p>
             ) : null}
 
@@ -101,7 +112,12 @@ export default function CompanyChannelsEditor({
                         className="grid gap-2 rounded-md border border-dashed border-border/70 p-3 md:grid-cols-[160px_1fr_1fr_auto]"
                     >
                         <div className="space-y-1">
-                            <Label className="text-xs">Type</Label>
+                            <Label className="text-xs">
+                                {uiText(
+                                    'ui.components.text_baaddf70fb5d',
+                                    'Type',
+                                )}
+                            </Label>
                             <Select
                                 value={channel.type}
                                 onValueChange={(value) =>
@@ -134,7 +150,12 @@ export default function CompanyChannelsEditor({
                         </div>
 
                         <div className="space-y-1">
-                            <Label className="text-xs">Valeur</Label>
+                            <Label className="text-xs">
+                                {uiText(
+                                    'ui.components.text_6e8f3132d8e2',
+                                    'Valeur',
+                                )}
+                            </Label>
                             {isPhoneChannel(channel.type) ? (
                                 <InternationalPhoneInput
                                     value={channel.value}
@@ -143,7 +164,9 @@ export default function CompanyChannelsEditor({
                                             value: phone,
                                         })
                                     }
-                                    aria-invalid={Boolean(errors[valueErrorKey])}
+                                    aria-invalid={Boolean(
+                                        errors[valueErrorKey],
+                                    )}
                                 />
                             ) : (
                                 <Input
@@ -164,7 +187,12 @@ export default function CompanyChannelsEditor({
                         </div>
 
                         <div className="space-y-1">
-                            <Label className="text-xs">Libellé (optionnel)</Label>
+                            <Label className="text-xs">
+                                {uiText(
+                                    'ui.components.text_0ce868f83000',
+                                    'Libellé (optionnel)',
+                                )}
+                            </Label>
                             <Input
                                 value={channel.label ?? ''}
                                 onChange={(event) =>
@@ -172,7 +200,10 @@ export default function CompanyChannelsEditor({
                                         label: event.target.value,
                                     })
                                 }
-                                placeholder="Compta, Standard…"
+                                placeholder={uiText(
+                                    'ui.components.text_c698f3b0e1ac',
+                                    'Compta, Standard…',
+                                )}
                             />
                         </div>
 
@@ -183,7 +214,10 @@ export default function CompanyChannelsEditor({
                                 size="icon"
                                 className="text-destructive hover:text-destructive"
                                 onClick={() => removeChannel(channelIndex)}
-                                aria-label="Supprimer le canal"
+                                aria-label={uiText(
+                                    'ui.components.text_f047806919e7',
+                                    'Supprimer le canal',
+                                )}
                             >
                                 <Trash2 className="size-4" />
                             </Button>
@@ -192,9 +226,14 @@ export default function CompanyChannelsEditor({
                 );
             })}
 
-            <Button type="button" variant="outline" size="sm" onClick={addChannel}>
+            <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addChannel}
+            >
                 <Plus className="size-4" aria-hidden />
-                Ajouter un canal
+                {uiText('ui.components.text_62204ba82570', 'Ajouter un canal')}
             </Button>
         </div>
     );

@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import CountryFlag from '@/components/analytics/country-flag';
 
 type CityStatRowProps = {
@@ -21,6 +22,8 @@ export default function CityStatRow({
     visitors,
     percentage,
 }: CityStatRowProps) {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <div className="flex items-center gap-3 text-sm">
             <CountryFlag code={country_code} className="h-4 w-6 shrink-0" />
@@ -28,18 +31,19 @@ export default function CityStatRow({
                 <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0">
                         <span className="truncate font-medium">{city}</span>
-                        <span className="text-muted-foreground ml-1 text-xs">
+                        <span className="ml-1 text-xs text-muted-foreground">
                             ({country})
                         </span>
                     </div>
-                    <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
-                        {formatNumber(visitors)} visiteurs
+                    <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
+                        {formatNumber(visitors)}{' '}
+                        {uiText('ui.components.text_6d7e48186a6b', 'visiteurs')}
                     </span>
                 </div>
                 <div className="mt-1.5 flex items-center gap-2">
-                    <div className="bg-border h-1.5 flex-1 overflow-hidden rounded-full">
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
                         <div
-                            className="bg-primary h-full rounded-full transition-all duration-500"
+                            className="h-full rounded-full bg-primary transition-all duration-500"
                             style={{ width: `${percentage}%` }}
                         />
                     </div>

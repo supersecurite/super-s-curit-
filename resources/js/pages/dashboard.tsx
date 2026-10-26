@@ -25,7 +25,10 @@ import {
     index as articlesIndex,
     show as articleShow,
 } from '@/routes/articles';
-import { index as candidaturesIndex, show as candidatureShow } from '@/routes/candidatures-agents';
+import {
+    index as candidaturesIndex,
+    show as candidatureShow,
+} from '@/routes/candidatures-agents';
 import {
     create as conseilCreate,
     index as conseilsIndex,
@@ -125,7 +128,7 @@ function countLabel(
 
 function ChangeChip({ value }: { value: number | null }) {
     if (value === null) {
-        return <span className="text-muted-foreground text-xs">—</span>;
+        return <span className="text-xs text-muted-foreground">—</span>;
     }
 
     const positive = value >= 0;
@@ -162,10 +165,10 @@ function StatCard({
     const content = (
         <div className="app-panel flex h-full flex-col gap-3 p-5 transition-colors hover:border-super-securite-accent/40">
             <div className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground text-sm font-medium">
+                <span className="text-sm font-medium text-muted-foreground">
                     {label}
                 </span>
-                <div className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <Icon className="size-4" aria-hidden />
                 </div>
             </div>
@@ -176,7 +179,7 @@ function StatCard({
                 {change !== undefined && <ChangeChip value={change ?? null} />}
             </div>
             {hint ? (
-                <span className="text-muted-foreground text-xs">{hint}</span>
+                <span className="text-xs text-muted-foreground">{hint}</span>
             ) : null}
         </div>
     );
@@ -238,7 +241,7 @@ function RecentContentPanel({
     emptyMessage: string;
 }) {
     const { t, locale } = useTrans();
-    const numberFormat = locale === 'en' ? 'en-US' : 'fr-FR';
+    const numberFormat = locale;
 
     return (
         <div className="app-panel overflow-hidden">
@@ -247,7 +250,7 @@ function RecentContentPanel({
                     <h2 className="font-heading text-lg font-semibold">
                         {title}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-sm text-muted-foreground">
                         {description}
                     </p>
                 </div>
@@ -260,7 +263,7 @@ function RecentContentPanel({
             </div>
 
             {items.length === 0 ? (
-                <p className="text-muted-foreground px-5 py-8 text-sm">
+                <p className="px-5 py-8 text-sm text-muted-foreground">
                     {emptyMessage}
                 </p>
             ) : (
@@ -303,14 +306,20 @@ function RecentContentPanel({
                                             {item.status_label}
                                         </Badge>
                                     </td>
-                                    <td className="text-muted-foreground px-5 py-3">
-                                        {item.views.toLocaleString(numberFormat)}
+                                    <td className="px-5 py-3 text-muted-foreground">
+                                        {item.views.toLocaleString(
+                                            numberFormat,
+                                        )}
                                     </td>
-                                    <td className="text-muted-foreground px-5 py-3">
+                                    <td className="px-5 py-3 text-muted-foreground">
                                         {item.created_at_formatted ?? '—'}
                                     </td>
                                     <td className="px-5 py-3 text-right">
-                                        <Button asChild size="sm" variant="ghost">
+                                        <Button
+                                            asChild
+                                            size="sm"
+                                            variant="ghost"
+                                        >
                                             <Link href={showHref(item.slug)}>
                                                 <Eye className="size-4" />
                                                 {t('common.view', 'Voir')}
@@ -337,7 +346,7 @@ function UserDashboard({
     recentTips: RecentContentItem[];
 }) {
     const { t, locale } = useTrans();
-    const numberFormat = locale === 'en' ? 'en-US' : 'fr-FR';
+    const numberFormat = locale;
     const { has, canAccessFeature } = useBackofficePermission();
     const canCreateArticle = has('articles.create');
     const canCreateConseil = has('conseils.create');
@@ -348,8 +357,7 @@ function UserDashboard({
         stats.tips.pending +
         stats.articles.rejected +
         stats.tips.rejected;
-    const pendingValidationCount =
-        stats.articles.pending + stats.tips.pending;
+    const pendingValidationCount = stats.articles.pending + stats.tips.pending;
     const rejectedCount = stats.articles.rejected + stats.tips.rejected;
 
     return (
@@ -363,7 +371,7 @@ function UserDashboard({
                                 'Vos contenus à suivre',
                             )}
                         </p>
-                        <p className="text-muted-foreground mt-1 text-sm">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             {pendingValidationCount > 0
                                 ? t(
                                       'dashboard.pending_validation_count',
@@ -390,7 +398,10 @@ function UserDashboard({
                         {canViewArticles ? (
                             <Button asChild size="sm" variant="outline">
                                 <Link href={articlesIndex.url()}>
-                                    {t('dashboard.my_articles', 'Mes actualités')}
+                                    {t(
+                                        'dashboard.my_articles',
+                                        'Mes actualités',
+                                    )}
                                 </Link>
                             </Button>
                         ) : null}
@@ -465,7 +476,9 @@ function UserDashboard({
                         <StatCard
                             icon={Eye}
                             label={t('dashboard.tip_views', 'Vues conseils')}
-                            value={stats.tips.views.toLocaleString(numberFormat)}
+                            value={stats.tips.views.toLocaleString(
+                                numberFormat,
+                            )}
                             hint={
                                 stats.tips.published > 0
                                     ? t(
@@ -556,7 +569,7 @@ function AdminDashboard({
     recentApplications: RecentApplication[];
 }) {
     const { t, locale } = useTrans();
-    const numberFormat = locale === 'en' ? 'en-US' : 'fr-FR';
+    const numberFormat = locale;
     const { has, canAccessFeature } = useBackofficePermission();
     const canViewAnalytics = has('analytics.view');
     const canViewUsers = canAccessFeature('users');
@@ -579,7 +592,7 @@ function AdminDashboard({
                                 'Actions en attente',
                             )}
                         </p>
-                        <p className="text-muted-foreground mt-1 text-sm">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             {t(
                                 'dashboard.pending_banner_body',
                                 ':count élément(s) nécessite(nt) votre attention.',
@@ -588,7 +601,8 @@ function AdminDashboard({
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        {stats.applications.pending > 0 && canViewApplications ? (
+                        {stats.applications.pending > 0 &&
+                        canViewApplications ? (
                             <Button asChild size="sm" variant="outline">
                                 <Link href={candidaturesIndex.url()}>
                                     {countLabel(
@@ -602,7 +616,8 @@ function AdminDashboard({
                                 </Link>
                             </Button>
                         ) : null}
-                        {stats.content.articles_pending > 0 && canViewArticles ? (
+                        {stats.content.articles_pending > 0 &&
+                        canViewArticles ? (
                             <Button asChild size="sm" variant="outline">
                                 <Link href={articlesIndex.url()}>
                                     {countLabel(
@@ -638,7 +653,10 @@ function AdminDashboard({
                 {canViewAnalytics ? (
                     <StatCard
                         icon={MousePointerClick}
-                        label={t('dashboard.pages_views_7d', 'Pages vues (7 j)')}
+                        label={t(
+                            'dashboard.pages_views_7d',
+                            'Pages vues (7 j)',
+                        )}
                         value={stats.visits.views.toLocaleString(numberFormat)}
                         change={stats.visits.views_change}
                         hint={t(
@@ -689,7 +707,10 @@ function AdminDashboard({
                                           count: stats.content.articles_pending,
                                       },
                                   )
-                                : t('dashboard.none_pending', 'Aucune en attente')
+                                : t(
+                                      'dashboard.none_pending',
+                                      'Aucune en attente',
+                                  )
                         }
                         href={articlesIndex.url()}
                     />
@@ -732,7 +753,7 @@ function AdminDashboard({
                                         'Trafic des 7 derniers jours',
                                     )}
                                 </h2>
-                                <p className="text-muted-foreground text-sm">
+                                <p className="text-sm text-muted-foreground">
                                     {t(
                                         'dashboard.traffic_subtitle',
                                         'Pages vues et visiteurs uniques',
@@ -756,7 +777,7 @@ function AdminDashboard({
                     </h2>
                     <dl className="mt-4 space-y-4">
                         <div className="flex items-center justify-between gap-3 border-b border-border pb-4">
-                            <dt className="text-muted-foreground flex items-center gap-2 text-sm">
+                            <dt className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <Users className="size-4" aria-hidden />
                                 {t('dashboard.users', 'Utilisateurs')}
                             </dt>
@@ -774,7 +795,7 @@ function AdminDashboard({
                             </dd>
                         </div>
                         <div className="flex items-center justify-between gap-3 border-b border-border pb-4">
-                            <dt className="text-muted-foreground flex items-center gap-2 text-sm">
+                            <dt className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <FileText className="size-4" aria-hidden />
                                 {t(
                                     'dashboard.total_applications',
@@ -786,7 +807,7 @@ function AdminDashboard({
                             </dd>
                         </div>
                         <div className="flex items-center justify-between gap-3">
-                            <dt className="text-muted-foreground flex items-center gap-2 text-sm">
+                            <dt className="flex items-center gap-2 text-sm text-muted-foreground">
                                 <Eye className="size-4" aria-hidden />
                                 {t(
                                     'dashboard.unique_visitors_7d',
@@ -813,7 +834,7 @@ function AdminDashboard({
                                     'Dernières candidatures',
                                 )}
                             </h2>
-                            <p className="text-muted-foreground text-sm">
+                            <p className="text-sm text-muted-foreground">
                                 {t(
                                     'dashboard.recent_applications_desc',
                                     'Les 5 demandes les plus récentes',
@@ -829,7 +850,7 @@ function AdminDashboard({
                     </div>
 
                     {recentApplications.length === 0 ? (
-                        <p className="text-muted-foreground px-5 py-8 text-sm">
+                        <p className="px-5 py-8 text-sm text-muted-foreground">
                             {t(
                                 'dashboard.no_applications',
                                 'Aucune candidature pour le moment.',
@@ -875,10 +896,10 @@ function AdminDashboard({
                                             <td className="px-5 py-3 font-medium">
                                                 {application.full_name}
                                             </td>
-                                            <td className="text-muted-foreground px-5 py-3">
+                                            <td className="px-5 py-3 text-muted-foreground">
                                                 {application.post_label ?? '—'}
                                             </td>
-                                            <td className="text-muted-foreground px-5 py-3">
+                                            <td className="px-5 py-3 text-muted-foreground">
                                                 {application.phone}
                                             </td>
                                             <td className="px-5 py-3">
@@ -890,19 +911,26 @@ function AdminDashboard({
                                                     {application.status_label}
                                                 </Badge>
                                             </td>
-                                            <td className="text-muted-foreground px-5 py-3">
+                                            <td className="px-5 py-3 text-muted-foreground">
                                                 {application.created_at_formatted ??
                                                     '—'}
                                             </td>
                                             <td className="px-5 py-3 text-right">
-                                                <Button asChild size="sm" variant="ghost">
+                                                <Button
+                                                    asChild
+                                                    size="sm"
+                                                    variant="ghost"
+                                                >
                                                     <Link
                                                         href={candidatureShow.url(
                                                             application.uuid,
                                                         )}
                                                     >
                                                         <Eye className="size-4" />
-                                                        {t('common.view', 'Voir')}
+                                                        {t(
+                                                            'common.view',
+                                                            'Voir',
+                                                        )}
                                                     </Link>
                                                 </Button>
                                             </td>
@@ -956,8 +984,9 @@ export default function Dashboard() {
                     <h1 className="font-heading text-2xl font-bold tracking-tight">
                         {overview.greeting}
                     </h1>
-                    <p className="text-muted-foreground text-sm">
-                        {overview.role_label} · {t('dashboard.title', 'Dashboard')}
+                    <p className="text-sm text-muted-foreground">
+                        {overview.role_label} ·{' '}
+                        {t('dashboard.title', 'Dashboard')}
                     </p>
                 </div>
 

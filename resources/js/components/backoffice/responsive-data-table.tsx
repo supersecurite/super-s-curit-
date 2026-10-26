@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link } from '@inertiajs/react';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -10,7 +11,13 @@ export type ResponsiveColumn<T> = {
     header: ReactNode;
     cell: (row: T) => ReactNode;
     /** Rôle d'affichage sur mobile — défaut : `default`. */
-    mobileRole?: 'title' | 'subtitle' | 'meta' | 'actions' | 'hidden' | 'default';
+    mobileRole?:
+        | 'title'
+        | 'subtitle'
+        | 'meta'
+        | 'actions'
+        | 'hidden'
+        | 'default';
     /** Clé de tri envoyée au backend (`sort_by`). */
     sortKey?: string;
     /** Colonne triable (desktop). */
@@ -143,12 +150,12 @@ function MobileRowCard<T>({
         <article className="space-y-3 rounded-xl border border-border/70 bg-card p-4 shadow-sm">
             <div className="space-y-1">
                 {titleColumn ? (
-                    <div className="font-semibold leading-snug">
+                    <div className="leading-snug font-semibold">
                         {titleColumn.cell(row)}
                     </div>
                 ) : null}
                 {subtitleColumn ? (
-                    <div className="text-muted-foreground text-sm">
+                    <div className="text-sm text-muted-foreground">
                         {subtitleColumn.cell(row)}
                     </div>
                 ) : null}
@@ -158,7 +165,7 @@ function MobileRowCard<T>({
                 <dl className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {metaColumns.map((column) => (
                         <div key={column.id} className="min-w-0">
-                            <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                            <dt className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                 {column.header}
                             </dt>
                             <dd className="mt-0.5 text-sm break-words">
@@ -193,7 +200,7 @@ export function ResponsiveDataTable<T>({
 }: ResponsiveDataTableProps<T>) {
     if (rows.length === 0) {
         return (
-            <div className="text-muted-foreground px-4 py-10 text-center text-sm">
+            <div className="px-4 py-10 text-center text-sm text-muted-foreground">
                 {emptyMessage}
             </div>
         );
@@ -216,10 +223,12 @@ export function ResponsiveDataTable<T>({
                     className="w-full text-left text-sm"
                     style={{ minWidth }}
                 >
-                    <thead className="bg-muted/50 border-b text-xs uppercase tracking-wide text-muted-foreground">
+                    <thead className="border-b bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase">
                         <tr>
                             {columns
-                                .filter((column) => column.mobileRole !== 'hidden')
+                                .filter(
+                                    (column) => column.mobileRole !== 'hidden',
+                                )
                                 .map((column) => (
                                     <th
                                         key={column.id}
@@ -228,7 +237,11 @@ export function ResponsiveDataTable<T>({
                                             column.headerClassName,
                                         )}
                                     >
-                                        {renderColumnHeader(column, sort, onSort)}
+                                        {renderColumnHeader(
+                                            column,
+                                            sort,
+                                            onSort,
+                                        )}
                                     </th>
                                 ))}
                         </tr>
@@ -240,11 +253,17 @@ export function ResponsiveDataTable<T>({
                                 className="border-b transition-colors last:border-b-0 hover:bg-muted/40"
                             >
                                 {columns
-                                    .filter((column) => column.mobileRole !== 'hidden')
+                                    .filter(
+                                        (column) =>
+                                            column.mobileRole !== 'hidden',
+                                    )
                                     .map((column) => (
                                         <td
                                             key={column.id}
-                                            className={cn('px-4 py-3', column.className)}
+                                            className={cn(
+                                                'px-4 py-3',
+                                                column.className,
+                                            )}
                                         >
                                             {column.cell(row)}
                                         </td>
@@ -273,6 +292,8 @@ export function IndexTablePagination({
     onPageClick,
     embedded = false,
 }: IndexTablePaginationProps) {
+    const { t: uiText, locale } = useUiTranslations();
+
     if (paginated.last_page <= 1) {
         return null;
     }
@@ -282,7 +303,9 @@ export function IndexTablePagination({
             return;
         }
 
-        const page = new URL(url, window.location.origin).searchParams.get('page');
+        const page = new URL(url, window.location.origin).searchParams.get(
+            'page',
+        );
 
         if (page) {
             onPageClick(Number.parseInt(page, 10));
@@ -290,10 +313,11 @@ export function IndexTablePagination({
     };
 
     return (
-        <div className="text-muted-foreground flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <span>
-                Page {paginated.current_page} / {paginated.last_page} ·{' '}
-                {paginated.total.toLocaleString('fr-FR')} {itemLabel}
+                {uiText('ui.components.text_0a30a815d67d', 'Page')}{' '}
+                {paginated.current_page} / {paginated.last_page} ·{' '}
+                {paginated.total.toLocaleString(locale)} {itemLabel}
             </span>
 
             {paginated.links && paginated.links.length > 0 ? (
@@ -304,7 +328,9 @@ export function IndexTablePagination({
                                 <span
                                     key={`${link.label}-${index}`}
                                     className="px-2 py-1"
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             );
                         }
@@ -314,10 +340,14 @@ export function IndexTablePagination({
                                 <Button
                                     key={`${link.label}-${index}`}
                                     type="button"
-                                    variant={link.active ? 'default' : 'outline'}
+                                    variant={
+                                        link.active ? 'default' : 'outline'
+                                    }
                                     size="sm"
                                     onClick={() => handlePageFromUrl(link.url)}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             );
                         }
@@ -332,7 +362,9 @@ export function IndexTablePagination({
                                 <Link
                                     href={link.url}
                                     preserveState
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             </Button>
                         );
@@ -342,15 +374,25 @@ export function IndexTablePagination({
                 <div className="flex flex-wrap gap-2">
                     {paginated.current_page > 1 ? (
                         <Button variant="outline" size="sm" asChild>
-                            <Link href={buildPageUrl(paginated.current_page - 1)}>
-                                Précédent
+                            <Link
+                                href={buildPageUrl(paginated.current_page - 1)}
+                            >
+                                {uiText(
+                                    'ui.components.text_30b0e9a45aba',
+                                    'Précédent',
+                                )}
                             </Link>
                         </Button>
                     ) : null}
                     {paginated.current_page < paginated.last_page ? (
                         <Button variant="outline" size="sm" asChild>
-                            <Link href={buildPageUrl(paginated.current_page + 1)}>
-                                Suivant
+                            <Link
+                                href={buildPageUrl(paginated.current_page + 1)}
+                            >
+                                {uiText(
+                                    'ui.components.text_df2df3bc713a',
+                                    'Suivant',
+                                )}
                             </Link>
                         </Button>
                     ) : null}
@@ -369,7 +411,9 @@ export function BackofficeIndexPanel({
     className?: string;
 }) {
     return (
-        <div className={cn('app-panel overflow-hidden', className)}>{children}</div>
+        <div className={cn('app-panel overflow-hidden', className)}>
+            {children}
+        </div>
     );
 }
 

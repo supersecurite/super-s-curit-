@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import FaqAccordionList, {
     FaqAccordionHeader,
     type FaqAccordionItem,
@@ -8,6 +9,8 @@ export default function ServiceFaq({
 }: {
     faqs: readonly FaqAccordionItem[];
 }) {
+    const { t: uiText } = useUiTranslations();
+
     if (faqs.length === 0) {
         return null;
     }
@@ -18,9 +21,15 @@ export default function ServiceFaq({
                 <FaqAccordionHeader
                     title={
                         <>
-                            Questions{' '}
+                            {uiText(
+                                'ui.components.text_9a72221a2747',
+                                'Questions',
+                            )}{' '}
                             <span className="text-black">
-                                fréquentes
+                                {uiText(
+                                    'ui.components.text_95cebc3a7e56',
+                                    'fréquentes',
+                                )}
                             </span>
                         </>
                     }

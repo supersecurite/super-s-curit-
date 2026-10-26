@@ -11,12 +11,12 @@ enum ServiceId: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.ServiceId.'.$this->name, [], match ($this) {
             self::Entreprise => 'Sécurité entreprise',
             self::Residence => 'Sécurité résidence',
             self::Chantiers => 'Sécurité chantiers',
             self::ZonesMinieres => 'Zones minières',
-        };
+        });
     }
 
     public function path(): string

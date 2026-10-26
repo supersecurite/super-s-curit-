@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { CodeNode } from '@lexical/code';
 import { LinkNode } from '@lexical/link';
 import { ListItemNode, ListNode } from '@lexical/list';
@@ -42,9 +43,14 @@ const theme = {
 };
 
 function Placeholder() {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <div className="pointer-events-none absolute top-[60px] left-3 text-muted-foreground select-none">
-            Rédigez votre message ou insérez des variables…
+            {uiText(
+                'ui.components.text_53aba69bcd34',
+                'Rédigez votre message ou insérez des variables…',
+            )}
         </div>
     );
 }
@@ -131,6 +137,8 @@ export default function MarketingTemplateEditor({
     variables,
     imageUploadUrl,
 }: MarketingTemplateEditorProps) {
+    const { t: uiText } = useUiTranslations();
+
     const mountInitialContent = useRef(initialContent);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -232,7 +240,9 @@ export default function MarketingTemplateEditor({
                     className="hidden"
                     onChange={handleFileChange}
                 />
-                <Toolbar onPickImageFile={() => fileInputRef.current?.click()} />
+                <Toolbar
+                    onPickImageFile={() => fileInputRef.current?.click()}
+                />
                 <TemplateVariablePicker variables={variables} />
                 <div className="relative min-h-[300px] p-3">
                     <RichTextPlugin
@@ -240,7 +250,10 @@ export default function MarketingTemplateEditor({
                             <ContentEditable
                                 className="prose min-h-[300px] max-w-none rounded-md p-2 outline-none focus:ring-2 focus:ring-ring/20"
                                 style={{ wordBreak: 'break-word' }}
-                                aria-label="Éditeur de template de message"
+                                aria-label={uiText(
+                                    'ui.components.text_7a68460b0f70',
+                                    'Éditeur de template de message',
+                                )}
                             />
                         }
                         placeholder={<Placeholder />}
@@ -281,7 +294,11 @@ function InsertImageBridge() {
         };
 
         window.addEventListener('marketing-editor-insert-image', handler);
-        return () => window.removeEventListener('marketing-editor-insert-image', handler);
+        return () =>
+            window.removeEventListener(
+                'marketing-editor-insert-image',
+                handler,
+            );
     }, [editor]);
 
     return null;

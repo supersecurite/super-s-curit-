@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronUp, History, Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -32,22 +33,37 @@ const defaultFilterOptions: AccessLogFilterOptions = {
 /**
  * Accordéon d'historique des actions — fixé en bas de toutes les pages backoffice.
  */
-export function ActionHistoryAccordion({ currentPath }: { currentPath: string }) {
+export function ActionHistoryAccordion({
+    currentPath,
+}: {
+    currentPath: string;
+}) {
+    const { t: uiText } = useUiTranslations();
+
     const { has } = useBackofficePermission();
     const canView = has('access_logs.view');
     const hydrated = useHydrated();
-    const { accessLogFilterUsers = [], accessLogFilterOptions = defaultFilterOptions } =
-        usePage<SharedProps>().props;
+    const {
+        accessLogFilterUsers = [],
+        accessLogFilterOptions = defaultFilterOptions,
+    } = usePage<SharedProps>().props;
 
     const [open, setOpen] = useState(false);
 
-    const { filters, logs, users, filterOptions, loading, updateFilters, resetFilters } =
-        useAccessLogsFeed({
-            currentPath,
-            enabled: open && canView,
-            initialUsers: accessLogFilterUsers,
-            initialFilterOptions: accessLogFilterOptions,
-        });
+    const {
+        filters,
+        logs,
+        users,
+        filterOptions,
+        loading,
+        updateFilters,
+        resetFilters,
+    } = useAccessLogsFeed({
+        currentPath,
+        enabled: open && canView,
+        initialUsers: accessLogFilterUsers,
+        initialFilterOptions: accessLogFilterOptions,
+    });
 
     if (!canView) {
         return null;
@@ -62,24 +78,52 @@ export function ActionHistoryAccordion({ currentPath }: { currentPath: string })
     if (!hydrated) {
         return (
             <details className={panelClassName}>
-                <summary className={cn(triggerClassName, 'list-none [&::-webkit-details-marker]:hidden')}>
+                <summary
+                    className={cn(
+                        triggerClassName,
+                        'list-none [&::-webkit-details-marker]:hidden',
+                    )}
+                >
                     <span className="flex min-w-0 items-center gap-2 text-sm font-semibold">
-                        <History className="size-4 shrink-0 text-primary" aria-hidden />
-                        Historique des actions
+                        <History
+                            className="size-4 shrink-0 text-primary"
+                            aria-hidden
+                        />
+                        {uiText(
+                            'ui.components.text_c51fef493cc0',
+                            'Historique des actions',
+                        )}
                     </span>
-                    <ChevronUp className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                    <ChevronUp
+                        className="size-4 shrink-0 text-muted-foreground"
+                        aria-hidden
+                    />
                 </summary>
             </details>
         );
     }
 
     return (
-        <Collapsible open={open} onOpenChange={setOpen} className={panelClassName}>
+        <Collapsible
+            open={open}
+            onOpenChange={setOpen}
+            className={panelClassName}
+        >
             <CollapsibleTrigger asChild>
-                <button type="button" className={triggerClassName} aria-expanded={open}>
+                <button
+                    type="button"
+                    className={triggerClassName}
+                    aria-expanded={open}
+                >
                     <span className="flex min-w-0 items-center gap-2 text-sm font-semibold">
-                        <History className="size-4 shrink-0 text-primary" aria-hidden />
-                        Historique des actions
+                        <History
+                            className="size-4 shrink-0 text-primary"
+                            aria-hidden
+                        />
+                        {uiText(
+                            'ui.components.text_c51fef493cc0',
+                            'Historique des actions',
+                        )}
                     </span>
                     <ChevronUp
                         className={cn(
@@ -95,16 +139,25 @@ export function ActionHistoryAccordion({ currentPath }: { currentPath: string })
                 <div className="space-y-4 px-4 py-4 md:px-5">
                     <p className="text-sm">
                         <span className="font-semibold text-foreground">
-                            Consultations et modifications
+                            {uiText(
+                                'ui.components.text_981b09da1bc5',
+                                'Consultations et modifications',
+                            )}
                         </span>{' '}
                         <span className="text-muted-foreground">
-                            enregistrées automatiquement.
+                            {uiText(
+                                'ui.components.text_71e864220b6e',
+                                'enregistrées automatiquement.',
+                            )}
                         </span>
                     </p>
 
                     {loading && logs.data.length === 0 ? (
                         <div className="flex items-center justify-center py-10 text-muted-foreground">
-                            <Loader2 className="size-5 animate-spin" aria-hidden />
+                            <Loader2
+                                className="size-5 animate-spin"
+                                aria-hidden
+                            />
                         </div>
                     ) : (
                         <AccessLogsTable
@@ -123,7 +176,10 @@ export function ActionHistoryAccordion({ currentPath }: { currentPath: string })
                     <div className="flex justify-end border-t border-border/50 pt-3">
                         <Button variant="ghost" size="sm" asChild>
                             <Link href={accessLogsIndex.url()}>
-                                Ouvrir le journal complet
+                                {uiText(
+                                    'ui.components.text_afef715a1b4c',
+                                    'Ouvrir le journal complet',
+                                )}
                             </Link>
                         </Button>
                     </div>

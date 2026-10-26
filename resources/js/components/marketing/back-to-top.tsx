@@ -1,9 +1,12 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { ArrowUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const SCROLL_THRESHOLD = 400;
 
 export default function BackToTop() {
+    const { t: uiText } = useUiTranslations();
+
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -22,7 +25,10 @@ export default function BackToTop() {
         <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Retour en haut de la page"
+            aria-label={uiText(
+                'ui.components.text_1fecc82cff1f',
+                'Retour en haut de la page',
+            )}
             className="fixed right-6 bottom-6 z-50 flex size-11 items-center justify-center rounded-full border border-super-securite-border bg-super-securite-surface text-super-securite-heading shadow-lg shadow-slate-900/10 transition-colors duration-200 hover:border-super-securite-accent hover:bg-super-securite-accent hover:text-white focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
         >
             <ArrowUp className="size-5" aria-hidden />

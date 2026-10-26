@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { CalendarRange, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -26,11 +27,14 @@ export default function DateRangeFilter({
     onApplyRange,
     onClear,
 }: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const [singleDate, setSingleDate] = useState(dateFilter.date ?? '');
     const [rangeFrom, setRangeFrom] = useState(dateFilter.date_from ?? '');
     const [rangeTo, setRangeTo] = useState(dateFilter.date_to ?? '');
 
-    const isCustom = dateFilter.mode === 'single' || dateFilter.mode === 'range';
+    const isCustom =
+        dateFilter.mode === 'single' || dateFilter.mode === 'range';
 
     const applySingle = () => {
         if (singleDate) {
@@ -48,7 +52,7 @@ export default function DateRangeFilter({
         <div className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1">
                 <Label htmlFor="analytics-date-single" className="text-xs">
-                    Date précise
+                    {uiText('ui.components.text_710952ede24e', 'Date précise')}
                 </Label>
                 <div className="flex items-center gap-1.5">
                     <Input
@@ -71,24 +75,34 @@ export default function DateRangeFilter({
                 </div>
             </div>
 
-            <span className="text-muted-foreground hidden pb-2 text-xs sm:inline">ou</span>
+            <span className="hidden pb-2 text-xs text-muted-foreground sm:inline">
+                {uiText('ui.components.text_fc74181ece96', 'ou')}
+            </span>
 
             <div className="flex flex-col gap-1">
-                <Label className="text-xs">Intervalle</Label>
+                <Label className="text-xs">
+                    {uiText('ui.components.text_45b31f5996f8', 'Intervalle')}
+                </Label>
                 <div className="flex flex-wrap items-center gap-1.5">
                     <Input
                         id="analytics-date-from"
                         type="date"
-                        aria-label="Date de début"
+                        aria-label={uiText(
+                            'ui.components.text_980472432f98',
+                            'Date de début',
+                        )}
                         value={rangeFrom}
                         onChange={(e) => setRangeFrom(e.target.value)}
                         className="h-8 w-[10.5rem] text-xs"
                     />
-                    <span className="text-muted-foreground text-xs">→</span>
+                    <span className="text-xs text-muted-foreground">→</span>
                     <Input
                         id="analytics-date-to"
                         type="date"
-                        aria-label="Date de fin"
+                        aria-label={uiText(
+                            'ui.components.text_b134aabee003',
+                            'Date de fin',
+                        )}
                         value={rangeTo}
                         onChange={(e) => setRangeTo(e.target.value)}
                         className="h-8 w-[10.5rem] text-xs"
@@ -115,7 +129,10 @@ export default function DateRangeFilter({
                     onClick={onClear}
                 >
                     <CalendarRange className="size-3.5" aria-hidden />
-                    Période rapide
+                    {uiText(
+                        'ui.components.text_97f3c4722ee5',
+                        'Période rapide',
+                    )}{' '}
                     <X className="size-3" aria-hidden />
                 </Button>
             )}

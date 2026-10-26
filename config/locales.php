@@ -4,16 +4,18 @@ return [
 
     'default' => 'fr',
 
-    'supported' => ['fr', 'en'],
+    'supported' => ['fr', 'en', 'zh'],
 
     'labels' => [
         'fr' => 'Français',
         'en' => 'English',
+        'zh' => '简体中文',
     ],
 
     'og_locales' => [
         'fr' => 'fr_FR',
         'en' => 'en_US',
+        'zh' => 'zh_CN',
     ],
 
     /**
@@ -22,6 +24,7 @@ return [
      */
     'url_prefixes' => [
         'en' => 'en',
+        'zh' => 'zh',
     ],
 
 ];

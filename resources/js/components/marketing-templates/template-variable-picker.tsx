@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { Badge } from '@/components/ui/badge';
 import { insertTemplateVariable } from '@/components/lexical-editor/plugins/template-variable-plugin';
@@ -10,13 +11,17 @@ type TemplateVariablePickerProps = {
     variables: string[];
 };
 
-export function TemplateVariablePicker({ variables }: TemplateVariablePickerProps) {
+export function TemplateVariablePicker({
+    variables,
+}: TemplateVariablePickerProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [editor] = useLexicalComposerContext();
 
     return (
         <div className="flex flex-wrap items-center gap-2 border-b bg-muted/20 px-3 py-2">
-            <span className="text-muted-foreground text-xs font-medium">
-                Variables :
+            <span className="text-xs font-medium text-muted-foreground">
+                {uiText('ui.components.text_c41ce2cc0050', 'Variables :')}
             </span>
             {variables.map((variable) => (
                 <button

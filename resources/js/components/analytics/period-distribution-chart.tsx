@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 export type DistributionRow = {
     label: string;
     views: number;
@@ -15,11 +16,13 @@ export default function PeriodDistributionChart({
     data,
     emptyMessage = 'Aucune donnée pour cette période.',
 }: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const total = data.reduce((sum, row) => sum + row.views, 0);
 
     if (total === 0) {
         return (
-            <p className="text-muted-foreground py-6 text-center text-sm">
+            <p className="py-6 text-center text-sm text-muted-foreground">
                 {emptyMessage}
             </p>
         );
@@ -37,18 +40,29 @@ export default function PeriodDistributionChart({
                         >
                             {row.label}
                             {row.is_peak && (
-                                <span className="bg-primary/10 text-primary ml-1.5 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase">
-                                    pic
+                                <span className="ml-1.5 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary uppercase">
+                                    {uiText(
+                                        'ui.components.text_2255c8b55faa',
+                                        'pic',
+                                    )}
                                 </span>
                             )}
                         </span>
-                        <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
-                            {row.views.toLocaleString('fr-FR')} vues ·{' '}
-                            {row.visitors.toLocaleString('fr-FR')} visiteurs
+                        <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
+                            {row.views.toLocaleString('fr-FR')}{' '}
+                            {uiText(
+                                'ui.components.text_61315563b9fe',
+                                'vues ·',
+                            )}{' '}
+                            {row.visitors.toLocaleString('fr-FR')}{' '}
+                            {uiText(
+                                'ui.components.text_6d7e48186a6b',
+                                'visiteurs',
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="bg-border h-2 flex-1 overflow-hidden rounded-full">
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-border">
                             <div
                                 className={`h-full rounded-full transition-all duration-500 ${
                                     row.is_peak ? 'bg-primary' : 'bg-primary/50'
@@ -58,7 +72,7 @@ export default function PeriodDistributionChart({
                                 }}
                             />
                         </div>
-                        <span className="text-muted-foreground w-10 shrink-0 text-right text-xs tabular-nums">
+                        <span className="w-10 shrink-0 text-right text-xs text-muted-foreground tabular-nums">
                             {row.percentage}%
                         </span>
                     </div>

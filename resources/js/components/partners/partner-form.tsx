@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +28,8 @@ export default function PartnerForm({
     partner,
     method = 'post',
 }: PartnerFormProps) {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <Form
             action={submitUrl}
@@ -39,7 +42,12 @@ export default function PartnerForm({
             ) : null}
 
             <div className="space-y-2">
-                <Label htmlFor="name">Nom du partenaire</Label>
+                <Label htmlFor="name">
+                    {uiText(
+                        'ui.components.text_2db99eb306c3',
+                        'Nom du partenaire',
+                    )}
+                </Label>
                 <Input
                     id="name"
                     name="name"
@@ -53,13 +61,19 @@ export default function PartnerForm({
 
             <div className="space-y-2">
                 <Label htmlFor="logo">
-                    Logo {method === 'put' ? '(laisser vide pour conserver)' : ''}
+                    {uiText('ui.components.text_d707dc2f1936', 'Logo')}{' '}
+                    {method === 'put'
+                        ? uiText(
+                              'ui.components.text_5ad87f071809',
+                              '(laisser vide pour conserver)',
+                          )
+                        : ''}
                 </Label>
                 {partner?.logo ? (
                     <img
                         src={partner.logo}
                         alt={partner.name}
-                        className="mb-3 h-20 w-auto max-w-full rounded-lg border object-contain bg-slate-50 p-2"
+                        className="mb-3 h-20 w-auto max-w-full rounded-lg border bg-slate-50 object-contain p-2"
                     />
                 ) : null}
                 <Input id="logo" name="logo" type="file" accept="image/*" />
@@ -69,7 +83,12 @@ export default function PartnerForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="sort_order">Ordre d’affichage</Label>
+                <Label htmlFor="sort_order">
+                    {uiText(
+                        'ui.components.text_2c6271453fa1',
+                        'Ordre d’affichage',
+                    )}
+                </Label>
                 <Input
                     id="sort_order"
                     name="sort_order"
@@ -78,7 +97,9 @@ export default function PartnerForm({
                     defaultValue={partner?.sort_order ?? 0}
                 />
                 {errors.sort_order ? (
-                    <p className="text-sm text-destructive">{errors.sort_order}</p>
+                    <p className="text-sm text-destructive">
+                        {errors.sort_order}
+                    </p>
                 ) : null}
             </div>
 
@@ -90,13 +111,18 @@ export default function PartnerForm({
                     defaultChecked={partner?.is_published ?? true}
                     className="size-4 rounded border-input"
                 />
-                Activer sur le site
+                {uiText(
+                    'ui.components.text_36d15cf0d80b',
+                    'Activer sur le site',
+                )}
             </label>
 
             <div className="flex flex-wrap gap-3">
                 <Button type="submit">{submitLabel}</Button>
                 <Button type="button" variant="outline" asChild>
-                    <a href={cancelHref}>Annuler</a>
+                    <a href={cancelHref}>
+                        {uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
+                    </a>
                 </Button>
             </div>
         </Form>

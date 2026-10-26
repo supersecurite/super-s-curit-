@@ -12,13 +12,13 @@ enum SecurityAgentApplicationStatus: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.SecurityAgentApplicationStatus.'.$this->name, [], match ($this) {
             self::Pending => 'Nouvelle candidature',
             self::Contacted => 'Contacté',
             self::Recruited => 'Recruté',
             self::Rejected => 'Refusé',
             self::OnHold => 'En attente',
-        };
+        });
     }
 
     /**

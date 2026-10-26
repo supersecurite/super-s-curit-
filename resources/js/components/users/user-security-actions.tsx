@@ -1,24 +1,23 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { KeyRound, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-    sendPasswordReset,
-    sendWelcome,
-} from '@/routes/users';
+import { sendPasswordReset, sendWelcome } from '@/routes/users';
 
 type UserSecurityActionsProps = {
     userUuid: string;
 };
 
-export default function UserSecurityActions({ userUuid }: UserSecurityActionsProps) {
+export default function UserSecurityActions({
+    userUuid,
+}: UserSecurityActionsProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [sendingWelcome, setSendingWelcome] = useState(false);
     const [sendingReset, setSendingReset] = useState(false);
 
-    const postAction = (
-        url: string,
-        setLoading: (value: boolean) => void,
-    ) => {
+    const postAction = (url: string, setLoading: (value: boolean) => void) => {
         setLoading(true);
 
         router.post(
@@ -40,11 +39,16 @@ export default function UserSecurityActions({ userUuid }: UserSecurityActionsPro
                     </div>
                     <div className="min-w-0 flex-1 space-y-1">
                         <p className="text-sm font-medium">
-                            E-mail de bienvenue
+                            {uiText(
+                                'ui.components.text_a45e0ff4bd9e',
+                                'E-mail de bienvenue',
+                            )}
                         </p>
-                        <p className="text-muted-foreground text-sm">
-                            Envoie un lien pour choisir un mot de passe initial.
-                            Valable 15 minutes.
+                        <p className="text-sm text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_15b9f4f4b842',
+                                'Envoie un lien pour choisir un mot de passe initial. Valable 15 minutes.',
+                            )}
                         </p>
                     </div>
                     <Button
@@ -53,10 +57,21 @@ export default function UserSecurityActions({ userUuid }: UserSecurityActionsPro
                         size="sm"
                         disabled={sendingWelcome || sendingReset}
                         onClick={() =>
-                            postAction(sendWelcome.url(userUuid), setSendingWelcome)
+                            postAction(
+                                sendWelcome.url(userUuid),
+                                setSendingWelcome,
+                            )
                         }
                     >
-                        {sendingWelcome ? 'Envoi…' : 'Renvoyer'}
+                        {sendingWelcome
+                            ? uiText(
+                                  'ui.components.text_1ccef8a10ca7',
+                                  'Envoi…',
+                              )
+                            : uiText(
+                                  'ui.components.text_58c0fa009a92',
+                                  'Renvoyer',
+                              )}
                     </Button>
                 </div>
             </div>
@@ -68,11 +83,16 @@ export default function UserSecurityActions({ userUuid }: UserSecurityActionsPro
                     </div>
                     <div className="min-w-0 flex-1 space-y-1">
                         <p className="text-sm font-medium">
-                            Réinitialisation du mot de passe
+                            {uiText(
+                                'ui.components.text_909822f461c0',
+                                'Réinitialisation du mot de passe',
+                            )}
                         </p>
-                        <p className="text-muted-foreground text-sm">
-                            Envoie un lien pour définir un nouveau mot de passe.
-                            Valable 15 minutes.
+                        <p className="text-sm text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_87ab4659acc0',
+                                'Envoie un lien pour définir un nouveau mot de passe. Valable 15 minutes.',
+                            )}
                         </p>
                     </div>
                     <Button
@@ -87,7 +107,15 @@ export default function UserSecurityActions({ userUuid }: UserSecurityActionsPro
                             )
                         }
                     >
-                        {sendingReset ? 'Envoi…' : 'Envoyer le lien'}
+                        {sendingReset
+                            ? uiText(
+                                  'ui.components.text_1ccef8a10ca7',
+                                  'Envoi…',
+                              )
+                            : uiText(
+                                  'ui.components.text_d7c52473addb',
+                                  'Envoyer le lien',
+                              )}
                     </Button>
                 </div>
             </div>

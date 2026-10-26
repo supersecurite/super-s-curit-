@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router, useForm, usePage } from '@inertiajs/react';
 import { Lock } from 'lucide-react';
 import type { FormEvent } from 'react';
@@ -21,6 +22,8 @@ type InactivityLockScreenProps = {
 export default function InactivityLockScreen({
     onUnlock,
 }: InactivityLockScreenProps) {
+    const { t: uiText } = useUiTranslations();
+
     const { auth } = usePage().props;
     const user = auth.user!;
     const form = useForm({
@@ -85,11 +88,16 @@ export default function InactivityLockScreen({
                                 id="profile-lock-title"
                                 className="text-xl font-semibold tracking-tight"
                             >
-                                Session verrouillée
+                                {uiText(
+                                    'ui.components.text_83eaf6eb1740',
+                                    'Session verrouillée',
+                                )}
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                                Entrez votre mot de passe pour reprendre votre
-                                session.
+                                {uiText(
+                                    'ui.components.text_257ed1540106',
+                                    'Entrez votre mot de passe pour reprendre votre session.',
+                                )}
                             </p>
                         </div>
 
@@ -101,7 +109,10 @@ export default function InactivityLockScreen({
                     <form onSubmit={submit} className="space-y-4">
                         <div className="grid gap-2">
                             <Label htmlFor="profile-lock-password">
-                                Mot de passe
+                                {uiText(
+                                    'ui.components.text_ff9c8b8c0677',
+                                    'Mot de passe',
+                                )}
                             </Label>
                             <PasswordInput
                                 id="profile-lock-password"
@@ -110,7 +121,10 @@ export default function InactivityLockScreen({
                                 onChange={(event) =>
                                     form.setData('password', event.target.value)
                                 }
-                                placeholder="Mot de passe"
+                                placeholder={uiText(
+                                    'ui.components.text_ff9c8b8c0677',
+                                    'Mot de passe',
+                                )}
                                 autoComplete="current-password"
                                 autoFocus
                             />
@@ -124,7 +138,10 @@ export default function InactivityLockScreen({
                             data-test="profile-lock-unlock-button"
                         >
                             {form.processing && <Spinner />}
-                            Déverrouiller
+                            {uiText(
+                                'ui.components.text_3e1eafe5296a',
+                                'Déverrouiller',
+                            )}
                         </Button>
                     </form>
 
@@ -134,7 +151,10 @@ export default function InactivityLockScreen({
                         className="w-full"
                         onClick={handleLogout}
                     >
-                        Se déconnecter
+                        {uiText(
+                            'ui.components.text_b18aeed1a806',
+                            'Se déconnecter',
+                        )}
                     </Button>
                 </div>
             </div>

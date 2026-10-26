@@ -11,12 +11,12 @@ enum ArticleStatus: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.ArticleStatus.'.$this->name, [], match ($this) {
             self::Draft => 'Brouillon',
             self::PendingApproval => 'En attente de validation',
             self::Published => 'Publié',
             self::Rejected => 'Refusé',
-        };
+        });
     }
 
     /**

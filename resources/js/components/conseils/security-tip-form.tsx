@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link, router } from '@inertiajs/react';
 import { Save } from 'lucide-react';
 import { useCallback, useState } from 'react';
@@ -54,6 +55,8 @@ export default function SecurityTipForm({
     cancelHref,
     errors = {},
 }: SecurityTipFormProps) {
+    const { t: uiText } = useUiTranslations();
+
     const isEditing = method === 'put';
     const showStatusField = isEditing && statusOptions.length > 0;
     const [formData, setFormData] = useState({
@@ -79,7 +82,10 @@ export default function SecurityTipForm({
     const [processing, setProcessing] = useState(false);
 
     const updateField = useCallback(
-        (field: keyof typeof formData, value: string | boolean | File | null) => {
+        (
+            field: keyof typeof formData,
+            value: string | boolean | File | null,
+        ) => {
             setFormData((prev) => ({ ...prev, [field]: value }));
         },
         [],
@@ -156,7 +162,10 @@ export default function SecurityTipForm({
                                         : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
                                 }
                             >
-                                Français
+                                {uiText(
+                                    'ui.components.text_e495d53b967a',
+                                    'Français',
+                                )}
                             </button>
                             <button
                                 type="button"
@@ -167,14 +176,22 @@ export default function SecurityTipForm({
                                         : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
                                 }
                             >
-                                English
+                                {uiText(
+                                    'ui.components.text_ba118bf7fc9c',
+                                    'English',
+                                )}
                             </button>
                         </div>
 
                         {localeTab === 'fr' ? (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="title">Titre</Label>
+                                    <Label htmlFor="title">
+                                        {uiText(
+                                            'ui.components.text_78e7920010aa',
+                                            'Titre',
+                                        )}
+                                    </Label>
                                     <Input
                                         id="title"
                                         value={formData.title}
@@ -187,24 +204,39 @@ export default function SecurityTipForm({
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="excerpt">Résumé</Label>
+                                    <Label htmlFor="excerpt">
+                                        {uiText(
+                                            'ui.components.text_9d750fae7486',
+                                            'Résumé',
+                                        )}
+                                    </Label>
                                     <textarea
                                         id="excerpt"
                                         rows={3}
                                         value={formData.excerpt}
                                         onChange={(e) =>
-                                            updateField('excerpt', e.target.value)
+                                            updateField(
+                                                'excerpt',
+                                                e.target.value,
+                                            )
                                         }
-                                        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                        className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                                     />
                                     <InputError message={errors.excerpt} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label>Contenu</Label>
+                                    <Label>
+                                        {uiText(
+                                            'ui.components.text_7a6de5670ea8',
+                                            'Contenu',
+                                        )}
+                                    </Label>
                                     <Editor
                                         key={`${securityTip?.id ?? 'new'}-fr`}
-                                        initialContent={securityTip?.content ?? ''}
+                                        initialContent={
+                                            securityTip?.content ?? ''
+                                        }
                                         onChange={(content) =>
                                             updateField('content', content)
                                         }
@@ -215,19 +247,32 @@ export default function SecurityTipForm({
                         ) : (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="title_en">Title (English)</Label>
+                                    <Label htmlFor="title_en">
+                                        {uiText(
+                                            'ui.components.text_921e6eb0c12a',
+                                            'Title (English)',
+                                        )}
+                                    </Label>
                                     <Input
                                         id="title_en"
                                         value={formData.title_en}
                                         onChange={(e) =>
-                                            updateField('title_en', e.target.value)
+                                            updateField(
+                                                'title_en',
+                                                e.target.value,
+                                            )
                                         }
                                     />
                                     <InputError message={errors.title_en} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="excerpt_en">Excerpt (English)</Label>
+                                    <Label htmlFor="excerpt_en">
+                                        {uiText(
+                                            'ui.components.text_96b29a9978a0',
+                                            'Excerpt (English)',
+                                        )}
+                                    </Label>
                                     <textarea
                                         id="excerpt_en"
                                         rows={3}
@@ -238,13 +283,18 @@ export default function SecurityTipForm({
                                                 e.target.value,
                                             )
                                         }
-                                        className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                        className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                                     />
                                     <InputError message={errors.excerpt_en} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label>Content (English)</Label>
+                                    <Label>
+                                        {uiText(
+                                            'ui.components.text_d2bdfbb924d9',
+                                            'Content (English)',
+                                        )}
+                                    </Label>
                                     <Editor
                                         key={`${securityTip?.id ?? 'new'}-en`}
                                         initialContent={
@@ -265,7 +315,12 @@ export default function SecurityTipForm({
                     {showStatusField ? (
                         <div className="app-panel space-y-4 p-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="status">Statut</Label>
+                                <Label htmlFor="status">
+                                    {uiText(
+                                        'ui.components.text_dee377cfd8cd',
+                                        'Statut',
+                                    )}
+                                </Label>
                                 <SearchableSelect
                                     id="status"
                                     options={statusOptions}
@@ -273,19 +328,34 @@ export default function SecurityTipForm({
                                     onChange={(status) =>
                                         updateField('status', status)
                                     }
-                                    placeholder="Sélectionner un statut"
-                                    searchPlaceholder="Rechercher..."
+                                    placeholder={uiText(
+                                        'ui.components.text_1d07b91ad3dd',
+                                        'Sélectionner un statut',
+                                    )}
+                                    searchPlaceholder={uiText(
+                                        'ui.components.text_8984247e3f42',
+                                        'Rechercher...',
+                                    )}
                                     disabled={
                                         !canApprove &&
                                         formData.status === 'published'
                                     }
                                 />
-                                <p className="text-muted-foreground text-xs">
+                                <p className="text-xs text-muted-foreground">
                                     {canApprove
-                                        ? 'Modifiez le statut pour valider, refuser ou republier le conseil.'
+                                        ? uiText(
+                                              'ui.components.text_48bb84b0ce31',
+                                              'Modifiez le statut pour valider, refuser ou republier le conseil.',
+                                          )
                                         : formData.status === 'published'
-                                          ? 'Ce conseil est publié. Seul un administrateur peut modifier son statut.'
-                                          : 'Soumettez à nouveau pour validation ou enregistrez en brouillon.'}
+                                          ? uiText(
+                                                'ui.components.text_0a9a4c480f7d',
+                                                'Ce conseil est publié. Seul un administrateur peut modifier son statut.',
+                                            )
+                                          : uiText(
+                                                'ui.components.text_da4b70be5d41',
+                                                'Soumettez à nouveau pour validation ou enregistrez en brouillon.',
+                                            )}
                                 </p>
                                 <InputError message={errors.status} />
                             </div>
@@ -293,22 +363,35 @@ export default function SecurityTipForm({
                     ) : (
                         <div className="app-panel space-y-2 p-6">
                             <p className="text-sm font-medium">
-                                Soumission automatique
+                                {uiText(
+                                    'ui.components.text_96e1742418d4',
+                                    'Soumission automatique',
+                                )}
                             </p>
-                            <p className="text-muted-foreground text-xs">
-                                Le conseil sera enregistré en attente de
-                                validation par un administrateur.
+                            <p className="text-xs text-muted-foreground">
+                                {uiText(
+                                    'ui.components.text_9dbb5563662a',
+                                    'Le conseil sera enregistré en attente de validation par un administrateur.',
+                                )}
                             </p>
                         </div>
                     )}
 
                     <div className="app-panel space-y-4 p-6">
-                        <Label htmlFor="image">Image principale</Label>
+                        <Label htmlFor="image">
+                            {uiText(
+                                'ui.components.text_697915fdf014',
+                                'Image principale',
+                            )}
+                        </Label>
                         {imagePreview ? (
                             <div className="relative overflow-hidden rounded-lg">
                                 <img
                                     src={imagePreview}
-                                    alt="Aperçu"
+                                    alt={uiText(
+                                        'ui.components.text_bb28a9f4a4e3',
+                                        'Aperçu',
+                                    )}
                                     className="h-48 w-full object-cover"
                                 />
                                 <Button
@@ -321,7 +404,10 @@ export default function SecurityTipForm({
                                         updateField('image', null);
                                     }}
                                 >
-                                    Retirer
+                                    {uiText(
+                                        'ui.components.text_41e22ed93372',
+                                        'Retirer',
+                                    )}
                                 </Button>
                             </div>
                         ) : (
@@ -337,7 +423,12 @@ export default function SecurityTipForm({
 
                     <div className="app-panel space-y-4 p-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="category">Catégorie</Label>
+                            <Label htmlFor="category">
+                                {uiText(
+                                    'ui.components.text_68a5341fc6bd',
+                                    'Catégorie',
+                                )}
+                            </Label>
                             <Input
                                 id="category"
                                 value={formData.category}
@@ -349,14 +440,22 @@ export default function SecurityTipForm({
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="tags">Tags</Label>
+                            <Label htmlFor="tags">
+                                {uiText(
+                                    'ui.components.text_1331275bc537',
+                                    'Tags',
+                                )}
+                            </Label>
                             <Input
                                 id="tags"
                                 value={formData.tags}
                                 onChange={(e) =>
                                     updateField('tags', e.target.value)
                                 }
-                                placeholder="Séparez les tags par des virgules"
+                                placeholder={uiText(
+                                    'ui.components.text_e6bd3117bd55',
+                                    'Séparez les tags par des virgules',
+                                )}
                             />
                             <InputError message={errors.tags} />
                         </div>
@@ -369,11 +468,19 @@ export default function SecurityTipForm({
                                     id="featured"
                                     checked={formData.featured}
                                     onCheckedChange={(checked) =>
-                                        updateField('featured', checked === true)
+                                        updateField(
+                                            'featured',
+                                            checked === true,
+                                        )
                                     }
                                     disabled={formData.status !== 'published'}
                                 />
-                                <Label htmlFor="featured">Mettre à la une</Label>
+                                <Label htmlFor="featured">
+                                    {uiText(
+                                        'ui.components.text_2933e1ef6d3c',
+                                        'Mettre à la une',
+                                    )}
+                                </Label>
                             </div>
                             <InputError message={errors.featured} />
                         </div>
@@ -383,14 +490,20 @@ export default function SecurityTipForm({
                         <div className="app-panel space-y-4 p-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="published_at">
-                                    Date de publication
+                                    {uiText(
+                                        'ui.components.text_dbfb83c3b23c',
+                                        'Date de publication',
+                                    )}
                                 </Label>
                                 <Input
                                     id="published_at"
                                     type="date"
                                     value={formData.published_at}
                                     onChange={(e) =>
-                                        updateField('published_at', e.target.value)
+                                        updateField(
+                                            'published_at',
+                                            e.target.value,
+                                        )
                                     }
                                 />
                                 <InputError message={errors.published_at} />
@@ -402,11 +515,18 @@ export default function SecurityTipForm({
 
             <div className="flex justify-end gap-3">
                 <Button type="button" variant="outline" asChild>
-                    <Link href={cancelHref}>Annuler</Link>
+                    <Link href={cancelHref}>
+                        {uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
+                    </Link>
                 </Button>
                 <Button type="submit" disabled={processing}>
                     <Save className="size-4" aria-hidden />
-                    {processing ? 'Enregistrement...' : submitLabel}
+                    {processing
+                        ? uiText(
+                              'ui.components.text_3cea1e964cdc',
+                              'Enregistrement...',
+                          )
+                        : submitLabel}
                 </Button>
             </div>
         </form>

@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -30,6 +31,8 @@ export default function AddContactDialog({
     listUuid,
     availableContacts,
 }: AddContactDialogProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [open, setOpen] = useState(false);
     const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
 
@@ -57,15 +60,25 @@ export default function AddContactDialog({
             <DialogTrigger asChild>
                 <Button type="button">
                     <Plus className="size-4" aria-hidden />
-                    Ajouter des contacts
+                    {uiText(
+                        'ui.components.text_07a06f50446d',
+                        'Ajouter des contacts',
+                    )}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Ajouter des contacts</DialogTitle>
+                    <DialogTitle>
+                        {uiText(
+                            'ui.components.text_07a06f50446d',
+                            'Ajouter des contacts',
+                        )}
+                    </DialogTitle>
                     <DialogDescription>
-                        Recherchez puis sélectionnez un ou plusieurs contacts à inclure dans
-                        ce groupe.
+                        {uiText(
+                            'ui.components.text_b8529fbdcfe6',
+                            'Recherchez puis sélectionnez un ou plusieurs contacts à inclure dans ce groupe.',
+                        )}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -82,16 +95,30 @@ export default function AddContactDialog({
                     {({ processing }) => (
                         <>
                             <div className="space-y-2">
-                                <Label htmlFor="contact_uuids">Contacts</Label>
+                                <Label htmlFor="contact_uuids">
+                                    {uiText(
+                                        'ui.components.text_b450645debe2',
+                                        'Contacts',
+                                    )}
+                                </Label>
                                 <SearchableMultiSelect
                                     id="contact_uuids"
                                     name="contact_uuids"
                                     options={options}
                                     value={selectedContacts}
                                     onChange={setSelectedContacts}
-                                    placeholder="Sélectionner des contacts…"
-                                    searchPlaceholder="Rechercher par nom ou e-mail…"
-                                    emptyMessage="Aucun contact disponible"
+                                    placeholder={uiText(
+                                        'ui.components.text_448668bcbddc',
+                                        'Sélectionner des contacts…',
+                                    )}
+                                    searchPlaceholder={uiText(
+                                        'ui.components.text_46b23b86fcce',
+                                        'Rechercher par nom ou e-mail…',
+                                    )}
+                                    emptyMessage={uiText(
+                                        'ui.components.text_e510937c4356',
+                                        'Aucun contact disponible',
+                                    )}
                                 />
                             </div>
 
@@ -101,7 +128,10 @@ export default function AddContactDialog({
                                     variant="outline"
                                     onClick={() => setOpen(false)}
                                 >
-                                    Annuler
+                                    {uiText(
+                                        'ui.components.text_46ad3916f6a0',
+                                        'Annuler',
+                                    )}
                                 </Button>
                                 <Button
                                     type="submit"
@@ -113,7 +143,10 @@ export default function AddContactDialog({
                                 >
                                     {selectedContacts.length > 1
                                         ? `Ajouter (${selectedContacts.length})`
-                                        : 'Ajouter'}
+                                        : uiText(
+                                              'ui.components.text_00f9c5334547',
+                                              'Ajouter',
+                                          )}
                                 </Button>
                             </DialogFooter>
                         </>

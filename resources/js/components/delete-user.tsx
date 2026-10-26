@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
@@ -17,20 +18,33 @@ import {
 import { Label } from '@/components/ui/label';
 
 export default function DeleteUser() {
+    const { t: uiText } = useUiTranslations();
+
     const passwordInput = useRef<HTMLInputElement>(null);
 
     return (
         <div className="space-y-6">
             <Heading
                 variant="small"
-                title="Supprimer le compte"
-                description="Supprimez définitivement votre compte et toutes vos données"
+                title={uiText(
+                    'ui.components.text_d2d80f8122e6',
+                    'Supprimer le compte',
+                )}
+                description={uiText(
+                    'ui.components.text_9ed453ccae42',
+                    'Supprimez définitivement votre compte et toutes vos données',
+                )}
             />
             <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4">
                 <div className="relative space-y-0.5 text-red-600">
-                    <p className="font-medium">Attention</p>
+                    <p className="font-medium">
+                        {uiText('ui.components.text_c2eb8cd9d956', 'Attention')}
+                    </p>
                     <p className="text-sm">
-                        Cette action est irréversible. Procédez avec prudence.
+                        {uiText(
+                            'ui.components.text_c45386b35889',
+                            'Cette action est irréversible. Procédez avec prudence.',
+                        )}
                     </p>
                 </div>
 
@@ -40,17 +54,24 @@ export default function DeleteUser() {
                             variant="destructive"
                             data-test="delete-user-button"
                         >
-                            Supprimer le compte
+                            {uiText(
+                                'ui.components.text_d2d80f8122e6',
+                                'Supprimer le compte',
+                            )}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogTitle>
-                            Confirmer la suppression du compte ?
+                            {uiText(
+                                'ui.components.text_f9435d3e7239',
+                                'Confirm account deletion?',
+                            )}
                         </DialogTitle>
                         <DialogDescription>
-                            Une fois votre compte supprimé, toutes vos données
-                            seront définitivement effacées. Saisissez votre mot
-                            de passe pour confirmer.
+                            {uiText(
+                                'ui.components.text_fc3e41e0cded',
+                                'Une fois votre compte supprimé, toutes vos données seront définitivement effacées. Saisissez votre mot de passe pour confirmer.',
+                            )}
                         </DialogDescription>
 
                         <Form
@@ -69,14 +90,20 @@ export default function DeleteUser() {
                                             htmlFor="password"
                                             className="sr-only"
                                         >
-                                            Mot de passe
+                                            {uiText(
+                                                'ui.components.text_ff9c8b8c0677',
+                                                'Mot de passe',
+                                            )}
                                         </Label>
 
                                         <PasswordInput
                                             id="password"
                                             name="password"
                                             ref={passwordInput}
-                                            placeholder="Mot de passe"
+                                            placeholder={uiText(
+                                                'ui.components.text_ff9c8b8c0677',
+                                                'Mot de passe',
+                                            )}
                                             autoComplete="current-password"
                                         />
 
@@ -91,7 +118,10 @@ export default function DeleteUser() {
                                                     resetAndClearErrors()
                                                 }
                                             >
-                                                Annuler
+                                                {uiText(
+                                                    'ui.components.text_46ad3916f6a0',
+                                                    'Annuler',
+                                                )}
                                             </Button>
                                         </DialogClose>
 
@@ -104,7 +134,10 @@ export default function DeleteUser() {
                                                 type="submit"
                                                 data-test="confirm-delete-user-button"
                                             >
-                                                Supprimer le compte
+                                                {uiText(
+                                                    'ui.components.text_d2d80f8122e6',
+                                                    'Supprimer le compte',
+                                                )}
                                             </button>
                                         </Button>
                                     </DialogFooter>

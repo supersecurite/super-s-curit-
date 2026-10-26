@@ -34,9 +34,7 @@ type PageProps = {
     tab: UserFormTab;
 };
 
-function roleBadgeVariant(
-    role: string,
-): 'default' | 'secondary' | 'outline' {
+function roleBadgeVariant(role: string): 'default' | 'secondary' | 'outline' {
     if (role === 'super_admin') {
         return 'default';
     }
@@ -62,7 +60,7 @@ function formatCreatedAt(value: string | null, locale: string): string | null {
         return null;
     }
 
-    return new Date(value).toLocaleDateString(locale === 'en' ? 'en-US' : 'fr-FR', {
+    return new Date(value).toLocaleDateString(locale, {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
@@ -97,7 +95,10 @@ export default function UsersEdit() {
             value: 'security',
             label: t('users.tab_security', 'Sécurité'),
             icon: KeyRound,
-            description: t('users.tab_security_desc', 'E-mails et mot de passe'),
+            description: t(
+                'users.tab_security_desc',
+                'E-mails et mot de passe',
+            ),
         },
     ];
 
@@ -138,8 +139,8 @@ export default function UsersEdit() {
                 ? [
                       {
                           title:
-                              tabs.find((item) => item.value === tab)
-                                  ?.label ?? t('settings.profile_title', 'Profil'),
+                              tabs.find((item) => item.value === tab)?.label ??
+                              t('settings.profile_title', 'Profil'),
                           href: edit.url(user.uuid, { query: { tab } }),
                       },
                   ]
@@ -188,14 +189,14 @@ export default function UsersEdit() {
 
                 <div className="app-panel flex flex-col gap-5 p-6 sm:flex-row sm:items-center">
                     <Avatar className="size-16 border-2 border-super-securite-accent/20">
-                        <AvatarFallback className="bg-primary/10 text-primary font-heading text-lg font-semibold">
+                        <AvatarFallback className="bg-primary/10 font-heading text-lg font-semibold text-primary">
                             {userInitials(user.name)}
                         </AvatarFallback>
                     </Avatar>
 
                     <div className="min-w-0 flex-1 space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
-                            <h1 className="font-heading truncate text-2xl font-semibold tracking-tight">
+                            <h1 className="truncate font-heading text-2xl font-semibold tracking-tight">
                                 {user.name}
                             </h1>
                             <Badge variant={roleBadgeVariant(user.role)}>
@@ -203,9 +204,12 @@ export default function UsersEdit() {
                             </Badge>
                         </div>
 
-                        <div className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
                             <span className="inline-flex items-center gap-1.5">
-                                <Mail className="size-3.5 shrink-0" aria-hidden />
+                                <Mail
+                                    className="size-3.5 shrink-0"
+                                    aria-hidden
+                                />
                                 {user.email}
                             </span>
                             {user.phone ? (
@@ -219,7 +223,7 @@ export default function UsersEdit() {
                             ) : null}
                         </div>
 
-                        <p className="text-muted-foreground font-mono text-xs">
+                        <p className="font-mono text-xs text-muted-foreground">
                             {user.uuid}
                             {createdAt ? ` · Créé le ${createdAt}` : ''}
                         </p>
@@ -227,7 +231,7 @@ export default function UsersEdit() {
                 </div>
 
                 <nav
-                    className="border-border flex gap-1 overflow-x-auto border-b"
+                    className="flex gap-1 overflow-x-auto border-b border-border"
                     aria-label="Sections utilisateur"
                 >
                     {tabs.map(({ value, label, icon: Icon, description }) => {
@@ -242,7 +246,7 @@ export default function UsersEdit() {
                                     'flex min-w-[9rem] cursor-pointer flex-col items-start gap-0.5 border-b-2 px-4 py-3 text-left transition-colors',
                                     isActive
                                         ? 'border-super-securite-accent text-foreground'
-                                        : 'text-muted-foreground hover:text-foreground border-transparent',
+                                        : 'border-transparent text-muted-foreground hover:text-foreground',
                                 )}
                                 aria-current={isActive ? 'page' : undefined}
                             >

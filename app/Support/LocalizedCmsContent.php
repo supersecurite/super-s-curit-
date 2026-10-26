@@ -41,7 +41,7 @@ final class LocalizedCmsContent
             'title' => (string) $model->title,
             'excerpt' => $model->excerpt,
             'content' => $model->content,
-            'is_fallback' => $wantsEnglish,
+            'is_fallback' => $locale !== LocaleUrl::defaultLocale(),
             'has_english' => $hasEnglish,
         ];
     }

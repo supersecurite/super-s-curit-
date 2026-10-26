@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -17,6 +18,8 @@ export default function MarketingContentPreviewCard({
     readLabel,
     fallbackIcon: FallbackIcon,
 }: MarketingContentPreviewCardProps) {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
             <div className="relative aspect-video overflow-hidden">
@@ -49,7 +52,8 @@ export default function MarketingContentPreviewCard({
                     ) : null}
                     <span className="flex items-center gap-1">
                         <Clock className="size-4" aria-hidden />
-                        {item.read_time} min
+                        {item.read_time}{' '}
+                        {uiText('ui.components.text_1f6fa6f69d18', 'min')}
                     </span>
                 </div>
 

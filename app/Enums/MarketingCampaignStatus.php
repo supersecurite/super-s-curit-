@@ -13,14 +13,14 @@ enum MarketingCampaignStatus: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.MarketingCampaignStatus.'.$this->name, [], match ($this) {
             self::Draft => 'Brouillon',
             self::Scheduled => 'Planifiée',
             self::Queued => 'En file',
             self::Sending => 'Envoi en cours',
             self::Completed => 'Terminée',
             self::Failed => 'Échec',
-        };
+        });
     }
 
     public function isEditable(): bool

@@ -107,7 +107,7 @@ final class LocalizedSeo
             return $default;
         }
 
-        return config('seo_en.'.$key, $default);
+        return config('seo_'.app()->getLocale().'.'.$key, $default);
     }
 
     /**

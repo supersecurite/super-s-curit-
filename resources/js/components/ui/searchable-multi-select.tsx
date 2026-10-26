@@ -1,3 +1,4 @@
+import { useTrans } from '@/hooks/use-trans';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
@@ -33,13 +34,14 @@ export function SearchableMultiSelect({
     options,
     value,
     defaultValue = [],
-    placeholder = 'Sélectionner…',
-    searchPlaceholder = 'Rechercher…',
-    emptyMessage = 'Aucun résultat',
+    placeholder,
+    searchPlaceholder,
+    emptyMessage,
     disabled = false,
     className,
     onChange,
 }: SearchableMultiSelectProps) {
+    const { t } = useTrans();
     const listId = useId();
     const containerRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
@@ -145,8 +147,8 @@ export function SearchableMultiSelect({
             >
                 <span className="text-muted-foreground truncate text-left">
                     {selectedOptions.length > 0
-                        ? `${selectedOptions.length} sélectionné${selectedOptions.length > 1 ? 's' : ''}`
-                        : placeholder}
+                        ? t('ui.selected_count', { count: selectedOptions.length })
+                        : (placeholder ?? t('ui.select', 'Sélectionner…'))}
                 </span>
                 <ChevronsUpDown className="size-4 shrink-0 opacity-50" aria-hidden />
             </Button>
@@ -164,7 +166,7 @@ export function SearchableMultiSelect({
                                 type="button"
                                 className="hover:text-foreground rounded-sm opacity-70 hover:opacity-100"
                                 onClick={() => remove(option.value)}
-                                aria-label={`Retirer ${option.label}`}
+                                aria-label={`${t('ui.remove', 'Retirer')} ${option.label}`}
                                 disabled={disabled}
                             >
                                 <X className="size-3" aria-hidden />
@@ -184,14 +186,14 @@ export function SearchableMultiSelect({
                             ref={searchRef}
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={searchPlaceholder}
+                            placeholder={searchPlaceholder ?? t('ui.search', 'Rechercher…')}
                             className="h-8"
                         />
                     </div>
                     <ul className="max-h-56 overflow-y-auto p-1">
                         {filteredOptions.length === 0 ? (
                             <li className="text-muted-foreground px-2 py-3 text-center text-sm">
-                                {emptyMessage}
+                                {emptyMessage ?? t('ui.no_results', 'Aucun résultat')}
                             </li>
                         ) : (
                             filteredOptions.map((option) => {

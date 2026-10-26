@@ -11,12 +11,12 @@ enum UserRole: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.UserRole.'.$this->name, [], match ($this) {
             self::SuperAdmin => 'Super administrateur',
             self::Admin => 'Administrateur',
             self::Commercial => 'Commercial',
             self::User => 'Utilisateur',
-        };
+        });
     }
 
     public function isAdmin(): bool

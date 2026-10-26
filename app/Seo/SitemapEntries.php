@@ -111,7 +111,7 @@ class SitemapEntries
             }
 
             foreach (LocaleUrl::supported() as $locale) {
-                if (LocaleUrl::isDefault($locale)) {
+                if ($locale !== 'en') {
                     continue;
                 }
 

@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { CalendarClock, Send } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -40,6 +41,8 @@ export default function CampaignLaunchDialog({
     triggerSize = 'default',
     triggerLabel = 'Lancer la campagne',
 }: CampaignLaunchDialogProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState<LaunchMode>('now');
     const [processing, setProcessing] = useState(false);
@@ -84,9 +87,15 @@ export default function CampaignLaunchDialog({
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Lancer « {campaignName} »</DialogTitle>
+                    <DialogTitle>
+                        {uiText('ui.components.text_d2aa0156582f', 'Lancer «')}{' '}
+                        {campaignName} »
+                    </DialogTitle>
                     <DialogDescription>
-                        Envoyez immédiatement ou planifiez le lancement à une date future.
+                        {uiText(
+                            'ui.components.text_d00449ae99a7',
+                            'Envoyez immédiatement ou planifiez le lancement à une date future.',
+                        )}{' '}
                         {scheduledAtFormatted
                             ? ` Planification actuelle : ${scheduledAtFormatted}.`
                             : ''}
@@ -106,10 +115,16 @@ export default function CampaignLaunchDialog({
                         >
                             <span className="flex items-center gap-2 font-medium">
                                 <Send className="size-4" aria-hidden />
-                                Maintenant
+                                {uiText(
+                                    'ui.components.text_4303250da364',
+                                    'Maintenant',
+                                )}
                             </span>
-                            <span className="text-muted-foreground mt-1 block text-xs">
-                                Met les envois en file immédiatement.
+                            <span className="mt-1 block text-xs text-muted-foreground">
+                                {uiText(
+                                    'ui.components.text_b16f391d4c72',
+                                    'Met les envois en file immédiatement.',
+                                )}
                             </span>
                         </button>
                         <button
@@ -123,23 +138,36 @@ export default function CampaignLaunchDialog({
                         >
                             <span className="flex items-center gap-2 font-medium">
                                 <CalendarClock className="size-4" aria-hidden />
-                                Planifier
+                                {uiText(
+                                    'ui.components.text_2a858768800f',
+                                    'Planifier',
+                                )}
                             </span>
-                            <span className="text-muted-foreground mt-1 block text-xs">
-                                Choisir une date et une heure de lancement.
+                            <span className="mt-1 block text-xs text-muted-foreground">
+                                {uiText(
+                                    'ui.components.text_503fac4deae5',
+                                    'Choisir une date et une heure de lancement.',
+                                )}
                             </span>
                         </button>
                     </div>
 
                     {mode === 'schedule' ? (
                         <div className="space-y-2">
-                            <Label htmlFor="scheduled_at">Date et heure</Label>
+                            <Label htmlFor="scheduled_at">
+                                {uiText(
+                                    'ui.components.text_4891cd042a20',
+                                    'Date et heure',
+                                )}
+                            </Label>
                             <Input
                                 id="scheduled_at"
                                 type="datetime-local"
                                 value={scheduledAt}
                                 min={toLocalDateTimeValue(new Date())}
-                                onChange={(event) => setScheduledAt(event.target.value)}
+                                onChange={(event) =>
+                                    setScheduledAt(event.target.value)
+                                }
                                 required
                             />
                         </div>
@@ -153,18 +181,29 @@ export default function CampaignLaunchDialog({
                         onClick={() => setOpen(false)}
                         disabled={processing}
                     >
-                        Annuler
+                        {uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
                     </Button>
                     <Button
                         type="button"
                         onClick={handleSubmit}
-                        disabled={processing || (mode === 'schedule' && !scheduledAt)}
+                        disabled={
+                            processing || (mode === 'schedule' && !scheduledAt)
+                        }
                     >
                         {processing
-                            ? 'En cours…'
+                            ? uiText(
+                                  'ui.components.text_2e64da4c8af7',
+                                  'En cours…',
+                              )
                             : mode === 'schedule'
-                              ? 'Planifier'
-                              : 'Lancer maintenant'}
+                              ? uiText(
+                                    'ui.components.text_2a858768800f',
+                                    'Planifier',
+                                )
+                              : uiText(
+                                    'ui.components.text_0a1fcd4be879',
+                                    'Lancer maintenant',
+                                )}
                     </Button>
                 </DialogFooter>
             </DialogContent>

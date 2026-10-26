@@ -10,9 +10,9 @@ enum AccessLogKind: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.AccessLogKind.'.$this->name, [], match ($this) {
             self::Visit => 'Consultation',
             self::Action => 'Action',
-        };
+        });
     }
 }

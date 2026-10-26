@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import {
     useCallback,
     useEffect,
@@ -33,6 +34,8 @@ export default function TemplateSubjectInput({
     placeholder,
     required = false,
 }: TemplateSubjectInputProps) {
+    const { t: uiText } = useUiTranslations();
+
     const inputRef = useRef<HTMLInputElement>(null);
     const [query, setQuery] = useState<string | null>(null);
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -55,7 +58,9 @@ export default function TemplateSubjectInput({
             const input = inputRef.current;
 
             if (!input) {
-                onChange(`${value}${formatMarketingTemplateVariable(variable)}`);
+                onChange(
+                    `${value}${formatMarketingTemplateVariable(variable)}`,
+                );
                 return;
             }
 
@@ -100,7 +105,10 @@ export default function TemplateSubjectInput({
 
     const handleChange = (nextValue: string) => {
         onChange(nextValue);
-        syncAutocomplete(nextValue, inputRef.current?.selectionStart ?? nextValue.length);
+        syncAutocomplete(
+            nextValue,
+            inputRef.current?.selectionStart ?? nextValue.length,
+        );
     };
 
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -117,7 +125,8 @@ export default function TemplateSubjectInput({
         if (event.key === 'ArrowUp') {
             event.preventDefault();
             setHighlightedIndex(
-                (index) => (index - 1 + suggestions.length) % suggestions.length,
+                (index) =>
+                    (index - 1 + suggestions.length) % suggestions.length,
             );
             return;
         }
@@ -166,14 +175,15 @@ export default function TemplateSubjectInput({
                 />
 
                 {query !== null && suggestions.length > 0 ? (
-                    <ul className="bg-popover text-popover-foreground absolute z-20 mt-1 w-full overflow-hidden rounded-md border shadow-md">
+                    <ul className="absolute z-20 mt-1 w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md">
                         {suggestions.map((variable, index) => (
                             <li key={variable}>
                                 <button
                                     type="button"
                                     className={cn(
                                         'flex w-full items-center gap-2 px-3 py-2 text-left font-mono text-sm',
-                                        index === highlightedIndex && 'bg-accent',
+                                        index === highlightedIndex &&
+                                            'bg-accent',
                                     )}
                                     onMouseDown={(event) => {
                                         event.preventDefault();
@@ -181,8 +191,12 @@ export default function TemplateSubjectInput({
                                     }}
                                 >
                                     {formatMarketingTemplateVariable(variable)}
-                                    <span className="text-muted-foreground font-sans text-xs">
-                                        {MARKETING_TEMPLATE_VARIABLE_LABELS[variable]}
+                                    <span className="font-sans text-xs text-muted-foreground">
+                                        {
+                                            MARKETING_TEMPLATE_VARIABLE_LABELS[
+                                                variable
+                                            ]
+                                        }
                                     </span>
                                 </button>
                             </li>
@@ -192,14 +206,17 @@ export default function TemplateSubjectInput({
             </div>
 
             {value ? (
-                <p className="text-muted-foreground text-xs">
-                    Aperçu :{' '}
+                <p className="text-xs text-muted-foreground">
+                    {uiText('ui.components.text_96465fa1029a', 'Aperçu :')}{' '}
                     {previewParts.map((part, index) => {
                         const match = part.match(/^\{\{([a-z_]+)\}\}$/);
 
                         if (match) {
                             return (
-                                <span key={`${part}-${index}`} className={variableTokenClassName()}>
+                                <span
+                                    key={`${part}-${index}`}
+                                    className={variableTokenClassName()}
+                                >
                                     {part}
                                 </span>
                             );
@@ -215,7 +232,10 @@ export default function TemplateSubjectInput({
                     <button
                         key={variable}
                         type="button"
-                        className={cn(variableTokenClassName(), 'cursor-pointer hover:bg-primary/25')}
+                        className={cn(
+                            variableTokenClassName(),
+                            'cursor-pointer hover:bg-primary/25',
+                        )}
                         onClick={() => insertVariable(variable)}
                         title={MARKETING_TEMPLATE_VARIABLE_LABELS[variable]}
                     >

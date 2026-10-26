@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { usePasskeyRegister } from '@laravel/passkeys/react';
 import { useState } from 'react';
 import InputError from '@/components/input-error';
@@ -10,6 +11,8 @@ type Props = {
 };
 
 export default function PasskeyRegistration({ onSuccess }: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const [name, setName] = useState(() => {
         const ua = navigator.userAgent;
 
@@ -51,7 +54,10 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
     if (!isSupported) {
         return (
             <div className="text-sm text-muted-foreground">
-                Passkeys are not supported in this browser.
+                {uiText(
+                    'ui.components.text_820494bb9a60',
+                    "Ce navigateur ne prend pas en charge les clés d'accès.",
+                )}
             </div>
         );
     }
@@ -59,7 +65,10 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
     if (!showForm) {
         return (
             <Button variant="outline" onClick={() => setShowForm(true)}>
-                Add passkey
+                {uiText(
+                    'ui.components.text_ffc92f64f0e4',
+                    "Ajouter une clé d'accès",
+                )}
             </Button>
         );
     }
@@ -70,18 +79,26 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
             className="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
         >
             <div className="grid gap-2">
-                <Label htmlFor="passkey-name">Passkey name</Label>
+                <Label htmlFor="passkey-name">
+                    {uiText('ui.components.text_30a3a952bf7c', 'Nom de la clé')}
+                </Label>
                 <Input
                     id="passkey-name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g., MacBook Pro, iPhone"
+                    placeholder={uiText(
+                        'ui.components.text_95b54ce65c8b',
+                        'Par exemple : MacBook Pro, iPhone',
+                    )}
                     className="mt-1 block w-full border-foreground/20"
                     autoFocus
                 />
                 <p className="text-xs text-muted-foreground">
-                    A name helps you identify this passkey later.
+                    {uiText(
+                        'ui.components.text_33e15b41872d',
+                        "Ce nom vous permettra d'identifier cette clé.",
+                    )}
                 </p>
             </div>
 
@@ -89,10 +106,18 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
 
             <div className="flex gap-2">
                 <Button type="submit" disabled={isLoading || !name.trim()}>
-                    {isLoading ? 'Registering...' : 'Register passkey'}
+                    {isLoading
+                        ? uiText(
+                              'ui.components.text_9ef767a32782',
+                              'Enregistrement…',
+                          )
+                        : uiText(
+                              'ui.components.text_4cc2cdac74f2',
+                              "Enregistrer une clé d'accès",
+                          )}
                 </Button>
                 <Button type="button" variant="ghost" onClick={handleCancel}>
-                    Cancel
+                    {uiText('ui.components.text_19766ed6ccb2', 'Annuler')}
                 </Button>
             </div>
         </form>

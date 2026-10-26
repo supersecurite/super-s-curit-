@@ -1,0 +1,41 @@
+<?php
+
+return [
+    'required' => ':attribute 为必填项。',
+    'email' => ':attribute 必须为有效的电子邮箱。',
+    'string' => ':attribute 必须是文本。',
+    'numeric' => ':attribute 必须是数字。',
+    'integer' => ':attribute 必须是整数。',
+    'confirmed' => ':attribute 两次输入不一致。',
+    'unique' => ':attribute 已被使用。',
+    'in' => '所选 :attribute 无效。',
+    'exists' => '所选 :attribute 无效。',
+    'accepted' => '必须接受 :attribute。',
+    'max' => [
+        'string' => ':attribute 不能超过 :max 个字符。',
+        'file' => ':attribute 不能超过 :max KB。',
+        'numeric' => ':attribute 不能超过 :max。',
+        'array' => ':attribute 不能超过 :max 项。',
+    ],
+    'min' => [
+        'string' => ':attribute 至少需要 :min 个字符。',
+        'numeric' => ':attribute 至少为 :min。',
+    ],
+    'attributes' => [
+        'title' => '标题',
+        'status' => '状态',
+        'excerpt' => '摘要',
+        'content' => '正文',
+        'image' => '图片',
+        'category' => '分类',
+        'tags' => '标签',
+        'featured' => '精选',
+        'published_at' => '发布日期',
+        'name' => '名称',
+        'email' => '电子邮箱',
+        'phone' => '电话',
+        'role' => '角色',
+        'password' => '密码',
+        'internal_notes' => '内部备注',
+    ],
+];

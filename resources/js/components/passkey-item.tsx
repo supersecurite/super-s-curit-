@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { KeyRound, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,8 @@ type Props = {
 };
 
 export default function PasskeyItem({ passkey, onDelete }: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = () => {
@@ -43,13 +46,18 @@ export default function PasskeyItem({ passkey, onDelete }: Props) {
                         )}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                        Added {passkey.created_at_diff}
+                        {uiText('ui.components.text_6b02e0d363a4', 'Ajoutée')}{' '}
+                        {passkey.created_at_diff}
                         {passkey.last_used_at_diff && (
                             <>
                                 <span className="mx-1 text-muted-foreground/50">
                                     /
                                 </span>
-                                Last used {passkey.last_used_at_diff}
+                                {uiText(
+                                    'ui.components.text_830ec7f812f9',
+                                    'Dernière utilisation',
+                                )}{' '}
+                                {passkey.last_used_at_diff}
                             </>
                         )}
                     </p>
@@ -64,26 +72,55 @@ export default function PasskeyItem({ passkey, onDelete }: Props) {
                         className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                     >
                         <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Remove</span>
+                        <span className="sr-only">
+                            {uiText(
+                                'ui.components.text_c3812fc4acb8',
+                                'Retirer',
+                            )}
+                        </span>
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
-                    <DialogTitle>Remove passkey</DialogTitle>
+                    <DialogTitle>
+                        {uiText(
+                            'ui.components.text_9541dec2bd74',
+                            "Supprimer la clé d'accès",
+                        )}
+                    </DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to remove the "{passkey.name}"
-                        passkey? You will no longer be able to use it to sign
-                        in.
+                        {uiText(
+                            'ui.components.text_1b8921b6ade5',
+                            'Voulez-vous supprimer la clé «',
+                        )}{' '}
+                        {passkey.name}{' '}
+                        {uiText(
+                            'ui.components.text_a54a9780ea13',
+                            "» ? Vous ne pourrez plus l'utiliser pour vous connecter.",
+                        )}
                     </DialogDescription>
                     <DialogFooter className="gap-2">
                         <DialogClose asChild>
-                            <Button variant="secondary">Cancel</Button>
+                            <Button variant="secondary">
+                                {uiText(
+                                    'ui.components.text_19766ed6ccb2',
+                                    'Annuler',
+                                )}
+                            </Button>
                         </DialogClose>
                         <Button
                             variant="destructive"
                             onClick={handleDelete}
                             disabled={isDeleting}
                         >
-                            {isDeleting ? 'Removing...' : 'Remove passkey'}
+                            {isDeleting
+                                ? uiText(
+                                      'ui.components.text_60d18e42fd5a',
+                                      'Suppression…',
+                                  )
+                                : uiText(
+                                      'ui.components.text_9541dec2bd74',
+                                      "Supprimer la clé d'accès",
+                                  )}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

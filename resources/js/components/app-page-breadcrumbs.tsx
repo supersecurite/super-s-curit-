@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Link } from '@inertiajs/react';
 import { ChevronRight, Home } from 'lucide-react';
 import { Fragment } from 'react';
@@ -15,6 +16,8 @@ export function AppPageBreadcrumbs({
     breadcrumbs,
     className,
 }: AppPageBreadcrumbsProps) {
+    const { t: uiText } = useUiTranslations();
+
     if (breadcrumbs.length === 0) {
         return null;
     }
@@ -41,7 +44,10 @@ export function AppPageBreadcrumbs({
                     prefetch
                     onClick={showNavigationLoader}
                     className="group flex size-8 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background/80 text-muted-foreground shadow-xs transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
-                    aria-label="Tableau de bord"
+                    aria-label={uiText(
+                        'ui.components.text_ac0e5fc936ad',
+                        'Tableau de bord',
+                    )}
                 >
                     <Home className="size-4 transition-transform group-hover:scale-105" />
                 </Link>
@@ -49,8 +55,11 @@ export function AppPageBreadcrumbs({
                 <div className="hidden h-5 w-px shrink-0 bg-border/70 sm:block" />
 
                 <nav
-                    aria-label="Fil d'Ariane"
-                    className="min-w-0 flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    aria-label={uiText(
+                        'ui.components.text_69bee433c010',
+                        "Fil d'Ariane",
+                    )}
+                    className="min-w-0 flex-1 [scrollbar-width:none] overflow-x-auto [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 >
                     <ol className="flex min-w-max items-center gap-1 text-sm">
                         {breadcrumbs.map((item, index) => {
@@ -84,9 +93,7 @@ export function AppPageBreadcrumbs({
                                             <Link
                                                 href={item.href}
                                                 prefetch
-                                                onClick={
-                                                    showNavigationLoader
-                                                }
+                                                onClick={showNavigationLoader}
                                                 className="inline-flex max-w-[10rem] truncate rounded-md px-2 py-1 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:max-w-[12rem]"
                                             >
                                                 {item.title}

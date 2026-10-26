@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import CampaignAudiencePanel, {
@@ -109,28 +110,38 @@ export default function MarketingCampaignForm({
     variables,
     method = 'post',
 }: MarketingCampaignFormProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [formData, setFormData] = useState({
         name: campaign?.name ?? '',
         channel: lockedChannel,
         list_uuids: campaign?.list_uuids ?? [],
         contact_uuids: campaign?.contact_uuids ?? [],
-        marketing_message_template_id: campaign?.marketing_message_template_id ?? null,
+        marketing_message_template_id:
+            campaign?.marketing_message_template_id ?? null,
         marketing_email_account_id:
-            campaign?.marketing_email_account_id ?? defaultEmailAccountId ?? null,
+            campaign?.marketing_email_account_id ??
+            defaultEmailAccountId ??
+            null,
         whatsapp_account_id:
             campaign?.whatsapp_account_id ?? defaultWhatsappAccountId ?? null,
         subject: campaign?.subject ?? '',
         body: campaign?.body ?? '',
     });
     const [processing, setProcessing] = useState(false);
-    const [audience, setAudience] = useState<AudiencePreviewPayload | null>(null);
+    const [audience, setAudience] = useState<AudiencePreviewPayload | null>(
+        null,
+    );
     const [audienceLoading, setAudienceLoading] = useState(false);
     const [audienceError, setAudienceError] = useState<string | null>(null);
 
     const isWhatsApp = formData.channel === 'whatsapp';
 
     const channelTemplates = useMemo(
-        () => templates.filter((template) => template.channel === formData.channel),
+        () =>
+            templates.filter(
+                (template) => template.channel === formData.channel,
+            ),
         [formData.channel, templates],
     );
 
@@ -162,7 +173,8 @@ export default function MarketingCampaignForm({
     const selectedTemplate = useMemo(
         () =>
             channelTemplates.find(
-                (template) => template.id === formData.marketing_message_template_id,
+                (template) =>
+                    template.id === formData.marketing_message_template_id,
             ) ?? null,
         [formData.marketing_message_template_id, channelTemplates],
     );
@@ -171,7 +183,10 @@ export default function MarketingCampaignForm({
         formData.list_uuids.length > 0 || formData.contact_uuids.length > 0;
 
     const updateField = useCallback(
-        (field: keyof typeof formData, value: string | number | null | string[]) => {
+        (
+            field: keyof typeof formData,
+            value: string | number | null | string[],
+        ) => {
             setFormData((previous) => ({ ...previous, [field]: value }));
         },
         [],
@@ -180,7 +195,9 @@ export default function MarketingCampaignForm({
     const applyTemplate = useCallback(
         (templateId: string) => {
             const parsedId = Number(templateId);
-            const template = channelTemplates.find((item) => item.id === parsedId);
+            const template = channelTemplates.find(
+                (item) => item.id === parsedId,
+            );
 
             if (!template) {
                 return;
@@ -201,7 +218,8 @@ export default function MarketingCampaignForm({
     useEffect(() => {
         setFormData((previous) => {
             const stillValid = channelTemplates.some(
-                (template) => template.id === previous.marketing_message_template_id,
+                (template) =>
+                    template.id === previous.marketing_message_template_id,
             );
 
             if (stillValid) {
@@ -228,8 +246,12 @@ export default function MarketingCampaignForm({
 
         const params = new URLSearchParams();
         params.set('channel', formData.channel);
-        formData.list_uuids.forEach((uuid) => params.append('list_uuids[]', uuid));
-        formData.contact_uuids.forEach((uuid) => params.append('contact_uuids[]', uuid));
+        formData.list_uuids.forEach((uuid) =>
+            params.append('list_uuids[]', uuid),
+        );
+        formData.contact_uuids.forEach((uuid) =>
+            params.append('contact_uuids[]', uuid),
+        );
 
         const url = `${audiencePreview.url()}?${params.toString()}`;
 
@@ -248,7 +270,10 @@ export default function MarketingCampaignForm({
                 setAudience(payload);
             })
             .catch((error: unknown) => {
-                if (error instanceof DOMException && error.name === 'AbortError') {
+                if (
+                    error instanceof DOMException &&
+                    error.name === 'AbortError'
+                ) {
                     return;
                 }
 
@@ -264,7 +289,12 @@ export default function MarketingCampaignForm({
             });
 
         return () => controller.abort();
-    }, [formData.channel, formData.list_uuids, formData.contact_uuids, hasAudience]);
+    }, [
+        formData.channel,
+        formData.list_uuids,
+        formData.contact_uuids,
+        hasAudience,
+    ]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -278,11 +308,14 @@ export default function MarketingCampaignForm({
                 channel: formData.channel,
                 list_uuids: formData.list_uuids,
                 contact_uuids: formData.contact_uuids,
-                marketing_message_template_id: formData.marketing_message_template_id,
+                marketing_message_template_id:
+                    formData.marketing_message_template_id,
                 marketing_email_account_id: isWhatsApp
                     ? null
                     : formData.marketing_email_account_id,
-                whatsapp_account_id: isWhatsApp ? formData.whatsapp_account_id : null,
+                whatsapp_account_id: isWhatsApp
+                    ? formData.whatsapp_account_id
+                    : null,
                 subject: isWhatsApp ? null : formData.subject,
                 body: isWhatsApp ? '' : formData.body,
             },
@@ -299,17 +332,31 @@ export default function MarketingCampaignForm({
 
     return (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:items-start">
-            <form onSubmit={handleSubmit} className="app-panel space-y-6 p-4 xl:max-w-none">
-                <div className="bg-muted/40 rounded-lg border px-3 py-2 text-sm">
-                    Canal verrouillé : <span className="font-medium">{channelLabel}</span>
+            <form
+                onSubmit={handleSubmit}
+                className="app-panel space-y-6 p-4 xl:max-w-none"
+            >
+                <div className="rounded-lg border bg-muted/40 px-3 py-2 text-sm">
+                    {uiText(
+                        'ui.components.text_9b3084b27fe8',
+                        'Canal verrouillé :',
+                    )}{' '}
+                    <span className="font-medium">{channelLabel}</span>
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="name">Nom de la campagne</Label>
+                    <Label htmlFor="name">
+                        {uiText(
+                            'ui.components.text_d3f41a8a8b33',
+                            'Nom de la campagne',
+                        )}
+                    </Label>
                     <Input
                         id="name"
                         value={formData.name}
-                        onChange={(event) => updateField('name', event.target.value)}
+                        onChange={(event) =>
+                            updateField('name', event.target.value)
+                        }
                         required
                     />
                     <InputError message={errors.name} />
@@ -317,20 +364,38 @@ export default function MarketingCampaignForm({
 
                 {isWhatsApp ? (
                     <div className="space-y-2">
-                        <Label htmlFor="whatsapp_account_id">Compte WhatsApp</Label>
+                        <Label htmlFor="whatsapp_account_id">
+                            {uiText(
+                                'ui.components.text_ff71a402ea54',
+                                'Compte WhatsApp',
+                            )}
+                        </Label>
                         <Select
-                            value={formData.whatsapp_account_id?.toString() ?? ''}
+                            value={
+                                formData.whatsapp_account_id?.toString() ?? ''
+                            }
                             onValueChange={(value) =>
-                                updateField('whatsapp_account_id', Number(value))
+                                updateField(
+                                    'whatsapp_account_id',
+                                    Number(value),
+                                )
                             }
                             required
                         >
                             <SelectTrigger id="whatsapp_account_id">
-                                <SelectValue placeholder="Choisir un compte" />
+                                <SelectValue
+                                    placeholder={uiText(
+                                        'ui.components.text_b5eb217f2610',
+                                        'Choisir un compte',
+                                    )}
+                                />
                             </SelectTrigger>
                             <SelectContent>
                                 {whatsappAccounts.map((account) => (
-                                    <SelectItem key={account.id} value={account.id.toString()}>
+                                    <SelectItem
+                                        key={account.id}
+                                        value={account.id.toString()}
+                                    >
                                         {account.name}
                                     </SelectItem>
                                 ))}
@@ -340,20 +405,39 @@ export default function MarketingCampaignForm({
                     </div>
                 ) : (
                     <div className="space-y-2">
-                        <Label htmlFor="marketing_email_account_id">Compte e-mail</Label>
+                        <Label htmlFor="marketing_email_account_id">
+                            {uiText(
+                                'ui.components.text_7d9956f4af0a',
+                                'Compte e-mail',
+                            )}
+                        </Label>
                         <Select
-                            value={formData.marketing_email_account_id?.toString() ?? ''}
+                            value={
+                                formData.marketing_email_account_id?.toString() ??
+                                ''
+                            }
                             onValueChange={(value) =>
-                                updateField('marketing_email_account_id', Number(value))
+                                updateField(
+                                    'marketing_email_account_id',
+                                    Number(value),
+                                )
                             }
                             required
                         >
                             <SelectTrigger id="marketing_email_account_id">
-                                <SelectValue placeholder="Choisir un compte" />
+                                <SelectValue
+                                    placeholder={uiText(
+                                        'ui.components.text_b5eb217f2610',
+                                        'Choisir un compte',
+                                    )}
+                                />
                             </SelectTrigger>
                             <SelectContent>
                                 {emailAccounts.map((account) => (
-                                    <SelectItem key={account.id} value={account.id.toString()}>
+                                    <SelectItem
+                                        key={account.id}
+                                        value={account.id.toString()}
+                                    >
                                         {account.name} ({account.from_address}
                                         {account.daily_send_limit !== null
                                             ? ` — ${account.remaining_today ?? 0}/${account.daily_send_limit} restants`
@@ -363,57 +447,108 @@ export default function MarketingCampaignForm({
                                 ))}
                             </SelectContent>
                         </Select>
-                        <InputError message={errors.marketing_email_account_id} />
+                        <InputError
+                            message={errors.marketing_email_account_id}
+                        />
                     </div>
                 )}
 
                 <div className="space-y-2">
-                    <Label htmlFor="list_uuids">Groupes</Label>
+                    <Label htmlFor="list_uuids">
+                        {uiText('ui.components.text_0144dbff81be', 'Groupes')}
+                    </Label>
                     <SearchableMultiSelect
                         id="list_uuids"
                         options={listOptions}
                         value={formData.list_uuids}
                         onChange={(values) => updateField('list_uuids', values)}
-                        placeholder="Ajouter des groupes…"
-                        searchPlaceholder="Rechercher un groupe…"
-                        emptyMessage="Aucun groupe trouvé"
+                        placeholder={uiText(
+                            'ui.components.text_7b81586164e9',
+                            'Ajouter des groupes…',
+                        )}
+                        searchPlaceholder={uiText(
+                            'ui.components.text_0302be0df6c4',
+                            'Rechercher un groupe…',
+                        )}
+                        emptyMessage={uiText(
+                            'ui.components.text_18767c44bff0',
+                            'Aucun groupe trouvé',
+                        )}
                     />
                     <InputError message={errors.list_uuids} />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="contact_uuids">Contacts individuels</Label>
+                    <Label htmlFor="contact_uuids">
+                        {uiText(
+                            'ui.components.text_1c2a1391c14a',
+                            'Contacts individuels',
+                        )}
+                    </Label>
                     <SearchableMultiSelect
                         id="contact_uuids"
                         options={contactOptions}
                         value={formData.contact_uuids}
-                        onChange={(values) => updateField('contact_uuids', values)}
-                        placeholder="Ajouter des contacts…"
-                        searchPlaceholder="Rechercher un contact…"
-                        emptyMessage="Aucun contact trouvé"
+                        onChange={(values) =>
+                            updateField('contact_uuids', values)
+                        }
+                        placeholder={uiText(
+                            'ui.components.text_be797ee9eb16',
+                            'Ajouter des contacts…',
+                        )}
+                        searchPlaceholder={uiText(
+                            'ui.components.text_9e1cab61a0c6',
+                            'Rechercher un contact…',
+                        )}
+                        emptyMessage={uiText(
+                            'ui.components.text_30cfabaf854c',
+                            'Aucun contact trouvé',
+                        )}
                     />
-                    <p className="text-muted-foreground text-xs">
-                        Combinez groupes et contacts : l’audience fusionne sans doublon.
+                    <p className="text-xs text-muted-foreground">
+                        {uiText(
+                            'ui.components.text_15c8d6eef6e1',
+                            'Combinez groupes et contacts : l’audience fusionne sans doublon.',
+                        )}
                     </p>
                     <InputError message={errors.contact_uuids} />
                 </div>
 
                 <div className="space-y-2">
                     <Label htmlFor="marketing_message_template_id">
-                        {isWhatsApp ? 'Template WhatsApp' : 'Template e-mail'}
+                        {isWhatsApp
+                            ? uiText(
+                                  'ui.components.text_bf0ee15a9fd2',
+                                  'Template WhatsApp',
+                              )
+                            : uiText(
+                                  'ui.components.text_5e7b26cb0c2a',
+                                  'Template e-mail',
+                              )}
                     </Label>
                     {channelTemplates.length > 0 ? (
                         <Select
-                            value={formData.marketing_message_template_id?.toString() ?? ''}
+                            value={
+                                formData.marketing_message_template_id?.toString() ??
+                                ''
+                            }
                             onValueChange={applyTemplate}
                             required
                         >
                             <SelectTrigger id="marketing_message_template_id">
-                                <SelectValue placeholder="Choisir un template" />
+                                <SelectValue
+                                    placeholder={uiText(
+                                        'ui.components.text_62b1f63f7c0c',
+                                        'Choisir un template',
+                                    )}
+                                />
                             </SelectTrigger>
                             <SelectContent>
                                 {channelTemplates.map((template) => (
-                                    <SelectItem key={template.id} value={template.id.toString()}>
+                                    <SelectItem
+                                        key={template.id}
+                                        value={template.id.toString()}
+                                    >
                                         {template.name}
                                     </SelectItem>
                                 ))}
@@ -421,43 +556,89 @@ export default function MarketingCampaignForm({
                         </Select>
                     ) : (
                         <div className="rounded-lg border border-dashed border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
-                            <p className="font-medium">Aucun template disponible pour ce canal.</p>
-                            <p className="text-muted-foreground mt-1 text-xs">
-                                Vous devez créer un template {isWhatsApp ? 'WhatsApp' : 'e-mail'} avant de pouvoir configurer une campagne.
+                            <p className="font-medium">
+                                {uiText(
+                                    'ui.components.text_c73d4fcb8ce8',
+                                    'Aucun template disponible pour ce canal.',
+                                )}
+                            </p>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                                {uiText(
+                                    'ui.components.text_0d52d3fb4688',
+                                    'Vous devez créer un template',
+                                )}{' '}
+                                {isWhatsApp
+                                    ? uiText(
+                                          'ui.components.text_6a40edf1fc87',
+                                          'WhatsApp',
+                                      )
+                                    : uiText(
+                                          'ui.components.text_39e0749da40f',
+                                          'e-mail',
+                                      )}{' '}
+                                {uiText(
+                                    'ui.components.text_1c74dae514c3',
+                                    'avant de pouvoir configurer une campagne.',
+                                )}
                             </p>
                         </div>
                     )}
                     {!isWhatsApp && channelTemplates.length > 0 ? (
-                        <p className="text-muted-foreground text-xs">
-                            Sélectionnez un template disponible : l’objet et le message seront chargés et modifiables avant validation.
+                        <p className="text-xs text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_b3823649d757',
+                                'Sélectionnez un template disponible : l’objet et le message seront chargés et modifiables avant validation.',
+                            )}
                         </p>
                     ) : null}
-                    <InputError message={errors.marketing_message_template_id} />
+                    <InputError
+                        message={errors.marketing_message_template_id}
+                    />
                 </div>
 
                 {!isWhatsApp ? (
                     canEditMessage ? (
                         <>
                             <div className="space-y-2">
-                                <Label htmlFor="subject">Objet</Label>
+                                <Label htmlFor="subject">
+                                    {uiText(
+                                        'ui.components.text_b01189cd35d9',
+                                        'Objet',
+                                    )}
+                                </Label>
                                 <TemplateSubjectInput
                                     id="subject"
                                     value={formData.subject}
-                                    onChange={(value) => updateField('subject', value)}
+                                    onChange={(value) =>
+                                        updateField('subject', value)
+                                    }
                                     variables={variables}
                                 />
                                 <InputError message={errors.subject} />
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Message</Label>
+                                <Label>
+                                    {uiText(
+                                        'ui.components.text_2f77668a9dfb',
+                                        'Message',
+                                    )}
+                                </Label>
                                 <MarketingTemplateEditor
                                     key={editorKey}
-                                    initialContent={formData.body?.trim() ? formData.body : ''}
-                                    fallbackPlainContent={
-                                        formData.body?.trim() ? '' : formData.body
+                                    initialContent={
+                                        formData.body?.trim()
+                                            ? formData.body
+                                            : ''
                                     }
-                                    onChange={(content) => updateField('body', content)}
+                                    fallbackPlainContent={
+                                        formData.body?.trim()
+                                            ? ''
+                                            : formData.body
+                                    }
+                                    onChange={(content) =>
+                                        updateField('body', content)
+                                    }
                                     variables={variables}
                                     imageUploadUrl={storeMarketingEditorImage.url()}
                                 />
@@ -465,32 +646,56 @@ export default function MarketingCampaignForm({
                             </div>
                         </>
                     ) : (
-                        <div className="bg-muted/40 text-muted-foreground rounded-lg border p-3 text-sm">
-                            Choisissez un template pour charger l’objet et le message
-                            (modifiables ensuite).
+                        <div className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_3f0e59f2a167',
+                                'Choisissez un template pour charger l’objet et le message (modifiables ensuite).',
+                            )}
                         </div>
                     )
                 ) : (
-                    <div className="bg-muted/40 space-y-2 rounded-lg border p-3 text-sm">
-                        <p className="font-medium">Envoi via modèle Meta uniquement</p>
-                        <p className="text-muted-foreground text-xs">
-                            WhatsApp n&apos;accepte pas de message libre hors fenêtre de
-                            conversation. Sélectionnez un template dont le nom Meta correspond
-                            à un modèle approuvé. Les variables Meta {'{{1}}'}, {'{{2}}'},{' '}
-                            {'{{3}}'} sont remplies avec le nom et l&apos;entreprise du contact.
+                    <div className="space-y-2 rounded-lg border bg-muted/40 p-3 text-sm">
+                        <p className="font-medium">
+                            {uiText(
+                                'ui.components.text_0fdff2a23256',
+                                'Envoi via modèle Meta uniquement',
+                            )}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_36b706da124c',
+                                'WhatsApp n&apos;accepte pas de message libre hors fenêtre de conversation. Sélectionnez un template dont le nom Meta correspond à un modèle approuvé. Les variables Meta',
+                            )}{' '}
+                            {'{{1}}'}, {'{{2}}'}, {'{{3}}'}{' '}
+                            {uiText(
+                                'ui.components.text_130733fc52a7',
+                                'sont remplies avec le nom et l&apos;entreprise du contact.',
+                            )}
                         </p>
                         {selectedTemplate ? (
                             <dl className="grid gap-1 text-xs sm:grid-cols-2">
                                 <div>
-                                    <dt className="text-muted-foreground">Modèle Meta</dt>
+                                    <dt className="text-muted-foreground">
+                                        {uiText(
+                                            'ui.components.text_94723168a3f4',
+                                            'Modèle Meta',
+                                        )}
+                                    </dt>
                                     <dd className="font-mono">
-                                        {selectedTemplate.meta_template_name ?? '—'}
+                                        {selectedTemplate.meta_template_name ??
+                                            '—'}
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="text-muted-foreground">Langue</dt>
+                                    <dt className="text-muted-foreground">
+                                        {uiText(
+                                            'ui.components.text_5f6baab4dbe1',
+                                            'Langue',
+                                        )}
+                                    </dt>
                                     <dd className="font-mono">
-                                        {selectedTemplate.meta_template_language ?? '—'}
+                                        {selectedTemplate.meta_template_language ??
+                                            '—'}
                                     </dd>
                                 </div>
                             </dl>
@@ -503,7 +708,12 @@ export default function MarketingCampaignForm({
                         {submitLabel}
                     </Button>
                     <Button type="button" variant="outline" asChild>
-                        <a href={cancelHref}>Annuler</a>
+                        <a href={cancelHref}>
+                            {uiText(
+                                'ui.components.text_46ad3916f6a0',
+                                'Annuler',
+                            )}
+                        </a>
                     </Button>
                 </div>
             </form>
@@ -524,9 +734,11 @@ export default function MarketingCampaignForm({
 
                 {!hasAudience && selectedTemplate === null ? (
                     <section className="app-panel p-4">
-                        <p className="text-muted-foreground text-sm">
-                            Sélectionnez des groupes et/ou des contacts pour voir l&apos;audience,
-                            et un template pour prévisualiser le message.
+                        <p className="text-sm text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_23c41ffc8299',
+                                'Sélectionnez des groupes et/ou des contacts pour voir l&apos;audience, et un template pour prévisualiser le message.',
+                            )}
                         </p>
                     </section>
                 ) : null}

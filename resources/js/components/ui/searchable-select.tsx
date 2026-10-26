@@ -1,3 +1,4 @@
+import { useTrans } from '@/hooks/use-trans';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -37,9 +38,9 @@ export function SearchableSelect({
     options,
     value,
     defaultValue = '',
-    placeholder = 'Sélectionner…',
-    searchPlaceholder = 'Rechercher…',
-    emptyMessage = 'Aucun résultat',
+    placeholder,
+    searchPlaceholder,
+    emptyMessage,
     disabled = false,
     required = false,
     className,
@@ -47,6 +48,7 @@ export function SearchableSelect({
     variant = 'default',
     onChange,
 }: SearchableSelectProps) {
+    const { t } = useTrans();
     const listId = useId();
     const containerRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
@@ -145,7 +147,7 @@ export function SearchableSelect({
                 )}
             >
                 <span className="truncate">
-                    {selectedOption?.label ?? placeholder}
+                    {selectedOption?.label ?? placeholder ?? t('ui.select', 'Sélectionner…')}
                 </span>
                 <ChevronsUpDown className="size-4 shrink-0 opacity-50" />
             </Button>
@@ -157,7 +159,7 @@ export function SearchableSelect({
                             ref={searchRef}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder={searchPlaceholder}
+                            placeholder={searchPlaceholder ?? t('ui.search', 'Rechercher…')}
                             className="h-8"
                             onKeyDown={(e) => {
                                 if (e.key === 'Escape') {
@@ -174,7 +176,7 @@ export function SearchableSelect({
                     >
                         {filteredOptions.length === 0 ? (
                             <li className="px-2 py-1.5 text-sm text-muted-foreground">
-                                {emptyMessage}
+                                {emptyMessage ?? t('ui.no_results', 'Aucun résultat')}
                             </li>
                         ) : (
                             filteredOptions.map((option) => (

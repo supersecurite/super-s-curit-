@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Form } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,8 @@ export default function MarketingListForm({
     list,
     method = 'post',
 }: MarketingListFormProps) {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <Form
             action={submitUrl}
@@ -37,7 +40,9 @@ export default function MarketingListForm({
             ) : null}
 
             <div className="space-y-2">
-                <Label htmlFor="name">Nom du groupe</Label>
+                <Label htmlFor="name">
+                    {uiText('ui.components.text_aa160595aa51', 'Nom du groupe')}
+                </Label>
                 <Input
                     id="name"
                     name="name"
@@ -50,7 +55,9 @@ export default function MarketingListForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">
+                    {uiText('ui.components.text_526e0087cc3f', 'Description')}
+                </Label>
                 <Textarea
                     id="description"
                     name="description"
@@ -58,14 +65,18 @@ export default function MarketingListForm({
                     defaultValue={list?.description ?? ''}
                 />
                 {errors.description ? (
-                    <p className="text-sm text-destructive">{errors.description}</p>
+                    <p className="text-sm text-destructive">
+                        {errors.description}
+                    </p>
                 ) : null}
             </div>
 
             <div className="flex flex-wrap gap-3">
                 <Button type="submit">{submitLabel}</Button>
                 <Button type="button" variant="outline" asChild>
-                    <a href={cancelHref}>Annuler</a>
+                    <a href={cancelHref}>
+                        {uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
+                    </a>
                 </Button>
             </div>
         </Form>

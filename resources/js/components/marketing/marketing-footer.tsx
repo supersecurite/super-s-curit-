@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { usePage } from '@inertiajs/react';
 import { index as galerieIndex } from '@/routes/galerie';
 import { index as actualitesIndex } from '@/routes/actualites';
@@ -9,13 +10,21 @@ import { superSecuriteServices } from '@/data/super-securite-content';
 import { useTrans } from '@/hooks/use-trans';
 import { localizePath } from '@/lib/locale-url';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
-import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, Youtube } from 'lucide-react';
+import {
+    FacebookIcon,
+    InstagramIcon,
+    LinkedinIcon,
+    TwitterIcon,
+    Youtube,
+} from 'lucide-react';
 
 type SharedPageProps = {
     superSecurite: SuperSecuriteConfig;
 };
 
 export default function MarketingFooter() {
+    const { t: uiText } = useUiTranslations();
+
     const { superSecurite } = usePage<SharedPageProps>().props;
     const { t, locale } = useTrans();
     const lp = (path: string) => localizePath(path, locale);
@@ -97,7 +106,10 @@ export default function MarketingFooter() {
                                         href={lp(service.path)}
                                         className="cursor-pointer transition-colors duration-200 hover:text-white"
                                     >
-                                        {t(`services.${service.id}.title`, service.title)}
+                                        {t(
+                                            `services.${service.id}.title`,
+                                            service.title,
+                                        )}
                                     </a>
                                 </li>
                             ))}
@@ -114,7 +126,10 @@ export default function MarketingFooter() {
                                     href={`${lp(contact.url())}#faq`}
                                     className="cursor-pointer transition-colors duration-200 hover:text-white"
                                 >
-                                    FAQ
+                                    {uiText(
+                                        'ui.components.text_dbc468a14b60',
+                                        'FAQ',
+                                    )}
                                 </a>
                             </li>
                             <li>
@@ -154,7 +169,10 @@ export default function MarketingFooter() {
                                         className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
                                     >
                                         <FacebookIcon className="h-4 w-4 text-blue-500" />
-                                        Facebook
+                                        {uiText(
+                                            'ui.components.text_d41f5b4977ee',
+                                            'Facebook',
+                                        )}
                                     </a>
                                 </li>
                             )}

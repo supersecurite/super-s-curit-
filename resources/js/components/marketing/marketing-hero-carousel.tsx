@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -9,6 +10,8 @@ import { cn } from '@/lib/utils';
 const AUTO_PLAY_MS = 7000;
 
 export default function MarketingHeroCarousel() {
+    const { t: uiText } = useUiTranslations();
+
     const { slides, labels, carouselAria } = useMarketingHeroSlides();
     const { t } = useTrans();
     const slideCount = slides.length;
@@ -73,7 +76,10 @@ export default function MarketingHeroCarousel() {
                     <div
                         className="flex items-center gap-1.5 px-1"
                         role="tablist"
-                        aria-label={t('common.slide_selection', 'Sélection de slide')}
+                        aria-label={t(
+                            'common.slide_selection',
+                            'Sélection de slide',
+                        )}
                     >
                         {labels.map((label, index) => {
                             const isActive = index === activeIndex;
@@ -112,8 +118,14 @@ export default function MarketingHeroCarousel() {
                         className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-super-securite-muted transition-colors duration-200 hover:bg-super-securite-bg hover:text-super-securite-heading focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:outline-none"
                         aria-label={
                             isPaused
-                                ? t('common.resume_autoplay', 'Reprendre le défilement automatique')
-                                : t('common.pause_autoplay', 'Mettre en pause le défilement automatique')
+                                ? t(
+                                      'common.resume_autoplay',
+                                      'Reprendre le défilement automatique',
+                                  )
+                                : t(
+                                      'common.pause_autoplay',
+                                      'Mettre en pause le défilement automatique',
+                                  )
                         }
                         aria-pressed={isPaused}
                     >
@@ -127,7 +139,8 @@ export default function MarketingHeroCarousel() {
             </div>
 
             <p className="sr-only" aria-live="polite">
-                Slide {activeIndex + 1} / {slideCount} : {labels[activeIndex]}
+                {uiText('ui.components.text_6bb4c1177681', 'Slide')}{' '}
+                {activeIndex + 1} / {slideCount} : {labels[activeIndex]}
             </p>
         </section>
     );

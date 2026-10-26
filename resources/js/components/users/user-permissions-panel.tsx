@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import {
     BarChart3,
     Briefcase,
@@ -61,6 +62,8 @@ export default function UserPermissionsPanel({
     initialPermissions = [],
     error,
 }: UserPermissionsPanelProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [selected, setSelected] = useState<Set<string>>(
         () => new Set(initialPermissions),
     );
@@ -125,10 +128,7 @@ export default function UserPermissionsPanel({
         });
     };
 
-    const setGroupPermissions = (
-        group: PermissionGroup,
-        enabled: boolean,
-    ) => {
+    const setGroupPermissions = (group: PermissionGroup, enabled: boolean) => {
         setSelected((current) => {
             const next = new Set(current);
             group.permissions.forEach((permission) => {
@@ -170,7 +170,12 @@ export default function UserPermissionsPanel({
 
     return (
         <fieldset className="space-y-4">
-            <legend className="sr-only">Permissions backoffice</legend>
+            <legend className="sr-only">
+                {uiText(
+                    'ui.components.text_1572a83d5115',
+                    'Permissions backoffice',
+                )}
+            </legend>
 
             {Array.from(selected).map((value) => (
                 <input
@@ -185,33 +190,42 @@ export default function UserPermissionsPanel({
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                         <h2 className="font-heading text-lg font-semibold">
-                            Permissions backoffice
+                            {uiText(
+                                'ui.components.text_1572a83d5115',
+                                'Permissions backoffice',
+                            )}
                         </h2>
-                        <p className="text-muted-foreground mt-1 text-sm">
-                            Accordez l&apos;accès par fonctionnalité et par
-                            action. Les modifications sont enregistrées avec le
-                            reste du profil.
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            {uiText(
+                                'ui.components.text_e838e7316a14',
+                                'Accordez l&apos;accès par fonctionnalité et par action. Les modifications sont enregistrées avec le reste du profil.',
+                            )}
                         </p>
                     </div>
                     <Badge variant="secondary" className="w-fit shrink-0">
-                        {selected.size} / {totalPermissions} actives
+                        {selected.size} / {totalPermissions}{' '}
+                        {uiText('ui.components.text_f6b6fba38189', 'actives')}
                     </Badge>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <div className="relative min-w-0 flex-1">
                         <Search
-                            className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+                            className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
                             aria-hidden
                         />
                         <Input
                             value={search}
-                            onChange={(event) =>
-                                setSearch(event.target.value)
-                            }
-                            placeholder="Rechercher une fonctionnalité ou une action..."
+                            onChange={(event) => setSearch(event.target.value)}
+                            placeholder={uiText(
+                                'ui.components.text_ae70522d8276',
+                                'Rechercher une fonctionnalité ou une action...',
+                            )}
                             className="pl-9"
-                            aria-label="Rechercher une permission"
+                            aria-label={uiText(
+                                'ui.components.text_f41a96655daa',
+                                'Rechercher une permission',
+                            )}
                         />
                     </div>
                     <div className="flex shrink-0 gap-2">
@@ -221,7 +235,10 @@ export default function UserPermissionsPanel({
                             size="sm"
                             onClick={() => setAllPermissions(true)}
                         >
-                            Tout activer
+                            {uiText(
+                                'ui.components.text_fe7a28d10eef',
+                                'Tout activer',
+                            )}
                         </Button>
                         <Button
                             type="button"
@@ -229,7 +246,10 @@ export default function UserPermissionsPanel({
                             size="sm"
                             onClick={() => setAllPermissions(false)}
                         >
-                            Tout désactiver
+                            {uiText(
+                                'ui.components.text_02324f57958d',
+                                'Tout désactiver',
+                            )}
                         </Button>
                     </div>
                 </div>
@@ -237,18 +257,19 @@ export default function UserPermissionsPanel({
 
             {filteredGroups.length === 0 ? (
                 <div className="app-panel p-6">
-                    <p className="text-muted-foreground text-sm">
-                        Aucune permission ne correspond à votre recherche.
+                    <p className="text-sm text-muted-foreground">
+                        {uiText(
+                            'ui.components.text_63f7f411fe06',
+                            'Aucune permission ne correspond à votre recherche.',
+                        )}
                     </p>
                 </div>
             ) : (
                 <div className="space-y-3">
                     {filteredGroups.map((group) => {
-                        const Icon =
-                            FEATURE_ICONS[group.key] ?? LayoutGrid;
+                        const Icon = FEATURE_ICONS[group.key] ?? LayoutGrid;
                         const activeCount = group.permissions.filter(
-                            (permission) =>
-                                selected.has(permission.value),
+                            (permission) => selected.has(permission.value),
                         ).length;
                         const isExpanded = expanded.has(group.key);
                         const allEnabled =
@@ -269,7 +290,7 @@ export default function UserPermissionsPanel({
                                         className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 text-left"
                                         aria-expanded={isExpanded}
                                     >
-                                        <div className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-lg">
+                                        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                                             <Icon
                                                 className="size-4"
                                                 aria-hidden
@@ -292,15 +313,18 @@ export default function UserPermissionsPanel({
                                                     {group.permissions.length}
                                                 </Badge>
                                             </div>
-                                            <p className="text-muted-foreground mt-0.5 text-xs">
+                                            <p className="mt-0.5 text-xs text-muted-foreground">
                                                 {activeCount > 0
                                                     ? `${activeCount} action${activeCount > 1 ? 's' : ''} autorisée${activeCount > 1 ? 's' : ''}`
-                                                    : 'Aucun accès accordé'}
+                                                    : uiText(
+                                                          'ui.components.text_a5bbcdda778d',
+                                                          'Aucun accès accordé',
+                                                      )}
                                             </p>
                                         </div>
                                         <ChevronDown
                                             className={cn(
-                                                'text-muted-foreground size-4 shrink-0 transition-transform duration-200',
+                                                'size-4 shrink-0 text-muted-foreground transition-transform duration-200',
                                                 isExpanded && 'rotate-180',
                                             )}
                                             aria-hidden
@@ -314,13 +338,13 @@ export default function UserPermissionsPanel({
                                             size="sm"
                                             disabled={allEnabled}
                                             onClick={() =>
-                                                setGroupPermissions(
-                                                    group,
-                                                    true,
-                                                )
+                                                setGroupPermissions(group, true)
                                             }
                                         >
-                                            Tout
+                                            {uiText(
+                                                'ui.components.text_bcda4a955df7',
+                                                'Tout',
+                                            )}
                                         </Button>
                                         <Button
                                             type="button"
@@ -334,7 +358,10 @@ export default function UserPermissionsPanel({
                                                 )
                                             }
                                         >
-                                            Aucun
+                                            {uiText(
+                                                'ui.components.text_4679b3b12de0',
+                                                'Aucun',
+                                            )}
                                         </Button>
                                     </div>
                                 </div>
@@ -350,7 +377,7 @@ export default function UserPermissionsPanel({
                                                 <label
                                                     key={permission.value}
                                                     className={cn(
-                                                        'hover:border-super-securite-accent/40 flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors',
+                                                        'flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors hover:border-super-securite-accent/40',
                                                         isChecked
                                                             ? 'border-super-securite-accent/50 bg-super-securite-accent/5'
                                                             : 'border-border bg-background',
@@ -363,7 +390,8 @@ export default function UserPermissionsPanel({
                                                         ) =>
                                                             togglePermission(
                                                                 permission.value,
-                                                                checked === true,
+                                                                checked ===
+                                                                    true,
                                                             )
                                                         }
                                                         className="mt-0.5"
@@ -372,7 +400,7 @@ export default function UserPermissionsPanel({
                                                         <span className="block text-sm font-medium">
                                                             {permission.label}
                                                         </span>
-                                                        <span className="text-muted-foreground mt-1 block text-xs leading-relaxed">
+                                                        <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
                                                             {
                                                                 permission.description
                                                             }

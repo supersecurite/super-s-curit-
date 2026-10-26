@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { useMemo } from 'react';
 import {
     getAllRegions,
@@ -27,6 +28,8 @@ export default function LocationCascadingSelects({
     errors = {},
     variant = 'default',
 }: LocationCascadingSelectsProps) {
+    const { t: uiText } = useUiTranslations();
+
     const regions = useMemo(
         () =>
             getAllRegions().map((region) => ({
@@ -52,10 +55,12 @@ export default function LocationCascadingSelects({
             return [];
         }
 
-        return getCommunesForPrefecture(values.prefecture_id).map((commune) => ({
-            value: commune.id,
-            label: commune.nom,
-        }));
+        return getCommunesForPrefecture(values.prefecture_id).map(
+            (commune) => ({
+                value: commune.id,
+                label: commune.nom,
+            }),
+        );
     }, [values.prefecture_id]);
 
     const handleRegionChange = (regionId: string) => {
@@ -85,7 +90,7 @@ export default function LocationCascadingSelects({
                             : undefined
                     }
                 >
-                    Région{' '}
+                    {uiText('ui.components.text_3553f8c0304e', 'Région')}{' '}
                     <span className="text-super-securite-accent">*</span>
                 </Label>
                 <SearchableSelect
@@ -94,8 +99,14 @@ export default function LocationCascadingSelects({
                     options={regions}
                     value={values.region_id}
                     onChange={handleRegionChange}
-                    placeholder="Sélectionner une région"
-                    searchPlaceholder="Rechercher une région..."
+                    placeholder={uiText(
+                        'ui.components.text_2b9b8d88517d',
+                        'Sélectionner une région',
+                    )}
+                    searchPlaceholder={uiText(
+                        'ui.components.text_8dae34d7cb25',
+                        'Rechercher une région...',
+                    )}
                     required
                     variant={variant}
                 />
@@ -111,7 +122,7 @@ export default function LocationCascadingSelects({
                             : undefined
                     }
                 >
-                    Préfecture{' '}
+                    {uiText('ui.components.text_4038a3928a50', 'Préfecture')}{' '}
                     <span className="text-super-securite-accent">*</span>
                 </Label>
                 <SearchableSelect
@@ -120,8 +131,14 @@ export default function LocationCascadingSelects({
                     options={prefectures}
                     value={values.prefecture_id}
                     onChange={handlePrefectureChange}
-                    placeholder="Sélectionner une préfecture"
-                    searchPlaceholder="Rechercher une préfecture..."
+                    placeholder={uiText(
+                        'ui.components.text_d205948e28ad',
+                        'Sélectionner une préfecture',
+                    )}
+                    searchPlaceholder={uiText(
+                        'ui.components.text_0774e41f7921',
+                        'Rechercher une préfecture...',
+                    )}
                     disabled={!values.region_id}
                     required
                     variant={variant}
@@ -138,7 +155,7 @@ export default function LocationCascadingSelects({
                             : undefined
                     }
                 >
-                    Commune
+                    {uiText('ui.components.text_eaf0dc2a430e', 'Commune')}{' '}
                     {communes.length > 0 ? (
                         <span className="text-super-securite-accent"> *</span>
                     ) : null}
@@ -153,10 +170,19 @@ export default function LocationCascadingSelects({
                     }
                     placeholder={
                         communes.length === 0
-                            ? 'Aucune commune disponible'
-                            : 'Sélectionner une commune'
+                            ? uiText(
+                                  'ui.components.text_3c302bf09143',
+                                  'Aucune commune disponible',
+                              )
+                            : uiText(
+                                  'ui.components.text_59c165792cf5',
+                                  'Sélectionner une commune',
+                              )
                     }
-                    searchPlaceholder="Rechercher une commune..."
+                    searchPlaceholder={uiText(
+                        'ui.components.text_413e5519131c',
+                        'Rechercher une commune...',
+                    )}
                     disabled={!values.prefecture_id || communes.length === 0}
                     required={communes.length > 0}
                     variant={variant}

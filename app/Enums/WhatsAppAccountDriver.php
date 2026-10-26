@@ -9,9 +9,9 @@ enum WhatsAppAccountDriver: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.WhatsAppAccountDriver.'.$this->name, [], match ($this) {
             self::Meta => 'Meta Cloud API',
             self::Log => 'Log (démo locale)',
-        };
+        });
     }
 }

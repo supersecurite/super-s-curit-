@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import {
     AlertCircle,
@@ -63,7 +64,9 @@ function humanizeTemplateName(name: string): string {
         .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-function statusBadgeVariant(status: string): 'default' | 'secondary' | 'outline' | 'destructive' {
+function statusBadgeVariant(
+    status: string,
+): 'default' | 'secondary' | 'outline' | 'destructive' {
     switch (status.toUpperCase()) {
         case 'APPROVED':
             return 'default';
@@ -82,6 +85,8 @@ export default function ImportMetaTemplatesDialog({
     triggerVariant = 'outline',
     triggerSize = 'default',
 }: ImportMetaTemplatesDialogProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [open, setOpen] = useState(false);
     const [selectedAccountUuid, setSelectedAccountUuid] = useState<string>(
         accounts.find((a) => a.is_default)?.uuid ?? accounts[0]?.uuid ?? '',
@@ -90,7 +95,9 @@ export default function ImportMetaTemplatesDialog({
     const [error, setError] = useState<string | null>(null);
     const [metaTemplates, setMetaTemplates] = useState<MetaTemplateItem[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
-    const [customTitles, setCustomTitles] = useState<Record<string, string>>({});
+    const [customTitles, setCustomTitles] = useState<Record<string, string>>(
+        {},
+    );
     const [submitting, setSubmitting] = useState(false);
 
     const loadMetaTemplates = async (accountUuid: string) => {
@@ -110,7 +117,9 @@ export default function ImportMetaTemplatesDialog({
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                throw new Error(data.message || 'Impossible de récupérer les modèles Meta.');
+                throw new Error(
+                    data.message || 'Impossible de récupérer les modèles Meta.',
+                );
             }
 
             const templates: MetaTemplateItem[] = data.templates ?? [];
@@ -131,7 +140,11 @@ export default function ImportMetaTemplatesDialog({
             setSelectedKeys(approved);
             setCustomTitles(titles);
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Erreur lors de la récupération.');
+            setError(
+                err instanceof Error
+                    ? err.message
+                    : 'Erreur lors de la récupération.',
+            );
             setMetaTemplates([]);
             setSelectedKeys(new Set());
         } finally {
@@ -166,7 +179,9 @@ export default function ImportMetaTemplatesDialog({
         if (selectedKeys.size === metaTemplates.length) {
             setSelectedKeys(new Set());
         } else {
-            const allKeys = new Set(metaTemplates.map((t) => `${t.name}:${t.language}`));
+            const allKeys = new Set(
+                metaTemplates.map((t) => `${t.name}:${t.language}`),
+            );
             setSelectedKeys(allKeys);
         }
     };
@@ -209,42 +224,76 @@ export default function ImportMetaTemplatesDialog({
             <DialogTrigger asChild>
                 <Button variant={triggerVariant} size={triggerSize}>
                     <CloudDownload className="size-4" aria-hidden />
-                    Importer depuis Meta
+                    {uiText(
+                        'ui.components.text_2f740b5cd80b',
+                        'Importer depuis Meta',
+                    )}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-3xl max-h-[85vh] flex flex-col">
+            <DialogContent className="flex max-h-[85vh] max-w-3xl flex-col">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <MessageSquare className="size-5 text-emerald-500" />
-                        Importer les modèles WhatsApp du compte Meta
+                        {uiText(
+                            'ui.components.text_d90cf3846ae1',
+                            'Importer les modèles WhatsApp du compte Meta',
+                        )}
                     </DialogTitle>
                     <DialogDescription>
-                        Récupérez et synchronisez les modèles approuvés directement depuis votre compte WhatsApp Business Cloud API.
+                        {uiText(
+                            'ui.components.text_a8734e6311f9',
+                            'Récupérez et synchronisez les modèles approuvés directement depuis votre compte WhatsApp Business Cloud API.',
+                        )}
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="space-y-4 py-2 flex-1 overflow-y-auto">
+                <div className="flex-1 space-y-4 overflow-y-auto py-2">
                     {/* Account selector & refresh */}
                     <div className="flex flex-wrap items-end gap-3 rounded-lg border bg-muted/20 p-3">
-                        <div className="flex-1 min-w-[200px] space-y-1.5">
-                            <Label htmlFor="whatsapp-account-select" className="text-xs">
-                                Compte WhatsApp Business
+                        <div className="min-w-[200px] flex-1 space-y-1.5">
+                            <Label
+                                htmlFor="whatsapp-account-select"
+                                className="text-xs"
+                            >
+                                {uiText(
+                                    'ui.components.text_166413ecc51b',
+                                    'Compte WhatsApp Business',
+                                )}
                             </Label>
                             {accounts.length > 1 ? (
-                                <Select value={selectedAccountUuid} onValueChange={handleAccountChange}>
+                                <Select
+                                    value={selectedAccountUuid}
+                                    onValueChange={handleAccountChange}
+                                >
                                     <SelectTrigger id="whatsapp-account-select">
-                                        <SelectValue placeholder="Choisir un compte" />
+                                        <SelectValue
+                                            placeholder={uiText(
+                                                'ui.components.text_b5eb217f2610',
+                                                'Choisir un compte',
+                                            )}
+                                        />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {accounts.map((acc) => (
-                                            <SelectItem key={acc.uuid} value={acc.uuid}>
-                                                {acc.name} {acc.is_default ? '(Par défaut)' : ''}
+                                            <SelectItem
+                                                key={acc.uuid}
+                                                value={acc.uuid}
+                                            >
+                                                {acc.name}{' '}
+                                                {acc.is_default
+                                                    ? uiText(
+                                                          'ui.components.text_72aa305f5dcd',
+                                                          '(Par défaut)',
+                                                      )
+                                                    : ''}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             ) : (
-                                <p className="text-sm font-medium">{accounts[0]?.name ?? 'Compte par défaut'}</p>
+                                <p className="text-sm font-medium">
+                                    {accounts[0]?.name ?? 'Compte par défaut'}
+                                </p>
                             )}
                         </div>
 
@@ -252,21 +301,33 @@ export default function ImportMetaTemplatesDialog({
                             type="button"
                             variant="outline"
                             size="sm"
-                            onClick={() => loadMetaTemplates(selectedAccountUuid)}
+                            onClick={() =>
+                                loadMetaTemplates(selectedAccountUuid)
+                            }
                             disabled={loading}
                         >
-                            <RefreshCw className={`size-3.5 ${loading ? 'animate-spin' : ''}`} />
-                            Actualiser
+                            <RefreshCw
+                                className={`size-3.5 ${loading ? 'animate-spin' : ''}`}
+                            />
+                            {uiText(
+                                'ui.components.text_d7d646faaecb',
+                                'Actualiser',
+                            )}
                         </Button>
                     </div>
 
                     {/* Error message */}
                     {error ? (
-                        <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive flex items-start gap-2">
-                            <AlertCircle className="size-4 shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+                            <AlertCircle className="mt-0.5 size-4 shrink-0" />
                             <div>
-                                <p className="font-medium">Erreur lors de la récupération Meta</p>
-                                <p className="text-xs mt-0.5">{error}</p>
+                                <p className="font-medium">
+                                    {uiText(
+                                        'ui.components.text_14164a4d4d85',
+                                        'Erreur lors de la récupération Meta',
+                                    )}
+                                </p>
+                                <p className="mt-0.5 text-xs">{error}</p>
                             </div>
                         </div>
                     ) : null}
@@ -274,9 +335,19 @@ export default function ImportMetaTemplatesDialog({
                     {/* Loading state */}
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
-                            <Loader2 className="size-8 animate-spin text-primary mb-3" />
-                            <p className="text-sm font-medium">Interrogation de l’API Meta Cloud…</p>
-                            <p className="text-xs">Récupération des modèles de messages enregistrés</p>
+                            <Loader2 className="mb-3 size-8 animate-spin text-primary" />
+                            <p className="text-sm font-medium">
+                                {uiText(
+                                    'ui.components.text_a458a71599de',
+                                    'Interrogation de l’API Meta Cloud…',
+                                )}
+                            </p>
+                            <p className="text-xs">
+                                {uiText(
+                                    'ui.components.text_5e12ee2e1cf0',
+                                    'Récupération des modèles de messages enregistrés',
+                                )}
+                            </p>
                         </div>
                     ) : null}
 
@@ -285,7 +356,11 @@ export default function ImportMetaTemplatesDialog({
                         <div className="space-y-3">
                             <div className="flex items-center justify-between px-1 text-xs">
                                 <span className="font-medium text-muted-foreground">
-                                    {metaTemplates.length} modèle(s) trouvé(s) sur Meta
+                                    {metaTemplates.length}{' '}
+                                    {uiText(
+                                        'ui.components.text_dc514cef391a',
+                                        'modèle(s) trouvé(s) sur Meta',
+                                    )}
                                 </span>
                                 <Button
                                     type="button"
@@ -295,12 +370,18 @@ export default function ImportMetaTemplatesDialog({
                                     className="h-6 text-xs"
                                 >
                                     {selectedKeys.size === metaTemplates.length
-                                        ? 'Tout désélectionner'
-                                        : 'Tout sélectionner'}
+                                        ? uiText(
+                                              'ui.components.text_dfbf8a80272c',
+                                              'Tout désélectionner',
+                                          )
+                                        : uiText(
+                                              'ui.components.text_5b6fef95fb92',
+                                              'Tout sélectionner',
+                                          )}
                                 </Button>
                             </div>
 
-                            <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1">
+                            <div className="max-h-[380px] space-y-3 overflow-y-auto pr-1">
                                 {metaTemplates.map((tpl) => {
                                     const key = `${tpl.name}:${tpl.language}`;
                                     const isSelected = selectedKeys.has(key);
@@ -318,27 +399,44 @@ export default function ImportMetaTemplatesDialog({
                                                 <Checkbox
                                                     id={`check-${key}`}
                                                     checked={isSelected}
-                                                    onCheckedChange={() => toggleSelect(key)}
+                                                    onCheckedChange={() =>
+                                                        toggleSelect(key)
+                                                    }
                                                     className="mt-1"
                                                 />
                                                 <div className="flex-1 space-y-2">
                                                     <div className="flex flex-wrap items-center justify-between gap-2">
                                                         <label
                                                             htmlFor={`check-${key}`}
-                                                            className="cursor-pointer font-semibold text-sm hover:text-primary transition-colors flex items-center gap-2"
+                                                            className="flex cursor-pointer items-center gap-2 text-sm font-semibold transition-colors hover:text-primary"
                                                         >
-                                                            <span>{tpl.name}</span>
+                                                            <span>
+                                                                {tpl.name}
+                                                            </span>
                                                         </label>
                                                         <div className="flex items-center gap-1.5">
-                                                            <Badge variant={statusBadgeVariant(tpl.status)} className="text-[10px] uppercase">
+                                                            <Badge
+                                                                variant={statusBadgeVariant(
+                                                                    tpl.status,
+                                                                )}
+                                                                className="text-[10px] uppercase"
+                                                            >
                                                                 {tpl.status}
                                                             </Badge>
-                                                            <Badge variant="outline" className="text-[10px]">
+                                                            <Badge
+                                                                variant="outline"
+                                                                className="text-[10px]"
+                                                            >
                                                                 {tpl.language.toUpperCase()}
                                                             </Badge>
                                                             {tpl.category ? (
-                                                                <Badge variant="secondary" className="text-[10px]">
-                                                                    {tpl.category}
+                                                                <Badge
+                                                                    variant="secondary"
+                                                                    className="text-[10px]"
+                                                                >
+                                                                    {
+                                                                        tpl.category
+                                                                    }
                                                                 </Badge>
                                                             ) : null}
                                                         </div>
@@ -347,37 +445,64 @@ export default function ImportMetaTemplatesDialog({
                                                     {/* Custom title input if selected */}
                                                     {isSelected ? (
                                                         <div className="space-y-1">
-                                                            <Label htmlFor={`title-${key}`} className="text-[11px] text-muted-foreground">
-                                                                Titre interne dans Super Sécurité
+                                                            <Label
+                                                                htmlFor={`title-${key}`}
+                                                                className="text-[11px] text-muted-foreground"
+                                                            >
+                                                                {uiText(
+                                                                    'ui.components.text_e9e754fc7651',
+                                                                    'Titre interne dans Super Sécurité',
+                                                                )}
                                                             </Label>
                                                             <Input
                                                                 id={`title-${key}`}
-                                                                value={customTitles[key] ?? humanizeTemplateName(tpl.name)}
-                                                                onChange={(e) =>
-                                                                    setCustomTitles((prev) => ({
-                                                                        ...prev,
-                                                                        [key]: e.target.value,
-                                                                    }))
+                                                                value={
+                                                                    customTitles[
+                                                                        key
+                                                                    ] ??
+                                                                    humanizeTemplateName(
+                                                                        tpl.name,
+                                                                    )
                                                                 }
-                                                                placeholder="Titre pour vos campagnes"
-                                                                className="h-8 text-xs bg-background"
+                                                                onChange={(e) =>
+                                                                    setCustomTitles(
+                                                                        (
+                                                                            prev,
+                                                                        ) => ({
+                                                                            ...prev,
+                                                                            [key]: e
+                                                                                .target
+                                                                                .value,
+                                                                        }),
+                                                                    )
+                                                                }
+                                                                placeholder={uiText(
+                                                                    'ui.components.text_890b6603fa70',
+                                                                    'Titre pour vos campagnes',
+                                                                )}
+                                                                className="h-8 bg-background text-xs"
                                                             />
                                                         </div>
                                                     ) : null}
 
                                                     {/* WhatsApp Message Preview Bubble */}
-                                                    <div className="rounded-lg border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 p-3 text-xs space-y-1 text-foreground">
+                                                    <div className="space-y-1 rounded-lg border border-emerald-500/20 bg-emerald-50/50 p-3 text-xs text-foreground dark:bg-emerald-950/20">
                                                         {tpl.header_text ? (
-                                                            <p className="font-semibold text-foreground/90 border-b border-emerald-500/10 pb-1">
-                                                                {tpl.header_text}
+                                                            <p className="border-b border-emerald-500/10 pb-1 font-semibold text-foreground/90">
+                                                                {
+                                                                    tpl.header_text
+                                                                }
                                                             </p>
                                                         ) : null}
-                                                        <p className="whitespace-pre-line text-muted-foreground leading-relaxed">
-                                                            {tpl.body_text || 'Aucun texte de corps.'}
+                                                        <p className="leading-relaxed whitespace-pre-line text-muted-foreground">
+                                                            {tpl.body_text ||
+                                                                'Aucun texte de corps.'}
                                                         </p>
                                                         {tpl.footer_text ? (
-                                                            <p className="text-[10px] text-muted-foreground/70 pt-1">
-                                                                {tpl.footer_text}
+                                                            <p className="pt-1 text-[10px] text-muted-foreground/70">
+                                                                {
+                                                                    tpl.footer_text
+                                                                }
                                                             </p>
                                                         ) : null}
                                                     </div>
@@ -391,17 +516,32 @@ export default function ImportMetaTemplatesDialog({
                     ) : null}
 
                     {!loading && !error && metaTemplates.length === 0 ? (
-                        <div className="text-center py-10 text-muted-foreground">
-                            <MessageSquare className="size-8 mx-auto mb-2 opacity-40" />
-                            <p className="text-sm font-medium">Aucun modèle de message trouvé sur ce compte Meta.</p>
-                            <p className="text-xs mt-1">Créez et faites approuver vos modèles dans Meta Business Manager avant de les importer.</p>
+                        <div className="py-10 text-center text-muted-foreground">
+                            <MessageSquare className="mx-auto mb-2 size-8 opacity-40" />
+                            <p className="text-sm font-medium">
+                                {uiText(
+                                    'ui.components.text_55198ef7fcc2',
+                                    'Aucun modèle de message trouvé sur ce compte Meta.',
+                                )}
+                            </p>
+                            <p className="mt-1 text-xs">
+                                {uiText(
+                                    'ui.components.text_ba72063a4a92',
+                                    'Créez et faites approuver vos modèles dans Meta Business Manager avant de les importer.',
+                                )}
+                            </p>
                         </div>
                     ) : null}
                 </div>
 
                 <DialogFooter className="gap-2 border-t pt-3">
-                    <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={submitting}>
-                        Fermer
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setOpen(false)}
+                        disabled={submitting}
+                    >
+                        {uiText('ui.components.text_711e5f2e198d', 'Fermer')}
                     </Button>
                     <Button
                         type="button"
@@ -411,12 +551,21 @@ export default function ImportMetaTemplatesDialog({
                         {submitting ? (
                             <>
                                 <Loader2 className="size-4 animate-spin" />
-                                Importation en cours…
+                                {uiText(
+                                    'ui.components.text_8721536fbf9d',
+                                    'Importation en cours…',
+                                )}
                             </>
                         ) : (
                             <>
                                 <Check className="size-4" />
-                                Importer {selectedKeys.size > 0 ? `(${selectedKeys.size})` : ''}
+                                {uiText(
+                                    'ui.components.text_ed2c9cb3830e',
+                                    'Importer',
+                                )}{' '}
+                                {selectedKeys.size > 0
+                                    ? `(${selectedKeys.size})`
+                                    : ''}
                             </>
                         )}
                     </Button>

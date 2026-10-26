@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -181,6 +182,8 @@ function GalleryModal({
     mediaItems: BentoGalleryMediaItem[];
     showItemLabels: boolean;
 }) {
+    const { t: uiText } = useUiTranslations();
+
     const [dockPosition, setDockPosition] = useState({ x: 0, y: 0 });
 
     if (!isOpen) {
@@ -198,7 +201,7 @@ function GalleryModal({
                     stiffness: 400,
                     damping: 30,
                 }}
-                className="fixed inset-0 z-40 min-h-screen w-full overflow-hidden rounded-none bg-black/80 backdrop-blur-lg sm:h-[90vh] md:h-[600px] sm:rounded-lg md:rounded-xl"
+                className="fixed inset-0 z-40 min-h-screen w-full overflow-hidden rounded-none bg-black/80 backdrop-blur-lg sm:h-[90vh] sm:rounded-lg md:h-[600px] md:rounded-xl"
             >
                 <div className="flex h-full flex-col">
                     <div className="flex flex-1 items-center justify-center bg-black/20 p-2 sm:p-3 md:p-4">
@@ -252,7 +255,10 @@ function GalleryModal({
                     onClick={onClose}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    aria-label="Fermer la galerie"
+                    aria-label={uiText(
+                        'ui.components.text_c207d22f6253',
+                        'Fermer la galerie',
+                    )}
                 >
                     <X className="size-4" aria-hidden />
                 </motion.button>
@@ -359,9 +365,8 @@ export default function InteractiveBentoGallery({
     enableReorder = false,
     className,
 }: InteractiveBentoGalleryProps) {
-    const [selectedItem, setSelectedItem] = useState<BentoGalleryMediaItem | null>(
-        null,
-    );
+    const [selectedItem, setSelectedItem] =
+        useState<BentoGalleryMediaItem | null>(null);
     const [items, setItems] = useState(mediaItems);
     const [isDragging, setIsDragging] = useState(false);
 

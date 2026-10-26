@@ -1,0 +1,1548 @@
+{
+    "Password updated.": "密码已更新。",
+    "Profile updated.": "个人资料已更新。",
+    "Two factor authentication enabled.": "双重身份验证已启用。",
+    "Two factor authentication disabled.": "双重身份验证已停用。",
+    "nav": {
+        "home": "首页",
+        "services": "服务",
+        "why_us": "选择我们的理由",
+        "news": "新闻",
+        "tips": "安全建议",
+        "gallery": "图片与视频",
+        "contact": "联系我们",
+        "join_us": "加入我们",
+        "join": "加入我们",
+        "main": "主导航",
+        "main_label": "主导航",
+        "menu": "菜单",
+        "open_menu": "打开菜单",
+        "close_menu": "关闭菜单",
+        "mobile_title": "导航菜单",
+        "mobile_label": "移动端导航",
+        "navigation": "导航",
+        "services_submenu_open": "子菜单已展开",
+        "services_count": "项服务",
+        "services_submenu_label": "服务子菜单",
+        "scroll_progress": "阅读进度"
+    },
+    "language": {
+        "label": "语言",
+        "switch": "语言",
+        "fr": "FR",
+        "en": "EN",
+        "switch_to_fr": "切换到法语",
+        "switch_to_en": "切换到英语",
+        "zh": "中文",
+        "switch_to_zh": "切换到中文"
+    },
+    "common": {
+        "skip_to_content": "跳至正文",
+        "call": "致电",
+        "write_us": "给我们留言",
+        "learn_more": "了解更多",
+        "read_more": "阅读更多",
+        "back": "返回",
+        "send": "发送",
+        "loading": "加载中…",
+        "scroll_progress": "阅读进度",
+        "discover": "了解详情",
+        "featured": "精选"
+    },
+    "articles": {
+        "description": "Super Sécurité 的现场任务、经验分享与最新动态。",
+        "view_all": "查看全部新闻",
+        "read": "阅读文章",
+        "empty": "暂无新闻。",
+        "search_placeholder": "搜索文章…"
+    },
+    "tips": {
+        "description": "加强场所、活动和团队安全的实用建议。",
+        "view_all": "查看全部建议",
+        "read": "阅读建议",
+        "empty": "暂无安全建议。",
+        "search_placeholder": "搜索建议…"
+    },
+    "cms": {
+        "french_content_notice": "此内容目前仅提供法语版本，其他语言版本尚未发布。"
+    },
+    "footer": {
+        "rights": ":year — SuperSécurité — 版权所有。",
+        "who_we_are": "关于我们",
+        "about_heading": "关于我们",
+        "about_link": "为什么选择我们",
+        "why_choose": "为什么选择我们",
+        "news": "新闻",
+        "tips": "安全建议",
+        "gallery": "图片与视频",
+        "join": "加入我们",
+        "join_us": "加入我们",
+        "services": "服务",
+        "services_heading": "服务",
+        "contact_us": "联系我们",
+        "contact_heading": "联系我们",
+        "faq": "常见问题",
+        "networks": "社交媒体",
+        "social_heading": "社交媒体",
+        "privacy": "条款与隐私",
+        "legal": "法律声明"
+    },
+    "home": {
+        "welcome_label": "Super Sécurité",
+        "welcome_title": "您在几内亚值得信赖的私人安保合作伙伴",
+        "welcome_p1": "企业、住宅、建筑工地及工业设施都面临重要的安全挑战。Super Sécurité 根据几内亚的实际情况，提供可靠、专业的安保解决方案。",
+        "welcome_p2": "Super Sécurité 是依法成立的企业，持有在几内亚共和国开展私人安保业务所需的许可，以专业标准和合规要求为客户服务。",
+        "welcome_p3": "凭借合格的安保人员、严格的运营监督和现代技术，我们在全国范围内保护人员、财产和战略基础设施。",
+        "services_label": "我们的服务",
+        "services_intro": "Super Sécurité 为个人及企业提供安保、监控和守卫服务，保护人员、财产与业务运营。",
+        "why_label": "为什么选择我们",
+        "why_title": "现代、透明且高效的安保服务",
+        "why_intro": "我们将专业人员与技术相结合，提供高效、响应迅速的安保服务。",
+        "articles_label": "新闻",
+        "articles_title": "最新动态",
+        "tips_label": "安全建议",
+        "tips_title": "安全建议",
+        "testimonials_label": "客户评价",
+        "testimonials_title": "客户的信赖",
+        "partners_label": "合作伙伴",
+        "partners_title_lead": "他们",
+        "partners_title_highlight": "信赖我们",
+        "partners_aria": "Super Sécurité 合作伙伴标志",
+        "partners_section_lead": "我们的",
+        "partners_section_highlight": "合作伙伴",
+        "partners_section_desc": "他们信任我们，为其在科纳克里及周边地区的场所和活动提供安保服务。",
+        "advantages_label": "我们的优势",
+        "advantages_title": "我们的独特之处",
+        "advantages_items": [
+            {
+                "title": "经验与专业精神",
+                "description": "我们的私人安保专家团队接受符合行业严格标准的培训。"
+            },
+            {
+                "title": "快速响应",
+                "description": "迅速部署人员，为您的场所、建筑项目和设施提供保护。"
+            },
+            {
+                "title": "全天候服务",
+                "description": "每周七天、每天二十四小时保护您与您的财产。"
+            },
+            {
+                "title": "持证且训练有素的团队",
+                "description": "合格的安保人员，熟悉企业、住宅、建筑工地与矿区环境。"
+            }
+        ],
+        "innovation_label": "创新",
+        "app_teaser": "通过手机跟踪场所情况、报告事件并与我们的团队沟通。请在专页了解全部功能。",
+        "cta_call": "致电",
+        "cta_write": "给我们留言"
+    },
+    "services": {
+        "nav_label": "我们的服务",
+        "entreprise": {
+            "title": "企业安保",
+            "description": "保护办公室、商店和仓库，由合格安保人员提供全天候服务。",
+            "nav_tagline": "办公室、商店和仓库",
+            "hero_title_lead": "企业",
+            "hero_title_highlight": "安保",
+            "hero_description": "保护您的员工、财产及业务连续性",
+            "hero_image_alt": "Super Sécurité — 企业安保",
+            "hero_stats": [
+                {
+                    "label": "监控",
+                    "value": "全天候"
+                },
+                {
+                    "label": "覆盖范围",
+                    "value": "科纳克里及几内亚全国"
+                },
+                {
+                    "label": "专业性",
+                    "value": "合格且受监督的安保人员"
+                }
+            ],
+            "intro": [
+                "盗窃、入侵、破坏和未经授权的进入风险日益增加，企业安全不能靠运气。",
+                "Super Sécurité 为几内亚的企业提供符合实际需求的守卫与监控方案，服务办公室、商店、仓库、酒店、餐厅及工业设施，持续有效地保护客户场所。",
+                "通过具有威慑力的现场值守、严格流程和持续监督，我们保护您的运营，维护您的形象与安心。"
+            ],
+            "intro_indicators": [
+                "银行与金融机构",
+                "酒店与餐厅",
+                "商店与超市",
+                "仓库与物流基地",
+                "工业场所",
+                "办公室与总部"
+            ],
+            "sections_title": "我们的企业安保服务",
+            "sections": [
+                {
+                    "title": "出入管理",
+                    "description": "管理进出、核实身份并引导访客，保障场所出入安全。"
+                },
+                {
+                    "title": "场所监控",
+                    "description": "持续保护办公室、商店、仓库和敏感区域，防范入侵、盗窃和破坏。"
+                },
+                {
+                    "title": "安全巡逻",
+                    "description": "昼夜定期巡逻，及时发现异常，防患于未然。"
+                },
+                {
+                    "title": "事件处理",
+                    "description": "发生入侵、事件或紧急情况时迅速响应并执行相应流程。"
+                },
+                {
+                    "title": "车辆检查",
+                    "description": "检查并记录进出车辆，加强出入口安全。"
+                },
+                {
+                    "title": "工作规程与报告",
+                    "description": "提供明确指令、带时间记录的巡逻、访客登记及符合运营与合同要求的定期报告。"
+                }
+            ],
+            "gallery_title": "企业安保",
+            "gallery_description": "通过现场照片了解我们的企业安保服务。"
+        },
+        "residence": {
+            "title": "住宅安保",
+            "description": "以严格监控和具有威慑力的现场值守，守护别墅、公寓楼和住宅区。",
+            "nav_tagline": "别墅、公寓楼和住宅区",
+            "hero_title_lead": "住宅",
+            "hero_title_highlight": "安保",
+            "hero_description": "保护您的家人和居住环境，让您安心",
+            "hero_image_alt": "Super Sécurité — 住宅安保",
+            "hero_stats": [
+                {
+                    "label": "住宅",
+                    "value": "别墅与公寓楼"
+                },
+                {
+                    "label": "监控",
+                    "value": "昼夜值守"
+                },
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                }
+            ],
+            "intro": [
+                "住宅安全需要专业保障。无论您拥有别墅、管理公寓楼还是负责私人住宅，为居民和财产营造安全环境都是我们认真承担的责任。",
+                "Super Sécurité 由合格人员提供住宅守卫与监控服务，兼顾令人安心的现场值守、审慎工作方式与运营效率。"
+            ],
+            "intro_indicators": [
+                "私人别墅",
+                "住宅楼",
+                "私人住宅区",
+                "外籍人士住宅",
+                "高管住宅",
+                "外交人员住宅"
+            ],
+            "sections_title": "我们的住宅安保服务",
+            "sections": [
+                {
+                    "title": "全天候守卫",
+                    "description": "安保人员昼夜持续值守，为住宅提供不间断保护。"
+                },
+                {
+                    "title": "访客管理",
+                    "description": "严格管理进出、登记访客并核实通行权限，防范未经授权的入侵。"
+                },
+                {
+                    "title": "出入口监控",
+                    "description": "保护大门、停车场和通道等关键位置，从外围降低入侵风险。"
+                },
+                {
+                    "title": "安全巡逻",
+                    "description": "定期在内外区域巡逻，在可疑活动演变为事件前及时发现。"
+                },
+                {
+                    "title": "事件处理",
+                    "description": "遇到异常、入侵或威胁行为时立即响应并有序处置。"
+                },
+                {
+                    "title": "加强夜间监控",
+                    "description": "夜间加强对出入口、停车场和公共区域的警戒。"
+                }
+            ],
+            "gallery_title": "住宅安保",
+            "gallery_description": "通过现场照片了解我们的住宅安保服务。"
+        },
+        "chantiers": {
+            "title": "建筑工地安保",
+            "description": "保护工地物资，管理出入，并开展定期现场巡逻。",
+            "nav_tagline": "建筑工地与设备",
+            "hero_title_lead": "建筑工地",
+            "hero_title_highlight": "安保",
+            "hero_description": "保护您的项目、团队与设备",
+            "hero_image_alt": "Super Sécurité — 建筑工地安保",
+            "hero_stats": [
+                {
+                    "label": "行业",
+                    "value": "建筑与基础设施"
+                },
+                {
+                    "label": "监控",
+                    "value": "巡逻与出入管理"
+                },
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                }
+            ],
+            "intro": [
+                "建筑工地容易遭受物资盗窃、入侵和破坏，人员车辆流动失控也可能直接影响工期与成本。",
+                "Super Sécurité 为几内亚各类规模的建筑项目提供守卫与监控方案，涵盖公共工程、住宅建设和工业基础设施。",
+                "我们的目标是持续保护工地，让团队安全工作，让项目顺利推进。"
+            ],
+            "intro_indicators": [
+                "住宅建设",
+                "道路与桥梁",
+                "工业工地",
+                "翻新项目",
+                "住宅综合体",
+                "城市建设"
+            ],
+            "sections_title": "我们的建筑工地安保服务",
+            "sections": [
+                {
+                    "title": "出入管理",
+                    "description": "严格管理员工、访客和供应商的进出，持续掌握现场情况。"
+                },
+                {
+                    "title": "工地监控",
+                    "description": "保护施工区域、储存物资和设备，防范盗窃、破坏及未经授权的进入。"
+                },
+                {
+                    "title": "安全巡逻",
+                    "description": "昼夜定期巡逻，及时发现异常并在事件发生前采取措施。"
+                },
+                {
+                    "title": "车辆检查",
+                    "description": "系统检查进出工地的卡车、机械和车辆，防范可疑活动。"
+                },
+                {
+                    "title": "事件处理",
+                    "description": "遇到入侵、事件或异常情况时迅速、有序处置并做好记录。"
+                },
+                {
+                    "title": "工地协调",
+                    "description": "与工地负责人保持沟通，及时报告异常，避免影响施工进度。"
+                }
+            ],
+            "gallery_title": "建筑工地安保",
+            "gallery_description": "通过现场照片了解我们的建筑工地安保服务。"
+        },
+        "zones-minieres": {
+            "title": "矿区安保",
+            "description": "由接受严格安保规程培训的团队对矿区开展严密监控。",
+            "nav_tagline": "敏感场所与工业设施",
+            "hero_title_lead": "矿区",
+            "hero_title_highlight": "安保",
+            "hero_description": "满足矿业严格要求的安保服务",
+            "hero_image_alt": "Super Sécurité — 矿区安保",
+            "hero_stats": [
+                {
+                    "label": "行业",
+                    "value": "矿业与敏感场所"
+                },
+                {
+                    "label": "规程",
+                    "value": "严格并符合现场实际"
+                },
+                {
+                    "label": "专业能力",
+                    "value": "高风险环境安保"
+                }
+            ],
+            "intro": [
+                "几内亚拥有丰富的铝土矿、黄金及其他矿产资源，在全球矿业中占据重要地位。这些资源伴随着入侵、盗窃、蓄意破坏和运营中断等重大安全挑战。",
+                "Super Sécurité 为几内亚矿业企业提供可靠的安保体系，适应严苛环境及开采场所特有的运营限制。"
+            ],
+            "intro_indicators": [
+                "矿山",
+                "采石场",
+                "生活营地",
+                "港口设施",
+                "开采场所",
+                "勘探区域"
+            ],
+            "sections_title": "我们的矿区安保服务",
+            "sections": [
+                {
+                    "title": "出入管理",
+                    "description": "严格管理员工、访客和分包商进出，保障整个场所边界安全。"
+                },
+                {
+                    "title": "生活营地监控",
+                    "description": "保护员工住宿区，确保工作时间以外的生活环境安全、稳定、可控。"
+                },
+                {
+                    "title": "车辆检查",
+                    "description": "系统检查进出车辆，防范盗窃及违禁物品进入。"
+                },
+                {
+                    "title": "基础设施安保",
+                    "description": "保护办公室、车间、仓库和敏感区域，防范入侵、损毁和蓄意破坏。"
+                },
+                {
+                    "title": "安全巡逻",
+                    "description": "在整个区域持续巡逻，保持主动监控，震慑恶意行为。"
+                },
+                {
+                    "title": "事件处理",
+                    "description": "立即执行安全流程并有序上报警情，实现快速且可追溯的响应。"
+                }
+            ],
+            "gallery_title": "矿区安保",
+            "gallery_description": "通过现场照片了解我们的矿区安保服务。",
+            "highlights_title": "矿业运营商选择 Super Sécurité 的理由",
+            "highlights": [
+                "熟悉敏感与偏远环境的经验丰富人员",
+                "专门、持续且有记录的现场监督",
+                "偏远场所的强大部署能力",
+                "严格遵守健康、安全、环境流程及国际安保标准",
+                "及时提供清晰、详细的事件报告",
+                "在几内亚主要矿区建立运营网络"
+            ]
+        }
+    },
+    "about": {
+        "label": "关于我们",
+        "title": "为什么选择 Super Sécurité",
+        "mission_who_title": "我们是谁？",
+        "mission_who_body": "Super Sécurité 是一家位于科纳克里 Lambanyi 的私人安保公司。我们通过守卫与监控服务，保护科纳克里及周边地区的企业、住宅、建筑工地与矿区。",
+        "mission_commitment_title": "我们的承诺",
+        "mission_commitment_body": "保护您最重视的设施、团队与安心生活。专业、响应迅速的团队为您提供全天候服务。"
+    },
+    "contact": {
+        "channels_label": "直接联系",
+        "channels_title_lead": "选择适合您的",
+        "channels_title_highlight": "联系方式",
+        "channel_email_desc": "快速回复您的请求",
+        "channel_email_cta": "发送电子邮件",
+        "channel_phone_desc": "全天候服务",
+        "channel_phone_cta": "致电",
+        "channel_whatsapp_desc": "即时交流与文件分享",
+        "channel_whatsapp_cta": "打开 WhatsApp",
+        "process_label": "服务流程",
+        "process_title": "四步服务流程",
+        "step_1_title": "接收请求",
+        "step_1_desc": "分析您的安保需求。",
+        "step_2_title": "评估",
+        "step_2_desc": "实地考察或沟通，了解您的具体要求。",
+        "step_3_title": "方案",
+        "step_3_desc": "提供人员、时间安排和工作规程的定制方案。",
+        "step_4_title": "部署",
+        "step_4_desc": "迅速安排团队进驻现场。",
+        "legal_info_label": "法律信息",
+        "legal_info_text": "Super Sécurité · 科纳克里及周边地区",
+        "privacy_label": "隐私",
+        "privacy_text": "您的信息仅用于回复您的请求。如项目需要，我们愿意签署保密协议。",
+        "form_label": "联系表单",
+        "form_heading": "请描述您的安保需求",
+        "form_required_hint": "标有 * 的字段为必填项。",
+        "form_title": "给我们留言",
+        "form_name": "姓名",
+        "form_name_placeholder": "您的姓名",
+        "form_email": "电子邮箱",
+        "form_email_placeholder": "you@example.com",
+        "form_phone": "电话",
+        "form_phone_placeholder": "+224 ...",
+        "form_company": "公司",
+        "form_company_optional": "（选填）",
+        "form_company_placeholder": "您的公司名称",
+        "form_project_type": "项目类型",
+        "form_project_placeholder": "请选择…",
+        "form_project_search": "搜索类型…",
+        "form_message": "项目详情",
+        "form_message_placeholder": "请描述项目目标、背景及预期时间安排…",
+        "form_privacy": "您的信息将保密，且不会与他人共享。",
+        "form_submit": "发送",
+        "form_submitting": "正在发送…",
+        "project_types": [
+            "企业安保",
+            "住宅安保",
+            "建筑工地安保",
+            "矿区安保",
+            "视频监控与远程监控",
+            "其他"
+        ],
+        "map_label": "位置",
+        "map_title_lead": "找到",
+        "map_title_highlight": "我们",
+        "map_title": "路线",
+        "map_iframe_title": "前往 Super Sécurité 的路线",
+        "map_coordinates": "坐标",
+        "map_open_maps": "在 Google 地图中打开",
+        "faq_title": "常见问题",
+        "faq_title_lead": "您关心的",
+        "faq_title_highlight": "常见问题",
+        "faq_prefix": "常见问题 —",
+        "faq_groups": [
+            {
+                "title": "企业",
+                "faqs": [
+                    {
+                        "question": "为什么在几内亚聘请私人安保公司？",
+                        "answer": "私人安保公司可保护场所、设备、员工和访客，帮助企业应对出入管理、设施监控和犯罪预防等挑战。"
+                    },
+                    {
+                        "question": "哪些企业可以使用你们的服务？",
+                        "answer": "我们服务中小企业、大型公司、银行、商店、仓库、工厂、行政机构及在几内亚运营的国际机构和组织。"
+                    },
+                    {
+                        "question": "安保人员如何保护场所？",
+                        "answer": "我们开展出入管理、安全巡逻、访客接待、现场流动监控，并执行与客户共同制定的安全指令。"
+                    },
+                    {
+                        "question": "安保人员是否接受培训？",
+                        "answer": "是的。所有安保人员均接受符合私人安保要求的培训，并受到定期监督，以保持专业水平。"
+                    },
+                    {
+                        "question": "你们在科纳克里以外开展业务吗？",
+                        "answer": "是的。Super Sécurité 根据客户需求在几内亚各地开展业务。"
+                    },
+                    {
+                        "question": "如何获取企业安保报价？",
+                        "answer": "我们的团队会评估需求，提供符合您业务情况的定制方案与报价。"
+                    },
+                    {
+                        "question": "为什么选择科纳克里的安保公司来保护企业？",
+                        "answer": "科纳克里集中了几内亚大量经济活动，包括办公室、商店、仓库和工业设施。本地安保公司更熟悉现场情况，能够快速响应，提供符合首都实际安全环境的服务。"
+                    }
+                ]
+            },
+            {
+                "title": "矿区安保",
+                "faqs": [
+                    {
+                        "question": "为什么几内亚矿区的安全至关重要？",
+                        "answer": "矿区集中了高价值设备、原材料及大量人员流动。专业安保可降低盗窃、入侵、蓄意破坏和运营事故的风险。"
+                    },
+                    {
+                        "question": "你们有矿业经验吗？",
+                        "answer": "有。我们的团队接受培训，熟悉矿区特有的限制及在几内亚这一战略行业运营的企业要求。"
+                    },
+                    {
+                        "question": "你们为矿山提供哪些安保服务？",
+                        "answer": "我们提供出入管理、设施监控、设备保护、访客管理、安全巡逻及运营监督。"
+                    },
+                    {
+                        "question": "你们能在偏远矿区开展工作吗？",
+                        "answer": "能。我们可以在 Boké、Boffa、Siguiri、Kankan 及几内亚其他矿区部署团队。"
+                    },
+                    {
+                        "question": "如何监督矿区安保人员？",
+                        "answer": "主管定期检查，并可向场所负责人提供工作报告。"
+                    },
+                    {
+                        "question": "你们能提供全天候安保吗？",
+                        "answer": "能。我们通过轮班团队，为矿区提供持续保护。"
+                    },
+                    {
+                        "question": "如何为 Boké 或 Boffa 的矿区选择安保公司？",
+                        "answer": "Boké 和 Boffa 拥有几内亚重要矿业项目。保护这些场所需要专业经验、偏远地区部署能力及对矿业要求的深入了解。Super Sécurité 为设施、人员和设备提供相应安保方案。"
+                    }
+                ]
+            },
+            {
+                "title": "家庭与住宅安保",
+                "faqs": [
+                    {
+                        "question": "为什么聘请安保公司保护住宅？",
+                        "answer": "安保人员能够震慑入侵、管理出入，并加强住户与财产安全。"
+                    },
+                    {
+                        "question": "你们保护哪些住宅？",
+                        "answer": "我们服务别墅、私人住宅、住宅楼、外交人员住所以及高管或外籍人士住房。"
+                    },
+                    {
+                        "question": "安保人员昼夜值守吗？",
+                        "answer": "是的。我们可根据客户需要提供持续值守或合适的工作时段。"
+                    },
+                    {
+                        "question": "你们会检查访客吗？",
+                        "answer": "会。安保人员可核实访客身份、管理进出，并执行业主制定的安全指令。"
+                    },
+                    {
+                        "question": "可以提供临时安保服务吗？",
+                        "answer": "可以。我们也为长期外出或风险增加的时段提供短期服务。"
+                    },
+                    {
+                        "question": "如何确定所需安保人员数量？",
+                        "answer": "我们的团队会评估房产布局及已识别的风险，据此提出合适的配置建议。"
+                    },
+                    {
+                        "question": "如何有效保护科纳克里的别墅或住宅？",
+                        "answer": "住宅保护需要出入管理、合格安保人员、访客监控及相应流程。专业安保方案让住户安心，并有助于预防入侵和盗窃。"
+                    }
+                ]
+            },
+            {
+                "title": "建筑工地安保",
+                "faqs": [
+                    {
+                        "question": "为什么要保护几内亚的建筑工地？",
+                        "answer": "工地经常面临物资盗窃、损毁和入侵。专业监控可保护投资，减少施工中断。"
+                    },
+                    {
+                        "question": "你们保护哪些工地？",
+                        "answer": "我们服务建筑工地、工业项目、公共基础设施、矿业工程及房地产项目。"
+                    },
+                    {
+                        "question": "安保人员在工地负责什么？",
+                        "answer": "负责出入管理、物资和设备监控、安全巡逻以及员工进出管理。"
+                    },
+                    {
+                        "question": "非工作时间也有监控吗？",
+                        "answer": "有。我们提供夜间、周末和节假日监控，确保持续保护。"
+                    },
+                    {
+                        "question": "能迅速在新工地部署吗？",
+                        "answer": "能。我们可以根据位置和项目需求迅速部署团队。"
+                    },
+                    {
+                        "question": "如何减少工地盗窃损失？",
+                        "answer": "根据现场情况制定安保配置，结合出入检查和定期监控，有助于减少损失并保护工地资产。"
+                    },
+                    {
+                        "question": "如何保护科纳克里及几内亚主要城市的工地？",
+                        "answer": "工地容易遭受物资盗窃、入侵和破坏。合理配置出入管理、定期巡逻及非工作时间监控，可有效保护投资，保障施工进度。"
+                    }
+                ]
+            }
+        ],
+        "hero_label": "联系我们",
+        "hero_title_lead": "让我们谈谈您的",
+        "hero_title_highlight": "安保需求",
+        "hero_description": "您是否正在寻找几内亚的守卫、监控或私人安保服务？请告诉我们您的需求，我们的团队将尽快联系您，提供定制方案。"
+    },
+    "legal": {
+        "label": "法律信息",
+        "title": "法律声明",
+        "description": "supersecurite.com 网站的法律信息。",
+        "publisher": "网站发布者",
+        "publisher_body": "Super Sécurité，科纳克里及周边地区的私人安保服务商。",
+        "rccm": "商业及动产信用登记号（RCCM）",
+        "contact": "联系方式",
+        "director": "出版负责人",
+        "hosting": "网站托管",
+        "hosting_body": "Hostinger International Ltd.，网站通过 HTTPS 访问。"
+    },
+    "privacy": {
+        "label": "法律信息",
+        "title": "隐私政策",
+        "description": "了解我们如何收集和使用您的个人数据。",
+        "controller_title": "数据控制者",
+        "controller_body": "Super Sécurité — :address。联系方式：:email。",
+        "data_title": "收集的数据",
+        "data_body": "联系表单收集姓名、电子邮箱、电话及留言内容。网站统计还使用匿名浏览数据，包括浏览页面、访问时长及设备信息。",
+        "purpose_title": "使用目的",
+        "purpose_body": "回复安保报价请求、改进网站，并以汇总形式分析访问情况。我们不会出售您的数据。",
+        "cookies_title": "Cookie",
+        "cookies_body": "我们使用技术 Cookie（会话、偏好设置）及用于内部统计的访客 Cookie。您可以在浏览器设置中拒绝这些 Cookie。",
+        "retention_title": "保存期限",
+        "retention_body": "联系留言最多保存二十四个月，法律另有要求的除外。访问分析数据按照内部政策汇总保存。",
+        "rights_title": "您的权利",
+        "rights_body": "您可以通过 :email 申请访问、更正或删除您的数据。"
+    },
+    "devenir_agent": {
+        "cta": "加入我们",
+        "title": "成为安保人员",
+        "submit": "提交申请",
+        "thanks_title": "感谢您的申请",
+        "form": {
+            "badge": "求职申请",
+            "title": "加入我们的团队",
+            "required_hint": "标有 * 的字段为必填项。",
+            "first_name": "名",
+            "first_name_placeholder": "您的名字",
+            "last_name": "姓",
+            "last_name_placeholder": "您的姓氏",
+            "phone": "电话",
+            "phone_placeholder": "+224 6XX XX XX XX",
+            "email": "电子邮箱",
+            "email_placeholder": "you@example.com",
+            "post": "应聘职位",
+            "post_placeholder": "选择职位…",
+            "post_search_placeholder": "搜索职位…",
+            "post_empty": "未找到职位",
+            "experience_years": "工作经验年数",
+            "experience_years_placeholder": "0",
+            "availability": "可工作时段",
+            "availability_placeholder": "请选择…",
+            "availability_search_placeholder": "搜索…",
+            "availability_empty": "未找到可工作时段",
+            "location_title": "在几内亚的位置",
+            "commune": "市镇",
+            "commune_placeholder": "搜索市镇…",
+            "commune_search_placeholder": "搜索市镇…",
+            "commune_empty": "未找到市镇",
+            "address_detail": "详细地址",
+            "address_detail_placeholder": "地标、街道、区域…",
+            "certifications": "证书与培训",
+            "certifications_placeholder": "驾驶执照、职业资格、安保培训…",
+            "motivation": "求职动机",
+            "motivation_placeholder": "您为什么希望加入 Super Sécurité？",
+            "consent": "我同意 Super Sécurité 使用我的信息，就招聘事宜与我联系。",
+            "privacy_notice": "您的数据将保密，且不会与第三方共享。",
+            "submitting": "正在提交…",
+            "submit": "提交申请"
+        },
+        "posts": {
+            "agent": "安保人员",
+            "superviseur": "主管",
+            "coordinateur": "协调员",
+            "formateur": "培训师",
+            "responsable_operations": "运营经理",
+            "autres": "其他"
+        },
+        "availability": {
+            "jour": "白班",
+            "nuit": "夜班",
+            "24h": "全天候",
+            "evenementiel": "活动安保"
+        },
+        "validation": {
+            "first_name_required": "请输入名字。",
+            "last_name_required": "请输入姓氏。",
+            "phone_required": "请输入电话号码。",
+            "email_invalid": "电子邮箱地址无效。",
+            "consent_required": "您必须同意处理个人数据。",
+            "post_required": "请选择职位。",
+            "recaptcha_required": "请完成防机器人验证。"
+        },
+        "thank_you": {
+            "title": "申请已提交",
+            "description": "感谢您的申请。我们的人力资源团队将审核您的资料，如有适合您所在地区和经验的机会，会与您联系。",
+            "home_button": "返回首页"
+        }
+    },
+    "heroes": {
+        "actualites": {
+            "label": "新闻与现场",
+            "title_lead": "了解",
+            "title_highlight": "最新动态",
+            "title_trail": "安保资讯",
+            "description": "现场任务、经验分享、实用建议与最新动态。",
+            "image_alt": "Super Sécurité — 新闻与现场",
+            "stats": [
+                {
+                    "label": "内容",
+                    "value": "文章与报告"
+                },
+                {
+                    "label": "地区",
+                    "value": "科纳克里及周边地区"
+                },
+                {
+                    "label": "专业能力",
+                    "value": "私人安保"
+                }
+            ]
+        },
+        "conseils": {
+            "label": "预防与良好实践",
+            "title_lead": "通过我们的",
+            "title_highlight": "安全建议",
+            "title_trail": "预防风险",
+            "description": "由我们的团队编写的实用指南，帮助企业、住宅、工地及敏感场所加强保护。",
+            "image_alt": "Super Sécurité — 预防与良好实践",
+            "stats": [
+                {
+                    "label": "主题",
+                    "value": "预防与监控"
+                },
+                {
+                    "label": "阅读",
+                    "value": "实用指南"
+                },
+                {
+                    "label": "受众",
+                    "value": "企业与个人"
+                }
+            ]
+        },
+        "devenir_agent": {
+            "label": "职业机会",
+            "title_lead": "加入我们的",
+            "title_highlight": "专业安保团队",
+            "title_trail": "",
+            "description": "在科纳克里及周边地区参与多样化任务，发展安保职业生涯。欢迎申请。",
+            "image_alt": "Super Sécurité — 职业机会",
+            "stats": [
+                {
+                    "label": "任务",
+                    "value": "企业与现场"
+                },
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                },
+                {
+                    "label": "地区",
+                    "value": "科纳克里及周边地区"
+                }
+            ]
+        },
+        "contact": {
+            "label": "联系我们",
+            "title_lead": "让我们谈谈您的",
+            "title_highlight": "安保需求",
+            "title_trail": "",
+            "description": "您是否正在寻找几内亚的守卫、监控或私人安保服务？请告诉我们您的需求，我们的团队将尽快联系您，提供定制方案。",
+            "image_alt": "Super Sécurité — 联系我们",
+            "stats": [
+                {
+                    "label": "回复时间",
+                    "value": "二十四个工作小时内"
+                },
+                {
+                    "label": "办公室",
+                    "value": "科纳克里 Lambanyi"
+                },
+                {
+                    "label": "服务",
+                    "value": "四大专业领域"
+                }
+            ]
+        },
+        "about": {
+            "label": "为什么",
+            "title_lead": "选择 Super",
+            "title_highlight": "Sécurité？",
+            "title_trail": "",
+            "description": "经验、快速响应与全天候服务，训练有素的团队为科纳克里及周边地区的企业和个人提供保护。",
+            "image_alt": "Super Sécurité — 为什么",
+            "stats": [
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                },
+                {
+                    "label": "地区",
+                    "value": "科纳克里及周边地区"
+                },
+                {
+                    "label": "承诺",
+                    "value": "持证团队"
+                }
+            ]
+        },
+        "galerie": {
+            "label": "现场任务图片",
+            "title_lead": "了解我们的",
+            "title_highlight": "图片与视频",
+            "title_trail": "现场实录",
+            "description": "了解我们的团队在几内亚各地的企业、住宅、建筑工地与矿区开展工作的照片。",
+            "image_alt": "Super Sécurité — 现场任务图片",
+            "stats": [
+                {
+                    "label": "服务",
+                    "value": "四大专业领域"
+                },
+                {
+                    "label": "地区",
+                    "value": "科纳克里及周边地区"
+                },
+                {
+                    "label": "现场",
+                    "value": "实景照片"
+                }
+            ]
+        }
+    },
+    "home_hero": {
+        "carousel_aria": "Super Sécurité 欢迎信息",
+        "excellence": {
+            "label": "Super Sécurité",
+            "title": "您值得信赖的合作伙伴",
+            "highlight": "毫不妥协的安全保障",
+            "description": "企业、住宅、建筑工地及工业设施都面临重要的安全挑战。Super Sécurité 根据几内亚的实际情况，提供可靠、专业的安保解决方案。",
+            "primary_cta": "联系我们",
+            "secondary_cta": "了解更多",
+            "image_alt": "Super Sécurité — 毫不妥协的安全保障",
+            "stats": [
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                },
+                {
+                    "label": "覆盖范围",
+                    "value": "科纳克里及几内亚全国"
+                },
+                {
+                    "label": "专业能力",
+                    "value": "守卫与私人安保"
+                }
+            ],
+            "nav_label": "信赖"
+        },
+        "entreprise": {
+            "title": "企业",
+            "highlight": "安保",
+            "description": "保护办公室、商店和仓库，由合格安保人员提供全天候服务。",
+            "primary_cta": "联系我们",
+            "image_alt": "Super Sécurité — 安保",
+            "stats": [
+                {
+                    "label": "监控",
+                    "value": "全天候"
+                },
+                {
+                    "label": "覆盖范围",
+                    "value": "科纳克里及几内亚全国"
+                },
+                {
+                    "label": "专业性",
+                    "value": "合格且受监督的安保人员"
+                }
+            ],
+            "nav_label": "企业",
+            "label": "Super Sécurité"
+        },
+        "residence": {
+            "title": "住宅",
+            "highlight": "安保",
+            "description": "以严格监控和具有威慑力的现场值守，守护别墅、公寓楼和住宅区。",
+            "primary_cta": "联系我们",
+            "secondary_cta": "了解更多",
+            "image_alt": "Super Sécurité — 安保",
+            "stats": [
+                {
+                    "label": "住宅",
+                    "value": "别墅与公寓楼"
+                },
+                {
+                    "label": "监控",
+                    "value": "昼夜值守"
+                },
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                }
+            ],
+            "nav_label": "住宅",
+            "label": "Super Sécurité"
+        },
+        "chantiers": {
+            "title": "建筑工地",
+            "highlight": "安保",
+            "description": "保护工地物资，管理出入，并开展定期现场巡逻。",
+            "primary_cta": "联系我们",
+            "secondary_cta": "了解更多",
+            "image_alt": "Super Sécurité — 安保",
+            "stats": [
+                {
+                    "label": "行业",
+                    "value": "建筑与基础设施"
+                },
+                {
+                    "label": "监控",
+                    "value": "巡逻与出入管理"
+                },
+                {
+                    "label": "服务时间",
+                    "value": "全天候"
+                }
+            ],
+            "nav_label": "建筑工地",
+            "label": "Super Sécurité"
+        },
+        "zones-minieres": {
+            "title": "矿区",
+            "highlight": "安保",
+            "description": "由接受严格安保规程培训的团队对矿区开展严密监控。",
+            "primary_cta": "联系我们",
+            "secondary_cta": "了解更多",
+            "image_alt": "Super Sécurité — 安保",
+            "stats": [
+                {
+                    "label": "行业",
+                    "value": "矿业与敏感场所"
+                },
+                {
+                    "label": "规程",
+                    "value": "严格并符合现场实际"
+                },
+                {
+                    "label": "专业能力",
+                    "value": "高风险环境安保"
+                }
+            ],
+            "nav_label": "矿区",
+            "label": "Super Sécurité"
+        }
+    },
+    "about_values": {
+        "label": "我们的价值观",
+        "title_lead": "指引我们的",
+        "title_highlight": "日常原则",
+        "description": "从初次沟通到现场部署，四项基本原则指导我们的每一个决定。",
+        "image_alt": "Super Sécurité 团队在现场践行价值观",
+        "items": [
+            {
+                "title": "经验与专业精神",
+                "description": "我们的私人安保专家团队接受符合行业严格标准的培训。"
+            },
+            {
+                "title": "快速响应",
+                "description": "迅速部署人员，为您的场所、建筑项目和设施提供保护。"
+            },
+            {
+                "title": "全天候服务",
+                "description": "每周七天、每天二十四小时保护您与您的财产。"
+            },
+            {
+                "title": "持证且训练有素的团队",
+                "description": "合格的安保人员，熟悉企业、住宅、建筑工地与矿区环境。"
+            }
+        ]
+    },
+    "why_us": {
+        "section_label": "为什么选择我们",
+        "title": "现代、透明且高效的安保服务",
+        "intro": "我们将专业人员与技术相结合，提供高效、响应迅速的安保服务。",
+        "app_section_title": "我们的移动应用",
+        "app_lead": "我们的专属应用让客户能够：",
+        "conclusion": "这种方式提高了透明度、响应速度与管理能力。",
+        "reasons": [
+            "持有许可并遵守几内亚法规的安保公司",
+            "经过严格选拔和培训的安保人员",
+            "持续监督，保障服务质量",
+            "通过专属应用进行透明的实时跟踪",
+            "立足本地，在几内亚各地迅速响应",
+            "在矿区、企业、住宅和建筑工地安保领域拥有专业经验"
+        ],
+        "app_features": [
+            "快速报告事件或问题",
+            "实时跟踪请求处理进展",
+            "直接与我们的团队沟通",
+            "查阅场所相关信息与报告",
+            "更好地跟踪服务质量"
+        ],
+        "details": [
+            {
+                "title": "持有许可并遵守几内亚法规的安保公司",
+                "description": "选择 Super Sécurité，就是选择一家在几内亚共和国依法经营的公司。我们持有向企业、住宅、建筑工地和工业设施提供私人安保服务所需的批准与许可。这种合规经营为客户提供可靠、负责、遵循行业专业标准的合作伙伴。",
+                "image_alt": "Super Sécurité — 持有许可并遵守几内亚法规的安保公司"
+            },
+            {
+                "title": "经过严格选拔和培训的安保人员",
+                "description": "服务质量取决于安保人员的能力。每位团队成员都按照严格的品德、纪律和专业标准选拔，并接受符合现场实际的培训，涵盖出入管理、监控、事件预防、访客管理与客户关系，从而有效保护客户委托的人员与财产。",
+                "image_alt": "Super Sécurité — 经过严格选拔和培训的安保人员"
+            },
+            {
+                "title": "持续监督，保障服务质量",
+                "description": "我们的服务不仅是在现场安排人员。主管定期进行现场检查，核实指令执行、服务质量及安保岗位管理。持续跟踪使我们能够及时发现异常并采取措施，始终维持较高的安全水平。",
+                "image_alt": "Super Sécurité — 持续监督，保障服务质量"
+            },
+            {
+                "title": "通过专属应用进行透明的实时跟踪",
+                "description": "现代安保需要高效工具。我们的专属应用支持实时跟踪服务，客户可查看巡逻报告、接收通知、报告事件并与团队交流。透明的信息增强了信任，也让客户更清楚地了解服务执行情况。",
+                "image_alt": "Super Sécurité — 通过专属应用进行透明的实时跟踪"
+            },
+            {
+                "title": "立足本地，在几内亚各地迅速响应",
+                "description": "Super Sécurité 立足几内亚，熟悉当地情况以及企业与个人面临的安全挑战。无论更换人员、临时增派力量或处理紧急情况，我们都能迅速响应，以运营组织保障服务连续性。",
+                "image_alt": "Super Sécurité — 立足本地，在几内亚各地迅速响应"
+            },
+            {
+                "title": "在矿区、企业、住宅和建筑工地安保领域拥有专业经验",
+                "description": "不同领域的风险和要求各不相同。凭借在矿业企业、公司、私人住宅、商店和建筑工地的经验，我们为每种环境提供合适方案。团队采用成熟流程防范入侵、保护财产、管理出入，让客户安心。",
+                "image_alt": "Super Sécurité — 在矿区、企业、住宅和建筑工地安保领域拥有专业经验"
+            }
+        ]
+    },
+    "galerie": {
+        "title": "图片与视频",
+        "photos_tab": "照片",
+        "videos_tab": "视频",
+        "filter_label": "筛选",
+        "all_filter": "全部",
+        "general_filter": "综合相册",
+        "no_photos": "此筛选条件下暂无图片。",
+        "photo_count_singular": "显示 :count 张照片，共 :total 张",
+        "photo_count_plural": "显示 :count 张照片，共 :total 张",
+        "video_count_singular": "显示 :count 个视频，共 :total 个",
+        "video_count_plural": "显示 :count 个视频，共 :total 个"
+    },
+    "share": {
+        "title": "分享",
+        "native": "分享…",
+        "copy_link": "复制链接",
+        "copied": "已复制",
+        "link_copied": "链接已复制到剪贴板",
+        "copy_failed": "无法复制链接",
+        "failed": "分享失败",
+        "whatsapp": "WhatsApp",
+        "facebook": "Facebook",
+        "linkedin": "LinkedIn",
+        "x": "X",
+        "email": "电子邮箱"
+    },
+    "ui": {
+        "close": "关闭",
+        "select": "请选择…",
+        "search": "搜索…",
+        "no_results": "无结果",
+        "selected_count": "已选择 :count 项",
+        "previous": "上一页",
+        "next": "下一页",
+        "page": "页",
+        "remove": "移除",
+        "loading": "加载中…",
+        "components": {
+            "text_c18f9a27c52a": "全局搜索",
+            "text_539dd0c037af": "描述、网址、IP、国家、浏览器…",
+            "text_0b6722a8adfb": "从",
+            "text_3325c2b56f2b": "至",
+            "text_721e5b29abab": "用户",
+            "text_5b8bb51598d4": "按用户筛选",
+            "text_baaddf70fb5d": "类型",
+            "text_70e904fb7463": "事件类型",
+            "text_1d233ecad306": "IP 地址",
+            "text_fe753ffb9bba": "国家",
+            "text_8e293de6ed2d": "按国家筛选",
+            "text_db2039f22724": "浏览器",
+            "text_d0df30ae3c94": "按浏览器筛选",
+            "text_9f2278e16cb4": "HTTP 方法",
+            "text_974597d958b8": "每页",
+            "text_f113794f5f9a": "结果",
+            "text_c5c3a25ff1bc": "此页面",
+            "text_53bf932ca44a": "全部后台",
+            "text_5b35e0e35591": "重置",
+            "text_9043ce493bf6": "没有符合筛选条件的记录。",
+            "text_99c40ab40592": "日期",
+            "text_64cff1319d2f": "操作",
+            "text_b348af6c7fc0": "来源",
+            "text_c51fef493cc0": "操作历史",
+            "text_981b09da1bc5": "查看与修改",
+            "text_71e864220b6e": "自动记录。",
+            "text_afef715a1b4c": "打开完整日志",
+            "text_6d7e48186a6b": "位访客",
+            "text_710952ede24e": "指定日期",
+            "text_fc74181ece96": "或",
+            "text_45b31f5996f8": "日期范围",
+            "text_980472432f98": "开始日期",
+            "text_b134aabee003": "结束日期",
+            "text_97f3c4722ee5": "快捷时段",
+            "text_54408b8064a2": "清除全部",
+            "text_18cab2889216": "移除筛选",
+            "text_2255c8b55faa": "峰值",
+            "text_61315563b9fe": "次浏览 ·",
+            "text_d7315c751a39": "此时段暂无数据。",
+            "text_723cb60154ce": "次页面浏览",
+            "text_3f9abc8733ba": "导航菜单",
+            "text_ac0e5fc936ad": "控制面板",
+            "text_69bee433c010": "导航路径",
+            "text_0a30a815d67d": "页",
+            "text_30b0e9a45aba": "上一页",
+            "text_df2df3bc713a": "下一页",
+            "text_46ad3916f6a0": "取消",
+            "text_e495d53b967a": "法语",
+            "text_ba118bf7fc9c": "英语",
+            "text_78e7920010aa": "标题",
+            "text_9d750fae7486": "摘要",
+            "text_7a6de5670ea8": "内容",
+            "text_921e6eb0c12a": "标题（英语）",
+            "text_96b29a9978a0": "摘要（英语）",
+            "text_d2bdfbb924d9": "正文（英语）",
+            "text_dee377cfd8cd": "状态",
+            "text_1d07b91ad3dd": "选择状态",
+            "text_8984247e3f42": "搜索…",
+            "text_96e1742418d4": "自动提交",
+            "text_9dbb5563662a": "建议将保存并等待管理员审核。",
+            "text_697915fdf014": "主图",
+            "text_bb28a9f4a4e3": "预览",
+            "text_41e22ed93372": "移除",
+            "text_68a5341fc6bd": "分类",
+            "text_1331275bc537": "标签",
+            "text_e6bd3117bd55": "使用逗号分隔标签",
+            "text_2933e1ef6d3c": "在首页推荐",
+            "text_dbfb83c3b23c": "发布日期",
+            "text_d2d80f8122e6": "删除账户",
+            "text_9ed453ccae42": "永久删除您的账户及全部数据",
+            "text_c2eb8cd9d956": "注意",
+            "text_c45386b35889": "此操作无法撤销，请谨慎操作。",
+            "text_f9435d3e7239": "确认删除账户？",
+            "text_fc3e41e0cded": "删除账户后，全部数据将被永久清除。请输入密码以确认。",
+            "text_ff9c8b8c0677": "密码",
+            "text_c750202ef014": "关联页面",
+            "text_d099472f84f2": "选择关联页面",
+            "text_a6ba97261b7b": "搜索服务…",
+            "text_10174b1e8a59": "保留“综合相册”，使图片仅显示在相册页面。",
+            "text_2c6271453fa1": "显示顺序",
+            "text_1aa4cb0bcca7": "图片",
+            "text_1902927a35bc": "替代文本",
+            "text_00738344a3d6": "图注",
+            "text_ee8012606f4d": "在网站发布",
+            "text_f53e69c02864": "保留“综合相册”，使视频仅显示在相册页面。",
+            "text_6471d0a63ada": "YouTube 链接",
+            "text_51894e727b31": "支持格式：youtube.com/watch、youtu.be、embed 或 shorts。",
+            "text_526e0087cc3f": "说明",
+            "text_83eaf6eb1740": "会话已锁定",
+            "text_257ed1540106": "请输入密码以恢复会话。",
+            "text_3e1eafe5296a": "解锁",
+            "text_b18aeed1a806": "退出登录",
+            "text_33028e77dd97": "暂无内容。",
+            "text_a472d3a250f4": "开始写作，或将图片拖至此处…",
+            "text_29b9a6851a45": "内容编辑器",
+            "text_4cf3fd72da6f": "重做",
+            "text_b5e5339c48bd": "文本样式",
+            "text_9615231ee629": "粗体",
+            "text_c83ceff3955b": "斜体",
+            "text_cd6de1867141": "下划线",
+            "text_eaa7eddeb531": "删除线",
+            "text_f91295f60db3": "左对齐",
+            "text_8dfb61ed4cb3": "居中",
+            "text_b0ab2ca1f836": "右对齐",
+            "text_6eb3559a159a": "项目符号列表",
+            "text_477cd1e9f9de": "编号列表",
+            "text_0de2de181f56": "插入图片",
+            "text_e37bfa975ced": "插入链接",
+            "text_2955789aa4f8": "引用",
+            "text_58af3c8d7048": "暂无通行密钥",
+            "text_6dba379b1a84": "添加通行密钥，实现免密码登录",
+            "text_c87ccdb428e6": "通行密钥",
+            "text_77f4a36551f0": "管理用于免密码登录的通行密钥",
+            "text_b6824cc8a91e": "双重身份验证",
+            "text_fc7efb90d3ad": "管理双重身份验证设置",
+            "text_bd85fb60a8d4": "登录时，请输入手机 TOTP 身份验证应用生成的安全随机码。",
+            "text_1c3193f3a0b8": "停用双重身份验证",
+            "text_ddbb473a6a3a": "启用后，登录时需输入手机 TOTP 身份验证应用生成的安全码。",
+            "text_c5702c19da53": "继续设置",
+            "text_649b5dc5c210": "启用双重身份验证",
+            "text_1fecc82cff1f": "返回顶部",
+            "text_3f51af0d8de0": "图片查看器",
+            "text_a1388f905238": "缩小",
+            "text_c9c4547ae630": "放大",
+            "text_e3eb8fab573d": "重置缩放",
+            "text_c207d22f6253": "关闭相册",
+            "text_fe0cc279c539": "上一张图片",
+            "text_0611f50252d8": "下一张图片",
+            "text_3553f8c0304e": "大区",
+            "text_2b9b8d88517d": "选择大区",
+            "text_8dae34d7cb25": "搜索大区…",
+            "text_4038a3928a50": "省",
+            "text_d205948e28ad": "选择省",
+            "text_0774e41f7921": "搜索省…",
+            "text_eaf0dc2a430e": "市镇",
+            "text_413e5519131c": "搜索市镇…",
+            "text_cdcede56427e": "排序方式",
+            "text_1f6fa6f69d18": "分钟",
+            "text_9c451305249e": "需要立即协助？",
+            "text_dbc468a14b60": "常见问题",
+            "text_d41f5b4977ee": "Facebook",
+            "text_6bb4c1177681": "幻灯片",
+            "text_9a72221a2747": "常见",
+            "text_95cebc3a7e56": "问题",
+            "text_7b27947821c8": "图片与视频",
+            "text_bf5a25c2c350": "演示与培训",
+            "text_880a30fc8055": "通过实际任务和培训，了解我们的安保人员。",
+            "text_bbc3e1df86d1": "此筛选条件下暂无视频。",
+            "text_06b53875dbc3": "Super Sécurité 团队，几内亚私人安保",
+            "text_4385c6283978": "Super Sécurité 移动应用，实时跟踪",
+            "text_e3462593f510": "Super Sécurité 团队与受保护的场所",
+            "text_545c02357695": "受众",
+            "text_46f26080a8d2": "正在加载联系人…",
+            "text_13b2b6d91907": "合并受众",
+            "text_c1b8683c98ee": "位联系人",
+            "text_2f6e81299780": "符合条件",
+            "text_e9d8e46b7556": "已排除",
+            "text_a1db1b4edb2c": "组",
+            "text_093e7d5fdbaa": "联系人",
+            "text_d15690f08a57": "直接",
+            "text_50c6387e36b3": "所选受众中没有联系人。",
+            "text_68e7e51609e9": "已排除",
+            "text_e996f291499e": "其他",
+            "text_d2aa0156582f": "启动“",
+            "text_d00449ae99a7": "立即发送，或安排未来的启动时间。",
+            "text_4303250da364": "立即",
+            "text_b16f391d4c72": "立即将发送加入队列。",
+            "text_2a858768800f": "安排",
+            "text_503fac4deae5": "选择启动日期和时间。",
+            "text_4891cd042a20": "日期和时间",
+            "text_f27187960864": "查看组",
+            "text_5d43f0044a14": "仅已同意营销且有电子邮箱的联系人会收到此活动邮件。",
+            "text_55eb2f1c0ac8": "此组没有联系人。",
+            "text_0144dbff81be": "列表",
+            "text_0302be0df6c4": "搜索列表…",
+            "text_5f6baab4dbe1": "语言",
+            "text_6a40edf1fc87": "WhatsApp",
+            "text_b2c124536d21": "姓名",
+            "text_2550d962e536": "电子邮件",
+            "text_2498aead111a": "（选填）",
+            "text_cc4c424b571f": "电话",
+            "text_4b000c1c5bff": "公司",
+            "text_c3935ff32c71": "公司联系方式",
+            "text_79e5cf20de0b": "地址",
+            "text_8a7525b1492f": "备注",
+            "text_9fe4c68ec20d": "驱动",
+            "text_b450645debe2": "联系人",
+            "text_2f740b5cd80b": "从 Meta 导入",
+            "text_d90cf3846ae1": "从 Meta 账户导入 WhatsApp 模板",
+            "text_166413ecc51b": "WhatsApp Business 账户",
+            "text_d7d646faaecb": "刷新",
+            "text_14164a4d4d85": "无法获取 Meta 数据",
+            "text_a458a71599de": "正在查询 Meta Cloud API…",
+            "text_5e12ee2e1cf0": "正在获取已保存的消息模板",
+            "text_dc514cef391a": "个模板已在 Meta 找到",
+            "text_e9e754fc7651": "Super Sécurité 内部标题",
+            "text_890b6603fa70": "营销活动标题",
+            "text_55198ef7fcc2": "此 Meta 账户未找到消息模板。",
+            "text_ba72063a4a92": "请先在 Meta Business Manager 创建模板并通过审核，再进行导入。",
+            "text_711e5f2e198d": "关闭",
+            "text_8721536fbf9d": "正在导入…",
+            "text_ed2c9cb3830e": "导入",
+            "text_c0139cc8242e": "内部标题",
+            "text_0119803da011": "渠道",
+            "text_6ee55707521b": "渠道：",
+            "text_fe69cdbc0ab0": "Meta WhatsApp 模板设置",
+            "text_033c2728f923": "选择账户",
+            "text_02d4aefa0760": "Meta 技术名称",
+            "text_e23785fe64fe": "仅限小写字母、数字和下划线。",
+            "text_a8ff86de868d": "Meta 分类",
+            "text_7c3adc7b5735": "营销（促销、优惠）",
+            "text_40f5279489da": "实用（确认、提醒）",
+            "text_095126e1ff66": "身份验证（一次性密码）",
+            "text_d3e965bb5a04": "Meta 语言代码",
+            "text_9c1b028e2b8e": "官方语言代码（如 fr、en_US）。",
+            "text_f415d0f53ee2": "消息页眉（选填，最多六十个字符）",
+            "text_c659ee683f5e": "模板文本与位置变量（最多 1024 个字符）",
+            "text_69e52f8bfc64": "输入含位置变量的 Meta 模板文本",
+            "text_0ca7de783f52": "以自动插入客户姓名、公司、电话等信息。",
+            "text_c58f54566719": "页脚（选填，最多六十个字符）",
+            "text_8ba3ea4530d8": "WhatsApp 预览",
+            "text_9b5ad0bd2a29": "电子邮件主题",
+            "text_506447ec127c": "消息正文",
+            "text_5aebf103f092": "创建并提交至 Meta",
+            "text_53aba69bcd34": "撰写消息或插入变量…",
+            "text_7a68460b0f70": "消息模板编辑器",
+            "text_96465fa1029a": "预览：",
+            "text_c41ce2cc0050": "变量：",
+            "text_2db99eb306c3": "合作伙伴名称",
+            "text_d707dc2f1936": "标志",
+            "text_36d15cf0d80b": "在网站启用",
+            "text_6b02e0d363a4": "添加时间",
+            "text_830ec7f812f9": "最近使用",
+            "text_c3812fc4acb8": "移除",
+            "text_9541dec2bd74": "移除通行密钥",
+            "text_1b8921b6ade5": "确认移除通行密钥“",
+            "text_a54a9780ea13": "”？您将无法再使用此密钥登录。",
+            "text_19766ed6ccb2": "取消",
+            "text_820494bb9a60": "此浏览器不支持通行密钥。",
+            "text_ffc92f64f0e4": "添加通行密钥",
+            "text_30a3a952bf7c": "通行密钥名称",
+            "text_95b54ce65c8b": "例如 MacBook Pro、iPhone",
+            "text_33e15b41872d": "名称方便您以后识别此密钥。",
+            "text_fc122e7ada76": "双重身份验证恢复码",
+            "text_4df492fce754": "遗失双重身份验证设备时，可用恢复码重新访问账户。请将其保存在安全的密码管理器中。",
+            "text_ab2186d7009e": "恢复码",
+            "text_67b3a892f17c": "重新生成恢复码",
+            "text_36880d15c890": "恢复码",
+            "text_82a059f43396": "正在加载恢复码",
+            "text_71822a688963": "每个恢复码仅可使用一次，使用后即被移除。如需更多，请点击",
+            "text_96abf46f09b8": "上方按钮。",
+            "text_659d26a0e67c": "或手动输入验证码",
+            "text_76900f1bfd16": "返回",
+            "text_eebdd24a77d9": "确认",
+            "text_d6dc6b5ebe19": "导航路径",
+            "text_d47d7cb0e4f8": "更多",
+            "text_f7efa7bc1fc5": "侧边栏",
+            "text_2a174a65adee": "显示移动端侧边栏。",
+            "text_1d4c17db52f7": "显示或隐藏侧边栏",
+            "text_dc380888c4e2": "加载中",
+            "text_5412fb52c07b": "账户信息",
+            "text_58d5b0c1a599": "身份、联系方式与访问角色。",
+            "text_c8af6e29fba8": "完整姓名",
+            "text_a1fc967c5587": "角色",
+            "text_725ccabe5cfa": "选择角色",
+            "text_7fef7421ba2c": "搜索角色…",
+            "text_23c5a669ea2b": "超级管理员自动拥有全部后台权限。",
+            "text_b291590308ba": "账户安全",
+            "text_3794e5b2f1f8": "您不能代替用户设置密码。创建账户后，如有需要，请在安全选项卡重新发送邮件。",
+            "text_1572a83d5115": "后台权限",
+            "text_e838e7316a14": "按功能和操作授予访问权限。更改将随个人资料一同保存。",
+            "text_f6b6fba38189": "已启用",
+            "text_ae70522d8276": "搜索功能或操作…",
+            "text_f41a96655daa": "搜索权限",
+            "text_fe7a28d10eef": "全部启用",
+            "text_02324f57958d": "全部停用",
+            "text_63f7f411fe06": "没有符合搜索条件的权限。",
+            "text_bcda4a955df7": "全部",
+            "text_a45e0ff4bd9e": "欢迎邮件",
+            "text_15b9f4f4b842": "发送初始密码设置链接，十五分钟内有效。",
+            "text_909822f461c0": "密码重置",
+            "text_87ab4659acc0": "发送新密码设置链接，十五分钟内有效。",
+            "text_340f463033e0": "代码",
+            "text_0301d410db18": "上一页",
+            "text_d18b2802dac3": "位收件人",
+            "text_3c403f9de0e6": "绩效控制面板",
+            "text_69c58c5fedb7": "实时发送与互动统计。",
+            "text_442d9e5451ee": "项发送仍在队列中",
+            "text_165ac1fc94a1": "营销活动已全部处理",
+            "text_36f04d49a25d": "状态分布",
+            "text_d385ddcb0e58": "将鼠标悬停在区块上查看详情。",
+            "text_fea0bb342d9f": "全部（",
+            "text_5334a6a987aa": "发送漏斗",
+            "text_ca9543c4f775": "营销活动在各个发送阶段的进展。",
+            "text_194421837657": "阶段",
+            "text_1f04a8531a46": "转化",
+            "text_224f50e1e571": "总体比例分布",
+            "text_9fb440435a04": "打开",
+            "text_01a7bf433c74": "模板：",
+            "text_748242fe0f6f": "变量",
+            "text_a85ad92bf9c2": "（姓名）、",
+            "text_842b7a454f7f": "（电话）及",
+            "text_29e75bf2b5f9": "（公司）将为每位收件人自动填入。",
+            "text_b01189cd35d9": "主题",
+            "text_c115c7b1b675": "发送前仍可自定义以下内容。",
+            "text_9b3084b27fe8": "已锁定渠道：",
+            "text_d3f41a8a8b33": "营销活动名称",
+            "text_ff71a402ea54": "WhatsApp 账户",
+            "text_b5eb217f2610": "选择账户",
+            "text_7d9956f4af0a": "电子邮箱账户",
+            "text_7b81586164e9": "添加组…",
+            "text_18767c44bff0": "未找到组",
+            "text_1c2a1391c14a": "单独联系人",
+            "text_be797ee9eb16": "添加联系人…",
+            "text_9e1cab61a0c6": "搜索联系人…",
+            "text_30cfabaf854c": "未找到联系人",
+            "text_15c8d6eef6e1": "合并组和联系人，受众自动去重。",
+            "text_62b1f63f7c0c": "选择模板",
+            "text_c73d4fcb8ce8": "此渠道暂无可用模板。",
+            "text_0d52d3fb4688": "您必须先创建模板",
+            "text_1c74dae514c3": "才能设置营销活动。",
+            "text_b3823649d757": "选择模板以加载主题和正文，确认前仍可修改。",
+            "text_2f77668a9dfb": "消息",
+            "text_3f0e59f2a167": "选择模板以加载主题和正文，之后仍可修改。",
+            "text_0fdff2a23256": "仅通过 Meta 模板发送",
+            "text_36b706da124c": "WhatsApp 在会话窗口外要求使用已批准的 Meta 模板。Meta 变量",
+            "text_130733fc52a7": "将填入联系人的姓名与公司。",
+            "text_94723168a3f4": "Meta 模板",
+            "text_23c41ffc8299": "选择组或联系人以查看受众，并选择模板以预览消息。",
+            "text_9f1ab72fb876": "没有其他公司联系方式。",
+            "text_eabc8df8b237": "可用于营销活动",
+            "text_3deffb092bc5": "个电子邮箱",
+            "text_23a520905eca": "个电话号码",
+            "text_012409b0bb5d": "可抄送：",
+            "text_8aa2357e3830": "用于营销活动和抄送的其他公司联系方式。主要联系人在上方填写。",
+            "text_6e8f3132d8e2": "内容",
+            "text_0ce868f83000": "标签（选填）",
+            "text_c698f3b0e1ac": "财务、前台…",
+            "text_f047806919e7": "删除联系方式",
+            "text_62204ba82570": "添加联系方式",
+            "text_4f4b10298f3b": "公司联系人",
+            "text_5e02d2aebe7d": "勾选以填写公司信息。",
+            "text_bcbbb2dab716": "选择国家区号，然后输入号码。",
+            "text_eca4e95a8352": "公司名称",
+            "text_9710864dc44a": "标签（逗号分隔）",
+            "text_6a84d13cdb50": "组（选填）",
+            "text_cd3ee3ba9c98": "关联一个或多个组…",
+            "text_498686900a51": "暂无可用组",
+            "text_551f673371c9": "联系人将立即添加至所选组。",
+            "text_40da761d7aba": "已同意营销",
+            "text_1b232e62ee7b": "为什么使用多个电子邮箱账户？",
+            "text_c96b0539d9c5": "部分提供商限制每日发送量。可配置多个 SMTP 邮箱，为各活动选择合适账户。",
+            "text_e4d54d477f38": "今日配额",
+            "text_9c8f6d343a48": "已发送 —",
+            "text_a34b06b6624e": "剩余。",
+            "text_e2bcc7787440": "营销邮箱 — 主要",
+            "text_e9e7742d9ac7": "发件人地址",
+            "text_35085a907010": "发件人名称",
+            "text_ed415f3660e3": "SMTP 服务器",
+            "text_72e9a59f5a1d": "端口",
+            "text_a07eab97d8f3": "加密",
+            "text_4679b3b12de0": "无",
+            "text_c202d9eedad8": "SMTP 用户名",
+            "text_6692a93055ff": "SMTP 密码",
+            "text_9db1b80f3a4f": "每日发送上限",
+            "text_b42798a0832a": "留空表示不限",
+            "text_62e44b82e229": "例如提供商达到三百封后停止发送，可填写 300。留空表示不限。",
+            "text_3cf87c303b42": "启用账户",
+            "text_e56ff1b0c5cd": "默认账户",
+            "text_07a06f50446d": "添加联系人",
+            "text_b8529fbdcfe6": "搜索并选择要加入此组的联系人。",
+            "text_448668bcbddc": "选择联系人…",
+            "text_46b23b86fcce": "按姓名或电子邮箱搜索…",
+            "text_e510937c4356": "暂无可用联系人",
+            "text_aa160595aa51": "组名称",
+            "text_9bc297a703b6": "移除此联系人？",
+            "text_c130fb71d350": "”将从此组移除，仍保留在数据库中。",
+            "text_a8734e6311f9": "直接从 WhatsApp Business Cloud API 账户获取并同步已批准的模板。",
+            "text_61c3a58837a2": "在哪里查找 Meta 凭据？",
+            "text_2247c3d7d88b": "开发者控制台：",
+            "text_a01e180b6acd": "Meta Webhook 网址",
+            "text_c4cf74dcb730": "创建后，此页显示需粘贴至 Meta 的 Webhook 网址。",
+            "text_26838bfc20db": "电话号码 ID",
+            "text_26082b8b0617": "企业账户 ID",
+            "text_9a911b08feb9": "访问令牌",
+            "text_1cdbce289333": "应用密钥",
+            "text_57422fe975db": "验证令牌（Webhook）",
+            "text_5583c5eb7559": "选择驱动",
+            "text_30a8b7846961": "确认",
+            "text_c40aa566244e": "仅综合相册",
+            "text_b6d8ca4edab5": "排队中",
+            "text_39e0749da40f": "电子邮箱",
+            "text_2b5c3d26721a": "联系人",
+            "text_ff97ad7392f5": "留空以保留",
+            "text_00f9c5334547": "添加",
+            "text_adb501676cdc": "正在移除…",
+            "text_72aa305f5dcd": "（默认）",
+            "text_dfbf8a80272c": "取消全选",
+            "text_5b6fef95fb92": "全选",
+            "text_04e58a2eb8f8": "Meta Cloud API",
+            "text_d9144ec85fbc": "→ 您的应用 → WhatsApp。以下路径对应 Meta 界面，部分标签可能为英语。",
+            "text_0b2cc56fbfa2": "粘贴至 Meta：WhatsApp → Configuration → Webhook → Callback URL，使用与下方相同的验证令牌。",
+            "text_6d878657d963": "仅用于后台的内部标签，例如“Super Sécurité — 主要”。",
+            "text_0ce9e61d44f4": "WhatsApp → API Setup → Phone number ID。",
+            "text_9c30826921ac": "选填：API Setup → WhatsApp Business Account ID（WABA），或 Meta Business Suite → Settings。",
+            "text_d8724981479b": "（留空以保留）",
+            "text_fcfae76e9b1d": "WhatsApp → API Setup：测试使用临时令牌；生产环境使用系统用户永久令牌（Business Manager → System users → Generate token）。",
+            "text_608102bf39d8": "应用设置 → Settings → Basic → App secret，用于验证 Webhook 签名。",
+            "text_44bb3a9a2d1a": "自行设置字符串，例如随机密码。在此填写，并原样复制到 Meta Webhook 的 Verify token 字段。",
+            "text_b2530ae3438c": "“Meta Cloud API”通过 Graph API 实际发送。“Log（本地演示）”仅记录发送，不调用 Meta。",
+            "text_60d18e42fd5a": "正在移除…",
+            "text_9ef767a32782": "正在注册…",
+            "text_4cc2cdac74f2": "注册通行密钥",
+            "text_a60a56c584b3": "隐藏密码",
+            "text_6aeaa6a53d09": "显示密码",
+            "text_ac20a57bfde0": "隐藏",
+            "text_dcc839a4015c": "显示",
+            "text_de194463eaa3": "超级管理员拥有全部权限。",
+            "text_8d4279f04068": "此角色没有可配置权限。",
+            "text_08b01eed162e": "用户通过邮件中的安全链接管理密码。",
+            "text_086d72403fcb": "将自动发送含密码设置链接的欢迎邮件，链接十五分钟内有效。",
+            "text_a5bbcdda778d": "尚未授予访问权限",
+            "text_1ccef8a10ca7": "正在发送…",
+            "text_58c0fa009a92": "重新发送",
+            "text_d7c52473addb": "发送链接",
+            "text_2f5f32765f02": "正在删除…",
+            "text_48bb84b0ce31": "更改状态以批准、拒绝或重新发布建议。",
+            "text_0a9a4c480f7d": "此建议已发布，仅管理员可更改其状态。",
+            "text_da4b70be5d41": "重新提交审核或保存为草稿。",
+            "text_3cea1e964cdc": "正在保存…",
+            "text_5ad87f071809": "（留空以保留）",
+            "text_3c302bf09143": "暂无可用市镇",
+            "text_59c165792cf5": "选择市镇",
+            "text_2e64da4c8af7": "正在处理…",
+            "text_0a1fcd4be879": "立即启动",
+            "text_455e65d5cda8": "已发送",
+            "text_9bc2a5fdccca": "失败／退信",
+            "text_340914b5f834": "目标收件人",
+            "text_a2e47c6857fe": "失败率",
+            "text_f2fb8e27115b": "受众总数",
+            "text_08bbb78918e9": "已发出",
+            "text_854cbc63db02": "模板预览",
+            "text_bf0ee15a9fd2": "WhatsApp 模板",
+            "text_5e7b26cb0c2a": "电子邮件模板",
+            "text_fe06934ce995": "联系人员"
+        },
+        "newest": "最新",
+        "oldest": "最早",
+        "most_viewed": "最多浏览",
+        "least_viewed": "最少浏览",
+        "all_categories": "全部分类"
+    }
+}

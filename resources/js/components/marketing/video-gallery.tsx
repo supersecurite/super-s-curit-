@@ -1,19 +1,25 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Video } from 'lucide-react';
 import type { GalleryVideoPublic } from '@/types/gallery';
 import { cn } from '@/lib/utils';
 
 type VideoGalleryProps = {
-    videos: GalleryVideoPublic[];
+    videos: readonly GalleryVideoPublic[];
     className?: string;
 };
 
 export default function VideoGallery({ videos, className }: VideoGalleryProps) {
+    const { t: uiText } = useUiTranslations();
+
     if (videos.length === 0) {
         return (
             <div className="marketing-card flex flex-col items-center gap-3 py-16 text-center">
                 <Video className="size-10 text-super-securite-muted" />
                 <p className="text-super-securite-muted">
-                    Aucune vidéo disponible pour ce filtre.
+                    {uiText(
+                        'ui.components.text_bbc3e1df86d1',
+                        'Aucune vidéo disponible pour ce filtre.',
+                    )}
                 </p>
             </div>
         );

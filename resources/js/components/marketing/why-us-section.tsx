@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { superSecuriteAdvantages } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
 import { Link } from '@inertiajs/react';
@@ -153,11 +154,16 @@ function WhyUsAboutButton({ variant = 'light' }: { variant?: WhyUsTone }) {
 }
 
 function WhyUsMobileAppImage({ className }: { className?: string }) {
+    const { t: uiText } = useUiTranslations();
+
     return (
         <div className={cn('mx-auto max-w-sm', className)}>
             <img
                 src={superSecuriteStock.about.mobileApp}
-                alt="Application mobile Super Sécurité — suivi en temps réel"
+                alt={uiText(
+                    'ui.components.text_4385c6283978',
+                    'Application mobile Super Sécurité — suivi en temps réel',
+                )}
                 width={480}
                 height={640}
                 loading="lazy"
@@ -173,6 +179,8 @@ export default function WhyUsSection({
     showAppFeatures = false,
     showAppSection = false,
 }: WhyUsSectionProps) {
+    const { t: uiText } = useUiTranslations();
+
     const { t, tNode } = useTrans();
     const whyUs = useWhyUsContent();
     const advantagesItems = tNode<
@@ -192,7 +200,10 @@ export default function WhyUsSection({
                 <div className="relative mx-auto flex min-h-[100dvh] w-full max-w-[1920px] items-end overflow-hidden lg:items-center">
                     <img
                         src={superSecuriteStock.home.whyUsBannerTransparent2}
-                        alt="Super Sécurité — équipes et sites sécurisés"
+                        alt={uiText(
+                            'ui.components.text_e3462593f510',
+                            'Super Sécurité — équipes et sites sécurisés',
+                        )}
                         width={1920}
                         height={1080}
                         loading="lazy"
@@ -213,7 +224,7 @@ export default function WhyUsSection({
                         aria-hidden
                     />
 
-                    <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 pt-[calc(var(--marketing-header-height,5.5rem)+3.5rem)] pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
+                    <div className="relative z-10 mx-auto w-full max-w-7xl min-w-0 px-4 pt-[calc(var(--marketing-header-height,5.5rem)+3.5rem)] pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:py-28">
                         <div className="max-w-2xl min-w-0">
                             <Reveal delay={80}>
                                 <p className="marketing-label mb-3 flex items-center gap-2 before:block before:h-px before:w-6 before:bg-super-securite-accent">
@@ -227,13 +238,19 @@ export default function WhyUsSection({
                                 </h2>
                             </Reveal>
 
-                            <Reveal delay={260} className="mt-5 max-w-xl sm:mt-6">
+                            <Reveal
+                                delay={260}
+                                className="mt-5 max-w-xl sm:mt-6"
+                            >
                                 <p className="text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
                                     {whyUs.intro}
                                 </p>
                             </Reveal>
 
-                            <Reveal delay={400} className="mt-6 max-w-xl sm:mt-8">
+                            <Reveal
+                                delay={400}
+                                className="mt-6 max-w-xl sm:mt-8"
+                            >
                                 <WhyUsReasonsList variant="dark" />
                                 <WhyUsAboutButton variant="dark" />
                             </Reveal>
@@ -244,12 +261,17 @@ export default function WhyUsSection({
 
             <div
                 className={
-                    showCinematicHero ? 'bg-white py-16 md:py-24' : 'py-16 md:py-24'
+                    showCinematicHero
+                        ? 'bg-white py-16 md:py-24'
+                        : 'py-16 md:py-24'
                 }
             >
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {!showCinematicHero ? (
-                        <Reveal delay={80} className="mx-auto mb-12 max-w-3xl md:mb-16">
+                        <Reveal
+                            delay={80}
+                            className="mx-auto mb-12 max-w-3xl md:mb-16"
+                        >
                             <p className="marketing-label mb-3">
                                 {whyUs.sectionLabel}
                             </p>
@@ -274,7 +296,10 @@ export default function WhyUsSection({
                                     {showAppFeatures ? (
                                         <>
                                             <p className="marketing-label mb-3">
-                                                {t('home.innovation_label', 'Innovation')}
+                                                {t(
+                                                    'home.innovation_label',
+                                                    'Innovation',
+                                                )}
                                             </p>
                                             <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
                                                 {whyUs.appSectionTitle}
@@ -286,7 +311,10 @@ export default function WhyUsSection({
                                     ) : (
                                         <>
                                             <p className="marketing-label mb-3">
-                                                {t('home.innovation_label', 'Innovation')}
+                                                {t(
+                                                    'home.innovation_label',
+                                                    'Innovation',
+                                                )}
                                             </p>
                                             <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
                                                 {whyUs.appSectionTitle}
@@ -309,9 +337,14 @@ export default function WhyUsSection({
                         delay={80}
                         className="mx-auto mb-10 max-w-2xl text-center md:mb-14"
                     >
-                        <p className="marketing-label mb-2">{t('home.advantages_label', 'Nos atouts')}</p>
+                        <p className="marketing-label mb-2">
+                            {t('home.advantages_label', 'Nos atouts')}
+                        </p>
                         <h3 className="font-heading text-2xl font-bold tracking-tight text-super-securite-heading sm:text-3xl">
-                            {t('home.advantages_title', 'Ce qui nous distingue')}
+                            {t(
+                                'home.advantages_title',
+                                'Ce qui nous distingue',
+                            )}
                         </h3>
                     </Reveal>
 

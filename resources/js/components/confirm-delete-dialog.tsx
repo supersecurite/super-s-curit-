@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -34,6 +35,8 @@ export default function ConfirmDeleteDialog({
     triggerClassName,
     'aria-label': ariaLabel,
 }: ConfirmDeleteDialogProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [open, setOpen] = useState(false);
     const [processing, setProcessing] = useState(false);
 
@@ -71,8 +74,15 @@ export default function ConfirmDeleteDialog({
                 </DialogHeader>
                 <DialogFooter className="gap-2">
                     <DialogClose asChild>
-                        <Button type="button" variant="outline" disabled={processing}>
-                            Annuler
+                        <Button
+                            type="button"
+                            variant="outline"
+                            disabled={processing}
+                        >
+                            {uiText(
+                                'ui.components.text_46ad3916f6a0',
+                                'Annuler',
+                            )}
                         </Button>
                     </DialogClose>
                     <Button
@@ -81,7 +91,15 @@ export default function ConfirmDeleteDialog({
                         disabled={processing}
                         onClick={handleConfirm}
                     >
-                        {processing ? 'Suppression…' : 'Confirmer'}
+                        {processing
+                            ? uiText(
+                                  'ui.components.text_2f5f32765f02',
+                                  'Suppression…',
+                              )
+                            : uiText(
+                                  'ui.components.text_30a8b7846961',
+                                  'Confirmer',
+                              )}
                     </Button>
                 </DialogFooter>
             </DialogContent>

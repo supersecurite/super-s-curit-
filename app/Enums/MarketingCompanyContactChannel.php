@@ -11,11 +11,11 @@ enum MarketingCompanyContactChannel: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.MarketingCompanyContactChannel.'.$this->name, [], match ($this) {
             self::Email => 'E-mail',
             self::Phone => 'Téléphone',
             self::WhatsApp => 'WhatsApp',
-        };
+        });
     }
 
     /**

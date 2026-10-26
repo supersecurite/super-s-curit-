@@ -1,4 +1,8 @@
-import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from '@lexical/list';
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
+import {
+    INSERT_ORDERED_LIST_COMMAND,
+    INSERT_UNORDERED_LIST_COMMAND,
+} from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
@@ -65,6 +69,8 @@ export default function Toolbar({
 }: {
     onPickImageFile?: () => void;
 } = {}) {
+    const { t: uiText } = useUiTranslations();
+
     const [editor] = useLexicalComposerContext();
     const [showHeadingOptions, setShowHeadingOptions] = useState(false);
 
@@ -77,7 +83,13 @@ export default function Toolbar({
                         editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
                     } else {
                         const headingNode = $createHeadingNode(
-                            headingSize as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
+                            headingSize as
+                                | 'h1'
+                                | 'h2'
+                                | 'h3'
+                                | 'h4'
+                                | 'h5'
+                                | 'h6',
                         );
                         selection.insertNodes([headingNode]);
                     }
@@ -122,14 +134,21 @@ export default function Toolbar({
         <div className="sticky top-0 z-10 flex flex-wrap gap-2 border-b bg-card p-2">
             <div className="flex items-center gap-1 border-r pr-2">
                 <ToolbarButton
-                    onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)}
+                    onClick={() =>
+                        editor.dispatchCommand(UNDO_COMMAND, undefined)
+                    }
                     icon={<Undo className="size-4" />}
-                    title="Annuler"
+                    title={uiText('ui.components.text_46ad3916f6a0', 'Annuler')}
                 />
                 <ToolbarButton
-                    onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)}
+                    onClick={() =>
+                        editor.dispatchCommand(REDO_COMMAND, undefined)
+                    }
                     icon={<Redo className="size-4" />}
-                    title="Rétablir"
+                    title={uiText(
+                        'ui.components.text_4cf3fd72da6f',
+                        'Rétablir',
+                    )}
                 />
             </div>
 
@@ -137,7 +156,10 @@ export default function Toolbar({
                 <ToolbarButton
                     onClick={() => setShowHeadingOptions(!showHeadingOptions)}
                     icon={<Type className="size-4" />}
-                    title="Style de texte"
+                    title={uiText(
+                        'ui.components.text_b5e5339c48bd',
+                        'Style de texte',
+                    )}
                 />
                 {showHeadingOptions ? (
                     <div className="absolute top-full left-0 z-20 mt-1 w-40 rounded-md border bg-card shadow-lg">
@@ -165,21 +187,27 @@ export default function Toolbar({
                         editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
                     }
                     icon={<Bold className="size-4" />}
-                    title="Gras"
+                    title={uiText('ui.components.text_9615231ee629', 'Gras')}
                 />
                 <ToolbarButton
                     onClick={() =>
                         editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
                     }
                     icon={<Italic className="size-4" />}
-                    title="Italique"
+                    title={uiText(
+                        'ui.components.text_c83ceff3955b',
+                        'Italique',
+                    )}
                 />
                 <ToolbarButton
                     onClick={() =>
                         editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
                     }
                     icon={<Underline className="size-4" />}
-                    title="Souligné"
+                    title={uiText(
+                        'ui.components.text_cd6de1867141',
+                        'Souligné',
+                    )}
                 />
                 <ToolbarButton
                     onClick={() =>
@@ -189,7 +217,7 @@ export default function Toolbar({
                         )
                     }
                     icon={<Strikethrough className="size-4" />}
-                    title="Barré"
+                    title={uiText('ui.components.text_eaa7eddeb531', 'Barré')}
                 />
             </div>
 
@@ -199,21 +227,27 @@ export default function Toolbar({
                         editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')
                     }
                     icon={<AlignLeft className="size-4" />}
-                    title="Aligner à gauche"
+                    title={uiText(
+                        'ui.components.text_f91295f60db3',
+                        'Aligner à gauche',
+                    )}
                 />
                 <ToolbarButton
                     onClick={() =>
                         editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')
                     }
                     icon={<AlignCenter className="size-4" />}
-                    title="Centrer"
+                    title={uiText('ui.components.text_8dfb61ed4cb3', 'Centrer')}
                 />
                 <ToolbarButton
                     onClick={() =>
                         editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')
                     }
                     icon={<AlignRight className="size-4" />}
-                    title="Aligner à droite"
+                    title={uiText(
+                        'ui.components.text_b0ab2ca1f836',
+                        'Aligner à droite',
+                    )}
                 />
             </div>
 
@@ -226,7 +260,10 @@ export default function Toolbar({
                         )
                     }
                     icon={<List className="size-4" />}
-                    title="Liste à puces"
+                    title={uiText(
+                        'ui.components.text_6eb3559a159a',
+                        'Liste à puces',
+                    )}
                 />
                 <ToolbarButton
                     onClick={() =>
@@ -236,7 +273,10 @@ export default function Toolbar({
                         )
                     }
                     icon={<ListOrdered className="size-4" />}
-                    title="Liste numérotée"
+                    title={uiText(
+                        'ui.components.text_477cd1e9f9de',
+                        'Liste numérotée',
+                    )}
                 />
             </div>
 
@@ -244,19 +284,25 @@ export default function Toolbar({
                 <ToolbarButton
                     onClick={insertImage}
                     icon={<Image className="size-4" />}
-                    title="Insérer une image"
+                    title={uiText(
+                        'ui.components.text_0de2de181f56',
+                        'Insérer une image',
+                    )}
                 />
                 <ToolbarButton
                     onClick={insertLink}
                     icon={<Link className="size-4" />}
-                    title="Insérer un lien"
+                    title={uiText(
+                        'ui.components.text_e37bfa975ced',
+                        'Insérer un lien',
+                    )}
                 />
                 <ToolbarButton
                     onClick={() =>
                         editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
                     }
                     icon={<Code className="size-4" />}
-                    title="Code"
+                    title={uiText('ui.components.text_340f463033e0', 'Code')}
                 />
                 <ToolbarButton
                     onClick={() => {
@@ -270,7 +316,10 @@ export default function Toolbar({
                         });
                     }}
                     icon={<Quote className="size-4" />}
-                    title="Citation"
+                    title={uiText(
+                        'ui.components.text_2955789aa4f8',
+                        'Citation',
+                    )}
                 />
             </div>
         </div>

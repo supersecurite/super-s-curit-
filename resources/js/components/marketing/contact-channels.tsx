@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react';
 import Reveal from '@/components/marketing/reveal';
 import { useTrans } from '@/hooks/use-trans';
@@ -7,7 +8,11 @@ type ContactChannelsProps = {
     superSecurite: SuperSecuriteConfig;
 };
 
-export default function ContactChannels({ superSecurite }: ContactChannelsProps) {
+export default function ContactChannels({
+    superSecurite,
+}: ContactChannelsProps) {
+    const { t: uiText } = useUiTranslations();
+
     const { t } = useTrans();
     const phoneDigits = superSecurite.phone_href.replace(/[^0-9]/g, '');
 
@@ -36,7 +41,7 @@ export default function ContactChannels({ superSecurite }: ContactChannelsProps)
         },
         {
             icon: MessageCircle,
-            label: 'WhatsApp',
+            label: uiText('ui.components.text_6a40edf1fc87', 'WhatsApp'),
             value: superSecurite.phone,
             description: t(
                 'contact.channel_whatsapp_desc',
@@ -72,7 +77,7 @@ export default function ContactChannels({ superSecurite }: ContactChannelsProps)
 
                             <div className="flex items-start justify-between">
                                 <div className="flex flex-row items-center justify-items-center gap-2">
-                                    <div className="inline-flex size-12 items-center justify-center rounded-xl bg-super-securite-accent/10 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100">
+                                    <div className="inline-flex size-12 items-center justify-center rounded-xl bg-super-securite-accent/10 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0">
                                         <Icon
                                             className="size-6 text-super-securite-accent"
                                             strokeWidth={2}
@@ -85,7 +90,7 @@ export default function ContactChannels({ superSecurite }: ContactChannelsProps)
                                     </h3>
                                 </div>
                                 <ArrowUpRight
-                                    className="size-5 text-super-securite-muted opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-super-securite-accent group-hover:opacity-100 motion-reduce:transition-none"
+                                    className="size-5 text-super-securite-muted opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-super-securite-accent group-hover:opacity-100 motion-reduce:transition-none"
                                     aria-hidden
                                 />
                             </div>

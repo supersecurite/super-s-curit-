@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import {
     ChevronLeft,
     ChevronRight,
@@ -77,6 +78,8 @@ export default function GalleryLightbox({
     onClose,
     onIndexChange,
 }: GalleryLightboxProps) {
+    const { t: uiText } = useUiTranslations();
+
     const [scale, setScale] = useState(MIN_SCALE);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -211,8 +214,12 @@ export default function GalleryLightbox({
         }
 
         setPosition({
-            x: dragOrigin.current.originX + (event.clientX - dragOrigin.current.x),
-            y: dragOrigin.current.originY + (event.clientY - dragOrigin.current.y),
+            x:
+                dragOrigin.current.originX +
+                (event.clientX - dragOrigin.current.x),
+            y:
+                dragOrigin.current.originY +
+                (event.clientY - dragOrigin.current.y),
         });
     };
 
@@ -263,7 +270,10 @@ export default function GalleryLightbox({
             className="fixed inset-0 z-[200] bg-black/95"
             role="dialog"
             aria-modal="true"
-            aria-label="Visionneuse d'images"
+            aria-label={uiText(
+                'ui.components.text_3f51af0d8de0',
+                "Visionneuse d'images",
+            )}
         >
             <div className="absolute inset-0 flex items-center justify-center">
                 <div
@@ -286,7 +296,7 @@ export default function GalleryLightbox({
                         src={currentImage.src}
                         alt={currentImage.alt}
                         draggable={false}
-                        className="max-h-[100dvh] max-w-full select-none object-contain transition-transform duration-150 ease-out"
+                        className="max-h-[100dvh] max-w-full object-contain transition-transform duration-150 ease-out select-none"
                         style={{
                             transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
                         }}
@@ -306,7 +316,10 @@ export default function GalleryLightbox({
                             onClick={zoomOut}
                             disabled={scale <= MIN_SCALE}
                             className={cn(controlButtonClass, 'size-10')}
-                            aria-label="Dézoomer"
+                            aria-label={uiText(
+                                'ui.components.text_a1388f905238',
+                                'Dézoomer',
+                            )}
                         >
                             <ZoomOut className="size-5" aria-hidden />
                         </button>
@@ -315,7 +328,10 @@ export default function GalleryLightbox({
                             onClick={zoomIn}
                             disabled={scale >= MAX_SCALE}
                             className={cn(controlButtonClass, 'size-10')}
-                            aria-label="Zoomer"
+                            aria-label={uiText(
+                                'ui.components.text_c9c4547ae630',
+                                'Zoomer',
+                            )}
                         >
                             <ZoomIn className="size-5" aria-hidden />
                         </button>
@@ -324,7 +340,10 @@ export default function GalleryLightbox({
                             onClick={resetTransform}
                             disabled={scale <= MIN_SCALE}
                             className={cn(controlButtonClass, 'size-10')}
-                            aria-label="Réinitialiser le zoom"
+                            aria-label={uiText(
+                                'ui.components.text_e3eb8fab573d',
+                                'Réinitialiser le zoom',
+                            )}
                         >
                             <RotateCcw className="size-5" aria-hidden />
                         </button>
@@ -332,7 +351,10 @@ export default function GalleryLightbox({
                             type="button"
                             onClick={onClose}
                             className={cn(controlButtonClass, 'size-10')}
-                            aria-label="Fermer la galerie"
+                            aria-label={uiText(
+                                'ui.components.text_c207d22f6253',
+                                'Fermer la galerie',
+                            )}
                         >
                             <X className="size-5" aria-hidden />
                         </button>
@@ -348,7 +370,10 @@ export default function GalleryLightbox({
                                 controlButtonClass,
                                 'absolute top-1/2 left-2 size-11 -translate-y-1/2 sm:left-4 sm:size-12',
                             )}
-                            aria-label="Image précédente"
+                            aria-label={uiText(
+                                'ui.components.text_fe0cc279c539',
+                                'Image précédente',
+                            )}
                         >
                             <ChevronLeft className="size-6" aria-hidden />
                         </button>
@@ -362,7 +387,10 @@ export default function GalleryLightbox({
                                 controlButtonClass,
                                 'absolute top-1/2 right-2 size-11 -translate-y-1/2 sm:right-4 sm:size-12',
                             )}
-                            aria-label="Image suivante"
+                            aria-label={uiText(
+                                'ui.components.text_0611f50252d8',
+                                'Image suivante',
+                            )}
                         >
                             <ChevronRight className="size-6" aria-hidden />
                         </button>

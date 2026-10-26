@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import type { ReactNode } from 'react';
 
 type LexicalNode = {
@@ -108,7 +109,7 @@ function renderImage(node: LexicalNode, index: number) {
                 style={{ maxHeight: '500px' }}
             />
             {node.alt ? (
-                <p className="text-super-securite-muted mt-2 text-center text-sm italic">
+                <p className="mt-2 text-center text-sm text-super-securite-muted italic">
                     {node.alt}
                 </p>
             ) : null}
@@ -175,12 +176,17 @@ export default function ContentRenderer({
     content,
     className = '',
 }: ContentRendererProps) {
+    const { t: uiText } = useUiTranslations();
+
     const parsedContent = validateAndParseContent(content);
 
     if (!parsedContent) {
         return (
             <p className="text-super-securite-muted italic">
-                Aucun contenu disponible.
+                {uiText(
+                    'ui.components.text_33028e77dd97',
+                    'Aucun contenu disponible.',
+                )}
             </p>
         );
     }
@@ -188,27 +194,40 @@ export default function ContentRenderer({
     if ('isPlainText' in parsedContent && parsedContent.isPlainText) {
         return (
             <div className={`whitespace-pre-wrap ${className}`}>
-                {(parsedContent.content ?? '').split('\n').map((line, index) => (
-                    <p key={index} className="mb-2 leading-relaxed last:mb-0">
-                        {line.split(/(\{\{[a-z_]+\}\})/g).filter(Boolean).map((part, partIndex) => {
-                            const match = part.match(/^\{\{([a-z_]+)\}\}$/);
+                {(parsedContent.content ?? '')
+                    .split('\n')
+                    .map((line, index) => (
+                        <p
+                            key={index}
+                            className="mb-2 leading-relaxed last:mb-0"
+                        >
+                            {line
+                                .split(/(\{\{[a-z_]+\}\})/g)
+                                .filter(Boolean)
+                                .map((part, partIndex) => {
+                                    const match =
+                                        part.match(/^\{\{([a-z_]+)\}\}$/);
 
-                            if (match) {
-                                return (
-                                    <span
-                                        key={`${index}-${partIndex}`}
-                                        className="rounded bg-primary/15 px-1.5 py-0.5 font-mono text-sm font-semibold text-primary"
-                                    >
-                                        {part}
-                                    </span>
-                                );
-                            }
+                                    if (match) {
+                                        return (
+                                            <span
+                                                key={`${index}-${partIndex}`}
+                                                className="rounded bg-primary/15 px-1.5 py-0.5 font-mono text-sm font-semibold text-primary"
+                                            >
+                                                {part}
+                                            </span>
+                                        );
+                                    }
 
-                            return <span key={`${index}-${partIndex}`}>{part}</span>;
-                        })}
-                        {!line ? <br /> : null}
-                    </p>
-                ))}
+                                    return (
+                                        <span key={`${index}-${partIndex}`}>
+                                            {part}
+                                        </span>
+                                    );
+                                })}
+                            {!line ? <br /> : null}
+                        </p>
+                    ))}
             </div>
         );
     }
@@ -235,7 +254,10 @@ export default function ContentRenderer({
 
                 if (node.type === 'heading' && node.tag) {
                     const level = Math.min(
-                        Math.max(parseInt(node.tag.replace('h', ''), 10) || 1, 1),
+                        Math.max(
+                            parseInt(node.tag.replace('h', ''), 10) || 1,
+                            1,
+                        ),
                         6,
                     );
                     const Tag = HEADING_TAGS[level - 1];

@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { Check } from 'lucide-react';
 import ServiceFaq from '@/components/marketing/service-faq';
 import ServiceGallery from '@/components/marketing/service-gallery';
@@ -26,6 +27,8 @@ export default function ServicePageSections({
     serviceGalleryImages = [],
     serviceGalleryVideos = [],
 }: ServicePageLayoutProps) {
+    const { t: uiText } = useUiTranslations();
+
     const figures = (
         serviceGalleryImages.length > 0
             ? toGalleryFigures(serviceGalleryImages)
@@ -42,8 +45,7 @@ export default function ServicePageSections({
     }
 
     const spotlight = figures[0];
-    const galleryImages =
-        figures.length > 1 ? figures.slice(1) : figures;
+    const galleryImages = figures.length > 1 ? figures.slice(1) : figures;
 
     const serviceVideos = serviceGalleryVideos;
 
@@ -54,15 +56,13 @@ export default function ServicePageSections({
                     <div
                         className={cn(
                             'grid items-start gap-10 lg:gap-16',
-                            spotlight
-                                ? 'lg:grid-cols-12'
-                                : 'mx-auto max-w-3xl',
+                            spotlight ? 'lg:grid-cols-12' : 'mx-auto max-w-3xl',
                         )}
                     >
                         {spotlight ? (
                             <Reveal
                                 variant="fade"
-                                className="lg:col-span-5 lg:sticky lg:top-28"
+                                className="lg:sticky lg:top-28 lg:col-span-5"
                             >
                                 <div className="overflow-hidden rounded-2xl">
                                     <img
@@ -111,7 +111,7 @@ export default function ServicePageSections({
                                             (indicator) => (
                                                 <li
                                                     key={indicator}
-                                                    className="flex h-full items-center gap-3 rounded-xl border border-super-securite-accent/20 bg-super-securite-accent/5 p-0 text-sm font-medium leading-snug text-super-securite-heading transition-colors duration-200 hover:border-super-securite-accent/40 hover:bg-super-securite-accent/10"
+                                                    className="flex h-full items-center gap-3 rounded-xl border border-super-securite-accent/20 bg-super-securite-accent/5 p-0 text-sm leading-snug font-medium text-super-securite-heading transition-colors duration-200 hover:border-super-securite-accent/40 hover:bg-super-securite-accent/10"
                                                 >
                                                     <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-super-securite-accent/20 bg-white text-super-securite-accent shadow-sm">
                                                         <Check
@@ -169,7 +169,7 @@ export default function ServicePageSections({
                                     <span className="inline-flex size-9 items-center justify-center rounded-full bg-super-securite-accent/10 font-heading text-sm font-bold text-super-securite-accent">
                                         {String(index + 1).padStart(2, '0')}
                                     </span>
-                                    <h3 className="font-heading mt-4 text-lg font-semibold text-super-securite-heading">
+                                    <h3 className="mt-4 font-heading text-lg font-semibold text-super-securite-heading">
                                         {section.title}
                                     </h3>
                                     <p className="mt-3 text-sm leading-relaxed text-super-securite-muted">
@@ -222,7 +222,7 @@ export default function ServicePageSections({
                         <div className="overflow-hidden rounded-3xl border border-super-securite-border bg-white shadow-lg shadow-slate-900/5">
                             <div className="border-b border-super-securite-border bg-slate-50 px-6 py-8 md:px-10 md:py-10">
                                 <Reveal>
-                                    <h2 className="font-heading text-center text-2xl font-bold text-super-securite-heading sm:text-3xl">
+                                    <h2 className="text-center font-heading text-2xl font-bold text-super-securite-heading sm:text-3xl">
                                         {content.highlightsTitle}
                                     </h2>
                                 </Reveal>
@@ -249,14 +249,20 @@ export default function ServicePageSections({
             ) : null}
 
             {serviceVideos.length > 0 ? (
-                <section className="bg-slate-50/50 border-t border-super-securite-border/60 py-14 md:py-20">
+                <section className="border-t border-super-securite-border/60 bg-slate-50/50 py-14 md:py-20">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <Reveal className="mx-auto max-w-3xl text-center mb-10 md:mb-12">
+                        <Reveal className="mx-auto mb-10 max-w-3xl text-center md:mb-12">
                             <h2 className="font-heading text-2xl font-bold text-super-securite-heading sm:text-3xl">
-                                Démonstrations & Formations
+                                {uiText(
+                                    'ui.components.text_bf5a25c2c350',
+                                    'Démonstrations & Formations',
+                                )}
                             </h2>
                             <p className="mt-4 text-sm leading-relaxed text-super-securite-muted sm:text-base">
-                                Découvrez nos agents en action à travers nos interventions réelles et nos sessions d'entraînement.
+                                {uiText(
+                                    'ui.components.text_880a30fc8055',
+                                    "Découvrez nos agents en action à travers nos interventions réelles et nos sessions d'entraînement.",
+                                )}
                             </p>
                         </Reveal>
 

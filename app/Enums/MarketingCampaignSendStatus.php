@@ -14,14 +14,14 @@ enum MarketingCampaignSendStatus: string
 
     public function label(): string
     {
-        return match ($this) {
+        return bt('enums.MarketingCampaignSendStatus.'.$this->name, [], match ($this) {
             self::Queued => 'En file',
             self::Sent => 'Envoyé',
             self::Received, self::Delivered => 'Reçu',
             self::Read => 'Lu',
             self::Failed => 'Échec',
             self::Bounced => 'Rebond',
-        };
+        });
     }
 
     public function isTerminal(): bool

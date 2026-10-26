@@ -1,3 +1,4 @@
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { useMemo, useState } from 'react';
 
 export type ChartPoint = {
@@ -14,6 +15,8 @@ type Props = {
 const PADDING = { top: 16, right: 12, bottom: 28, left: 36 };
 
 export default function TrafficChart({ data, height = 240 }: Props) {
+    const { t: uiText } = useUiTranslations();
+
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const [containerWidth, setContainerWidth] = useState<number>(720);
 
@@ -77,12 +80,18 @@ export default function TrafficChart({ data, height = 240 }: Props) {
         return indexes;
     }, [data.length]);
 
-    const total = useMemo(() => data.reduce((acc, d) => acc + d.views, 0), [data]);
+    const total = useMemo(
+        () => data.reduce((acc, d) => acc + d.views, 0),
+        [data],
+    );
 
     if (data.length === 0) {
         return (
-            <p className="text-muted-foreground py-10 text-center text-sm">
-                Aucune donnée pour cette période.
+            <p className="py-10 text-center text-sm text-muted-foreground">
+                {uiText(
+                    'ui.components.text_d7315c751a39',
+                    'Aucune donnée pour cette période.',
+                )}
             </p>
         );
     }
@@ -108,9 +117,23 @@ export default function TrafficChart({ data, height = 240 }: Props) {
                 onMouseLeave={() => setHoverIndex(null)}
             >
                 <defs>
-                    <linearGradient id="traffic-area" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+                    <linearGradient
+                        id="traffic-area"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                    >
+                        <stop
+                            offset="0%"
+                            stopColor="currentColor"
+                            stopOpacity="0.25"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="currentColor"
+                            stopOpacity="0"
+                        />
                     </linearGradient>
                 </defs>
 
@@ -218,7 +241,7 @@ export default function TrafficChart({ data, height = 240 }: Props) {
 
             {hoverIndex !== null && (
                 <div
-                    className="border-border bg-popover text-popover-foreground pointer-events-none absolute top-2 rounded-md border px-3 py-2 text-xs shadow-md"
+                    className="pointer-events-none absolute top-2 rounded-md border border-border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-md"
                     style={{
                         left: clampTooltipLeft(xFor(hoverIndex), width),
                     }}
@@ -226,13 +249,25 @@ export default function TrafficChart({ data, height = 240 }: Props) {
                     <div className="font-medium">
                         {formatFullDate(data[hoverIndex].date)}
                     </div>
-                    <div className="text-primary flex items-center gap-2">
-                        <span className="bg-primary inline-block size-2 rounded-full" />
-                        <span>{data[hoverIndex].views} pages vues</span>
+                    <div className="flex items-center gap-2 text-primary">
+                        <span className="inline-block size-2 rounded-full bg-primary" />
+                        <span>
+                            {data[hoverIndex].views}{' '}
+                            {uiText(
+                                'ui.components.text_723cb60154ce',
+                                'pages vues',
+                            )}
+                        </span>
                     </div>
                     <div className="flex items-center gap-2 text-emerald-600">
                         <span className="inline-block size-2 rounded-full bg-emerald-500" />
-                        <span>{data[hoverIndex].visitors} visiteurs</span>
+                        <span>
+                            {data[hoverIndex].visitors}{' '}
+                            {uiText(
+                                'ui.components.text_6d7e48186a6b',
+                                'visiteurs',
+                            )}
+                        </span>
                     </div>
                 </div>
             )}

@@ -11,7 +11,7 @@ type CmsLocaleNoticeProps = {
 export default function CmsLocaleNotice({ show = true }: CmsLocaleNoticeProps) {
     const { t, locale } = useTrans();
 
-    if (locale !== 'en' || ! show) {
+    if (locale === 'fr' || ! show) {
         return null;
     }
 
