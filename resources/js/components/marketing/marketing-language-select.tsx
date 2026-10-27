@@ -115,6 +115,7 @@ export default function MarketingLanguageSelect({
                     <SelectItem
                         key={language}
                         value={language}
+                        aria-label={localeLabels[language] ?? language}
                         textValue={
                             localeLabels[language] ??
                             t('language.' + language, language.toUpperCase())
@@ -125,13 +126,7 @@ export default function MarketingLanguageSelect({
                             lang={language}
                         >
                             <LanguageFlag language={language} />
-                            <span>
-                                {localeLabels[language] ??
-                                    t(
-                                        'language.' + language,
-                                        language.toUpperCase(),
-                                    )}
-                            </span>
+                            <span>{language.toLowerCase()}</span>
                         </span>
                     </SelectItem>
                 ))}
