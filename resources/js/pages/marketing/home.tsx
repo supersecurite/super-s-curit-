@@ -250,7 +250,7 @@ export default function MarketingHome() {
                                 src={partner.logo}
                                 alt={partner.name}
                                 width={150}
-                                height={60}
+                                height={150}
                                 loading="lazy"
                             />
                         ))}
