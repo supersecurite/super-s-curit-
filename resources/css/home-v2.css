@@ -1,4 +1,9 @@
 /* Accueil V2 : photographie, typographie affirmée et accent rouge du thème. */
+.home-v2-header,
+.home-v2-header + #main-content,
+.home-v2 {
+    --home-v2-header-height: 88px;
+}
 .home-v2 {
     background: #fff;
     color: var(--super-securite-heading);
@@ -7,13 +12,25 @@
     position: sticky;
     top: 0;
     z-index: 50;
+    flex-shrink: 0;
+    /* La photo du hero se prolonge sous le bandeau sticky. */
+    margin-bottom: calc(-1 * var(--home-v2-header-height));
     color: #fff;
-    background: #06111d;
+    background: linear-gradient(
+        90deg,
+        rgb(6 17 29 / 0.97) 0%,
+        rgb(20 37 53 / 0.93) 50%,
+        rgb(31 48 65 / 0.88) 78%,
+        rgb(42 57 73 / 0.82) 100%
+    );
     border-bottom: 1px solid rgb(255 255 255 / 0.15);
+}
+.home-v2-header + #main-content {
+    scroll-margin-top: var(--home-v2-header-height);
 }
 .home-v2-header-inner {
     max-width: 1536px;
-    min-height: 88px;
+    min-height: calc(var(--home-v2-header-height) - 1px);
     margin: auto;
     padding: 8px 4%;
     display: flex;
@@ -43,7 +60,8 @@
     font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
-    color: rgb(255 255 255 / 0.85);
+    color: #fff;
+    text-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
 }
 .home-v2-desktop-nav a:hover,
 .home-v2-desktop-nav a.is-active {
@@ -110,11 +128,12 @@
     height: 36px;
     color: #fff;
     border-color: rgb(255 255 255 / 0.25);
-    background: rgb(255 255 255 / 0.06);
+    background: rgb(6 17 29 / 0.4);
 }
 .home-v2-hero {
     position: relative;
     min-height: 500px;
+    padding-top: var(--home-v2-header-height);
     isolation: isolate;
     overflow: hidden;
     color: #fff;
@@ -128,21 +147,6 @@
     object-fit: cover;
     object-position: center 48%;
     z-index: -3;
-}
-.home-v2-hero-shade {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    background:
-        linear-gradient(
-            90deg,
-            rgb(4 17 31 / 0.4) 0%,
-            rgb(4 17 31 / 0.25) 24%,
-            rgb(4 17 31 / 0.08) 43%,
-            transparent 62%,
-            rgb(4 17 31 / 0.28) 100%
-        ),
-        linear-gradient(0deg, rgb(3 16 27 / 0.08), transparent 30%);
 }
 .home-v2-hero-inner {
     max-width: 1536px;
@@ -597,8 +601,12 @@
     }
 }
 @media (max-width: 767px) {
+    .home-v2-header,
+    .home-v2-header + #main-content,
+    .home-v2 {
+        --home-v2-header-height: 72px;
+    }
     .home-v2-header-inner {
-        min-height: 72px;
         padding-block: 5px;
         gap: 10px;
     }
@@ -622,15 +630,6 @@
     }
     .home-v2-hero-photo {
         object-position: 61% center;
-    }
-    .home-v2-hero-shade {
-        background: linear-gradient(
-            180deg,
-            rgb(4 17 31 / 0.08) 0%,
-            rgb(4 17 31 / 0.18) 30%,
-            rgb(4 17 31 / 0.5) 55%,
-            rgb(4 17 31 / 0.85) 100%
-        );
     }
     .home-v2-hero-copy {
         width: 100%;
@@ -709,7 +708,7 @@
     }
     .home-v2-partner-logos img {
         max-width: 90px;
-        height: 38px;
+        height: 90px;
     }
     .home-v2-why {
         display: block;

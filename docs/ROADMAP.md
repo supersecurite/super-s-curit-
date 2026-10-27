@@ -148,4 +148,4 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 
 - 2026-10-26 : correction des interfaces publiques actualités, conseils, galerie et contact ; navigation et partage conservant la langue FR/EN/ZH, tests de rendu dédiés.
 
-- 2026-10-27 : branche V2, refonte de la page accueil selon la maquette client, thème rouge, responsive et FR/EN/ZH préservés. Luminosité du hero corrigée par réduction des voiles desktop/mobile.
+- 2026-10-27 : branche V2, refonte de la page accueil selon la maquette client, thème rouge, responsive et FR/EN/ZH préservés. Photo retouchée en lumière neutre claire avec logo au dos de l’agent ; menu superposé bleu nuit légèrement translucide et ombre latérale unique intégrée à la photo, sans voile CSS.

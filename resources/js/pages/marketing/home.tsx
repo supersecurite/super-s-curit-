@@ -31,7 +31,7 @@ type HomePageProps = {
 };
 
 const images = {
-    hero: '/images/super-securite/home-v2-hero.jpg',
+    hero: '/images/super-securite/home-v2-hero-daylight-shaded.jpg',
     fallback:
         '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     why: '/images/super-securite/agent-securite-radio-portrait.jpeg',
@@ -79,7 +79,6 @@ export default function MarketingHome() {
                         event.currentTarget.src = images.fallback;
                     }}
                 />
-                <div className="home-v2-hero-shade" aria-hidden="true" />
                 <div className="home-v2-hero-inner">
                     <div className="home-v2-hero-copy">
                         <p className="home-v2-eyebrow">
@@ -87,7 +86,9 @@ export default function MarketingHome() {
                             {t('home_v2.eyebrow')}
                         </p>
                         <h1 id="home-v2-title">
-                            <span className="text-white">{t('home_v2.title_lead')}</span>
+                            <span className="text-white">
+                                {t('home_v2.title_lead')}
+                            </span>
                             <strong>{t('home_v2.title_accent')}</strong>
                         </h1>
                         <p className="home-v2-intro">
