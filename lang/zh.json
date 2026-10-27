@@ -1561,5 +1561,76 @@
         "phone_required": "请输入电话号码。",
         "message_required": "请描述您的项目。",
         "captcha_required": "请完成防机器人验证。"
+    },
+    "home_v2": {
+        "eyebrow": "几内亚私人安保公司",
+        "title_lead": "您的安全，",
+        "title_accent": "我们的首要任务。",
+        "description": "我们以专业人员与技术相结合的解决方案，为您的团队、场所和业务提供保护，并充分适应当地实际情况。",
+        "services_cta": "我们的服务",
+        "contact_cta": "联系我们",
+        "quote_cta": "获取报价",
+        "references": "我们的客户",
+        "pillars": [
+            {
+                "title": "风险预防",
+                "description": "未雨绸缪，更好地守护"
+            },
+            {
+                "title": "保护您的资产",
+                "description": "保障人员、财产和场所安全"
+            },
+            {
+                "title": "保障运营持续",
+                "description": "每天提供可靠的守护"
+            },
+            {
+                "title": "支持您的项目",
+                "description": "随您需求不断发展的解决方案"
+            }
+        ],
+        "facts": [
+            {
+                "value": "24/7",
+                "label": "全天候值守与服务"
+            },
+            {
+                "value": "4",
+                "label": "专业服务领域"
+            },
+            {
+                "value": "几内亚",
+                "label": "熟悉当地实际情况"
+            },
+            {
+                "value": "量身定制",
+                "label": "安保解决方案"
+            }
+        ],
+        "why_label": "为什么选择我们",
+        "why_title": "可靠、尽责的安保合作伙伴",
+        "why_description": "以专业的方法、训练有素的团队和针对您风险的解决方案，提供安保服务。",
+        "values": [
+            {
+                "title": "专业精神",
+                "description": "接受培训并有督导的安保人员"
+            },
+            {
+                "title": "快速响应",
+                "description": "迅速响应您的需求"
+            },
+            {
+                "title": "技术支持",
+                "description": "现代化工具与透明的服务跟进"
+            },
+            {
+                "title": "尽责承诺",
+                "description": "建立持久、互信的合作关系"
+            }
+        ],
+        "future_title": "从今天起，守护您明天的项目。",
+        "future_cta": "与我们探讨您的项目",
+        "partners_label": "他们信赖我们",
+        "services_label": "适用于各种环境的安保解决方案"
     }
 }

@@ -1,67 +1,334 @@
-import { lazy, Suspense } from 'react';
-import { usePage } from '@inertiajs/react';
-import SeoHead from '@/components/marketing/seo-head';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    ArrowRight,
+    Building2,
+    Clock3,
+    Factory,
+    Handshake,
+    MapPin,
+    MonitorCheck,
+    Settings2,
+    ShieldCheck,
+    TrendingUp,
+    Users,
+    Zap,
+} from 'lucide-react';
 import ArticlesSection from '@/components/marketing/articles-section';
-import CtaBand from '@/components/marketing/cta-band';
-import MarketingHeroCarousel from '@/components/marketing/marketing-hero-carousel';
 import SecurityTipsSection from '@/components/marketing/security-tips-section';
-import ServiceCards from '@/components/marketing/service-cards';
-import TestimonialsSection from '@/components/marketing/testimonials-section';
-import WelcomeSection from '@/components/marketing/welcome-section';
-import WhyUsSection from '@/components/marketing/why-us-section';
+import SeoHead from '@/components/marketing/seo-head';
+import { superSecuriteServices } from '@/data/super-securite-content';
+import { superSecuritePartners } from '@/data/super-securite-partners';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
+import { useTrans } from '@/hooks/use-trans';
 import type { MarketingContentPreview } from '@/types/marketing-content';
 
-const PartnersMarquee = lazy(
-    () => import('@/components/marketing/partners-marquee'),
-);
-
+type CopyItem = { title: string; description: string };
+type Fact = { value: string; label: string };
 type HomePageProps = {
-    featuredArticles: MarketingContentPreview[];
-    featuredSecurityTips: MarketingContentPreview[];
+    featuredArticles?: MarketingContentPreview[];
+    featuredSecurityTips?: MarketingContentPreview[];
     partners?: { name: string; logo: string }[];
 };
 
+const images = {
+    hero: '/images/super-securite/home-v2-hero.jpg',
+    fallback:
+        '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
+    why: '/images/super-securite/agent-securite-radio-portrait.jpeg',
+    future: '/images/super-securite/securite-installation-convoyeur-minier.jpeg',
+    services: {
+        entreprise: '/images/super-securite/agents.jpeg',
+        residence: '/images/super-securite/base-vie-logements.jpeg',
+        chantiers:
+            '/images/super-securite/chantier-structure-beton-echafaudage-equipe.jpeg',
+        'zones-minieres':
+            '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
+    },
+} as const;
+
+/** Accueil V2 : composition terrain, services et engagements, avec contenus FR/EN/ZH. */
 export default function MarketingHome() {
-    const { featuredArticles = [], featuredSecurityTips = [], partners = [] } =
-        usePage<HomePageProps>().props;
+    const { t, tNode } = useTrans();
+    const lp = useLocalizedUrl();
+    const {
+        featuredArticles = [],
+        featuredSecurityTips = [],
+        partners = [],
+    } = usePage<HomePageProps>().props;
+    const pillars = tNode<CopyItem[]>('home_v2.pillars', []);
+    const facts = tNode<Fact[]>('home_v2.facts', []);
+    const values = tNode<CopyItem[]>('home_v2.values', []);
+    const partnerList = partners.length ? partners : superSecuritePartners;
+    const pillarIcons = [ShieldCheck, Users, Factory, TrendingUp];
+    const factIcons = [Clock3, Building2, MapPin, Settings2];
+    const valueIcons = [ShieldCheck, Zap, MonitorCheck, Handshake];
 
     return (
-        <>
+        <div className="home-v2">
             <SeoHead />
-
-            <MarketingHeroCarousel />
-
-            <div className="marketing-section-white">
-                <WelcomeSection />
-            </div>
-
-            <div className="marketing-section-band">
-                <ServiceCards />
-            </div>
-
-            <Suspense fallback={null}>
-                <div className="marketing-below-fold">
-                    <PartnersMarquee partners={partners} />
+            <section className="home-v2-hero" aria-labelledby="home-v2-title">
+                <img
+                    className="home-v2-hero-photo"
+                    src={images.hero}
+                    alt=""
+                    width={1920}
+                    height={840}
+                    fetchPriority="high"
+                    onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src = images.fallback;
+                    }}
+                />
+                <div className="home-v2-hero-shade" aria-hidden="true" />
+                <div className="home-v2-hero-inner">
+                    <div className="home-v2-hero-copy">
+                        <p className="home-v2-eyebrow">
+                            <span />
+                            {t('home_v2.eyebrow')}
+                        </p>
+                        <h1 id="home-v2-title">
+                            <span className="text-white">{t('home_v2.title_lead')}</span>
+                            <strong>{t('home_v2.title_accent')}</strong>
+                        </h1>
+                        <p className="home-v2-intro">
+                            {t('home_v2.description')}
+                        </p>
+                        <div className="home-v2-hero-actions">
+                            <a href="#services" className="home-v2-button">
+                                {t('home_v2.services_cta')}
+                                <ArrowRight size={18} aria-hidden="true" />
+                            </a>
+                            <Link
+                                href={lp('/contact')}
+                                className="home-v2-button home-v2-button-outline"
+                            >
+                                {t('home_v2.contact_cta')}
+                            </Link>
+                        </div>
+                    </div>
+                    <ul className="home-v2-pillars">
+                        {pillars.map((pillar, index) => {
+                            const Icon = pillarIcons[index];
+                            return (
+                                <li key={pillar.title}>
+                                    <Icon
+                                        size={30}
+                                        strokeWidth={1.6}
+                                        aria-hidden="true"
+                                    />
+                                    <div>
+                                        <span>{pillar.title}</span>
+                                        <small>{pillar.description}</small>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </div>
-            </Suspense>
-
-            <WhyUsSection showAppSection={false} />
-
-            <div className="marketing-section-band">
-                <ArticlesSection articles={featuredArticles} />
-            </div>
-
-            <div className="marketing-section-white">
-                <TestimonialsSection />
-            </div>
-
-            <div className="marketing-section-band">
-                <SecurityTipsSection tips={featuredSecurityTips} />
-            </div>
-
-            <div className="marketing-section-band">
-                <CtaBand />
-            </div>
-        </>
+            </section>
+            <section
+                id="services"
+                className="home-v2-services"
+                aria-labelledby="home-v2-services-title"
+            >
+                <h2 id="home-v2-services-title" className="sr-only">
+                    {t('home_v2.services_label')}
+                </h2>
+                <div className="home-v2-services-grid">
+                    {superSecuriteServices.map((service) => {
+                        const Icon = service.icon;
+                        return (
+                            <article
+                                className="home-v2-service-card"
+                                key={service.id}
+                            >
+                                <Link
+                                    href={lp(service.path)}
+                                    className="home-v2-service-image"
+                                    tabIndex={-1}
+                                    aria-hidden="true"
+                                >
+                                    <img
+                                        src={
+                                            images.services[
+                                                service.id as keyof typeof images.services
+                                            ]
+                                        }
+                                        alt=""
+                                        width={480}
+                                        height={280}
+                                        loading="lazy"
+                                    />
+                                </Link>
+                                <div className="home-v2-service-body">
+                                    <span className="home-v2-service-icon">
+                                        <Icon
+                                            size={24}
+                                            strokeWidth={1.6}
+                                            aria-hidden="true"
+                                        />
+                                    </span>
+                                    <h3>
+                                        <Link href={lp(service.path)}>
+                                            {t(
+                                                'services.' +
+                                                    service.id +
+                                                    '.title',
+                                                service.title,
+                                            )}
+                                        </Link>
+                                    </h3>
+                                    <p>
+                                        {t(
+                                            'services.' +
+                                                service.id +
+                                                '.description',
+                                            service.description,
+                                        )}
+                                    </p>
+                                    <Link
+                                        href={lp(service.path)}
+                                        className="home-v2-text-link"
+                                        aria-label={
+                                            t('common.learn_more') +
+                                            ' — ' +
+                                            t(
+                                                'services.' +
+                                                    service.id +
+                                                    '.title',
+                                                service.title,
+                                            )
+                                        }
+                                    >
+                                        {t('common.learn_more')}
+                                        <ArrowRight
+                                            size={15}
+                                            aria-hidden="true"
+                                        />
+                                    </Link>
+                                </div>
+                            </article>
+                        );
+                    })}
+                    <div className="home-v2-facts">
+                        {facts.map((fact, index) => {
+                            const Icon = factIcons[index];
+                            return (
+                                <div className="home-v2-fact" key={fact.label}>
+                                    <span className="home-v2-fact-icon">
+                                        <Icon
+                                            size={25}
+                                            strokeWidth={1.5}
+                                            aria-hidden="true"
+                                        />
+                                    </span>
+                                    <div>
+                                        <strong>{fact.value}</strong>
+                                        <span>{fact.label}</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+            <section
+                id="references"
+                className="home-v2-partners"
+                aria-label={t('home_v2.partners_label')}
+            >
+                <div className="home-v2-partners-inner">
+                    <h2>
+                        {t('home_v2.partners_label')}
+                        <span />
+                    </h2>
+                    <div className="home-v2-partner-logos">
+                        {partnerList.map((partner) => (
+                            <img
+                                key={partner.name}
+                                src={partner.logo}
+                                alt={partner.name}
+                                width={150}
+                                height={60}
+                                loading="lazy"
+                            />
+                        ))}
+                    </div>
+                </div>
+            </section>
+            <section
+                className="home-v2-why"
+                aria-labelledby="home-v2-why-title"
+            >
+                <div className="home-v2-why-story">
+                    <img
+                        src={images.why}
+                        alt=""
+                        width={800}
+                        height={600}
+                        loading="lazy"
+                    />
+                    <div
+                        className="home-v2-why-story-shade"
+                        aria-hidden="true"
+                    />
+                    <div className="home-v2-why-copy">
+                        <p className="home-v2-eyebrow">
+                            <span />
+                            {t('home_v2.why_label')}
+                        </p>
+                        <h2 id="home-v2-why-title">{t('home_v2.why_title')}</h2>
+                        <p>{t('home_v2.why_description')}</p>
+                    </div>
+                </div>
+                <div className="home-v2-values">
+                    {values.map((value, index) => {
+                        const Icon = valueIcons[index];
+                        return (
+                            <div className="home-v2-value" key={value.title}>
+                                <span>
+                                    <Icon
+                                        size={27}
+                                        strokeWidth={1.6}
+                                        aria-hidden="true"
+                                    />
+                                </span>
+                                <div>
+                                    <h3>{value.title}</h3>
+                                    <p>{value.description}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+                <Link href={lp('/contact')} className="home-v2-future">
+                    <img
+                        src={images.future}
+                        alt=""
+                        width={600}
+                        height={600}
+                        loading="lazy"
+                    />
+                    <span className="home-v2-future-shade" aria-hidden="true" />
+                    <span className="home-v2-future-copy">
+                        <strong>{t('home_v2.future_title')}</strong>
+                        <span>
+                            {t('home_v2.future_cta')}
+                            <ArrowRight size={20} aria-hidden="true" />
+                        </span>
+                    </span>
+                </Link>
+            </section>
+            {featuredArticles.length > 0 && (
+                <div className="home-v2-editorial">
+                    <ArticlesSection articles={featuredArticles} />
+                </div>
+            )}
+            {featuredSecurityTips.length > 0 && (
+                <div className="home-v2-editorial">
+                    <SecurityTipsSection tips={featuredSecurityTips} />
+                </div>
+            )}
+        </div>
     );
 }

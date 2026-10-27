@@ -1,3 +1,4 @@
+import HomeV2Header from '@/components/marketing/home-v2-header';
 import { useEffect, type ReactNode } from 'react';
 import { usePage } from '@inertiajs/react';
 import { Toaster } from '@/components/ui/sonner';
@@ -9,7 +10,7 @@ import { useVisitTracker } from '@/hooks/use-visit-tracker';
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
     useVisitTracker();
-    const { url } = usePage();
+    const { url, component } = usePage();
     const { locale = 'fr' } = usePage().props as { locale?: string };
     const { t } = useTrans();
 
@@ -55,7 +56,11 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             >
                 {t('common.skip_to_content', 'Aller au contenu')}
             </a>
-            <MarketingHeader />
+            {component === 'marketing/home' ? (
+                <HomeV2Header />
+            ) : (
+                <MarketingHeader />
+            )}
             <main id="main-content" className="flex-1">
                 {children}
             </main>

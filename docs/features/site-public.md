@@ -48,3 +48,17 @@ Visiteurs anonymes. Tracking visites actif (hors pages exclues).
 - Chinois simplifié (zh) : URLs /zh, sélecteurs public et backoffice, catalogues complets, métadonnées et FAQ. Les contenus éditoriaux sans version chinoise restent en français avec un bandeau. Le choix automatique conserve la règle FR si navigateur français, EN sinon. Composants partagés : recherche, dialogues, galerie, éditeur, formulaires et sécurité du compte traduits FR/EN/ZH.
 
 - Les listes/détails actualités et conseils, filtres, liens similaires, retours et partages conservent la langue. Galerie : compteurs et filtres traduits. Contact : soumission, validation et confirmation localisées.
+
+### Accueil V2 — 27 octobre 2026
+
+- Nouvelle composition basée sur la maquette client : hero panoramique, quatre cartes métier, panneau d'engagements, partenaires et bloc « Pourquoi nous choisir ».
+- Rouge du thème conservé ; variante rouge sombre déjà existante pour le contraste des petits CTA.
+- Header spécifique à l'accueil, liens localisés, sélecteur de langue conservé et navigation mobile disponible jusqu'au breakpoint xl. Les autres pages conservent leur header.
+- Services, photos de cartes et partenaires existants réutilisés ; aucun effectif, nombre de clients ou ancienneté non confirmé ajouté.
+- Traductions FR/EN/zh via home_v2 ; les contenus éditoriaux reçus par l'accueil restent disponibles.
+- Tests : tests/Frontend/home-v2.cjs, rendu aux largeurs 320/390/1280/1536 et contrôles TypeScript/build. L'aperçu isolé ne remplace pas un test avec la base métier active.
+
+Visuel : public/images/super-securite/home-v2-hero.jpg, généré avec l'outil imagegen intégré à partir de la référence utilisateur. Illustration promotionnelle.
+
+Consigne finale utilisée pour le visuel :
+Use case: compositing. Create ONLY the wide photographic hero background from the top hero scene in this reference, suitable for a 16:7 website banner, no UI, no lettering, no logos, no captions or buttons. A Black African private security officer viewed from behind, dark professional uniform and cap with subtle red accents and radio, centered slightly right, monitoring a Guinea open-pit mining site, mining trucks in the distance, a white patrol pickup on the far right. Cinematic realistic photography, warm late-afternoon sky, dark navy shadows. Preserve the reference composition and professional mood. Leave the left third mostly clear dark navy space for separately coded white and RED headline. Replace the gold security branding accents with RED. This is a promotional illustration, not a UI screenshot.

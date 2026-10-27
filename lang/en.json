@@ -1557,5 +1557,76 @@
         "phone_required": "Your phone number is required.",
         "message_required": "Please describe your project.",
         "captcha_required": "Please complete the anti-bot verification."
+    },
+    "home_v2": {
+        "eyebrow": "Private security company in Guinea",
+        "title_lead": "Your security,",
+        "title_accent": "our priority.",
+        "description": "We protect your teams, sites and operations with human expertise and technology tailored to local conditions.",
+        "services_cta": "Our services",
+        "contact_cta": "Contact us",
+        "quote_cta": "Request a quote",
+        "references": "Our references",
+        "pillars": [
+            {
+                "title": "Prevent risks",
+                "description": "Anticipate threats for better protection"
+            },
+            {
+                "title": "Protect your assets",
+                "description": "People, property and sites"
+            },
+            {
+                "title": "Maintain continuity",
+                "description": "A reliable presence every day"
+            },
+            {
+                "title": "Support your projects",
+                "description": "Solutions that evolve with you"
+            }
+        ],
+        "facts": [
+            {
+                "value": "24/7",
+                "label": "Presence and availability"
+            },
+            {
+                "value": "4",
+                "label": "Areas of expertise"
+            },
+            {
+                "value": "Guinea",
+                "label": "Local expertise"
+            },
+            {
+                "value": "Tailored",
+                "label": "Security solutions"
+            }
+        ],
+        "why_label": "Why choose us",
+        "why_title": "A reliable and committed security partner",
+        "why_description": "A professional approach, trained teams and solutions tailored to your risks.",
+        "values": [
+            {
+                "title": "Professionalism",
+                "description": "Trained and supervised agents"
+            },
+            {
+                "title": "Responsiveness",
+                "description": "A prompt response to your needs"
+            },
+            {
+                "title": "Technology",
+                "description": "Modern tools and transparent monitoring"
+            },
+            {
+                "title": "Commitment",
+                "description": "A lasting relationship built on trust"
+            }
+        ],
+        "future_title": "Secure tomorrow’s projects today.",
+        "future_cta": "Let’s discuss your project",
+        "partners_label": "They trust us",
+        "services_label": "Solutions for every environment"
     }
 }

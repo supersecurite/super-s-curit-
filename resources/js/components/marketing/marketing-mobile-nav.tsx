@@ -39,6 +39,7 @@ import { home } from '@/routes';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
 type MarketingMobileNavProps = {
+    desktopBreakpoint?: 'md' | 'xl';
     pathname: string;
     superSecurite: SuperSecuriteConfig;
     open: boolean;
@@ -46,6 +47,7 @@ type MarketingMobileNavProps = {
 };
 
 export default function MarketingMobileNav({
+    desktopBreakpoint = 'md',
     pathname,
     superSecurite,
     open,
@@ -105,7 +107,10 @@ export default function MarketingMobileNav({
             <SheetTrigger asChild>
                 <button
                     type="button"
-                    className="inline-flex size-14 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-all duration-200 hover:bg-super-securite-accent hover:text-white hover:shadow-lg hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none md:hidden"
+                    className={cn(
+                        'inline-flex size-14 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-all duration-200 hover:bg-super-securite-accent hover:text-white hover:shadow-lg hover:shadow-super-securite-accent/30 focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none',
+                        desktopBreakpoint === 'xl' ? 'xl:hidden' : 'md:hidden',
+                    )}
                     aria-label={t('nav.open_menu')}
                 >
                     <Menu className="size-6" aria-hidden />

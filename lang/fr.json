@@ -1557,5 +1557,76 @@
         "phone_required": "Le numéro de téléphone est obligatoire.",
         "message_required": "Veuillez décrire votre projet.",
         "captcha_required": "La vérification anti-robot est requise."
+    },
+    "home_v2": {
+        "eyebrow": "Société de sécurité privée en Guinée",
+        "title_lead": "Votre sécurité,",
+        "title_accent": "notre priorité.",
+        "description": "Nous protégeons vos équipes, vos sites et vos activités avec des solutions humaines et technologiques adaptées aux réalités du terrain.",
+        "services_cta": "Nos services",
+        "contact_cta": "Nous contacter",
+        "quote_cta": "Demander un devis",
+        "references": "Nos références",
+        "pillars": [
+            {
+                "title": "Prévenir les risques",
+                "description": "Anticiper pour mieux protéger"
+            },
+            {
+                "title": "Protéger vos actifs",
+                "description": "Les personnes, les biens et les sites"
+            },
+            {
+                "title": "Assurer la continuité",
+                "description": "Une présence fiable au quotidien"
+            },
+            {
+                "title": "Accompagner vos projets",
+                "description": "Des solutions qui évoluent avec vous"
+            }
+        ],
+        "facts": [
+            {
+                "value": "24/7",
+                "label": "Présence et disponibilité"
+            },
+            {
+                "value": "4",
+                "label": "Domaines d’intervention"
+            },
+            {
+                "value": "Guinée",
+                "label": "Expertise du terrain"
+            },
+            {
+                "value": "Sur mesure",
+                "label": "Solutions de sécurité"
+            }
+        ],
+        "why_label": "Pourquoi nous choisir",
+        "why_title": "Un partenaire de sécurité fiable et engagé",
+        "why_description": "Une approche professionnelle, des équipes formées et des solutions adaptées à vos risques.",
+        "values": [
+            {
+                "title": "Professionnalisme",
+                "description": "Des agents formés et encadrés"
+            },
+            {
+                "title": "Réactivité",
+                "description": "Une réponse rapide à vos besoins"
+            },
+            {
+                "title": "Technologie",
+                "description": "Des outils modernes et un suivi transparent"
+            },
+            {
+                "title": "Engagement",
+                "description": "Une relation durable et de confiance"
+            }
+        ],
+        "future_title": "Sécurisons aujourd’hui vos projets de demain.",
+        "future_cta": "Parlons de votre projet",
+        "partners_label": "Ils nous font confiance",
+        "services_label": "Des solutions pour chaque environnement"
     }
 }
