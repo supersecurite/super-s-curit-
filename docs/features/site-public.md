@@ -52,7 +52,7 @@ Visiteurs anonymes. Tracking visites actif (hors pages exclues).
 ### Accueil V2 — 27 octobre 2026
 
 - Nouvelle composition basée sur la maquette client : hero panoramique, quatre cartes métier, panneau d'engagements, partenaires et bloc « Pourquoi nous choisir ».
-- Rouge du thème conservé ; variante rouge sombre déjà existante pour le contraste des petits CTA.
+- Rouge du thème conservé ; variante rouge sombre déjà existante pour le contraste des petits CTA. Les voiles du hero restent légers au centre pour préserver la luminosité de la photo ; sur mobile, le voile est concentré derrière les textes.
 - Header spécifique à l'accueil, liens localisés, sélecteur de langue conservé et navigation mobile disponible jusqu'au breakpoint xl. Les autres pages conservent leur header.
 - Services, photos de cartes et partenaires existants réutilisés ; aucun effectif, nombre de clients ou ancienneté non confirmé ajouté.
 - Traductions FR/EN/zh via home_v2 ; les contenus éditoriaux reçus par l'accueil restent disponibles.
