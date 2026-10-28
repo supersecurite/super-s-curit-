@@ -1,3 +1,4 @@
+import { router, usePage } from '@inertiajs/react';
 import {
     Select,
     SelectContent,
@@ -5,7 +6,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { router, usePage } from '@inertiajs/react';
 import { useTrans } from '@/hooks/use-trans';
 import { alternatePath } from '@/lib/locale-url';
 import { cn } from '@/lib/utils';
@@ -18,7 +18,11 @@ type Props = {
 /** Drapeaux SVG indépendants de la prise en charge des emoji du navigateur. */
 function LanguageFlag({ language }: { language: string }) {
     const base = language.split(/[-_]/)[0];
-    if (!['fr', 'en', 'zh'].includes(base)) return null;
+
+    if (!['fr', 'en', 'zh'].includes(base)) {
+        return null;
+    }
+
     return (
         <svg
             viewBox="0 0 30 20"
@@ -110,7 +114,11 @@ export default function MarketingLanguageSelect({
             >
                 <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent
+                className="z-[70]"
+                avoidCollisions
+                collisionPadding={8}
+            >
                 {locales.map((language) => (
                     <SelectItem
                         key={language}

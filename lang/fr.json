@@ -10,7 +10,7 @@
         "news": "Actualités",
         "tips": "Conseils",
         "gallery": "Galerie",
-        "contact": "contact",
+        "contact": "Contact",
         "join_us": "Rejoignez-nous",
         "join": "Rejoignez-nous",
         "main": "Navigation principale",
@@ -1628,5 +1628,22 @@
         "future_cta": "Parlons de votre projet",
         "partners_label": "Ils nous font confiance",
         "services_label": "Des solutions pour chaque environnement"
+    },
+    "footer_v2": {
+        "presence_label": "Notre présence",
+        "presence_title": "Ancrés en Guinée",
+        "presence_description": "Nos équipes interviennent sur l’ensemble du territoire guinéen pour vous accompagner au plus près de vos sites et de vos enjeux, avec une connaissance fine du terrain.",
+        "country": "Guinée",
+        "project_label": "Votre projet",
+        "project_title": "Construisons votre dispositif de sécurité",
+        "project_description": "Nos équipes sont à votre écoute pour étudier vos besoins et vous proposer une solution sur mesure.",
+        "tagline": "Votre sécurité, notre priorité.",
+        "links_title": "Liens utiles",
+        "services_title": "Nos services",
+        "resources": "Ressources",
+        "recruitment": "Recrutement",
+        "privacy": "Confidentialité",
+        "legal_navigation": "Informations légales",
+        "rights": "© :year Super Sécurité. Tous droits réservés."
     }
 }

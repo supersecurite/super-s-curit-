@@ -1,250 +1,245 @@
-import { useTrans as useUiTranslations } from '@/hooks/use-trans';
-import { usePage } from '@inertiajs/react';
-import { index as galerieIndex } from '@/routes/galerie';
-import { index as actualitesIndex } from '@/routes/actualites';
-import { index as conseilsIndex } from '@/routes/conseils-securite';
-import { index as devenirAgentIndex } from '@/routes/devenir-agent';
-import { about, contact } from '@/routes';
-import { superSecuriteImages } from '@/data/super-securite-images';
-import { superSecuriteServices } from '@/data/super-securite-content';
-import { useTrans } from '@/hooks/use-trans';
-import { localizePath } from '@/lib/locale-url';
-import type { SuperSecuriteConfig } from '@/types/super-securite';
+import { Link, usePage } from '@inertiajs/react';
 import {
-    FacebookIcon,
-    InstagramIcon,
-    LinkedinIcon,
-    TwitterIcon,
+    ArrowRight,
+    ChevronDown,
+    Facebook,
+    Instagram,
+    Linkedin,
+    Mail,
+    MapPin,
+    Phone,
+    Twitter,
     Youtube,
 } from 'lucide-react';
+import { superSecuriteServices } from '@/data/super-securite-content';
+import { superSecuriteImages } from '@/data/super-securite-images';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
+import { useTrans } from '@/hooks/use-trans';
+import type { SuperSecuriteConfig } from '@/types/super-securite';
 
-type SharedPageProps = {
-    superSecurite: SuperSecuriteConfig;
-};
+type FooterPageProps = { superSecurite: SuperSecuriteConfig };
 
+/** Pied de page commun : présence en Guinée, navigation et coordonnées localisées. */
 export default function MarketingFooter() {
-    const { t: uiText } = useUiTranslations();
-
-    const { superSecurite } = usePage<SharedPageProps>().props;
-    const { t, locale } = useTrans();
-    const lp = (path: string) => localizePath(path, locale);
+    const { superSecurite } = usePage<FooterPageProps>().props;
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
     const year = new Date().getFullYear();
+    const socialLinks = [
+        {
+            name: 'LinkedIn',
+            href: superSecurite.social.linkedin,
+            icon: Linkedin,
+        },
+        {
+            name: 'Facebook',
+            href: superSecurite.social.facebook,
+            icon: Facebook,
+        },
+        { name: 'YouTube', href: superSecurite.social.youtube, icon: Youtube },
+        {
+            name: 'Instagram',
+            href: superSecurite.social.instagram,
+            icon: Instagram,
+        },
+        { name: 'Twitter', href: superSecurite.social.twitter, icon: Twitter },
+    ].filter((social) => social.href);
 
     return (
-        <footer className="border-t border-white/10 bg-black py-16 text-white/70">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
-                    <div>
-                        <img
-                            src={superSecuriteImages.brandWhite}
-                            alt="Super Sécurité"
-                            className="h-12 w-auto max-w-[220px] object-contain object-left"
-                            width={220}
-                            height={48}
-                        />
-                        <p className="mt-4 text-sm text-white/50">
-                            {t('footer.rights').replace(':year', String(year))}
+        <footer className="marketing-footer-v2">
+            <section
+                className="marketing-footer-presence"
+                aria-labelledby="footer-presence-title"
+            >
+                <div className="marketing-footer-container marketing-footer-presence-grid">
+                    <div className="marketing-footer-presence-copy">
+                        <p className="marketing-footer-eyebrow">
+                            {t('footer_v2.presence_label')}
                         </p>
+                        <h2 id="footer-presence-title">
+                            {t('footer_v2.presence_title')}
+                        </h2>
+                        <p>{t('footer_v2.presence_description')}</p>
                     </div>
+                    <div className="marketing-footer-map" aria-hidden="true">
+                        <img
+                            src="/images/super-securite/guinea-outline.svg"
+                            alt=""
+                            width={280}
+                            height={180}
+                            loading="lazy"
+                        />
+                        <div className="marketing-footer-map-label">
+                            <MapPin
+                                size={38}
+                                fill="currentColor"
+                                strokeWidth={1.5}
+                            />
+                            <span>{t('footer_v2.country')}</span>
+                        </div>
+                    </div>
+                    <div className="marketing-footer-project">
+                        <p className="marketing-footer-eyebrow">
+                            {t('footer_v2.project_label')}
+                        </p>
+                        <h3>{t('footer_v2.project_title')}</h3>
+                        <p>{t('footer_v2.project_description')}</p>
+                        <Link
+                            href={lp('/contact')}
+                            className="marketing-footer-quote"
+                        >
+                            {t('home_v2.quote_cta')}
+                            <ArrowRight size={17} aria-hidden="true" />
+                        </Link>
+                    </div>
+                </div>
+            </section>
 
-                    <div>
-                        <h3 className="font-heading text-sm font-semibold text-white">
-                            {t('footer.who_we_are')}
-                        </h3>
-                        <ul className="mt-4 space-y-3 text-sm">
+            <div className="marketing-footer-main">
+                <div className="marketing-footer-container marketing-footer-columns">
+                    <div className="marketing-footer-brand">
+                        <Link href={lp('/')} aria-label="Super Sécurité">
+                            <img
+                                src={superSecuriteImages.brandBlackTransparent}
+                                alt="Super Sécurité"
+                                width={220}
+                                height={94}
+                                loading="lazy"
+                            />
+                        </Link>
+                        <p>{t('footer_v2.tagline')}</p>
+                    </div>
+                    <nav aria-label={t('footer_v2.links_title')}>
+                        <h3>{t('footer_v2.links_title')}</h3>
+                        <ul className="marketing-footer-links">
                             <li>
-                                <a
-                                    href={lp(about.url())}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {t('footer.why_choose')}
-                                </a>
+                                <Link href={lp('/')}>{t('nav.home')}</Link>
                             </li>
                             <li>
-                                <a
-                                    href={lp(actualitesIndex.url())}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {t('footer.news')}
-                                </a>
+                                <Link href={lp('/a-propos')}>
+                                    {t('about.label')}
+                                </Link>
                             </li>
                             <li>
-                                <a
-                                    href={lp(conseilsIndex.url())}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {t('footer.tips')}
-                                </a>
+                                <Link href={lp('/') + '#services'}>
+                                    {t('nav.services')}
+                                </Link>
                             </li>
                             <li>
-                                <a
-                                    href={lp(galerieIndex.url())}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {t('footer.gallery')}
-                                </a>
+                                <details className="marketing-footer-resources">
+                                    <summary>
+                                        {t('footer_v2.resources')}
+                                        <ChevronDown
+                                            size={12}
+                                            aria-hidden="true"
+                                        />
+                                    </summary>
+                                    <ul>
+                                        <li>
+                                            <Link href={lp('/actualites')}>
+                                                {t('nav.news')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                href={lp('/conseils-securite')}
+                                            >
+                                                {t('footer.tips')}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href={lp('/galerie')}>
+                                                {t('footer.gallery')}
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </details>
                             </li>
                             <li>
-                                <a
-                                    href={lp(devenirAgentIndex.url())}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {t('footer.join_us')}
-                                </a>
+                                <Link href={lp('/devenir-agent')}>
+                                    {t('footer_v2.recruitment')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={lp('/contact')}>
+                                    {t('nav.contact')}
+                                </Link>
                             </li>
                         </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-heading text-sm font-semibold text-white">
-                            {t('footer.services')}
-                        </h3>
-                        <ul className="mt-4 space-y-3 text-sm">
+                    </nav>
+                    <nav aria-label={t('footer_v2.services_title')}>
+                        <h3>{t('footer_v2.services_title')}</h3>
+                        <ul className="marketing-footer-links">
                             {superSecuriteServices.map((service) => (
-                                <li key={`link-${service.id}`}>
-                                    <a
-                                        href={lp(service.path)}
-                                        className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                    >
+                                <li key={service.id}>
+                                    <Link href={lp(service.path)}>
                                         {t(
-                                            `services.${service.id}.title`,
+                                            'services.' + service.id + '.title',
                                             service.title,
                                         )}
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-heading text-sm font-semibold text-white">
-                            {t('footer.contact_us')}
-                        </h3>
-                        <ul className="mt-4 space-y-3 text-sm">
-                            <li>
-                                <a
-                                    href={`${lp(contact.url())}#faq`}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {uiText(
-                                        'ui.components.text_dbc468a14b60',
-                                        'FAQ',
-                                    )}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href={superSecurite.phone_href}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {superSecurite.phone}
-                                    {superSecurite.phone_secondary
-                                        ? ` // ${superSecurite.phone_secondary}`
-                                        : ''}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href={`mailto:${superSecurite.email}`}
-                                    className="cursor-pointer transition-colors duration-200 hover:text-white"
-                                >
-                                    {superSecurite.email}
-                                </a>
-                            </li>
-                            <li className="text-white/50">
-                                {superSecurite.address}
-                            </li>
-                        </ul>
-
-                        <h3 className="mt-8 font-heading text-sm font-semibold text-white">
-                            {t('footer.networks')}
-                        </h3>
-                        <ul className="mt-4 flex flex-col gap-2">
-                            {superSecurite.social.facebook && (
-                                <li>
-                                    <a
-                                        href={superSecurite.social.facebook}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
-                                    >
-                                        <FacebookIcon className="h-4 w-4 text-blue-500" />
-                                        {uiText(
-                                            'ui.components.text_d41f5b4977ee',
-                                            'Facebook',
-                                        )}
-                                    </a>
-                                </li>
-                            )}
-                            {superSecurite.social.instagram && (
-                                <li>
-                                    <a
-                                        href={superSecurite.social.instagram}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
-                                    >
-                                        <InstagramIcon className="h-4 w-4 text-pink-500" />
-                                        Instagram
-                                    </a>
-                                </li>
-                            )}
-                            {superSecurite.social.linkedin && (
-                                <li>
-                                    <a
-                                        href={superSecurite.social.linkedin}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
-                                    >
-                                        <LinkedinIcon className="h-4 w-4 text-blue-500" />
-                                        Linkedin
-                                    </a>
-                                </li>
-                            )}
-                            {superSecurite.social.twitter && (
-                                <li>
-                                    <a
-                                        href={superSecurite.social.twitter}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
-                                    >
-                                        <TwitterIcon className="h-4 w-4 text-blue-500" />
-                                        Twitter
-                                    </a>
-                                </li>
-                            )}
-                            {superSecurite.social.youtube && (
-                                <li>
-                                    <a
-                                        href={superSecurite.social.youtube}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex cursor-pointer items-center gap-2 text-sm text-white/60 transition-colors duration-200 hover:text-super-securite-accent"
-                                    >
-                                        <Youtube className="h-4 w-4 text-red-600" />
-                                        Youtube
-                                    </a>
-                                </li>
-                            )}
-                        </ul>
+                    </nav>
+                    <div className="marketing-footer-contact">
+                        <h3>{t('nav.contact')}</h3>
+                        <address>
+                            <span>
+                                <MapPin size={18} aria-hidden="true" />
+                                <span>{superSecurite.address}</span>
+                            </span>
+                            <a href={'mailto:' + superSecurite.email}>
+                                <Mail size={18} aria-hidden="true" />
+                                <span>{superSecurite.email}</span>
+                            </a>
+                            <a href={superSecurite.phone_href}>
+                                <Phone size={16} aria-hidden="true" />
+                                <span>{superSecurite.phone}</span>
+                            </a>
+                        </address>
+                        {socialLinks.length > 0 && (
+                            <ul
+                                className="marketing-footer-socials"
+                                aria-label={t('footer.networks')}
+                            >
+                                {socialLinks.map(
+                                    ({ name, href, icon: Icon }) => (
+                                        <li key={name}>
+                                            <a
+                                                href={href!}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                aria-label={name}
+                                            >
+                                                <Icon
+                                                    size={21}
+                                                    aria-hidden="true"
+                                                />
+                                            </a>
+                                        </li>
+                                    ),
+                                )}
+                            </ul>
+                        )}
                     </div>
                 </div>
+            </div>
 
-                <div className="mt-12 flex flex-wrap gap-4 border-t border-white/10 pt-8 text-xs text-white/50">
-                    <a
-                        href={lp('/politique-de-confidentialite')}
-                        className="hover:text-white"
-                    >
-                        {t('footer.privacy')}
-                    </a>
-                    <a
-                        href={lp('/mentions-legales')}
-                        className="hover:text-white"
-                    >
-                        {t('footer.legal')}
-                    </a>
+            <div className="marketing-footer-bottom">
+                <div className="marketing-footer-container marketing-footer-bottom-inner">
+                    <p>
+                        {t('footer_v2.rights').replace(':year', String(year))}
+                    </p>
+                    <nav aria-label={t('footer_v2.legal_navigation')}>
+                        <Link href={lp('/mentions-legales')}>
+                            {t('footer.legal')}
+                        </Link>
+                        <span aria-hidden="true">·</span>
+                        <Link href={lp('/politique-de-confidentialite')}>
+                            {t('footer_v2.privacy')}
+                        </Link>
+                    </nav>
                 </div>
             </div>
         </footer>

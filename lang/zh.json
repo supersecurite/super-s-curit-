@@ -1632,5 +1632,22 @@
         "future_cta": "与我们探讨您的项目",
         "partners_label": "他们信赖我们",
         "services_label": "适用于各种环境的安保解决方案"
+    },
+    "footer_v2": {
+        "presence_label": "我们的服务范围",
+        "presence_title": "扎根几内亚",
+        "presence_description": "我们的团队在几内亚全国开展服务，凭借对当地环境的深入了解，贴近您的场所与需求，为您提供支持。",
+        "country": "几内亚",
+        "project_label": "您的项目",
+        "project_title": "共同构建您的安保方案",
+        "project_description": "我们的团队愿意倾听您的需求，并为您提供量身定制的解决方案。",
+        "tagline": "您的安全，我们的首要任务。",
+        "links_title": "常用链接",
+        "services_title": "我们的服务",
+        "resources": "资讯中心",
+        "recruitment": "加入我们",
+        "privacy": "隐私政策",
+        "legal_navigation": "法律信息",
+        "rights": "© :year Super Sécurité。版权所有。"
     }
 }

@@ -52,7 +52,8 @@ function load(specifier, parent = root) {
         };
     if (
         specifier.startsWith('@/components/') &&
-        !specifier.endsWith('/home-v2-header')
+        !specifier.endsWith('/home-v2-header') &&
+        !specifier.endsWith('/marketing-footer')
     )
         return new Proxy(
             { __esModule: true, default: blank },
@@ -89,7 +90,7 @@ function load(specifier, parent = root) {
     )((name) => load(name, path.dirname(file)), module, module.exports);
     return module.exports;
 }
-function render(locale, partners = []) {
+function render(locale, partners = [], companyOverrides = {}) {
     pageProps = {
         locale,
         locales: ['fr', 'en', 'zh'],
@@ -97,16 +98,33 @@ function render(locale, partners = []) {
             fs.readFileSync(path.join(root, 'lang', locale + '.json')),
         ),
         partners,
-        superSecurite: { phone: '+224', social: {} },
+        superSecurite: {
+            phone: '+224 612 13 13 14',
+            phone_href: 'tel:+224612131314',
+            phone_secondary: '+224 612 13 13 15',
+            email: 'contact@supersecurite.com',
+            address:
+                'Lambanyi (en face de Cis Media) – Conakry – Rép. de Guinée',
+            social: {
+                linkedin: 'https://www.linkedin.com/company/super-securite/',
+                facebook: 'https://www.facebook.com/supersecurite',
+                instagram: 'https://www.instagram.com/supersecurite',
+                youtube: null,
+                twitter: null,
+            },
+            ...companyOverrides,
+        },
     };
     const Home = load('@/pages/marketing/home').default;
     const Header = load('@/components/marketing/home-v2-header').default;
+    const Footer = load('@/components/marketing/marketing-footer').default;
     return renderToStaticMarkup(
         React.createElement(
             React.Fragment,
             null,
             React.createElement(Header),
             React.createElement(Home),
+            React.createElement(Footer),
         ),
     );
 }
@@ -138,6 +156,48 @@ for (const locale of ['fr', 'en', 'zh']) {
         );
         checks++;
     }
+    const footer = html.slice(html.indexOf('<footer'));
+    for (const key of [
+        'presence_title',
+        'project_title',
+        'links_title',
+        'resources',
+        'privacy',
+    ]) {
+        assert.ok(
+            footer.includes(pageProps.translations.footer_v2[key]),
+            locale + ': footer ' + key,
+        );
+        checks++;
+    }
+    for (const page of [
+        'actualites',
+        'conseils-securite',
+        'galerie',
+        'devenir-agent',
+        'mentions-legales',
+        'politique-de-confidentialite',
+    ]) {
+        assert.ok(
+            footer.includes('href="' + prefix + '/' + page + '"'),
+            locale + ': footer route ' + page,
+        );
+        checks++;
+    }
+    assert.ok(
+        footer.includes('mailto:contact@supersecurite.com') &&
+            footer.includes('tel:+224612131314'),
+    );
+    checks++;
+    assert.ok(
+        footer.includes('aria-label="LinkedIn"') &&
+            !footer.includes('aria-label="YouTube"'),
+    );
+    checks++;
+    assert.ok(footer.includes('rel="noopener noreferrer"'));
+    checks++;
+    assert.ok(footer.includes(String(new Date().getFullYear())));
+    checks++;
     assert.equal((html.match(/<h1 /g) || []).length, 1);
     checks++;
     assert.ok(!html.includes('500+') && !html.includes('100+'));
@@ -155,7 +215,10 @@ assert.ok(
         !override.includes('alt="AKIBA FINANCE"'),
 );
 checks++;
-console.log(checks + ' home V2 rendering checks passed.');
+const noNetworks = render('fr', [], { social: {} });
+assert.ok(!noNetworks.includes('class="marketing-footer-socials"'));
+checks++;
+console.log(checks + ' home V2 and shared footer rendering checks passed.');
 if (process.argv.includes('--preview')) {
     const manifest = JSON.parse(
         fs.readFileSync(path.join(root, 'public/build/manifest.json')),
@@ -171,7 +234,14 @@ if (process.argv.includes('--preview')) {
         '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
         styles +
         '<style>' +
-        fs.readFileSync(path.join(root, 'resources/css/home-v2.css'), 'utf8') +
+        ['home-v2', 'marketing-footer', 'marketing-mobile-nav']
+            .map((name) =>
+                fs.readFileSync(
+                    path.join(root, 'resources/css', name + '.css'),
+                    'utf8',
+                ),
+            )
+            .join('\n') +
         '</style></head><body><div class="marketing-site">' +
         render('fr') +
         '</div></body></html>';

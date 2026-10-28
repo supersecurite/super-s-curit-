@@ -1628,5 +1628,22 @@
         "future_cta": "Let’s discuss your project",
         "partners_label": "They trust us",
         "services_label": "Solutions for every environment"
+    },
+    "footer_v2": {
+        "presence_label": "Our presence",
+        "presence_title": "Rooted in Guinea",
+        "presence_description": "Our teams work throughout Guinea, supporting your sites and priorities with close attention and a thorough knowledge of the field.",
+        "country": "Guinea",
+        "project_label": "Your project",
+        "project_title": "Let’s build your security plan",
+        "project_description": "Our teams are ready to discuss your needs and propose a tailored solution.",
+        "tagline": "Your security, our priority.",
+        "links_title": "Useful links",
+        "services_title": "Our services",
+        "resources": "Resources",
+        "recruitment": "Careers",
+        "privacy": "Privacy",
+        "legal_navigation": "Legal information",
+        "rights": "© :year Super Sécurité. All rights reserved."
     }
 }

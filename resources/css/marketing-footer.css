@@ -1,0 +1,371 @@
+/* Pied de page public commun, d'après la maquette V2. */
+.marketing-footer-v2 {
+    color: #e8edf3;
+    background: #031623;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.marketing-footer-container {
+    max-width: 1536px;
+    margin-inline: auto;
+    padding-inline: 4%;
+}
+.marketing-footer-v2 h2,
+.marketing-footer-v2 h3 {
+    color: #fff;
+    font-family: var(--font-heading);
+}
+.marketing-footer-v2 a,
+.marketing-footer-resources summary {
+    transition:
+        color 0.15s,
+        background-color 0.15s;
+}
+.marketing-footer-v2 a:hover,
+.marketing-footer-resources summary:hover {
+    color: #fff;
+}
+.marketing-footer-v2 a:focus-visible,
+.marketing-footer-resources summary:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+.marketing-footer-presence {
+    border-block: 1px solid rgb(255 255 255 / 0.18);
+    background:
+        linear-gradient(
+            90deg,
+            rgb(1 19 32 / 0.96),
+            rgb(1 19 32 / 0.88) 52%,
+            rgb(1 19 32 / 0.94)
+        ),
+        url('/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg')
+            center 65% / cover;
+}
+.marketing-footer-presence-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(190px, 0.95fr) minmax(
+            280px,
+            0.95fr
+        );
+    align-items: center;
+    gap: 32px;
+    padding-block: 22px;
+    min-height: 238px;
+}
+.marketing-footer-eyebrow {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 1.5;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+}
+.marketing-footer-eyebrow::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 3px;
+    margin-bottom: 11px;
+    background: var(--super-securite-accent);
+}
+.marketing-footer-presence-copy h2 {
+    margin: 0 0 9px;
+    font-size: clamp(27px, 2.5vw, 39px);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    font-weight: 750;
+}
+.marketing-footer-presence-copy > p:last-child {
+    max-width: 520px;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+}
+.marketing-footer-map {
+    position: relative;
+    justify-self: center;
+    width: 100%;
+    max-width: 280px;
+}
+.marketing-footer-map img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.marketing-footer-map-label {
+    position: absolute;
+    top: 41%;
+    left: 38%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 17px;
+    font-weight: 750;
+    color: #fff;
+}
+.marketing-footer-map-label svg {
+    color: var(--super-securite-accent);
+    flex: 0 0 auto;
+}
+.marketing-footer-map-label svg circle {
+    fill: #fff;
+    stroke: #fff;
+}
+.marketing-footer-project {
+    padding: 18px 24px;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: 5px;
+    background: rgb(0 16 28 / 0.48);
+}
+.marketing-footer-project .marketing-footer-eyebrow {
+    font-size: 10px;
+    margin-bottom: 7px;
+}
+.marketing-footer-project .marketing-footer-eyebrow::before {
+    width: 40px;
+    height: 2px;
+    margin-bottom: 9px;
+}
+.marketing-footer-project h3 {
+    max-width: 310px;
+    margin: 0 0 8px;
+    font-size: clamp(21px, 1.7vw, 27px);
+    font-weight: 750;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+}
+.marketing-footer-project > p:not(.marketing-footer-eyebrow) {
+    margin: 0 0 12px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.marketing-footer-quote {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 42px;
+    padding: 10px 24px;
+    border-radius: 4px;
+    color: #fff;
+    background: var(--super-securite-accent-hover);
+    font-size: 12px;
+    font-weight: 700;
+}
+.marketing-footer-quote:hover {
+    background: #a91119;
+}
+.marketing-footer-columns {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr 1fr 1.05fr;
+    gap: 46px;
+    padding-block: 26px;
+}
+.marketing-footer-columns > * {
+    min-width: 0;
+}
+.marketing-footer-brand {
+    border-right: 1px solid rgb(255 255 255 / 0.16);
+    padding-right: 24px;
+}
+.marketing-footer-brand img {
+    display: block;
+    width: 182px;
+    max-width: 100%;
+    height: auto;
+}
+.marketing-footer-brand p {
+    margin: 10px 0 0;
+    font-size: 14px;
+}
+.marketing-footer-columns h3 {
+    margin: 0 0 9px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 650;
+}
+.marketing-footer-links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.marketing-footer-links a,
+.marketing-footer-resources summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.marketing-footer-resources summary {
+    list-style: none;
+    cursor: pointer;
+}
+.marketing-footer-resources summary::-webkit-details-marker {
+    display: none;
+}
+.marketing-footer-resources[open] summary svg {
+    transform: rotate(180deg);
+}
+.marketing-footer-resources > ul {
+    list-style: none;
+    margin: 5px 0 7px;
+    padding-left: 12px;
+    border-left: 1px solid rgb(255 255 255 / 0.22);
+}
+.marketing-footer-contact {
+    padding-left: 32px;
+    border-left: 1px solid rgb(255 255 255 / 0.16);
+}
+.marketing-footer-contact address {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-style: normal;
+}
+.marketing-footer-contact address > * {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.marketing-footer-contact address svg {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    color: var(--super-securite-accent);
+}
+.marketing-footer-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.marketing-footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 30px;
+    color: #fff;
+}
+.marketing-footer-socials a:hover {
+    color: #ff646a;
+}
+.marketing-footer-bottom {
+    border-top: 1px solid rgb(255 255 255 / 0.16);
+}
+.marketing-footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    padding-block: 15px;
+    font-size: 12px;
+}
+.marketing-footer-bottom p {
+    margin: 0;
+}
+.marketing-footer-bottom nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+@media (max-width: 1199px) {
+    .marketing-footer-presence-grid {
+        grid-template-columns: minmax(0, 1.3fr) minmax(150px, 0.8fr) minmax(
+                240px,
+                1fr
+            );
+        gap: 20px;
+    }
+    .marketing-footer-project {
+        padding: 16px;
+    }
+    .marketing-footer-columns {
+        gap: 28px;
+    }
+    .marketing-footer-contact {
+        padding-left: 20px;
+    }
+}
+@media (max-width: 899px) {
+    .marketing-footer-presence-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(200px, 0.75fr);
+        gap: 24px;
+        padding-block: 30px;
+    }
+    .marketing-footer-project {
+        grid-column: 1 / -1;
+    }
+    .marketing-footer-project h3 {
+        max-width: none;
+    }
+    .marketing-footer-columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px;
+    }
+    .marketing-footer-brand,
+    .marketing-footer-contact {
+        border: 0;
+        padding: 0;
+    }
+}
+@media (max-width: 539px) {
+    .marketing-footer-container {
+        padding-inline: 6%;
+    }
+    .marketing-footer-presence-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 22px;
+    }
+    .marketing-footer-presence-copy > p:last-child {
+        font-size: 14px;
+    }
+    .marketing-footer-map {
+        align-self: center;
+        max-width: 250px;
+    }
+    .marketing-footer-project {
+        padding: 20px;
+    }
+    .marketing-footer-columns {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        padding-block: 30px;
+    }
+    .marketing-footer-brand {
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgb(255 255 255 / 0.16);
+    }
+    .marketing-footer-brand img {
+        width: 174px;
+    }
+    .marketing-footer-links li + li {
+        margin-top: 5px;
+    }
+    .marketing-footer-contact {
+        padding-top: 24px;
+        border-top: 1px solid rgb(255 255 255 / 0.16);
+    }
+    .marketing-footer-bottom-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding-block: 18px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .marketing-footer-v2 a,
+    .marketing-footer-resources summary {
+        transition: none;
+    }
+}
