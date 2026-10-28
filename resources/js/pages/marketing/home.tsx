@@ -13,8 +13,7 @@ import {
     Users,
     Zap,
 } from 'lucide-react';
-import ArticlesSection from '@/components/marketing/articles-section';
-import SecurityTipsSection from '@/components/marketing/security-tips-section';
+import HomeV2ResourceHighlights from '@/components/marketing/home-v2-resource-highlights';
 import SeoHead from '@/components/marketing/seo-head';
 import { superSecuriteServices } from '@/data/super-securite-content';
 import { superSecuritePartners } from '@/data/super-securite-partners';
@@ -35,7 +34,6 @@ const images = {
     fallback:
         '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     why: '/images/super-securite/agent-securite-radio-portrait.jpeg',
-    future: '/images/super-securite/securite-installation-convoyeur-minier.jpeg',
     services: {
         entreprise: '/images/super-securite/agents.jpeg',
         residence: '/images/super-securite/base-vie-logements.jpeg',
@@ -110,6 +108,7 @@ export default function MarketingHome() {
                     <ul className="home-v2-pillars">
                         {pillars.map((pillar, index) => {
                             const Icon = pillarIcons[index];
+
                             return (
                                 <li key={pillar.title}>
                                     <Icon
@@ -138,6 +137,7 @@ export default function MarketingHome() {
                 <div className="home-v2-services-grid">
                     {superSecuriteServices.map((service) => {
                         const Icon = service.icon;
+
                         return (
                             <article
                                 className="home-v2-service-card"
@@ -214,6 +214,7 @@ export default function MarketingHome() {
                     <div className="home-v2-facts">
                         {facts.map((fact, index) => {
                             const Icon = factIcons[index];
+
                             return (
                                 <div className="home-v2-fact" key={fact.label}>
                                     <span className="home-v2-fact-icon">
@@ -285,6 +286,7 @@ export default function MarketingHome() {
                 <div className="home-v2-values">
                     {values.map((value, index) => {
                         const Icon = valueIcons[index];
+
                         return (
                             <div className="home-v2-value" key={value.title}>
                                 <span>
@@ -302,34 +304,11 @@ export default function MarketingHome() {
                         );
                     })}
                 </div>
-                <Link href={lp('/contact')} className="home-v2-future">
-                    <img
-                        src={images.future}
-                        alt=""
-                        width={600}
-                        height={600}
-                        loading="lazy"
-                    />
-                    <span className="home-v2-future-shade" aria-hidden="true" />
-                    <span className="home-v2-future-copy">
-                        <strong>{t('home_v2.future_title')}</strong>
-                        <span>
-                            {t('home_v2.future_cta')}
-                            <ArrowRight size={20} aria-hidden="true" />
-                        </span>
-                    </span>
-                </Link>
             </section>
-            {featuredArticles.length > 0 && (
-                <div className="home-v2-editorial">
-                    <ArticlesSection articles={featuredArticles} />
-                </div>
-            )}
-            {featuredSecurityTips.length > 0 && (
-                <div className="home-v2-editorial">
-                    <SecurityTipsSection tips={featuredSecurityTips} />
-                </div>
-            )}
+            <HomeV2ResourceHighlights
+                articles={featuredArticles}
+                tips={featuredSecurityTips}
+            />
         </div>
     );
 }

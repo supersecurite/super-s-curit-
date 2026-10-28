@@ -1631,7 +1631,10 @@
         "future_title": "从今天起，守护您明天的项目。",
         "future_cta": "与我们探讨您的项目",
         "partners_label": "他们信赖我们",
-        "services_label": "适用于各种环境的安保解决方案"
+        "services_label": "适用于各种环境的安保解决方案",
+        "latest_title": "最新资讯",
+        "resources_cta": "浏览资讯中心",
+        "resources_empty": "我们将在资讯中心发布最新动态和实用安全建议。"
     },
     "footer_v2": {
         "presence_label": "我们的服务范围",
@@ -1649,5 +1652,62 @@
         "privacy": "隐私政策",
         "legal_navigation": "法律信息",
         "rights": "© :year Super Sécurité。版权所有。"
+    },
+    "about_v2": {
+        "hero_label": "关于公司",
+        "title_lead": "一支尽职尽责的团队",
+        "title_accent": "守护您的安全",
+        "hero_description": "Super Sécurité 为几内亚的企业、住宅、建筑工地和矿区提供可靠、以人为本且符合实际风险的安保方案。",
+        "values_cta": "我们的价值观",
+        "facts_label": "我们的承诺",
+        "approach_label": "我们的方法",
+        "approach_lead": "保护、预防，",
+        "approach_accent": "全程支持",
+        "approach_description": "人员是我们工作的核心。我们的安保人员接受培训与监督，遵循严格流程，并运用现代技术开展工作。",
+        "approach_followup": "我们根据您的环境制定安保方案，预判风险，提供具有威慑力的现场值守，并与您建立长期合作。",
+        "approach_image_alt": "Super Sécurité 监控工作人员示意图",
+        "method_label": "我们的组织方式",
+        "method_title": "紧贴现场实际的组织体系",
+        "method_description": "我们与您的团队密切合作，根据项目的实际情况调整工作方法。",
+        "tools_label": "满足您需求的工具",
+        "tools_title": "透明跟进您的安保服务",
+        "tools_description": "通过应用程序和监督机制，您可以了解服务、巡逻和事件信息，并与我们的团队直接沟通。",
+        "app_image_alt": "Super Sécurité 安保服务跟进应用程序",
+        "approach_cta": "了解我们的承诺",
+        "commitments_title": "我们在现场的承诺",
+        "video_title": "通过视频了解我们的团队",
+        "values": [
+            {
+                "title": "专业精神",
+                "description": "安保人员接受培训与监督，遵循专业标准。"
+            },
+            {
+                "title": "诚信",
+                "description": "以合乎道德且负责任的方式开展工作。"
+            },
+            {
+                "title": "快速响应",
+                "description": "根据您的需求与现场情况作出适当响应。"
+            },
+            {
+                "title": "尽职承诺",
+                "description": "与客户建立长期互信的合作关系。"
+            }
+        ],
+        "steps": [
+            {
+                "title": "风险评估",
+                "description": "了解您的需求与环境。"
+            },
+            {
+                "title": "团队部署",
+                "description": "在现场落实适合的安保方案。"
+            },
+            {
+                "title": "监督与跟进",
+                "description": "定期检查、沟通并调整。"
+            }
+        ],
+        "video_play": "观看视频"
     }
 }

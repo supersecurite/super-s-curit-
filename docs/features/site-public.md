@@ -88,3 +88,19 @@ Very important invariants: Keep the center of the scene, the main officer, the e
 - Silhouette géographique issue des données publiques Natural Earth 1:110m (https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_admin_0_countries.geojson).
 
 - Menu mobile V2 commun : panneau bleu nuit, six rubriques, Services et Ressources dépliables selon la page active, langue avec drapeaux et bouton de devis. Navigation clavier, fermeture Escape/clic lien et retour du focus via Radix Sheet ; contenu défilant et CTA fixe adaptés aux petits écrans.
+
+### Accueil et À propos — 28 octobre 2026
+
+- Accueil ajusté à la maquette : engagements en colonne, bloc atouts en deux parties et sélection éditoriale « À la une » réunissant actualités et conseils publiés. État vide localisé si aucun contenu n’est transmis.
+- À propos : présentation, engagements, approche, valeurs, organisation en trois étapes et application existante. Les six textes détaillés et leurs ancres sont conservés dans des rubriques dépliables ; la vidéo mise en avant conserve un aperçu et se charge à la demande lorsqu’elle possède une URL d’intégration.
+- Navigation V2 commune à ces deux pages, avec état actif et menus Services/Ressources. Les autres pages conservent leur navigation jusqu’à leur refonte. Footer et menu mobile communs inchangés.
+- FR/EN/zh préservés ; sur petit écran, photo et texte du hero sont séparés pour éviter la superposition sur le logo. Aucun voile supplémentaire sur les photos de hero.
+- Deux visuels d’illustration générés via l’outil imagegen intégré : public/images/super-securite/about-v2-team.jpg et about-v2-supervision.jpg. L’image de l’application est conservée.
+
+Consignes des deux visuels :
+
+about-v2-team :
+Use case: compositing. Extract and reconstruct ONLY the top HERO PHOTOGRAPH from image1 (the full website mockup). Image2 is the exact real logo. Create a wide 1896x760 photographic banner: Black African professional security supervisor seen from behind on the right, briefing a small mixed team of guards at a Guinea mining/industrial site, neutral gray-blue daylight sky, mining equipment softly visible behind. Apply exact white/red padlock-eye "Super Sécurité" logo from image2 to supervisor's back. Leave left40percent visually open for separately coded text. ONE smooth integrated navy side shadow on left fading to clear center; no extra overlay in code. Center/right remain bright, clear and neutral, no orange sunset. Match the top photo's composition and professional realism. Absolutely NO website interface, headline, button, frames or panels; only photograph. Do not reproduce the rest of image1's sections.
+
+about-v2-supervision :
+Use case: compositing. Image1 is the full website mockup; extract and reconstruct ONLY the control-room PHOTOGRAPH beside "Protéger, anticiper, accompagner". Image2 is the exact real white/red padlock-eye Super Sécurité logo. Output a clean landscape 1400x900 photo, no UI text or webpage panels. Black African security operator seen from behind/slight profile, black uniform and headset, seated at a professional security monitoring desk with multiple CCTV displays showing mine/construction entrance feeds in Guinea. Correct exact logo on uniform back, monitor content realistic with no gibberish branding. Neutral daylight/cool screen lighting, detailed but not too dark, whites neutral and no orange sunset. Focus on operator and equipment. No headlines, typography, button, watermark or invented software interface claims. This is an illustration for a corporate security webpage.

@@ -1627,7 +1627,10 @@
         "future_title": "Sécurisons aujourd’hui vos projets de demain.",
         "future_cta": "Parlons de votre projet",
         "partners_label": "Ils nous font confiance",
-        "services_label": "Des solutions pour chaque environnement"
+        "services_label": "Des solutions pour chaque environnement",
+        "latest_title": "À la une",
+        "resources_cta": "Explorer les ressources",
+        "resources_empty": "Nos prochaines actualités et nos conseils seront disponibles dans notre espace Ressources."
     },
     "footer_v2": {
         "presence_label": "Notre présence",
@@ -1645,5 +1648,62 @@
         "privacy": "Confidentialité",
         "legal_navigation": "Informations légales",
         "rights": "© :year Super Sécurité. Tous droits réservés."
+    },
+    "about_v2": {
+        "hero_label": "Notre entreprise",
+        "title_lead": "Une équipe engagée",
+        "title_accent": "pour votre sécurité",
+        "hero_description": "Super Sécurité accompagne les entreprises, résidences, chantiers et sites miniers en Guinée avec des solutions de sécurité fiables, humaines et adaptées à vos risques.",
+        "values_cta": "Nos valeurs",
+        "facts_label": "Nos engagements",
+        "approach_label": "Notre approche",
+        "approach_lead": "Protéger, anticiper,",
+        "approach_accent": "accompagner",
+        "approach_description": "Nous plaçons l’humain au cœur de notre métier. Nos agents sont formés et encadrés selon des procédures rigoureuses, avec le soutien de solutions technologiques modernes.",
+        "approach_followup": "Cette approche nous permet d’anticiper les risques, d’assurer une présence dissuasive et de vous accompagner dans la durée, avec des dispositifs adaptés à votre environnement.",
+        "approach_image_alt": "Illustration d’un opérateur de supervision Super Sécurité",
+        "method_label": "Notre organisation",
+        "method_title": "Une organisation au plus près du terrain",
+        "method_description": "Nous adaptons notre méthode à la réalité de vos projets, en étroite collaboration avec vos équipes.",
+        "tools_label": "Des outils au service de vos besoins",
+        "tools_title": "Un suivi transparent de vos prestations",
+        "tools_description": "Notre application et notre supervision vous donnent accès aux informations utiles sur les prestations, les rondes et les incidents, pour un échange direct avec nos équipes.",
+        "app_image_alt": "Application de suivi des prestations Super Sécurité",
+        "approach_cta": "Découvrir nos engagements",
+        "commitments_title": "Nos engagements sur le terrain",
+        "video_title": "Découvrez nos équipes en vidéo",
+        "values": [
+            {
+                "title": "Professionnalisme",
+                "description": "Des agents formés et encadrés selon des exigences professionnelles."
+            },
+            {
+                "title": "Intégrité",
+                "description": "Une conduite éthique et responsable dans toutes nos actions."
+            },
+            {
+                "title": "Réactivité",
+                "description": "Une réponse adaptée aux besoins et aux réalités du terrain."
+            },
+            {
+                "title": "Engagement",
+                "description": "Une relation durable de confiance avec nos clients."
+            }
+        ],
+        "steps": [
+            {
+                "title": "Analyse des risques",
+                "description": "Étude de vos besoins et de votre environnement."
+            },
+            {
+                "title": "Déploiement des équipes",
+                "description": "Mise en place d’un dispositif adapté sur le terrain."
+            },
+            {
+                "title": "Supervision et suivi",
+                "description": "Contrôles, échanges et ajustements réguliers."
+            }
+        ],
+        "video_play": "Voir la vidéo"
     }
 }

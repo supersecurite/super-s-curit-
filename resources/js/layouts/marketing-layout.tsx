@@ -1,10 +1,11 @@
-import HomeV2Header from '@/components/marketing/home-v2-header';
-import { useEffect, type ReactNode } from 'react';
 import { usePage } from '@inertiajs/react';
-import { Toaster } from '@/components/ui/sonner';
+import { useEffect } from 'react';
+import type { ReactNode } from 'react';
 import BackToTop from '@/components/marketing/back-to-top';
+import HomeV2Header from '@/components/marketing/home-v2-header';
 import MarketingFooter from '@/components/marketing/marketing-footer';
 import MarketingHeader from '@/components/marketing/marketing-header';
+import { Toaster } from '@/components/ui/sonner';
 import { useTrans } from '@/hooks/use-trans';
 import { useVisitTracker } from '@/hooks/use-visit-tracker';
 
@@ -56,7 +57,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             >
                 {t('common.skip_to_content', 'Aller au contenu')}
             </a>
-            {component === 'marketing/home' ? (
+            {['marketing/home', 'marketing/about'].includes(component) ? (
                 <HomeV2Header />
             ) : (
                 <MarketingHeader />

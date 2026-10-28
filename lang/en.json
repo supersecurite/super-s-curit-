@@ -1627,7 +1627,10 @@
         "future_title": "Secure tomorrow’s projects today.",
         "future_cta": "Let’s discuss your project",
         "partners_label": "They trust us",
-        "services_label": "Solutions for every environment"
+        "services_label": "Solutions for every environment",
+        "latest_title": "Latest updates",
+        "resources_cta": "Explore resources",
+        "resources_empty": "Our upcoming news and practical tips will be available in the Resources section."
     },
     "footer_v2": {
         "presence_label": "Our presence",
@@ -1645,5 +1648,62 @@
         "privacy": "Privacy",
         "legal_navigation": "Legal information",
         "rights": "© :year Super Sécurité. All rights reserved."
+    },
+    "about_v2": {
+        "hero_label": "Our company",
+        "title_lead": "A team committed",
+        "title_accent": "to your security",
+        "hero_description": "Super Sécurité supports businesses, residences, construction sites and mining operations in Guinea with reliable, people-focused security tailored to your risks.",
+        "values_cta": "Our values",
+        "facts_label": "Our commitments",
+        "approach_label": "Our approach",
+        "approach_lead": "Protect, anticipate,",
+        "approach_accent": "support",
+        "approach_description": "People are at the heart of our work. Our officers are trained and supervised through rigorous procedures, supported by modern technology.",
+        "approach_followup": "This approach helps us anticipate risks, provide a reassuring presence and support you over time with security arrangements suited to your environment.",
+        "approach_image_alt": "Illustration of a Super Sécurité monitoring operator",
+        "method_label": "Our organisation",
+        "method_title": "An organisation close to the field",
+        "method_description": "We adapt our approach to the realities of your project, working closely with your teams.",
+        "tools_label": "Tools that support your needs",
+        "tools_title": "Transparent monitoring of your services",
+        "tools_description": "Our application and supervision provide useful information on services, patrols and incidents, allowing direct communication with our teams.",
+        "app_image_alt": "Super Sécurité service monitoring application",
+        "approach_cta": "Explore our commitments",
+        "commitments_title": "Our commitments in the field",
+        "video_title": "Meet our teams on video",
+        "values": [
+            {
+                "title": "Professionalism",
+                "description": "Trained and supervised officers working to professional standards."
+            },
+            {
+                "title": "Integrity",
+                "description": "Ethical and responsible conduct in everything we do."
+            },
+            {
+                "title": "Responsiveness",
+                "description": "A response suited to your needs and conditions on the ground."
+            },
+            {
+                "title": "Commitment",
+                "description": "A lasting relationship built on trust with our clients."
+            }
+        ],
+        "steps": [
+            {
+                "title": "Risk assessment",
+                "description": "Understanding your needs and environment."
+            },
+            {
+                "title": "Team deployment",
+                "description": "Putting a tailored security arrangement in place."
+            },
+            {
+                "title": "Supervision and follow-up",
+                "description": "Regular checks, communication and adjustments."
+            }
+        ],
+        "video_play": "Watch the video"
     }
 }

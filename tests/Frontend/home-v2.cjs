@@ -7,6 +7,8 @@ const { renderToStaticMarkup } = require('react-dom/server');
 const ts = require('typescript');
 const root = path.resolve(__dirname, '../..');
 let pageProps;
+let pageComponent = 'marketing/home';
+let pageUrl = '/';
 const cache = new Map();
 const blank = () => null;
 const Link = ({ children, ...attributes }) =>
@@ -18,8 +20,8 @@ function load(specifier, parent = root) {
         return {
             usePage: () => ({
                 props: pageProps,
-                url: '/',
-                component: 'marketing/home',
+                url: pageUrl,
+                component: pageComponent,
             }),
             Link,
             router: { visit() {} },
@@ -53,7 +55,9 @@ function load(specifier, parent = root) {
     if (
         specifier.startsWith('@/components/') &&
         !specifier.endsWith('/home-v2-header') &&
-        !specifier.endsWith('/marketing-footer')
+        !specifier.endsWith('/marketing-footer') &&
+        !specifier.endsWith('/home-v2-resource-highlights') &&
+        specifier !== '@/components/ui/dropdown-menu'
     )
         return new Proxy(
             { __esModule: true, default: blank },
@@ -90,7 +94,17 @@ function load(specifier, parent = root) {
     )((name) => load(name, path.dirname(file)), module, module.exports);
     return module.exports;
 }
-function render(locale, partners = [], companyOverrides = {}) {
+function render(
+    locale,
+    partners = [],
+    companyOverrides = {},
+    page = 'home',
+    extraProps = {},
+) {
+    pageComponent = 'marketing/' + page;
+    pageUrl =
+        (locale === 'fr' ? '' : '/' + locale) +
+        (page === 'about' ? '/a-propos' : '/');
     pageProps = {
         locale,
         locales: ['fr', 'en', 'zh'],
@@ -98,6 +112,7 @@ function render(locale, partners = [], companyOverrides = {}) {
             fs.readFileSync(path.join(root, 'lang', locale + '.json')),
         ),
         partners,
+        ...extraProps,
         superSecurite: {
             phone: '+224 612 13 13 14',
             phone_href: 'tel:+224612131314',
@@ -115,7 +130,7 @@ function render(locale, partners = [], companyOverrides = {}) {
             ...companyOverrides,
         },
     };
-    const Home = load('@/pages/marketing/home').default;
+    const Home = load('@/pages/marketing/' + page).default;
     const Header = load('@/components/marketing/home-v2-header').default;
     const Footer = load('@/components/marketing/marketing-footer').default;
     return renderToStaticMarkup(
@@ -218,7 +233,103 @@ checks++;
 const noNetworks = render('fr', [], { social: {} });
 assert.ok(!noNetworks.includes('class="marketing-footer-socials"'));
 checks++;
-console.log(checks + ' home V2 and shared footer rendering checks passed.');
+
+for (const locale of ['fr', 'en', 'zh']) {
+    const html = render(locale, [], {}, 'about');
+    const copy = pageProps.translations.about_v2;
+    for (const text of [
+        copy.title_lead,
+        copy.title_accent,
+        copy.approach_lead,
+        copy.method_title,
+        copy.tools_title,
+        ...copy.values.map((item) => item.title),
+    ]) {
+        assert.ok(html.includes(text), locale + ': about ' + text);
+        checks++;
+    }
+    assert.equal((html.match(/<h1 /g) || []).length, 1);
+    checks++;
+    for (const id of [
+        'agrement',
+        'agents',
+        'supervision',
+        'application',
+        'reactivite',
+        'expertise',
+    ]) {
+        assert.ok(
+            html.includes('id="' + id + '"'),
+            locale + ': preserved ' + id,
+        );
+        checks++;
+    }
+    assert.ok(!html.includes('<iframe'));
+    checks++;
+    for (const image of [...html.matchAll(/src="(\/images\/[^"]+)"/g)]) {
+        assert.ok(fs.existsSync(path.join(root, 'public', image[1])), image[1]);
+        checks++;
+    }
+    const prefix = locale === 'fr' ? '' : '/' + locale;
+    assert.ok(
+        html.includes(
+            'href="' +
+                prefix +
+                '/a-propos" class="home-v2-nav-link is-active" aria-current="page"',
+        ),
+    );
+    checks++;
+}
+const withVideo = render('fr', [], {}, 'about', {
+    featuredVideo: {
+        title: 'Présentation vidéo',
+        embed_url: 'https://www.youtube-nocookie.com/embed/example',
+    },
+});
+assert.ok(
+    withVideo.includes('class="about-v2-video-poster"') &&
+        withVideo.includes('Présentation vidéo'),
+);
+checks++;
+const news = {
+    id: 42,
+    title: 'Actualité publiée',
+    slug: 'actualite-publiee',
+    excerpt: 'Une nouvelle du terrain.',
+    image_url: null,
+    category: 'Terrain',
+    read_time: 3,
+    published_at_formatted: null,
+};
+const tip = {
+    ...news,
+    id: 43,
+    title: 'Conseil publié',
+    slug: 'conseil-publie',
+};
+const editorial = render('en', [], {}, 'home', {
+    featuredArticles: [news],
+    featuredSecurityTips: [tip, { ...tip, id: 44, slug: 'autre-conseil' }],
+});
+for (const href of [
+    '/en/actualites/actualite-publiee',
+    '/en/conseils-securite/conseil-publie',
+    '/en/conseils-securite/autre-conseil',
+]) {
+    assert.ok(editorial.includes('href="' + href + '"'));
+    checks++;
+}
+assert.equal(
+    (editorial.match(/class="home-v2-resource-card"/g) || []).length,
+    3,
+);
+checks++;
+assert.ok(
+    render('fr').includes(pageProps.translations.home_v2.resources_empty),
+);
+checks++;
+
+console.log(checks + ' home, about and shared V2 rendering checks passed.');
 if (process.argv.includes('--preview')) {
     const manifest = JSON.parse(
         fs.readFileSync(path.join(root, 'public/build/manifest.json')),
@@ -234,7 +345,12 @@ if (process.argv.includes('--preview')) {
         '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
         styles +
         '<style>' +
-        ['home-v2', 'marketing-footer', 'marketing-mobile-nav']
+        [
+            'home-v2',
+            'marketing-footer',
+            'marketing-mobile-nav',
+            'marketing-pages-v2',
+        ]
             .map((name) =>
                 fs.readFileSync(
                     path.join(root, 'resources/css', name + '.css'),
