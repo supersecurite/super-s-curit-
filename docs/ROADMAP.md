@@ -153,3 +153,7 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 - 2026-10-27 : layout public, footer V2 commun avec présence en Guinée, carte et devis ; menu mobile bleu nuit avec Services/Ressources regroupés, navigation responsive localisée ; aucune modification du contenu métier des pages.
 
 - 2026-10-28 : accueil et À propos V2 adaptés aux maquettes, navigation commune, sélection éditoriale et contenus historiques préservés, versions FR/EN/zh et mobile.
+
+- 29 octobre 2026 — V2 : page Sécurité entreprise adaptée à la maquette (prestations, supervision, méthode, FAQ, médias existants et liens vers les autres services), interface FR/EN/zh et navigation V2.
+
+- 29 octobre 2026 — V2 : les trois pages Résidence, Chantiers et Zones minières sont adaptées aux maquettes 04/05/06, avec visuels propres, contenu métier conservé, FAQ, médias publiés et interface FR/EN/zh. Navigation V2 sur les quatre pages services.

@@ -60,7 +60,7 @@ function DesktopNavGroup({
     );
 }
 
-/** Navigation commune aux pages Accueil et À propos de la refonte V2. */
+/** Navigation commune aux pages déjà adaptées à la refonte V2. */
 export default function HomeV2Header() {
     const { t } = useTrans();
     const lp = useLocalizedUrl();
@@ -96,7 +96,7 @@ export default function HomeV2Header() {
         <header
             className={
                 'home-v2-header' +
-                (component === 'marketing/about' ? ' home-v2-header-solid' : '')
+                (component !== 'marketing/home' ? ' home-v2-header-solid' : '')
             }
             id="marketing-header"
         >

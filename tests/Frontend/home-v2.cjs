@@ -57,6 +57,10 @@ function load(specifier, parent = root) {
         !specifier.endsWith('/home-v2-header') &&
         !specifier.endsWith('/marketing-footer') &&
         !specifier.endsWith('/home-v2-resource-highlights') &&
+        !specifier.endsWith('/service-gallery') &&
+        !specifier.endsWith('/gallery-lightbox') &&
+        !specifier.endsWith('/reveal') &&
+        !specifier.startsWith('@/components/marketing/service-layouts') &&
         specifier !== '@/components/ui/dropdown-menu'
     )
         return new Proxy(
@@ -104,7 +108,11 @@ function render(
     pageComponent = 'marketing/' + page;
     pageUrl =
         (locale === 'fr' ? '' : '/' + locale) +
-        (page === 'about' ? '/a-propos' : '/');
+        (page === 'about'
+            ? '/a-propos'
+            : page === 'service-page'
+              ? '/' + (extraProps.serviceId || 'entreprise')
+              : '/');
     pageProps = {
         locale,
         locales: ['fr', 'en', 'zh'],
@@ -329,7 +337,154 @@ assert.ok(
 );
 checks++;
 
-console.log(checks + ' home, about and shared V2 rendering checks passed.');
+for (const locale of ['fr', 'en', 'zh']) {
+    const faqs = [
+        { question: 'Test FAQ ' + locale, answer: 'Test response ' + locale },
+    ];
+    const html = render(locale, [], {}, 'service-page', {
+        serviceId: 'entreprise',
+        pageFaqs: faqs,
+        galleryImages: [],
+        galleryVideos: [],
+    });
+    const copy = pageProps.translations.enterprise_v2;
+    const prefix = locale === 'fr' ? '' : '/' + locale;
+    for (const text of [
+        copy.title_lead,
+        copy.title_accent,
+        copy.perimeter,
+        copy.supervision_title,
+        copy.method_title,
+        copy.faq_title,
+        copy.related_title,
+        ...copy.benefits.map((x) => x.title),
+        ...copy.steps.map((x) => x.title),
+        ...pageProps.translations.services.entreprise.sections.map(
+            (x) => x.title,
+        ),
+        faqs[0].question,
+        faqs[0].answer,
+    ]) {
+        assert.ok(
+            html.includes(text.replaceAll('&', '&amp;')),
+            locale + ' enterprise: ' + text,
+        );
+        checks++;
+    }
+    assert.equal((html.match(/<h1[ >]/g) || []).length, 1);
+    checks++;
+    for (const path of [
+        '/contact',
+        '/a-propos',
+        '/residence',
+        '/chantiers',
+        '/zones-minieres',
+    ]) {
+        assert.ok(html.includes('href="' + prefix + path + '"'));
+        checks++;
+    }
+    assert.ok(html.includes('home-v2-header-solid'));
+    checks++;
+    assert.ok(html.includes('enterprise-v2-hero.jpg'));
+    checks++;
+    assert.ok(!html.includes('enterprise_v2.'));
+    checks++;
+    const noFaq = render(locale, [], {}, 'service-page', {
+        serviceId: 'entreprise',
+        pageFaqs: [],
+        galleryImages: [],
+        galleryVideos: [],
+    });
+    assert.ok(!noFaq.includes('class="enterprise-v2-faq"'));
+    checks++;
+}
+
+for (const locale of ['fr', 'en', 'zh']) {
+    for (const serviceId of ['residence', 'chantiers', 'zones-minieres']) {
+        const prefix = locale === 'fr' ? '' : '/' + locale;
+        const html = render(locale, [], {}, 'service-page', {
+            serviceId,
+            pageFaqs: [
+                { question: 'FAQ-' + serviceId, answer: 'Answer-' + serviceId },
+            ],
+            galleryImages: [],
+            galleryVideos: [],
+        });
+        const copy = pageProps.translations.services_v2[serviceId];
+        const service = pageProps.translations.services[serviceId];
+        for (const text of [
+            copy.title_lead,
+            copy.title_accent,
+            copy.intro_title,
+            copy.supervision_title,
+            copy.method_title,
+            copy.sectors_title,
+            ...copy.benefits.map((x) => x.title),
+            ...copy.steps.map((x) => x.title),
+            ...service.sections.flatMap((x) => [x.title, x.description]),
+            ...service.intro,
+            ...service.intro_indicators,
+            ...(service.highlights || []),
+            'FAQ-' + serviceId,
+            'Answer-' + serviceId,
+        ]) {
+            const escaped = text
+                .replaceAll('&', '&amp;')
+                .replaceAll("'", '&#x27;')
+                .replaceAll('"', '&quot;');
+            assert.ok(
+                html.includes(escaped),
+                locale + ' ' + serviceId + ': ' + text,
+            );
+            checks++;
+        }
+        assert.equal((html.match(/<h1[ >]/g) || []).length, 1);
+        checks++;
+        assert.ok(html.includes('service-v2-' + serviceId));
+        checks++;
+        assert.ok(html.includes(serviceId + '-v2-hero.jpg'));
+        checks++;
+        assert.ok(html.includes('home-v2-header-solid'));
+        checks++;
+        assert.ok(!html.includes('services_v2.'));
+        checks++;
+        assert.ok(!html.includes('.heic'));
+        checks++;
+        for (const id of [
+            'entreprise',
+            'residence',
+            'chantiers',
+            'zones-minieres',
+        ].filter((id) => id !== serviceId)) {
+            assert.ok(html.includes('href="' + prefix + '/' + id + '"'));
+            checks++;
+        }
+        assert.ok(html.includes('href="' + prefix + '/contact"'));
+        checks++;
+        const media = render(locale, [], {}, 'service-page', {
+            serviceId,
+            pageFaqs: [],
+            galleryImages: [
+                {
+                    id: 1,
+                    src: '/images/custom-' + serviceId + '.jpg',
+                    alt: 'Published media ' + serviceId,
+                    caption: null,
+                },
+            ],
+            galleryVideos: [],
+        });
+        assert.ok(media.includes('/images/custom-' + serviceId + '.jpg'));
+        checks++;
+        assert.ok(!media.includes('class="enterprise-v2-faq"'));
+        checks++;
+    }
+}
+
+console.log(
+    checks +
+        ' home, about, all services and shared V2 rendering checks passed.',
+);
 if (process.argv.includes('--preview')) {
     const manifest = JSON.parse(
         fs.readFileSync(path.join(root, 'public/build/manifest.json')),

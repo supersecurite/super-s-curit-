@@ -1709,5 +1709,204 @@
             }
         ],
         "video_play": "观看视频"
+    },
+    "enterprise_v2": {
+        "title_lead": "守护您的",
+        "title_accent": "企业日常安全",
+        "description": "为您的业务量身定制安保团队与工作流程。",
+        "intro_title": "为您的场所量身打造的安保方案",
+        "perimeter": "我们的服务范围",
+        "supervision_title": "专业团队，持续监督",
+        "supervision_text": "我们的主管协调团队并检查服务质量，为您场所的日常安全提供支持。",
+        "method_title": "三步实施方案",
+        "faq_title": "常见问题",
+        "faq_text": "还有其他问题？请联系我们，讨论您的具体需求。",
+        "related_title": "了解我们的其他服务",
+        "sectors_title": "适合您业务的安全保障",
+        "more": "了解更多",
+        "video_title": "我们的团队在行动",
+        "intro_alt": "企业入口处的门卫岗亭和出入管理",
+        "supervision_alt": "Super Sécurité监控中心的操作员",
+        "benefits": [
+            {
+                "title": "出入管理",
+                "description": "有效管理人员和车辆进出。"
+            },
+            {
+                "title": "预防性巡逻",
+                "description": "定期巡查，发挥威慑作用。"
+            },
+            {
+                "title": "事件处理",
+                "description": "清晰的流程和快速响应。"
+            },
+            {
+                "title": "服务监督",
+                "description": "定期提供透明的工作报告。"
+            }
+        ],
+        "advantages": [
+            {
+                "title": "经过培训和监督的安保人员",
+                "description": "团队具备访客接待、风险预防和敏感情况处理能力。"
+            },
+            {
+                "title": "量身定制的流程",
+                "description": "根据您的工作时间、出入口和场所特点制定方案。"
+            },
+            {
+                "title": "专业高效地融入现场",
+                "description": "安保人员身份明确、礼貌周到，注重服务质量。"
+            }
+        ],
+        "steps": [
+            {
+                "title": "评估您的需求",
+                "description": "分析您的场所、风险和安全目标。"
+            },
+            {
+                "title": "部署安保人员",
+                "description": "组建合适的团队，建立清晰的流程。"
+            },
+            {
+                "title": "跟踪与调整",
+                "description": "定期检查、提交报告，并根据您的反馈进行调整。"
+            }
+        ],
+        "enlarge": "放大：:image"
+    },
+    "services_v2": {
+        "residence": {
+            "title_lead": "安心生活",
+            "title_accent": "从家开始。",
+            "description": "为您的住所和家人提供安心的守护。",
+            "intro_title": "安全舒适的生活环境",
+            "supervision_title": "低调、警觉、值得信赖。",
+            "supervision_text": "我们的团队融入您的居住环境，以专业服务保障安全，并尊重您的隐私。",
+            "method_title": "我们的服务流程",
+            "sectors_title": "为各类住宅提供合适的保护",
+            "intro_alt": "住宅入口处的Super Sécurité安保人员",
+            "supervision_alt": "住宅环境及公共生活区域",
+            "benefits": [
+                {
+                    "title": "人员值守",
+                    "description": "专业、谨慎的安保人员。"
+                },
+                {
+                    "title": "出入管理",
+                    "description": "严格管理人员进出。"
+                },
+                {
+                    "title": "定期巡逻",
+                    "description": "主动巡视您的生活空间。"
+                },
+                {
+                    "title": "夜间监控",
+                    "description": "根据您的时间安排提供保护。"
+                }
+            ],
+            "steps": [
+                {
+                    "title": "倾听需求",
+                    "description": "分析您的需求和住宅特点。"
+                },
+                {
+                    "title": "部署方案",
+                    "description": "由经过培训的人员实施定制方案。"
+                },
+                {
+                    "title": "持续跟进",
+                    "description": "定期跟进并调整安保安排。"
+                }
+            ]
+        },
+        "chantiers": {
+            "title_lead": "让您的工程",
+            "title_accent": "安全推进。",
+            "description": "保护您的团队、设备和物资供应。",
+            "intro_title": "监控施工现场，提前防范风险。",
+            "supervision_title": "配合施工进度的安保组织。",
+            "supervision_text": "我们根据工程进度调整安保安排，与现场负责人保持协调，在需要时及时响应。",
+            "method_title": "我们的现场工作流程",
+            "sectors_title": "适合各类工程的安保方案",
+            "intro_alt": "Super Sécurité安保人员检查施工现场的物资运输",
+            "supervision_alt": "建筑工地及施工区域",
+            "benefits": [
+                {
+                    "title": "出入管控",
+                    "description": "有效管理人员和车辆进出。"
+                },
+                {
+                    "title": "设备保护",
+                    "description": "根据设备特点安排监控。"
+                },
+                {
+                    "title": "灵活部署",
+                    "description": "根据场地规模和复杂程度配备人员。"
+                },
+                {
+                    "title": "现场报告",
+                    "description": "清晰、定期的工作报告。"
+                }
+            ],
+            "steps": [
+                {
+                    "title": "现场勘察",
+                    "description": "分析需求和重点区域。"
+                },
+                {
+                    "title": "安排岗位",
+                    "description": "根据施工计划部署安保方案。"
+                },
+                {
+                    "title": "监督与报告",
+                    "description": "与您的团队定期跟进并调整。"
+                }
+            ]
+        },
+        "zones-minieres": {
+            "title_lead": "满足运营需求的",
+            "title_accent": "矿区安全保障",
+            "description": "适用于矿区和敏感环境的安保方案。",
+            "intro_title": "为您的现场运营提供支持",
+            "supervision_title": "应对复杂现场环境的专业团队",
+            "supervision_text": "经过培训、配备装备并接受监督的安保人员，与您的团队协作，应对复杂的工作环境。",
+            "method_title": "我们的工作方法",
+            "sectors_title": "深入运营现场的安全保障",
+            "intro_alt": "在矿业设施巡查的Super Sécurité安保人员",
+            "supervision_alt": "矿区设施及输送系统",
+            "benefits": [
+                {
+                    "title": "敏感区域管理",
+                    "description": "管控关键区域的出入。"
+                },
+                {
+                    "title": "大范围场地",
+                    "description": "适合大型场地的巡查安排。"
+                },
+                {
+                    "title": "生活营区",
+                    "description": "保护住宿和公共生活区域。"
+                },
+                {
+                    "title": "专用流程",
+                    "description": "符合您要求的安保方案。"
+                }
+            ],
+            "steps": [
+                {
+                    "title": "分析需求",
+                    "description": "评估您的需求、场所和运营限制。"
+                },
+                {
+                    "title": "部署团队",
+                    "description": "由专门团队实施定制方案。"
+                },
+                {
+                    "title": "持续监督",
+                    "description": "根据运营变化持续监督并调整。"
+                }
+            ]
+        }
     }
 }

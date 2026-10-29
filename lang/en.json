@@ -1705,5 +1705,204 @@
             }
         ],
         "video_play": "Watch the video"
+    },
+    "enterprise_v2": {
+        "title_lead": "Protect your",
+        "title_accent": "business every day",
+        "description": "Teams and procedures tailored to your business.",
+        "intro_title": "Security designed for your premises",
+        "perimeter": "Our scope of service",
+        "supervision_title": "Supported teams, continuous oversight",
+        "supervision_text": "Our supervisors coordinate teams and monitor service delivery to support the day-to-day security of your site.",
+        "method_title": "Our approach in 3 steps",
+        "faq_title": "Frequently asked questions",
+        "faq_text": "Have more questions? Contact us to discuss your needs.",
+        "related_title": "Discover our other services",
+        "sectors_title": "Protection tailored to your business",
+        "more": "Learn more",
+        "video_title": "Our teams in action",
+        "intro_alt": "Guard post and access control at a business site entrance",
+        "supervision_alt": "Super Sécurité operator in the monitoring centre",
+        "benefits": [
+            {
+                "title": "Access control",
+                "description": "Managed entry and exit points."
+            },
+            {
+                "title": "Preventive patrols",
+                "description": "A regular, visible deterrent."
+            },
+            {
+                "title": "Incident management",
+                "description": "Clear procedures and a swift response."
+            },
+            {
+                "title": "Service monitoring",
+                "description": "Regular, transparent reporting."
+            }
+        ],
+        "advantages": [
+            {
+                "title": "Trained and supervised guards",
+                "description": "Teams prepared for visitor reception, prevention and sensitive situations."
+            },
+            {
+                "title": "Tailored procedures",
+                "description": "A plan based on your operating hours, access points and site requirements."
+            },
+            {
+                "title": "Discreet, effective integration",
+                "description": "Identifiable, courteous guards focused on service quality."
+            }
+        ],
+        "steps": [
+            {
+                "title": "Assess your needs",
+                "description": "Review your site, risks and security objectives."
+            },
+            {
+                "title": "Deploy your guards",
+                "description": "Establish the right team and clear procedures."
+            },
+            {
+                "title": "Monitor and adjust",
+                "description": "Regular checks, reports and adjustments based on your feedback."
+            }
+        ],
+        "enlarge": "Enlarge: :image"
+    },
+    "services_v2": {
+        "residence": {
+            "title_lead": "Peace of mind begins",
+            "title_accent": "at home.",
+            "description": "A reassuring presence for your residence and your loved ones.",
+            "intro_title": "A protected place to live",
+            "supervision_title": "Discretion, vigilance and trust.",
+            "supervision_text": "Our teams fit into your surroundings to provide professional security while respecting your privacy.",
+            "method_title": "Our approach",
+            "sectors_title": "Protection for every type of residence",
+            "intro_alt": "Super Sécurité guard at a residential entrance",
+            "supervision_alt": "Residential surroundings and shared living spaces",
+            "benefits": [
+                {
+                    "title": "Human presence",
+                    "description": "Professional, discreet guards."
+                },
+                {
+                    "title": "Managed access",
+                    "description": "Careful management of entry and exit."
+                },
+                {
+                    "title": "Regular patrols",
+                    "description": "Active monitoring of your spaces."
+                },
+                {
+                    "title": "Night surveillance",
+                    "description": "Protection tailored to your schedule."
+                }
+            ],
+            "steps": [
+                {
+                    "title": "Listen",
+                    "description": "We assess your needs and the features of your residence."
+                },
+                {
+                    "title": "Set up",
+                    "description": "We deploy a tailored solution with trained guards."
+                },
+                {
+                    "title": "Follow up",
+                    "description": "We provide regular support to adjust the security plan."
+                }
+            ]
+        },
+        "chantiers": {
+            "title_lead": "Keep your construction",
+            "title_accent": "moving safely.",
+            "description": "Protect your teams, equipment and supplies.",
+            "intro_title": "A monitored site, anticipated risks.",
+            "supervision_title": "An organisation that follows your schedule.",
+            "supervision_text": "We adapt security to the pace of your project. Our teams coordinate with your site managers to respond when needed.",
+            "method_title": "Our approach on site",
+            "sectors_title": "Security tailored to your projects",
+            "intro_alt": "Super Sécurité guard checking a construction delivery",
+            "supervision_alt": "Construction site and working areas",
+            "benefits": [
+                {
+                    "title": "Controlled access",
+                    "description": "Managed entry and exit points."
+                },
+                {
+                    "title": "Protected equipment",
+                    "description": "Monitoring tailored to your equipment."
+                },
+                {
+                    "title": "Adapted staffing",
+                    "description": "Teams matched to site size and complexity."
+                },
+                {
+                    "title": "Field reporting",
+                    "description": "Clear, regular reports."
+                }
+            ],
+            "steps": [
+                {
+                    "title": "Site assessment",
+                    "description": "Review your needs and sensitive areas."
+                },
+                {
+                    "title": "Organise guard posts",
+                    "description": "Set up a plan tailored to your schedule."
+                },
+                {
+                    "title": "Supervise and report",
+                    "description": "Regular monitoring and adjustments with your teams."
+                }
+            ]
+        },
+        "zones-minieres": {
+            "title_lead": "Security that meets",
+            "title_accent": "your operational needs",
+            "description": "Security plans tailored to mining sites and sensitive environments.",
+            "intro_title": "Supporting your operations on the ground",
+            "supervision_title": "Teams prepared for demanding environments",
+            "supervision_text": "Trained, equipped and supervised guards working in demanding environments in coordination with your teams.",
+            "method_title": "Our method",
+            "sectors_title": "A presence at the heart of your operations",
+            "intro_alt": "Super Sécurité guard monitoring a mining facility",
+            "supervision_alt": "Mining facilities and conveyor systems",
+            "benefits": [
+                {
+                    "title": "Sensitive access",
+                    "description": "Control of entry to critical areas."
+                },
+                {
+                    "title": "Extensive sites",
+                    "description": "Monitoring suited to large perimeters."
+                },
+                {
+                    "title": "Living quarters",
+                    "description": "Protection of accommodation and shared spaces."
+                },
+                {
+                    "title": "Dedicated procedures",
+                    "description": "Security plans aligned with your requirements."
+                }
+            ],
+            "steps": [
+                {
+                    "title": "Analyse",
+                    "description": "Assess your needs, sites and operating constraints."
+                },
+                {
+                    "title": "Deploy",
+                    "description": "Set up a tailored plan with dedicated teams."
+                },
+                {
+                    "title": "Supervise",
+                    "description": "Continuous monitoring and adjustments as operations evolve."
+                }
+            ]
+        }
     }
 }

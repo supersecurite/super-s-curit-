@@ -57,7 +57,8 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             >
                 {t('common.skip_to_content', 'Aller au contenu')}
             </a>
-            {['marketing/home', 'marketing/about'].includes(component) ? (
+            {['marketing/home', 'marketing/about'].includes(component) ||
+            component === 'marketing/service-page' ? (
                 <HomeV2Header />
             ) : (
                 <MarketingHeader />

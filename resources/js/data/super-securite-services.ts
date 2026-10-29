@@ -1,10 +1,10 @@
-import { superSecuriteServices } from '@/data/super-securite-content';
-import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 import type {
     MarketingPageHeroStat,
     MarketingPageHeroUnderline,
 } from '@/data/marketing-page-heroes';
+import { superSecuriteServices } from '@/data/super-securite-content';
 import { superSecuriteStock } from '@/data/super-securite-stock';
+import { superSecuriteZoneLabel } from '@/data/super-securite-zone';
 
 export type SuperSecuriteServiceId =
     | 'entreprise'
@@ -291,12 +291,12 @@ const serviceMeta: Record<
                 caption: 'Agent qualifié assurant le contrôle des accès résidentiels',
             },
             {
-                src: '/images/super-securite/IMG_9598.heic',
+                src: '/images/super-securite/IMG_9598.jpg',
                 alt: 'Agent de garde sur site résidentiel',
                 caption: 'Protection et vigilance continues pour votre tranquillité',
             },
             {
-                src: '/images/super-securite/IMG_9665.heic',
+                src: '/images/super-securite/IMG_9665.jpg',
                 alt: 'Patrouille de surveillance autour de la résidence',
                 caption: 'Rondes régulières de contrôle de la clôture et des accès',
             },

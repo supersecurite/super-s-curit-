@@ -1,0 +1,577 @@
+.enterprise-v2 {
+    background: #fff;
+    color: #102337;
+}
+.enterprise-v2 h1,
+.enterprise-v2 h2,
+.enterprise-v2 h3 {
+    font-family: var(--font-heading);
+    font-weight: 750;
+}
+.enterprise-v2 p {
+    color: #526173;
+    font-size: 14px;
+    line-height: 1.65;
+}
+.enterprise-v2-hero {
+    position: relative;
+    min-height: 380px;
+    background: #061625;
+    color: #fff;
+}
+.enterprise-v2-hero > img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+}
+.enterprise-v2-hero-inner {
+    position: relative;
+    padding-top: 32px;
+    padding-bottom: 40px;
+}
+.enterprise-v2-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+    margin-bottom: 26px;
+}
+.enterprise-v2-breadcrumb a:hover {
+    text-decoration: underline;
+}
+.enterprise-v2-hero h1 {
+    max-width: 640px;
+    font-size: clamp(32px, 3.6vw, 54px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+}
+.enterprise-v2-hero h1 strong {
+    display: block;
+    color: var(--super-securite-accent);
+}
+.enterprise-v2-hero-inner > p {
+    max-width: 540px;
+    color: #fff;
+    font-size: 17px;
+    margin-bottom: 24px;
+}
+.enterprise-v2-benefits {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding-top: 28px;
+    padding-bottom: 28px;
+    gap: 24px;
+}
+.enterprise-v2-benefits > div {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.enterprise-v2-benefits > div + div {
+    border-left: 1px solid #dce3e9;
+    padding-left: 24px;
+}
+.enterprise-v2-benefits svg,
+.enterprise-v2-advantages svg,
+.enterprise-v2-service-grid svg {
+    color: var(--super-securite-accent);
+    flex-shrink: 0;
+}
+.enterprise-v2-benefits h2,
+.enterprise-v2 h3 {
+    font-size: 16px;
+    line-height: 1.35;
+    margin-bottom: 5px;
+}
+.enterprise-v2-benefits p {
+    font-size: 13px;
+}
+.enterprise-v2-heading {
+    font-size: clamp(24px, 2.3vw, 34px);
+    line-height: 1.18;
+    margin-bottom: 18px;
+    letter-spacing: -0.025em;
+}
+.enterprise-v2-heading::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 3px;
+    background: var(--super-securite-accent);
+    margin-bottom: 13px;
+}
+.enterprise-v2-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: center;
+    padding-top: 28px;
+    padding-bottom: 42px;
+}
+.enterprise-v2-site-photo {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.enterprise-v2-advantages {
+    display: grid;
+    gap: 20px;
+    margin-top: 24px;
+}
+.enterprise-v2-advantages > div {
+    display: flex;
+    gap: 18px;
+}
+.enterprise-v2-advantages p {
+    font-size: 13px;
+}
+.enterprise-v2-perimeter,
+.enterprise-v2-faq {
+    background: #f0f3f6;
+    padding: 36px 0;
+}
+.enterprise-v2-section-heading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.enterprise-v2-section-heading h2 {
+    margin-bottom: 0;
+}
+.enterprise-v2-service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+.enterprise-v2-service-grid article {
+    background: #fff;
+    border: 1px solid #e3e8ed;
+    border-radius: 5px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+}
+.enterprise-v2-service-grid p {
+    font-size: 13px;
+}
+.enterprise-v2-supervision {
+    background: #061b2b;
+    color: #fff;
+}
+.enterprise-v2-supervision-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: center;
+}
+.enterprise-v2-supervision img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+.enterprise-v2-supervision-inner > div {
+    padding: 28px 0;
+}
+.enterprise-v2-supervision p {
+    color: #e3eaf1;
+    margin-bottom: 22px;
+}
+.enterprise-v2-method {
+    padding-top: 36px;
+    padding-bottom: 36px;
+}
+.enterprise-v2-method ol {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 44px;
+    margin-top: 26px;
+    list-style: none;
+}
+.enterprise-v2-method li {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+.enterprise-v2-method li > span {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    background: var(--super-securite-accent);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 21px;
+    font-weight: 700;
+}
+.enterprise-v2-sectors {
+    padding-top: 12px;
+    padding-bottom: 36px;
+}
+.enterprise-v2-sectors > p {
+    max-width: 900px;
+}
+.enterprise-v2-sectors ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+}
+.enterprise-v2-sectors li {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+}
+.enterprise-v2-sectors svg {
+    flex-shrink: 0;
+    color: var(--super-securite-accent);
+}
+.enterprise-v2-gallery,
+.enterprise-v2-videos {
+    padding-top: 24px;
+    padding-bottom: 36px;
+}
+.enterprise-v2-faq-inner {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 64px;
+}
+.enterprise-v2-faq-inner > div > p {
+    margin-bottom: 20px;
+}
+.enterprise-v2-faq details {
+    background: #fff;
+    border: 1px solid #dfe5eb;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.enterprise-v2-faq summary {
+    cursor: pointer;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 14px;
+    font-weight: 650;
+    list-style: none;
+}
+.enterprise-v2-faq summary::-webkit-details-marker {
+    display: none;
+}
+.enterprise-v2-faq summary svg {
+    flex-shrink: 0;
+    color: var(--super-securite-accent);
+}
+.enterprise-v2-faq details[open] summary svg {
+    transform: rotate(180deg);
+}
+.enterprise-v2-faq details > p {
+    padding: 0 20px 20px;
+}
+.enterprise-v2-related {
+    padding-top: 36px;
+    padding-bottom: 42px;
+}
+.enterprise-v2-related > div {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+.enterprise-v2-related a {
+    border: 1px solid #e0e6ec;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.enterprise-v2-related img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+.enterprise-v2-related a > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px;
+}
+.enterprise-v2-related h3 {
+    margin: 0;
+}
+.enterprise-v2-related svg {
+    color: var(--super-securite-accent);
+    flex-shrink: 0;
+}
+.enterprise-v2 a:focus-visible,
+.enterprise-v2 summary:focus-visible {
+    outline: 3px solid var(--super-securite-accent);
+    outline-offset: 4px;
+}
+@media (max-width: 1023px) {
+    .enterprise-v2-hero h1 {
+        max-width: 55%;
+    }
+    .enterprise-v2-hero-inner > p {
+        max-width: 50%;
+    }
+    .enterprise-v2-benefits {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .enterprise-v2-benefits > div + div {
+        padding-left: 0;
+        border-left: 0;
+    }
+    .enterprise-v2-intro,
+    .enterprise-v2-supervision-inner {
+        gap: 28px;
+    }
+    .enterprise-v2-service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .enterprise-v2-method ol {
+        gap: 24px;
+    }
+    .enterprise-v2-faq-inner {
+        gap: 32px;
+    }
+}
+@media (max-width: 767px) {
+    .enterprise-v2-hero {
+        padding-top: 240px;
+    }
+    .enterprise-v2-hero > img {
+        top: 0;
+        height: 240px;
+        object-position: 75% center;
+    }
+    .enterprise-v2-hero-inner {
+        padding-top: 24px;
+        padding-bottom: 28px;
+    }
+    .enterprise-v2-breadcrumb {
+        margin-bottom: 18px;
+    }
+    .enterprise-v2-hero h1,
+    .enterprise-v2-hero-inner > p {
+        max-width: none;
+    }
+    .enterprise-v2-hero-inner > p {
+        font-size: 16px;
+    }
+    .enterprise-v2-intro,
+    .enterprise-v2-section-heading,
+    .enterprise-v2-supervision-inner,
+    .enterprise-v2-faq-inner {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .enterprise-v2-site-photo {
+        height: 300px;
+    }
+    .enterprise-v2-supervision-inner {
+        gap: 0;
+    }
+    .enterprise-v2-supervision img {
+        height: 260px;
+    }
+    .enterprise-v2-method ol {
+        grid-template-columns: 1fr;
+    }
+    .enterprise-v2-sectors ul {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .enterprise-v2-related > div {
+        grid-template-columns: 1fr;
+    }
+    .enterprise-v2-related img {
+        height: 210px;
+    }
+}
+@media (max-width: 479px) {
+    .enterprise-v2-benefits {
+        gap: 22px 16px;
+    }
+    .enterprise-v2-benefits > div {
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .enterprise-v2-benefits svg {
+        width: 26px;
+        height: 26px;
+    }
+    .enterprise-v2-benefits h2 {
+        font-size: 14px;
+    }
+    .enterprise-v2-benefits p {
+        font-size: 12px;
+    }
+    .enterprise-v2-service-grid,
+    .enterprise-v2-sectors ul {
+        grid-template-columns: 1fr;
+    }
+    .enterprise-v2-service-grid article {
+        padding: 20px;
+    }
+}
+.enterprise-v2-hero h1,
+.enterprise-v2-supervision h2 {
+    color: #fff;
+}
+/* Variations des maquettes Résidence, Chantiers et Mines. */
+.service-v2-residence .enterprise-v2-hero h1 {
+    max-width: 500px;
+}
+.service-v2-residence .enterprise-v2-intro,
+.service-v2-chantiers .enterprise-v2-intro,
+.service-v2-zones-minieres .enterprise-v2-intro {
+    padding-top: 24px;
+    padding-bottom: 28px;
+}
+.service-v2-residence .enterprise-v2-site-photo,
+.service-v2-chantiers .enterprise-v2-site-photo,
+.service-v2-zones-minieres .enterprise-v2-site-photo {
+    height: 330px;
+}
+.service-v2-residence .enterprise-v2-advantages:empty,
+.service-v2-chantiers .enterprise-v2-advantages:empty,
+.service-v2-zones-minieres .enterprise-v2-advantages:empty {
+    display: none;
+}
+.service-v2-residence .enterprise-v2-perimeter .enterprise-v2-section-heading,
+.service-v2-chantiers .enterprise-v2-perimeter .enterprise-v2-section-heading,
+.service-v2-zones-minieres
+    .enterprise-v2-perimeter
+    .enterprise-v2-section-heading {
+    grid-template-columns: 3fr 2fr;
+}
+.service-v2-residence .enterprise-v2-supervision-inner {
+    grid-template-columns: 3fr 2fr;
+}
+.service-v2-residence .enterprise-v2-faq-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+.service-v2-chantiers .enterprise-v2-supervision {
+    max-width: 1296px;
+    margin: 24px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.service-v2-chantiers .enterprise-v2-supervision-inner {
+    max-width: none;
+    padding-left: 0;
+}
+.service-v2-chantiers .enterprise-v2-supervision img {
+    height: 390px;
+}
+.service-v2-chantiers .enterprise-v2-method {
+    background: #f4f6f8;
+}
+.service-v2-zones-minieres .enterprise-v2-supervision-inner {
+    grid-template-columns: 1fr 1fr;
+}
+.service-v2-zones-minieres .enterprise-v2-supervision img {
+    order: 2;
+}
+.service-v2-zones-minieres .enterprise-v2-method {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    align-items: start;
+    gap: 32px;
+}
+.service-v2-zones-minieres .enterprise-v2-method ol {
+    margin-top: 0;
+}
+.enterprise-v2-highlights {
+    padding-top: 20px;
+    padding-bottom: 32px;
+}
+.enterprise-v2-highlights ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 32px;
+}
+.enterprise-v2-highlights li {
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.enterprise-v2-highlights svg {
+    color: var(--super-securite-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.service-v2-band-stats {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0 24px;
+}
+.service-v2-band-stats > div {
+    border-left: 2px solid var(--super-securite-accent);
+    padding-left: 14px;
+}
+.service-v2-band-stats dt {
+    font-size: 12px;
+    color: #bbc8d4;
+}
+.service-v2-band-stats dd {
+    font-size: 15px;
+    font-weight: 650;
+}
+@media (max-width: 1023px) {
+    .service-v2-residence .enterprise-v2-hero h1 {
+        max-width: 55%;
+    }
+    .service-v2-zones-minieres .enterprise-v2-method {
+        display: block;
+    }
+    .service-v2-zones-minieres .enterprise-v2-method ol {
+        margin-top: 24px;
+    }
+    .service-v2-chantiers .enterprise-v2-supervision {
+        margin-inline: 5%;
+    }
+    .service-v2-chantiers .enterprise-v2-supervision img {
+        height: 440px;
+    }
+}
+@media (max-width: 767px) {
+    .service-v2-residence .enterprise-v2-hero h1 {
+        max-width: none;
+    }
+    .service-v2-residence
+        .enterprise-v2-perimeter
+        .enterprise-v2-section-heading,
+    .service-v2-chantiers
+        .enterprise-v2-perimeter
+        .enterprise-v2-section-heading,
+    .service-v2-zones-minieres
+        .enterprise-v2-perimeter
+        .enterprise-v2-section-heading,
+    .service-v2-residence .enterprise-v2-supervision-inner,
+    .service-v2-zones-minieres .enterprise-v2-supervision-inner {
+        grid-template-columns: 1fr;
+    }
+    .service-v2-zones-minieres .enterprise-v2-supervision img {
+        order: 0;
+    }
+    .service-v2-chantiers .enterprise-v2-supervision-inner {
+        padding-right: 0;
+    }
+    .service-v2-chantiers .enterprise-v2-supervision-inner > div {
+        padding: 24px;
+    }
+    .service-v2-chantiers .enterprise-v2-supervision img {
+        height: 260px;
+    }
+    .enterprise-v2-highlights ul {
+        grid-template-columns: 1fr;
+    }
+}

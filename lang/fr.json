@@ -1705,5 +1705,204 @@
             }
         ],
         "video_play": "Voir la vidéo"
+    },
+    "enterprise_v2": {
+        "title_lead": "Protégez votre",
+        "title_accent": "entreprise au quotidien",
+        "description": "Des équipes et des procédures adaptées à votre activité.",
+        "intro_title": "Un dispositif pensé pour vos locaux",
+        "perimeter": "Notre périmètre d’intervention",
+        "supervision_title": "Des équipes encadrées, un suivi continu",
+        "supervision_text": "Nos superviseurs coordonnent les équipes et contrôlent les prestations pour accompagner la sécurité de votre site au quotidien.",
+        "method_title": "Notre approche en 3 étapes",
+        "faq_title": "Questions fréquentes",
+        "faq_text": "Vous avez d’autres questions ? Contactez-nous pour un échange personnalisé.",
+        "related_title": "Découvrez aussi nos autres services",
+        "sectors_title": "Une protection adaptée à votre activité",
+        "more": "En savoir plus",
+        "video_title": "Nos équipes en action",
+        "intro_alt": "Poste de garde et contrôle d’accès à l’entrée d’un site professionnel",
+        "supervision_alt": "Opérateur Super Sécurité au centre de supervision",
+        "benefits": [
+            {
+                "title": "Contrôle d’accès",
+                "description": "Maîtrise des entrées et des sorties."
+            },
+            {
+                "title": "Rondes préventives",
+                "description": "Une présence dissuasive et régulière."
+            },
+            {
+                "title": "Gestion des incidents",
+                "description": "Des procédures claires et une réaction rapide."
+            },
+            {
+                "title": "Suivi des prestations",
+                "description": "Des rapports réguliers et transparents."
+            }
+        ],
+        "advantages": [
+            {
+                "title": "Des agents formés et encadrés",
+                "description": "Des équipes sensibilisées à l’accueil, à la prévention et à la gestion des situations sensibles."
+            },
+            {
+                "title": "Des procédures adaptées",
+                "description": "Un dispositif défini selon vos horaires, vos accès et les spécificités de votre site."
+            },
+            {
+                "title": "Une intégration discrète et efficace",
+                "description": "Des agents identifiables, courtois et attentifs à la qualité du service."
+            }
+        ],
+        "steps": [
+            {
+                "title": "Évaluer vos besoins",
+                "description": "Analyse de votre site, de vos risques et de vos objectifs de sécurité."
+            },
+            {
+                "title": "Déployer vos agents",
+                "description": "Mise en place d’une équipe adaptée et de procédures claires."
+            },
+            {
+                "title": "Suivre et ajuster",
+                "description": "Contrôle régulier, rapports et ajustements en fonction de vos retours."
+            }
+        ],
+        "enlarge": "Agrandir : :image"
+    },
+    "services_v2": {
+        "residence": {
+            "title_lead": "La sérénité commence",
+            "title_accent": "chez vous.",
+            "description": "Une présence rassurante pour votre résidence et vos proches.",
+            "intro_title": "Un cadre de vie protégé",
+            "supervision_title": "Discrétion, vigilance et confiance.",
+            "supervision_text": "Nos équipes s’intègrent à votre environnement pour assurer votre sécurité avec professionnalisme et respect de votre vie privée.",
+            "method_title": "Notre approche",
+            "sectors_title": "À chaque résidence, sa protection",
+            "intro_alt": "Agent Super Sécurité à l’entrée d’une résidence",
+            "supervision_alt": "Environnement résidentiel et espaces de vie à sécuriser",
+            "benefits": [
+                {
+                    "title": "Présence humaine",
+                    "description": "Des agents professionnels et discrets."
+                },
+                {
+                    "title": "Accès maîtrisés",
+                    "description": "Un contrôle rigoureux des entrées et sorties."
+                },
+                {
+                    "title": "Rondes régulières",
+                    "description": "Une surveillance active de vos espaces."
+                },
+                {
+                    "title": "Surveillance de nuit",
+                    "description": "Une protection adaptée à vos horaires."
+                }
+            ],
+            "steps": [
+                {
+                    "title": "Écoute",
+                    "description": "Nous analysons vos besoins et les spécificités de votre résidence."
+                },
+                {
+                    "title": "Mise en place",
+                    "description": "Nous déployons une solution adaptée avec des agents formés."
+                },
+                {
+                    "title": "Suivi",
+                    "description": "Nous assurons un accompagnement régulier pour ajuster le dispositif."
+                }
+            ]
+        },
+        "chantiers": {
+            "title_lead": "Votre chantier avance",
+            "title_accent": "en toute sécurité.",
+            "description": "Protégez vos équipes, vos matériels et vos approvisionnements.",
+            "intro_title": "Un chantier surveillé, des risques anticipés.",
+            "supervision_title": "Une organisation qui suit votre planning.",
+            "supervision_text": "Nous adaptons nos dispositifs au rythme de votre chantier. Nos équipes restent coordonnées avec vos responsables pour réagir en cas de besoin.",
+            "method_title": "Notre démarche sur le terrain",
+            "sectors_title": "Des dispositifs adaptés à vos travaux",
+            "intro_alt": "Agent Super Sécurité contrôlant une livraison sur un chantier",
+            "supervision_alt": "Chantier de construction et zones de travail",
+            "benefits": [
+                {
+                    "title": "Accès contrôlés",
+                    "description": "Des entrées et sorties maîtrisées."
+                },
+                {
+                    "title": "Matériel protégé",
+                    "description": "Une surveillance adaptée à vos équipements."
+                },
+                {
+                    "title": "Présence adaptée",
+                    "description": "Des équipes selon la taille et la complexité du site."
+                },
+                {
+                    "title": "Suivi du terrain",
+                    "description": "Des rapports clairs et réguliers."
+                }
+            ],
+            "steps": [
+                {
+                    "title": "Repérage du site",
+                    "description": "Analyse de vos besoins et des points sensibles."
+                },
+                {
+                    "title": "Organisation des postes",
+                    "description": "Mise en place d’un dispositif adapté à votre planning."
+                },
+                {
+                    "title": "Supervision et rapports",
+                    "description": "Suivi régulier et ajustements avec vos équipes."
+                }
+            ]
+        },
+        "zones-minieres": {
+            "title_lead": "Une sécurité à la hauteur",
+            "title_accent": "de vos opérations",
+            "description": "Des dispositifs adaptés aux sites miniers et aux environnements sensibles.",
+            "intro_title": "Accompagner vos opérations sur le terrain",
+            "supervision_title": "Des équipes préparées aux exigences du terrain",
+            "supervision_text": "Des agents formés, équipés et encadrés pour intervenir dans des environnements exigeants, en coordination avec vos équipes.",
+            "method_title": "Notre méthode",
+            "sectors_title": "Une présence au cœur de vos opérations",
+            "intro_alt": "Agent Super Sécurité en surveillance sur une installation minière",
+            "supervision_alt": "Installations et convoyeurs sur un site minier",
+            "benefits": [
+                {
+                    "title": "Accès sensibles",
+                    "description": "Contrôle des accès aux zones critiques."
+                },
+                {
+                    "title": "Sites étendus",
+                    "description": "Une surveillance adaptée aux grands périmètres."
+                },
+                {
+                    "title": "Bases-vie",
+                    "description": "Sécurisation des logements et des espaces communs."
+                },
+                {
+                    "title": "Procédures dédiées",
+                    "description": "Des dispositifs alignés à vos exigences."
+                }
+            ],
+            "steps": [
+                {
+                    "title": "Analyse",
+                    "description": "Étude de vos besoins, de vos sites et de vos contraintes opérationnelles."
+                },
+                {
+                    "title": "Déploiement",
+                    "description": "Mise en place d’un dispositif adapté avec des équipes dédiées."
+                },
+                {
+                    "title": "Supervision",
+                    "description": "Suivi continu et ajustements selon l’évolution de vos opérations."
+                }
+            ]
+        }
     }
 }

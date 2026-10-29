@@ -1,7 +1,7 @@
-import { useTrans as useUiTranslations } from '@/hooks/use-trans';
-import Reveal from '@/components/marketing/reveal';
 import { useGalleryLightbox } from '@/components/marketing/gallery-lightbox';
+import Reveal from '@/components/marketing/reveal';
 import type { SuperSecuriteServiceGalleryImage } from '@/data/super-securite-services';
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 
 export type ServiceGalleryVariant = 'grid' | 'featured' | 'bento' | 'filmstrip';
@@ -18,7 +18,6 @@ function GalleryFigure({
     image,
     className,
     imageClassName,
-    captionClassName,
     onOpen,
 }: {
     image: SuperSecuriteServiceGalleryImage;
@@ -27,6 +26,8 @@ function GalleryFigure({
     captionClassName?: string;
     onOpen?: () => void;
 }) {
+    const { t } = useUiTranslations();
+
     return (
         <figure
             className={cn(
@@ -42,7 +43,9 @@ function GalleryFigure({
                     onOpen && 'cursor-zoom-in',
                     imageClassName,
                 )}
-                aria-label={`Agrandir : ${image.alt}`}
+                aria-label={t('enterprise_v2.enlarge', 'Agrandir : :image', {
+                    image: image.alt,
+                })}
             >
                 <img
                     src={image.src}
