@@ -1,19 +1,19 @@
-import { useTrans } from '@/hooks/use-trans';
-import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ArrowRight, Calendar, Clock, Eye, Star } from 'lucide-react';
-import MarketingContentFilters from '@/components/marketing/marketing-content-filters';
-import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
-import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import ContentShareButton from '@/components/content-share-button';
 import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
+import MarketingContentFilters from '@/components/marketing/marketing-content-filters';
+import MarketingContentImage from '@/components/marketing/marketing-content-image';
+import ResourcesV2Header from '@/components/marketing/resources-v2-header';
 import SeoHead from '@/components/marketing/seo-head';
-import type { MarketingContentImageSource } from '@/types/marketing-content';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
+import { useTrans } from '@/hooks/use-trans';
 import {
     index as actualitesIndex,
     show as actualitesShow,
 } from '@/routes/actualites';
+import type { MarketingContentImageSource } from '@/types/marketing-content';
 
 type ArticleCard = {
     id: number;
@@ -51,8 +51,9 @@ type PageProps = {
 function ArticleCardItem({ article }: { article: ArticleCard }) {
     const { t } = useTrans();
     const lp = useLocalizedUrl();
+
     return (
-        <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
+        <article className="resource-v2-card group">
             <div className="relative aspect-video overflow-hidden">
                 {article.image_url ? (
                     <MarketingContentImage
@@ -69,7 +70,7 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
                     </div>
                 )}
                 {article.category ? (
-                    <span className="absolute bottom-4 left-4 rounded-full bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                    <span className="resource-v2-category absolute bottom-4 left-4 rounded-full bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                         {article.category}
                     </span>
                 ) : null}
@@ -91,9 +92,9 @@ function ArticleCardItem({ article }: { article: ArticleCard }) {
                     </span>
                 </div>
 
-                <h2 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-super-securite-heading transition-colors group-hover:text-super-securite-accent">
+                <h3 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-super-securite-heading transition-colors group-hover:text-super-securite-accent">
                     {article.title}
-                </h2>
+                </h3>
 
                 {article.excerpt ? (
                     <p className="mb-4 line-clamp-3 text-sm text-super-securite-muted">
@@ -135,15 +136,15 @@ export default function MarketingArticlesIndex() {
     const hero = useMarketingPageHero('actualites');
 
     return (
-        <>
+        <div className="resources-v2">
             <SeoHead />
             <CmsLocaleNotice />
             <Head title={hero.label} />
 
-            <MarketingFullscreenHero {...hero} />
+            <ResourcesV2Header active="news" />
 
-            <section className="marketing-section-band marketing-below-fold py-16">
-                <div className="container mx-auto max-w-6xl px-4">
+            <section className="resources-v2-list">
+                <div className="resources-v2-container">
                     <MarketingContentFilters
                         filters={filters}
                         categories={categories}
@@ -152,13 +153,13 @@ export default function MarketingArticlesIndex() {
                     />
 
                     {featuredArticles.length > 0 ? (
-                        <div className="mb-12">
+                        <div className="resource-v2-featured mb-10">
                             <h2 className="marketing-heading-section mb-6 flex items-center gap-2">
                                 <Star className="size-5 text-super-securite-accent" />
                                 {t('common.featured')}
                             </h2>
                             <div className="grid gap-6 md:grid-cols-3">
-                                {featuredArticles.map((article) => (
+                                {featuredArticles.slice(0, 1).map((article) => (
                                     <ArticleCardItem
                                         key={article.id}
                                         article={article}
@@ -168,6 +169,9 @@ export default function MarketingArticlesIndex() {
                         </div>
                     ) : null}
 
+                    <h2 className="resource-v2-section-title">
+                        {t('resources_v2.all_news')}
+                    </h2>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {articles.data.map((article) => (
                             <ArticleCardItem
@@ -217,6 +221,6 @@ export default function MarketingArticlesIndex() {
                     ) : null}
                 </div>
             </section>
-        </>
+        </div>
     );
 }

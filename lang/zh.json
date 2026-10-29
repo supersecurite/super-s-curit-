@@ -1908,5 +1908,19 @@
                 }
             ]
         }
+    },
+    "resources_v2": {
+        "title_lead": "资源与",
+        "title_accent": "新闻",
+        "description": "现场动态、安全建议与影像，汇聚于此。",
+        "all_news": "所有新闻",
+        "all_tips": "团队的安全建议",
+        "gallery_title": "团队影像",
+        "contents": "本篇目录",
+        "contact_title": "需要定制安保方案？",
+        "contact_text": "与我们的团队交流，评估您的安全需求。",
+        "contact_cta": "与团队交流",
+        "share": "分享本篇内容",
+        "all_services": "所有服务"
     }
 }

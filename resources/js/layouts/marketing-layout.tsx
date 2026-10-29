@@ -58,7 +58,10 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
                 {t('common.skip_to_content', 'Aller au contenu')}
             </a>
             {['marketing/home', 'marketing/about'].includes(component) ||
-            component === 'marketing/service-page' ? (
+            component === 'marketing/service-page' ||
+            component.startsWith('marketing/articles/') ||
+            component.startsWith('marketing/conseils-securite/') ||
+            component === 'marketing/gallery/index' ? (
                 <HomeV2Header />
             ) : (
                 <MarketingHeader />

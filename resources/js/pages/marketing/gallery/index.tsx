@@ -1,16 +1,15 @@
-import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, router, usePage } from '@inertiajs/react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Images, Video } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import GalleryBentoGrid from '@/components/marketing/gallery-bento-grid';
 import { useGalleryLightbox } from '@/components/marketing/gallery-lightbox';
-import VideoGallery from '@/components/marketing/video-gallery';
+import ResourcesV2Header from '@/components/marketing/resources-v2-header';
 import SeoHead from '@/components/marketing/seo-head';
-import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
+import VideoGallery from '@/components/marketing/video-gallery';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { useTrans } from '@/hooks/use-trans';
-import { index as galerieIndex } from '@/routes/galerie';
 import { cn } from '@/lib/utils';
+import { index as galerieIndex } from '@/routes/galerie';
 import type {
     GalleryImagePublic,
     GalleryServiceOption,
@@ -39,24 +38,8 @@ export default function MarketingGalleryIndex() {
     } = usePage<PageProps>().props;
     const { t } = useTrans();
     const lp = useLocalizedUrl();
-    const hero = useMarketingPageHero('galerie');
 
-    const [slideIndex, setSlideIndex] = useState(0);
     const [activeTab, setActiveTab] = useState<'photos' | 'videos'>('photos');
-
-    useEffect(() => {
-        setSlideIndex(0);
-    }, [images]);
-
-    useEffect(() => {
-        if (images.length <= 1) {
-            return;
-        }
-        const interval = setInterval(() => {
-            setSlideIndex((prev) => (prev + 1) % images.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [images.length]);
 
     const totalVideoCount = Object.values(countsVideosByService).reduce(
         (sum, count) => sum + count,
@@ -84,61 +67,20 @@ export default function MarketingGalleryIndex() {
     };
 
     return (
-        <>
+        <div className="resources-v2 resources-v2-gallery">
             <SeoHead />
             <Head title={t('galerie.title')} />
 
-            <section className="marketing-hero-cinematic relative overflow-hidden">
-                <div className="relative mx-auto flex min-h-[90dvh] w-full max-w-[1920px] items-end overflow-hidden lg:items-center">
-                    {images.length > 0 ? (
-                        <AnimatePresence mode="wait" initial={false}>
-                            <motion.img
-                                key={slideIndex}
-                                src={images[slideIndex].src}
-                                alt={images[slideIndex].alt}
-                                width={1920}
-                                height={1080}
-                                fetchPriority="high"
-                                loading="eager"
-                                decoding="async"
-                                className="absolute inset-0 size-full max-w-full object-cover"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 1, ease: 'easeInOut' }}
-                            />
-                        </AnimatePresence>
-                    ) : (
-                        <img
-                            src={hero.image}
-                            alt={hero.imageAlt}
-                            width={1920}
-                            height={1080}
-                            fetchPriority="high"
-                            loading="eager"
-                            decoding="async"
-                            className="absolute inset-0 size-full max-w-full object-cover"
-                        />
-                    )}
+            <ResourcesV2Header active="gallery" />
 
-                    <div
-                        className="marketing-hero-overlay-base pointer-events-none absolute inset-0"
-                        aria-hidden
-                    />
-                    <div
-                        className="absolute inset-y-0 left-0 w-1 bg-super-securite-accent sm:w-1.5"
-                        aria-hidden
-                    />
-                </div>
-            </section>
-
-            <section className="marketing-section-band marketing-below-fold py-14 md:py-20">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <section className="resources-v2-list">
+                <div className="resources-v2-container">
                     {/* Tab Switcher */}
-                    <div className="mb-10 flex justify-center">
+                    <div className="resources-v2-media-switch mb-6 flex justify-start">
                         <div className="flex rounded-full border border-super-securite-border/30 bg-super-securite-bg p-1 shadow-md">
                             <button
                                 type="button"
+                                aria-pressed={activeTab === 'photos'}
                                 onClick={() => setActiveTab('photos')}
                                 className={cn(
                                     'flex cursor-pointer items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300',
@@ -153,6 +95,7 @@ export default function MarketingGalleryIndex() {
                             </button>
                             <button
                                 type="button"
+                                aria-pressed={activeTab === 'videos'}
                                 onClick={() => setActiveTab('videos')}
                                 className={cn(
                                     'flex cursor-pointer items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300',
@@ -202,65 +145,57 @@ export default function MarketingGalleryIndex() {
                             </p>
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
-                            <button
-                                type="button"
-                                onClick={() => applyServiceFilter('all')}
-                                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                                    filters.service === 'all'
-                                        ? 'border-super-securite-accent bg-super-securite-accent text-white'
-                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
-                                }`}
+                        <label className="resources-v2-service-filter">
+                            <span className="sr-only">
+                                {t('resources_v2.all_services')}
+                            </span>
+                            <select
+                                value={filters.service}
+                                onChange={(event) =>
+                                    applyServiceFilter(event.target.value)
+                                }
                             >
-                                {t('galerie.all_filter')} (
-                                {activeTab === 'photos'
-                                    ? totalCount
-                                    : totalVideoCount}
-                                )
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => applyServiceFilter('general')}
-                                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                                    filters.service === 'general'
-                                        ? 'border-super-securite-accent bg-super-securite-accent text-white'
-                                        : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
-                                }`}
-                            >
-                                {t('galerie.general_filter')} (
-                                {activeTab === 'photos'
-                                    ? (countsByService.general ?? 0)
-                                    : (countsVideosByService.general ?? 0)}
-                                )
-                            </button>
-                            {services.map((service) => (
-                                <button
-                                    key={service.value}
-                                    type="button"
-                                    onClick={() =>
-                                        applyServiceFilter(service.value)
-                                    }
-                                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                                        filters.service === service.value
-                                            ? 'border-super-securite-accent bg-super-securite-accent text-white'
-                                            : 'border-super-securite-border bg-white text-super-securite-heading hover:border-super-securite-accent/40'
-                                    }`}
-                                >
-                                    {t(
-                                        'services.' + service.value + '.title',
-                                        service.label,
-                                    )}{' '}
-                                    (
+                                <option value="all">
+                                    {t('resources_v2.all_services')} (
                                     {activeTab === 'photos'
-                                        ? (countsByService[service.value] ?? 0)
-                                        : (countsVideosByService[
-                                              service.value
-                                          ] ?? 0)}
+                                        ? totalCount
+                                        : totalVideoCount}
                                     )
-                                </button>
-                            ))}
-                        </div>
+                                </option>
+                                <option value="general">
+                                    {t('galerie.general_filter')} (
+                                    {activeTab === 'photos'
+                                        ? (countsByService.general ?? 0)
+                                        : (countsVideosByService.general ?? 0)}
+                                    )
+                                </option>
+                                {services.map((service) => (
+                                    <option
+                                        key={service.value}
+                                        value={service.value}
+                                    >
+                                        {t(
+                                            'services.' +
+                                                service.value +
+                                                '.title',
+                                            service.label,
+                                        )}{' '}
+                                        (
+                                        {activeTab === 'photos'
+                                            ? (countsByService[service.value] ??
+                                              0)
+                                            : (countsVideosByService[
+                                                  service.value
+                                              ] ?? 0)}
+                                        )
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
                     </div>
+                    <h2 className="resource-v2-section-title">
+                        {t('resources_v2.gallery_title')}
+                    </h2>
 
                     {activeTab === 'photos' ? (
                         images.length > 0 ? (
@@ -282,6 +217,6 @@ export default function MarketingGalleryIndex() {
                 </div>
             </section>
             {lightbox}
-        </>
+        </div>
     );
 }

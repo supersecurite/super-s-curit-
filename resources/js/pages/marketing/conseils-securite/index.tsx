@@ -1,19 +1,19 @@
-import { useTrans } from '@/hooks/use-trans';
-import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ArrowRight, Calendar, Clock, Eye, Shield, Star } from 'lucide-react';
-import MarketingContentFilters from '@/components/marketing/marketing-content-filters';
-import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
-import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import ContentShareButton from '@/components/content-share-button';
 import CmsLocaleNotice from '@/components/marketing/cms-locale-notice';
+import MarketingContentFilters from '@/components/marketing/marketing-content-filters';
+import MarketingContentImage from '@/components/marketing/marketing-content-image';
+import ResourcesV2Header from '@/components/marketing/resources-v2-header';
 import SeoHead from '@/components/marketing/seo-head';
-import type { MarketingContentImageSource } from '@/types/marketing-content';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
+import { useTrans } from '@/hooks/use-trans';
 import {
     index as conseilsIndex,
     show as conseilsShow,
 } from '@/routes/conseils-securite';
+import type { MarketingContentImageSource } from '@/types/marketing-content';
 
 type SecurityTipCard = {
     id: number;
@@ -51,8 +51,9 @@ type PageProps = {
 function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
     const { t } = useTrans();
     const lp = useLocalizedUrl();
+
     return (
-        <article className="group flex flex-col overflow-hidden rounded-2xl bg-super-securite-surface shadow-md shadow-slate-900/5 transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-900/10">
+        <article className="resource-v2-card group">
             <div className="relative aspect-video overflow-hidden">
                 {tip.image_url ? (
                     <MarketingContentImage
@@ -67,7 +68,7 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
                     </div>
                 )}
                 {tip.category ? (
-                    <span className="absolute bottom-4 left-4 rounded-full bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                    <span className="resource-v2-category absolute bottom-4 left-4 rounded-full bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                         {tip.category}
                     </span>
                 ) : null}
@@ -87,9 +88,9 @@ function SecurityTipCardItem({ tip }: { tip: SecurityTipCard }) {
                     </span>
                 </div>
 
-                <h2 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-super-securite-heading transition-colors group-hover:text-super-securite-accent">
+                <h3 className="mb-3 line-clamp-2 font-heading text-xl font-semibold text-super-securite-heading transition-colors group-hover:text-super-securite-accent">
                     {tip.title}
-                </h2>
+                </h3>
 
                 {tip.excerpt ? (
                     <p className="mb-4 line-clamp-3 text-sm text-super-securite-muted">
@@ -131,15 +132,15 @@ export default function MarketingConseilsSecuriteIndex() {
     const hero = useMarketingPageHero('conseils');
 
     return (
-        <>
+        <div className="resources-v2">
             <SeoHead />
             <CmsLocaleNotice />
             <Head title={hero.label} />
 
-            <MarketingFullscreenHero {...hero} />
+            <ResourcesV2Header active="tips" />
 
-            <section className="marketing-section-band marketing-below-fold py-16">
-                <div className="container mx-auto max-w-6xl px-4">
+            <section className="resources-v2-list">
+                <div className="resources-v2-container">
                     <MarketingContentFilters
                         filters={filters}
                         categories={categories}
@@ -148,13 +149,13 @@ export default function MarketingConseilsSecuriteIndex() {
                     />
 
                     {featuredSecurityTips.length > 0 ? (
-                        <div className="mb-12">
+                        <div className="resource-v2-featured mb-10">
                             <h2 className="marketing-heading-section mb-6 flex items-center gap-2">
                                 <Star className="size-5 text-super-securite-accent" />
                                 {t('common.featured')}
                             </h2>
                             <div className="grid gap-6 md:grid-cols-3">
-                                {featuredSecurityTips.map((tip) => (
+                                {featuredSecurityTips.slice(0, 1).map((tip) => (
                                     <SecurityTipCardItem
                                         key={tip.id}
                                         tip={tip}
@@ -164,6 +165,9 @@ export default function MarketingConseilsSecuriteIndex() {
                         </div>
                     ) : null}
 
+                    <h2 className="resource-v2-section-title">
+                        {t('resources_v2.all_tips')}
+                    </h2>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {securityTips.data.map((tip) => (
                             <SecurityTipCardItem key={tip.id} tip={tip} />
@@ -210,6 +214,6 @@ export default function MarketingConseilsSecuriteIndex() {
                     ) : null}
                 </div>
             </section>
-        </>
+        </div>
     );
 }

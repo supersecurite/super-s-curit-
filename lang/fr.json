@@ -1904,5 +1904,19 @@
                 }
             ]
         }
+    },
+    "resources_v2": {
+        "title_lead": "Ressources &",
+        "title_accent": "actualités",
+        "description": "Notre terrain, nos conseils et nos images, réunis au même endroit.",
+        "all_news": "Toutes les actualités",
+        "all_tips": "Les conseils de nos équipes",
+        "gallery_title": "Nos équipes en images",
+        "contents": "Dans cette publication",
+        "contact_title": "Besoin d’un dispositif adapté ?",
+        "contact_text": "Échangez avec notre équipe pour étudier vos besoins de sécurité.",
+        "contact_cta": "Échanger avec notre équipe",
+        "share": "Partager cette publication",
+        "all_services": "Tous les services"
     }
 }

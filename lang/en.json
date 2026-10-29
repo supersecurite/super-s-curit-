@@ -1904,5 +1904,19 @@
                 }
             ]
         }
+    },
+    "resources_v2": {
+        "title_lead": "Resources &",
+        "title_accent": "news",
+        "description": "Our work, advice and images, all in one place.",
+        "all_news": "All news",
+        "all_tips": "Advice from our teams",
+        "gallery_title": "Our teams in pictures",
+        "contents": "In this publication",
+        "contact_title": "Need a tailored security plan?",
+        "contact_text": "Talk to our team about your security needs.",
+        "contact_cta": "Talk to our team",
+        "share": "Share this publication",
+        "all_services": "All services"
     }
 }

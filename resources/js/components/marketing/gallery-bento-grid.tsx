@@ -1,5 +1,6 @@
 import MarketingContentImage from '@/components/marketing/marketing-content-image';
 import Reveal from '@/components/marketing/reveal';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import type { GalleryImagePublic } from '@/types/gallery';
 
@@ -23,6 +24,8 @@ export default function GalleryBentoGrid({
     images,
     onImageClick,
 }: GalleryBentoGridProps) {
+    const { t } = useTrans();
+
     return (
         <div className="mx-auto grid max-w-5xl auto-rows-[60px] grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-4">
             {images.map((image, index) => (
@@ -38,7 +41,9 @@ export default function GalleryBentoGrid({
                         type="button"
                         onClick={() => onImageClick(index)}
                         className="group relative size-full cursor-zoom-in overflow-hidden"
-                        aria-label={`Agrandir : ${image.alt}`}
+                        aria-label={t('enterprise_v2.enlarge', {
+                            image: image.alt,
+                        })}
                     >
                         <MarketingContentImage
                             src={image.src}

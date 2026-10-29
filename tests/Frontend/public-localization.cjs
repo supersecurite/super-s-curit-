@@ -31,6 +31,9 @@ const inertia = {
 };
 const realComponents = new Set([
     '@/components/marketing/marketing-content-filters',
+    '@/components/marketing/resources-v2-header',
+    '@/components/marketing/resource-v2-detail',
+    '@/components/lexical-editor/content-renderer',
     '@/components/marketing/contact-form',
     '@/components/content-share-button',
     '@/components/content-share-links',
@@ -160,10 +163,46 @@ for (const locale of ['fr', 'en', 'zh']) {
         },
         featuredSecurityTips: [],
         article: item,
-        articleContent: '',
+        articleContent: JSON.stringify({
+            root: {
+                children: [
+                    {
+                        type: 'heading',
+                        tag: 'h2',
+                        children: [
+                            { type: 'text', text: 'Actual content heading' },
+                        ],
+                    },
+                    {
+                        type: 'paragraph',
+                        children: [
+                            { type: 'text', text: 'Actual published body' },
+                        ],
+                    },
+                ],
+            },
+        }),
         relatedArticles: [{ ...item, id: 2, slug: 'related' }],
         securityTip: item,
-        securityTipContent: '',
+        securityTipContent: JSON.stringify({
+            root: {
+                children: [
+                    {
+                        type: 'heading',
+                        tag: 'h2',
+                        children: [
+                            { type: 'text', text: 'Actual content heading' },
+                        ],
+                    },
+                    {
+                        type: 'paragraph',
+                        children: [
+                            { type: 'text', text: 'Actual published body' },
+                        ],
+                    },
+                ],
+            },
+        }),
         relatedSecurityTips: [{ ...item, id: 2, slug: 'related' }],
     };
     for (const [file, section] of [
@@ -171,6 +210,21 @@ for (const locale of ['fr', 'en', 'zh']) {
         ['conseils-securite', 'conseils-securite'],
     ]) {
         let html = render(file + '/index');
+        assert.equal((html.match(/<h1[ >]/g) || []).length, 1);
+        assertions++;
+        assert.ok(html.includes(translations.resources_v2.title_lead));
+        assertions++;
+        assert.ok(html.includes('aria-current="page"'));
+        assertions++;
+        for (const target of [
+            '/actualites',
+            '/conseils-securite',
+            '/galerie',
+        ]) {
+            assert.ok(html.includes('href="' + prefix + target + '"'));
+            assertions++;
+        }
+
         assert.ok(
             html.includes(translations.public_content.read),
             locale + ': read button',
@@ -195,6 +249,17 @@ for (const locale of ['fr', 'en', 'zh']) {
         );
         assertions++;
         html = render(file + '/show');
+        assert.equal((html.match(/<h1[ >]/g) || []).length, 1);
+        assertions++;
+        assert.ok(html.includes('Actual published body'));
+        assertions++;
+        assert.ok(html.includes('Actual content heading'));
+        assertions++;
+        assert.ok(html.includes(translations.resources_v2.contact_title));
+        assertions++;
+        assert.ok(html.includes('resource-v2-sidebar'));
+        assertions++;
+
         assert.ok(
             html.includes(
                 translations.public_content[
@@ -240,6 +305,15 @@ for (const locale of ['fr', 'en', 'zh']) {
         filters: { service: 'all' },
     });
     const gallery = render('gallery/index');
+    assert.equal((gallery.match(/<h1[ >]/g) || []).length, 1);
+    assertions++;
+    assert.ok(gallery.includes(translations.resources_v2.gallery_title));
+    assertions++;
+    assert.ok(gallery.includes('aria-pressed="true"'));
+    assertions++;
+    assert.ok(gallery.includes('<select'));
+    assertions++;
+
     assert.ok(
         gallery.includes(translations.galerie.no_photos),
         locale + ': gallery empty message',

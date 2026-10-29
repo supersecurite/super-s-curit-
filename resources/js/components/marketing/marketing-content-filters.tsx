@@ -1,7 +1,7 @@
-import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 import { router } from '@inertiajs/react';
 import { ArrowDownUp, Search } from 'lucide-react';
 import { SearchableSelect } from '@/components/ui/searchable-select';
+import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 
 export type MarketingContentFiltersState = {
     search?: string;
@@ -53,6 +53,7 @@ export default function MarketingContentFilters({
                 <Search className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-super-securite-muted" />
                 <input
                     type="search"
+                    aria-label={searchPlaceholder}
                     placeholder={searchPlaceholder}
                     defaultValue={filters.search ?? ''}
                     onChange={(e) => applyFilters({ search: e.target.value })}
