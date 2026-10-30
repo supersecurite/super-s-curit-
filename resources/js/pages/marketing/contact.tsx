@@ -1,180 +1,205 @@
 import { usePage } from '@inertiajs/react';
-import SeoHead from '@/components/marketing/seo-head';
-import ContactChannels from '@/components/marketing/contact-channels';
-import ContactMapSection from '@/components/marketing/contact-map-section';
-import ContactFaq from '@/components/marketing/contact-faq';
+import {
+    ChevronDown,
+    Clock,
+    FileText,
+    Handshake,
+    Mail,
+    MapPin,
+    MessageCircle,
+    Phone,
+} from 'lucide-react';
 import ContactForm from '@/components/marketing/contact-form';
-import MarketingFullscreenHero from '@/components/marketing/marketing-fullscreen-hero';
-import Reveal from '@/components/marketing/reveal';
-import { useMarketingPageHero } from '@/hooks/use-marketing-page-hero';
+import SeoHead from '@/components/marketing/seo-head';
 import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
+
+type FaqGroup = {
+    title: string;
+    faqs: Array<{ question: string; answer: string }>;
+};
+
+type Step = { title: string; description: string };
 
 type SharedPageProps = {
     superSecurite: SuperSecuriteConfig;
 };
 
+function phoneHref(phone: string): string {
+    return `tel:${phone.replace(/[^\d+]/g, '')}`;
+}
+
 export default function MarketingContact() {
     const { superSecurite } = usePage<SharedPageProps>().props;
-    const { t } = useTrans();
-    const hero = useMarketingPageHero('contact');
+    const { t, tNode } = useTrans();
+    const steps = tNode<Step[]>('contact_v2.steps', []);
+    const faqGroups = tNode<FaqGroup[]>('contact.faq_groups', []);
+    const phoneDigits = superSecurite.phone.replace(/[^0-9]/g, '');
+    const stepIcons = [MessageCircle, FileText, Handshake];
 
     return (
-        <>
+        <div className="contact-v2">
             <SeoHead />
-
-            <MarketingFullscreenHero {...hero} />
-
-            <section className="py-10 marketing-section-band">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <Reveal className="mb-12 max-w-2xl">
-                        <p className="marketing-label mb-3">
-                            {t('contact.channels_label', 'Canaux directs')}
-                        </p>
-                        <h2 className="marketing-heading-section">
-                            {t('contact.channels_title_lead', 'Choisissez le moyen')}{' '}
-                            <span className="text-black">
-                                {t(
-                                    'contact.channels_title_highlight',
-                                    'qui vous convient',
-                                )}
-                            </span>
-                        </h2>
-                    </Reveal>
-
-                    <ContactChannels superSecurite={superSecurite} />
-
-                    {superSecurite.rccm && (
-                        <Reveal delay={200} className="mt-10">
-                            <p className="text-sm text-super-securite-muted">
-                                <span className="font-medium text-super-securite-heading">
-                                    Super Sécurité
-                                </span>{' '}
-                                · {superSecurite.address}
-                            </p>
-                        </Reveal>
-                    )}
+            <section className="contact-v2-hero">
+                <img
+                    src="/images/super-securite/contact-v2-hero.jpg"
+                    alt=""
+                    width={1980}
+                    height={794}
+                    fetchPriority="high"
+                />
+                <div className="contact-v2-container">
+                    <p className="contact-v2-eyebrow">
+                        {t('contact_v2.label')}
+                    </p>
+                    <h1>
+                        {t('contact_v2.title_lead')}
+                        <strong>{t('contact_v2.title_accent')}</strong>
+                    </h1>
+                    <p>{t('contact_v2.description')}</p>
                 </div>
             </section>
 
-            <section className="py-10 marketing-section-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-12">
-                        <Reveal className="lg:col-span-3">
-                            <ContactForm />
-                        </Reveal>
-
-                        <Reveal delay={150} className="lg:col-span-2">
-                            <div className="sticky top-28 flex flex-col gap-6">
-                                {/* <div className="relative overflow-hidden rounded-2xl border border-super-securite-border shadow-md shadow-slate-900/5">
-                                    <img
-                                        src={superSecuriteStock.contact.sidePanel}
-                                        alt="Équipe Super Sécurité disponible pour répondre"
-                                        width={900}
-                                        height={600}
-                                        loading="lazy"
-                                        className="aspect-[3/3] h-auto w-full object-cover"
-                                    />
-                                    <div
-                                        className="pointer-events-none absolute inset-0 bg-linear-to-t from-super-securite-heading/60 via-super-securite-heading/10 to-transparent"
-                                        aria-hidden
-                                    />
-                                    <div className="absolute right-4 bottom-4 left-4">
-                                        <p className="font-heading text-sm font-semibold text-white">
-                                            Une vraie équipe à votre écoute
-                                        </p>
-                                        <p className="mt-1 text-xs text-white/80">
-                                            Pas de robot, pas de centre
-                                            d&apos;appel.
-                                        </p>
-                                    </div>
-                                </div> */}
-
-                                <div className="marketing-card">
-                                    <p className="marketing-label mb-3">
-                                        {t('contact.process_label', 'À quoi vous attendre ?')}
-                                    </p>
-                                    <h3 className="font-heading text-xl font-semibold text-super-securite-heading">
-                                        {t('contact.process_title', 'Notre processus en 4 étapes')}
-                                    </h3>
-                                    <ol className="mt-6 space-y-5">
-                                        {[
-                                            {
-                                                step: '01',
-                                                title: t('contact.step_1_title', 'Réception'),
-                                                desc: t('contact.step_1_desc', 'Analyse de votre besoin de sécurité.'),
-                                            },
-                                            {
-                                                step: '02',
-                                                title: t('contact.step_2_title', 'Évaluation'),
-                                                desc: t('contact.step_2_desc', 'Visite ou échange pour comprendre le site.'),
-                                            },
-                                            {
-                                                step: '03',
-                                                title: t('contact.step_3_title', 'Proposition'),
-                                                desc: t('contact.step_3_desc', 'Offre adaptée : effectifs, horaires, protocoles.'),
-                                            },
-                                            {
-                                                step: '04',
-                                                title: t('contact.step_4_title', 'Déploiement'),
-                                                desc: t('contact.step_4_desc', 'Mise en place rapide de nos équipes.'),
-                                            },
-                                        ].map((item) => (
-                                            <li
-                                                key={item.step}
-                                                className="flex gap-4"
-                                            >
-                                                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-super-securite-accent/10 font-heading text-sm font-bold text-super-securite-accent">
-                                                    {item.step}
-                                                </span>
-                                                <div>
-                                                    <p className="font-heading text-sm font-semibold text-super-securite-heading">
-                                                        {item.title}
-                                                    </p>
-                                                    <p className="mt-1 text-sm text-super-securite-muted">
-                                                        {item.desc}
-                                                    </p>
-                                                </div>
-                                            </li>
-                                        ))}
-                                    </ol>
-                                </div>
-
-                                {superSecurite.rccm && (
-                                    <div className="marketing-card bg-super-securite-surface-elevated">
-                                        <p className="marketing-label mb-3">
-                                            {t('contact.legal_info_label', 'Informations légales')}
-                                        </p>
-                                        <p className="text-sm leading-relaxed text-super-securite-text">
-                                            {t('contact.legal_info_text', 'Super Sécurité · Conakry et région')}
-                                        </p>
-                                        <p className="mt-2 font-heading text-sm font-semibold text-super-securite-heading">
-                                            RCCM : {superSecurite.rccm}
-                                        </p>
-                                    </div>
-                                )}
-
-                                <div className="marketing-card bg-super-securite-surface-elevated">
-                                    <p className="marketing-label mb-3">
-                                        {t('contact.privacy_label', 'Confidentialité')}
-                                    </p>
-                                    <p className="text-sm leading-relaxed text-super-securite-text">
-                                        {t('contact.privacy_text', "Vos informations ne sont utilisées que pour vous répondre. Nous signons volontiers un NDA si votre projet l'exige.")}
-                                    </p>
-                                </div>
-                            </div>
-                        </Reveal>
+            <section className="contact-v2-main">
+                <div className="contact-v2-container contact-v2-main-grid">
+                    <aside className="contact-v2-coordinates">
+                        <h2>{t('contact_v2.coordinates_title')}</h2>
+                        <ul>
+                            <li>
+                                <MapPin aria-hidden="true" />
+                                <span>{superSecurite.address}</span>
+                            </li>
+                            <li>
+                                <Phone aria-hidden="true" />
+                                <a href={superSecurite.phone_href}>
+                                    {superSecurite.phone}
+                                </a>
+                            </li>
+                            {superSecurite.phone_secondary ? (
+                                <li>
+                                    <Phone aria-hidden="true" />
+                                    <a
+                                        href={phoneHref(
+                                            superSecurite.phone_secondary,
+                                        )}
+                                    >
+                                        {superSecurite.phone_secondary}
+                                    </a>
+                                </li>
+                            ) : null}
+                            <li>
+                                <Mail aria-hidden="true" />
+                                <a href={`mailto:${superSecurite.email}`}>
+                                    {superSecurite.email}
+                                </a>
+                            </li>
+                            <li>
+                                <Clock aria-hidden="true" />
+                                <span>{t('contact_v2.hours')}</span>
+                            </li>
+                        </ul>
+                        {superSecurite.rccm ? (
+                            <p className="contact-v2-rccm">
+                                RCCM : {superSecurite.rccm}
+                            </p>
+                        ) : null}
+                        <a
+                            className="contact-v2-whatsapp"
+                            href={`https://wa.me/${phoneDigits}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <MessageCircle aria-hidden="true" />
+                            {t('contact_v2.whatsapp')}
+                        </a>
+                    </aside>
+                    <div className="contact-v2-form" id="devis">
+                        <ContactForm />
                     </div>
                 </div>
             </section>
 
-            <section className="py-10 marketing-section-band">
-                <ContactMapSection superSecurite={superSecurite} />
+            <section
+                id="plan-acces"
+                className="contact-v2-access"
+                aria-labelledby="contact-map-heading"
+            >
+                <div className="contact-v2-container contact-v2-access-grid">
+                    <iframe
+                        title={`${t('contact.map_iframe_title')}, ${superSecurite.address}`}
+                        src={superSecurite.map.embedUrl}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allowFullScreen
+                    />
+                    <div>
+                        <h2 id="contact-map-heading">
+                            {t('contact_v2.join_title')}
+                        </h2>
+                        <p>
+                            {t('contact_v2.join_text', {
+                                address: superSecurite.address,
+                            })}
+                        </p>
+                        <p className="contact-v2-pin">
+                            <MapPin aria-hidden="true" />
+                            <span>{superSecurite.address}</span>
+                        </p>
+                        <a
+                            href={superSecurite.map.directionsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {t('contact.map_open_maps')}
+                        </a>
+                    </div>
+                </div>
             </section>
 
-            <section className="py-10 marketing-section-white">
-                <ContactFaq />
+            <section className="contact-v2-process contact-v2-container">
+                <h2>{t('contact_v2.process_title')}</h2>
+                <ol>
+                    {steps.map((step, index) => {
+                        const Icon = stepIcons[index % stepIcons.length];
+
+                        return (
+                            <li key={step.title}>
+                                <span>
+                                    {index + 1}
+                                    <Icon aria-hidden="true" />
+                                </span>
+                                <div>
+                                    <h3>{step.title}</h3>
+                                    <p>{step.description}</p>
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ol>
             </section>
-        </>
+
+            <section id="faq" className="contact-v2-faq contact-v2-container">
+                <h2>{t('contact.faq_title')}</h2>
+                {faqGroups.map((group) => (
+                    <div key={group.title}>
+                        <h3>{group.title}</h3>
+                        <div className="contact-v2-faq-grid">
+                            {group.faqs.map((faq) => (
+                                <details key={faq.question}>
+                                    <summary>
+                                        {faq.question}
+                                        <ChevronDown
+                                            size={18}
+                                            aria-hidden="true"
+                                        />
+                                    </summary>
+                                    <p>{faq.answer}</p>
+                                </details>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </section>
+        </div>
     );
 }

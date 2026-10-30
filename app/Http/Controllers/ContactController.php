@@ -12,7 +12,7 @@ class ContactController extends Controller
 {
     public function store(StoreContactRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
+        $validated = $request->safe()->except(['privacy_consent']);
 
         Mail::to(config('super-securite.mail_to'))->send(
             new ContactMessageMailable($validated),

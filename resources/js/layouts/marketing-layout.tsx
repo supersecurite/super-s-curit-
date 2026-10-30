@@ -61,7 +61,9 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             component === 'marketing/service-page' ||
             component.startsWith('marketing/articles/') ||
             component.startsWith('marketing/conseils-securite/') ||
-            component === 'marketing/gallery/index' ? (
+            component === 'marketing/gallery/index' ||
+            component === 'marketing/contact' ||
+            component.startsWith('marketing/devenir-agent/') ? (
                 <HomeV2Header />
             ) : (
                 <MarketingHeader />

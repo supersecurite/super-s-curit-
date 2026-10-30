@@ -453,11 +453,10 @@ return [
             'schema_type' => 'ContactPage',
             'changefreq' => 'monthly',
             'priority' => 0.9,
-            'image' => '/web-app-manifest-512x512.png',
+            'image' => '/images/super-securite/contact-v2-hero.jpg',
             'og_image_alt' => 'Contact et localisation Super Sécurité — Lambanyi, Conakry',
             'sources' => [
                 'resources/js/pages/marketing/contact.tsx',
-                'resources/js/components/marketing/contact-map-section.tsx',
                 'config/seo.php',
             ],
         ],

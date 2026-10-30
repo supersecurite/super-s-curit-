@@ -1,41 +1,77 @@
 import { Link } from '@inertiajs/react';
-import { CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Check, Info, Mail } from 'lucide-react';
+import RecruitmentV2Hero from '@/components/marketing/recruitment-v2-hero';
+import RecruitmentV2Steps from '@/components/marketing/recruitment-v2-steps';
 import SeoHead from '@/components/marketing/seo-head';
+import { useLocalizedUrl } from '@/hooks/use-localized-url';
 import { useTrans } from '@/hooks/use-trans';
-import { localizePath } from '@/lib/locale-url';
 
 export default function MarketingDevenirAgentMerci() {
-    const { t, locale } = useTrans();
+    const { t } = useTrans();
+    const lp = useLocalizedUrl();
 
     return (
-        <>
+        <div className="recruitment-v2 recruitment-v2-confirmation">
             <SeoHead />
-
-            <section className="marketing-section-band py-20">
-                <div className="container mx-auto max-w-2xl px-4 text-center">
-                    <div className="marketing-card mx-auto max-w-lg p-10">
-                        <CheckCircle2 className="text-super-securite-accent mx-auto size-14" />
-                        <h1 className="marketing-heading-section mt-6">
-                            {t('devenir_agent.thank_you.title', 'Candidature envoyée')}
-                        </h1>
-                        <p className="text-super-securite-muted mt-4 text-sm leading-relaxed">
-                            {t(
-                                'devenir_agent.thank_you.description',
-                                'Merci pour votre inscription. Notre équipe RH examinera votre profil et vous contactera si une opportunité correspond à votre localisation et votre expérience.',
-                            )}
-                        </p>
-                        <Link
-                            href={localizePath('/', locale)}
-                            className="marketing-cta-primary mt-8 inline-flex"
-                        >
-                            {t(
-                                'devenir_agent.thank_you.home_button',
-                                "Retour à l'accueil",
-                            )}
-                        </Link>
-                    </div>
+            <RecruitmentV2Hero confirmation />
+            <section className="recruitment-v2-result recruitment-v2-container">
+                <span className="recruitment-v2-success-icon">
+                    <Check size={52} strokeWidth={2.5} aria-hidden="true" />
+                </span>
+                <h1>{t('devenir_agent.thank_you.title')}</h1>
+                <p>{t('devenir_agent.thank_you.description')}</p>
+            </section>
+            <section className="recruitment-v2-container">
+                <div className="recruitment-v2-next">
+                    <h2>{t('recruitment_v2.next_title')}</h2>
+                    <p>{t('recruitment_v2.next_description')}</p>
+                    <RecruitmentV2Steps confirmation />
+                </div>
+                <div className="recruitment-v2-result-actions">
+                    <Link className="home-v2-button" href={lp('/')}>
+                        {t('devenir_agent.thank_you.home_button')}
+                        <ArrowRight size={17} aria-hidden="true" />
+                    </Link>
+                    <Link
+                        className="recruitment-v2-outline"
+                        href={lp('/a-propos')}
+                    >
+                        {t('recruitment_v2.about_button')}
+                    </Link>
                 </div>
             </section>
-        </>
+            <section className="recruitment-v2-team recruitment-v2-container">
+                <img
+                    src="/images/super-securite/about-v2-team.jpg"
+                    alt={t('recruitment_v2.team_alt')}
+                    width={1980}
+                    height={794}
+                    loading="lazy"
+                />
+                <div>
+                    <h2 className="resource-v2-section-title">
+                        {t('recruitment_v2.team_title')}
+                    </h2>
+                    <p>{t('recruitment_v2.team_description')}</p>
+                    <Link
+                        className="recruitment-v2-question"
+                        href={lp('/contact')}
+                    >
+                        <Mail size={28} aria-hidden="true" />
+                        <span>
+                            {t('recruitment_v2.question')}
+                            <strong>{t('recruitment_v2.contact')}</strong>
+                        </span>
+                        <ArrowRight size={20} aria-hidden="true" />
+                    </Link>
+                </div>
+            </section>
+            <div className="recruitment-v2-container">
+                <p className="recruitment-v2-reminder">
+                    <Info size={26} aria-hidden="true" />
+                    {t('recruitment_v2.keep_updated')}
+                </p>
+            </div>
+        </div>
     );
 }

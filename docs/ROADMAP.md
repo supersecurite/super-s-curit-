@@ -159,3 +159,5 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 - 29 octobre 2026 — V2 : les trois pages Résidence, Chantiers et Zones minières sont adaptées aux maquettes 04/05/06, avec visuels propres, contenu métier conservé, FAQ, médias publiés et interface FR/EN/zh. Navigation V2 sur les quatre pages services.
 
 - 29 octobre 2026 — V2 : Ressources (listes actualités/conseils, deux pages de lecture et galerie) adaptées aux maquettes 07 à 11, navigation commune, filtres existants, partage, sommaire réel et interface FR/EN/zh.
+
+- 30 octobre 2026 — V2 : page Contact adaptée à la maquette 14 (coordonnées, devis, carte, processus, FAQ), navigation V2, FR/EN/zh.

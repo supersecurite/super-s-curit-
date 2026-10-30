@@ -26,13 +26,15 @@ test('contact validation and confirmation follow the form language', function (s
     Mail::fake();
     config(['super-securite.mail_to' => 'contact@example.com']);
     $path = ($locale === 'fr' ? '' : '/'.$locale).'/contact';
-    $this->from($path)->post($path, [])->assertSessionHasErrors(['name', 'email', 'phone', 'message']);
+    $this->from($path)->post($path, [])->assertSessionHasErrors(['name', 'email', 'phone', 'message', 'site_location', 'privacy_consent']);
     expect(session('errors')->first('name'))->toBe(LocaleTranslations::forLocale($locale)['public_content']['name_required']);
 
     $this->from($path)->post($path, [
         'name' => 'Test Contact',
         'email' => 'visitor@example.com',
         'phone' => '+224620000000',
+        'site_location' => 'Lambanyi',
+        'privacy_consent' => '1',
         'message' => 'Request for site security.',
     ])->assertRedirect($path)
         ->assertSessionHas('success', LocaleTranslations::forLocale($locale)['public_content']['contact_success']);

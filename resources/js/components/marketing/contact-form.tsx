@@ -1,5 +1,5 @@
+import { Form, Link, usePage } from '@inertiajs/react';
 import { useLocalizedUrl } from '@/hooks/use-localized-url';
-import { Form, usePage } from '@inertiajs/react';
 import { CheckCircle2, Send } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import InputError from '@/components/input-error';
@@ -53,20 +53,11 @@ export default function ContactForm() {
             />
 
             <div className="relative">
-                <p className="marketing-label mb-2">
-                    {t('contact.form_label', 'Formulaire de contact')}
-                </p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
-                    {t(
-                        'contact.form_heading',
-                        'Décrivez votre besoin de sécurité',
-                    )}
+                    {t('contact.form_heading', 'Demander un devis')}
                 </h2>
                 <p className="mt-2 text-sm text-super-securite-muted">
-                    {t(
-                        'contact.form_required_hint',
-                        "Les champs marqués d'un * sont obligatoires.",
-                    )}
+                    {t('contact_v2.form_intro')}
                 </p>
 
                 {flash.success && (
@@ -113,7 +104,7 @@ export default function ContactForm() {
                                         className={fieldClasses}
                                         placeholder={t(
                                             'contact.form_name_placeholder',
-                                            'Votre nom',
+                                            'Votre nom complet',
                                         )}
                                     />
                                     <InputError message={errors.name} />
@@ -121,27 +112,22 @@ export default function ContactForm() {
 
                                 <div className="grid gap-2">
                                     <Label
-                                        htmlFor="email"
+                                        htmlFor="company"
                                         className="text-super-securite-heading"
                                     >
-                                        {t('contact.form_email', 'E-mail')}{' '}
-                                        <span className="text-super-securite-accent">
-                                            *
-                                        </span>
+                                        {t('contact.form_company', 'Société')}
                                     </Label>
                                     <Input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        required
-                                        autoComplete="email"
+                                        id="company"
+                                        name="company"
+                                        autoComplete="organization"
                                         className={fieldClasses}
                                         placeholder={t(
-                                            'contact.form_email_placeholder',
-                                            'vous@exemple.com',
+                                            'contact.form_company_placeholder',
+                                            'Nom de votre société',
                                         )}
                                     />
-                                    <InputError message={errors.email} />
+                                    <InputError message={errors.company} />
                                 </div>
                             </div>
 
@@ -173,60 +159,83 @@ export default function ContactForm() {
 
                                 <div className="grid gap-2">
                                     <Label
-                                        htmlFor="company"
+                                        htmlFor="email"
                                         className="text-super-securite-heading"
                                     >
-                                        {t(
-                                            'contact.form_company',
-                                            'Entreprise',
-                                        )}{' '}
-                                        <span className="text-super-securite-muted">
-                                            {t(
-                                                'contact.form_company_optional',
-                                                '(optionnel)',
-                                            )}
+                                        {t('contact.form_email', 'E-mail')}{' '}
+                                        <span className="text-super-securite-accent">
+                                            *
                                         </span>
                                     </Label>
                                     <Input
-                                        id="company"
-                                        name="company"
-                                        autoComplete="organization"
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        required
+                                        autoComplete="email"
                                         className={fieldClasses}
                                         placeholder={t(
-                                            'contact.form_company_placeholder',
-                                            'Nom de votre entreprise',
+                                            'contact.form_email_placeholder',
+                                            'vous@email.com',
                                         )}
                                     />
-                                    <InputError message={errors.company} />
+                                    <InputError message={errors.email} />
                                 </div>
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label
-                                    htmlFor="project_type"
-                                    className="text-super-securite-heading"
-                                >
-                                    {t(
-                                        'contact.form_project_type',
-                                        'Type de projet',
-                                    )}
-                                </Label>
-                                <SearchableSelect
-                                    id="project_type"
-                                    name="project_type"
-                                    options={projectTypeOptions}
-                                    placeholder={t(
-                                        'contact.form_project_placeholder',
-                                        'Sélectionner...',
-                                    )}
-                                    searchPlaceholder={t(
-                                        'contact.form_project_search',
-                                        'Rechercher un type...',
-                                    )}
-                                    variant="underline"
-                                    triggerClassName={fieldClasses}
-                                />
-                                <InputError message={errors.project_type} />
+                            <div className="grid gap-5 sm:grid-cols-2">
+                                <div className="grid gap-2">
+                                    <Label
+                                        htmlFor="project_type"
+                                        className="text-super-securite-heading"
+                                    >
+                                        {t(
+                                            'contact.form_project_type',
+                                            'Service souhaité',
+                                        )}
+                                    </Label>
+                                    <SearchableSelect
+                                        id="project_type"
+                                        name="project_type"
+                                        options={projectTypeOptions}
+                                        placeholder={t(
+                                            'contact.form_project_placeholder',
+                                            'Sélectionner...',
+                                        )}
+                                        searchPlaceholder={t(
+                                            'contact.form_project_search',
+                                            'Rechercher un type...',
+                                        )}
+                                        variant="underline"
+                                        triggerClassName={fieldClasses}
+                                    />
+                                    <InputError message={errors.project_type} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label
+                                        htmlFor="site_location"
+                                        className="text-super-securite-heading"
+                                    >
+                                        {t('contact_v2.site_location')}{' '}
+                                        <span className="text-super-securite-accent">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="site_location"
+                                        name="site_location"
+                                        required
+                                        autoComplete="off"
+                                        className={fieldClasses}
+                                        placeholder={t(
+                                            'contact_v2.site_location_placeholder',
+                                        )}
+                                    />
+                                    <InputError
+                                        message={errors.site_location}
+                                    />
+                                </div>
                             </div>
 
                             <div className="grid gap-2">
@@ -234,10 +243,7 @@ export default function ContactForm() {
                                     htmlFor="message"
                                     className="text-super-securite-heading"
                                 >
-                                    {t(
-                                        'contact.form_message',
-                                        'Détails du projet',
-                                    )}{' '}
+                                    {t('contact.form_message', 'Message')}{' '}
                                     <span className="text-super-securite-accent">
                                         *
                                     </span>
@@ -246,11 +252,11 @@ export default function ContactForm() {
                                     id="message"
                                     name="message"
                                     required
-                                    rows={6}
+                                    rows={5}
                                     className={fieldClasses}
                                     placeholder={t(
                                         'contact.form_message_placeholder',
-                                        'Décrivez votre projet : objectifs, contexte, délais souhaités...',
+                                        'Décrivez vos besoins en quelques lignes…',
                                     )}
                                 />
                                 <InputError message={errors.message} />
@@ -278,20 +284,35 @@ export default function ContactForm() {
                                 </div>
                             ) : null}
 
-                            <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                                <p className="text-xs text-super-securite-muted">
-                                    {t(
-                                        'contact.form_privacy',
-                                        'Vos informations restent confidentielles et ne sont jamais partagées.',
-                                    )}
-                                </p>
+                            <label className="contact-v2-consent flex items-start gap-3 text-sm text-super-securite-muted">
+                                <input
+                                    type="checkbox"
+                                    name="privacy_consent"
+                                    value="1"
+                                    required
+                                    className="mt-1 size-4 rounded border-super-securite-border"
+                                />
+                                <span>
+                                    {t('contact_v2.consent')}{' '}
+                                    <Link
+                                        href={lp(
+                                            '/politique-de-confidentialite',
+                                        )}
+                                    >
+                                        {t('footer_v2.privacy')}
+                                    </Link>
+                                </span>
+                            </label>
+                            <InputError message={errors.privacy_consent} />
+
+                            <div className="pt-1">
                                 <button
                                     type="submit"
                                     disabled={
                                         processing ||
                                         (recaptcha.enabled && !recaptchaToken)
                                     }
-                                    className="marketing-cta-primary marketing-magnetic group inline-flex w-full items-center justify-center gap-2 sm:w-auto"
+                                    className="marketing-cta-primary marketing-magnetic group inline-flex w-full items-center justify-center gap-2"
                                 >
                                     {processing ? (
                                         <>

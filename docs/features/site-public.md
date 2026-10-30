@@ -171,3 +171,10 @@ Consigne finale du visuel (maquette 07 et logo officiel blanc/rouge en référen
 Use case: photorealistic-natural. Asset type: wide website hero photograph 1980x794. Image1 is complete Resources website mockup: recreate ONLY its top hero photograph, no website interface or letters. Image2 exact real Super Sécurité white/red padlock-eye logo. Professional Black African security guard from back and three-quarter profile at RIGHT third using a tablet for field reporting at a Guinea mining site. Black uniform and cap, exact white/red padlock-eye logo with white words Super Sécurité clearly visible on back. Large yellow haul truck left background, gray rocky hills and white security pickup far right, natural pale blue-gray daylight. Left half open for coded white text with ONE soft navy side shadow baked into photo, clear center/right. Neutral balanced cool daylight, no orange grade or red sky, no weapons, no watermark, no headings/buttons/UI. Photorealistic corporate editorial image.
 
 Validation Ressources : 144 assertions de rendu et de localisation FR/EN/zh, TypeScript, ESLint ciblé et compilation réussis. Listes et détails contrôlés à 1440, 1024, 768, 390 et 320 px : une seule h1, aucune image manquante ni débordement horizontal. Visionneuse et passage aux quatre vidéos validés dans la galerie. Les deux publications réelles contrôlées n’ont pas de titres h2/h3 : le sommaire reste donc masqué. Aperçus dans storage/app/previews/resources-*.png.
+
+### Contact V2 — 30 octobre 2026
+
+- Page contact adaptée à la maquette 14 : hero, coordonnées réelles, formulaire de devis, carte, trois étapes et FAQ existantes. Navigation V2. Les groupes de questions, le RCCM lorsqu’il est renseigné et les numéros configurés sont conservés.
+- Le formulaire exige la localisation du site et l’accord d’utilisation des données. Société et service restent facultatifs. L’e-mail de contact reprend la localisation.
+- Textes d’interface FR/EN/zh. Sur mobile, la photo du hero est séparée du titre.
+- Illustration : `public/images/super-securite/contact-v2-hero.jpg`, une seule ombre intégrée à gauche, sans voile CSS.

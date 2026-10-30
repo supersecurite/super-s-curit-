@@ -343,5 +343,37 @@ for (const locale of ['fr', 'en', 'zh']) {
         locale + ': contact submit',
     );
     assertions++;
+    props.superSecurite = {
+        email: 'contact@supersecurite.com',
+        phone: '+224 612 13 13 14',
+        phone_secondary: '+224 612 13 13 15',
+        phone_href: 'tel:+224612131314',
+        address: 'Lambanyi, Conakry',
+        rccm: null,
+        social: {},
+        map: {
+            latitude: '9.6',
+            longitude: '-13.6',
+            zoom: 12,
+            embedUrl: 'https://maps.example/embed',
+            directionsUrl: 'https://maps.example',
+        },
+    };
+    const contactPage = render('contact');
+    assert.equal((contactPage.match(/<h1[ >]/g) || []).length, 1);
+    assertions++;
+    assert.ok(contactPage.includes(translations.contact_v2.title_accent));
+    assertions++;
+    assert.ok(contactPage.includes(translations.contact_v2.coordinates_title));
+    assertions++;
+    assert.ok(contactPage.includes('id="faq"'));
+    assertions++;
+    assert.ok(
+        contactPage.includes(
+            translations.contact.faq_groups[0].faqs[0].question,
+        ),
+        locale + ': contact faq',
+    );
+    assertions++;
 }
 console.log(assertions + ' public rendering assertions passed (FR/EN/ZH).');

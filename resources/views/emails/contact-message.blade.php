@@ -30,6 +30,12 @@
                 <td style="padding:8px 0;">{{ $contact['project_type'] }}</td>
             </tr>
         @endif
+        @if (! empty($contact['site_location']))
+            <tr>
+                <td style="padding:8px 0;color:#71717a;vertical-align:top;">Localisation du site</td>
+                <td style="padding:8px 0;">{{ $contact['site_location'] }}</td>
+            </tr>
+        @endif
     </table>
 
     <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e4e4e7;">

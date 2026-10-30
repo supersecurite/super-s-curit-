@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Mail;
 test('contact form requires name email phone and message', function () {
     $response = $this->post(route('contact.store'), []);
 
-    $response->assertSessionHasErrors(['name', 'email', 'phone', 'message']);
+    $response->assertSessionHasErrors(['name', 'email', 'phone', 'message', 'site_location', 'privacy_consent']);
 });
 
 test('contact form rejects invalid email', function () {
@@ -27,6 +27,8 @@ test('contact form sends mail and redirects with success', function () {
         'name' => 'Aristide Gnimassou',
         'email' => 'client@example.com',
         'phone' => '+224621630916',
+        'site_location' => 'Lambanyi, Conakry',
+        'privacy_consent' => '1',
         'message' => 'Nous avons besoin d\'une application web.',
     ];
 
@@ -61,6 +63,8 @@ test('contact form accepts optional company and project type', function () {
         'phone' => '+224621630916',
         'company' => 'SUPER_SECURITE',
         'project_type' => 'Application web sur mesure',
+        'site_location' => 'Kaloum',
+        'privacy_consent' => '1',
         'message' => 'Refonte complète de notre plateforme.',
     ];
 
@@ -71,6 +75,7 @@ test('contact form accepts optional company and project type', function () {
 
     Mail::assertSent(ContactMessageMailable::class, function (ContactMessageMailable $mail) use ($payload) {
         return $mail->contact['company'] === $payload['company']
-            && $mail->contact['project_type'] === $payload['project_type'];
+            && $mail->contact['project_type'] === $payload['project_type']
+            && $mail->contact['site_location'] === $payload['site_location'];
     });
 });

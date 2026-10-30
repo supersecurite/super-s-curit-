@@ -81,6 +81,8 @@ test('contact form accepts valid recaptcha token when enabled', function () {
         'name' => 'Client Test',
         'email' => 'client@example.com',
         'phone' => '+224621630916',
+        'site_location' => 'Lambanyi',
+        'privacy_consent' => '1',
         'message' => 'Message de test.',
         'g-recaptcha-response' => 'valid-token',
     ]);

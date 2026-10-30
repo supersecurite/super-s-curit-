@@ -1,11 +1,10 @@
 import { Form, usePage } from '@inertiajs/react';
 import { Send } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
-import CommuneSearchSelect from '@/components/marketing/commune-search-select';
 import InputError from '@/components/input-error';
-import RecaptchaField, {
-    type RecaptchaFieldHandle,
-} from '@/components/marketing/recaptcha-field';
+import CommuneSearchSelect from '@/components/marketing/commune-search-select';
+import RecaptchaField from '@/components/marketing/recaptcha-field';
+import type {RecaptchaFieldHandle} from '@/components/marketing/recaptcha-field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SearchableSelect } from '@/components/ui/searchable-select';
@@ -69,7 +68,7 @@ export default function SecurityAgentRegistrationForm() {
                     {t('devenir_agent.form.badge', 'Candidature')}
                 </p>
                 <h2 className="font-heading text-2xl font-semibold text-super-securite-heading">
-                    {t('devenir_agent.form.title', 'Rejoignez notre réseau')}
+                    {t('recruitment_v2.form_title')}
                 </h2>
                 <p className="mt-2 text-sm text-super-securite-muted">
                     {t(
@@ -111,242 +110,281 @@ export default function SecurityAgentRegistrationForm() {
                                 aria-hidden
                             />
 
-                            <div className="grid gap-5 sm:grid-cols-2">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="first_name">
-                                        {t('devenir_agent.form.first_name', 'Prénom')}{' '}
-                                        <span className="text-super-securite-accent">
-                                            *
-                                        </span>
-                                    </Label>
-                                    <Input
-                                        id="first_name"
-                                        name="first_name"
-                                        placeholder={t(
-                                            'devenir_agent.form.first_name_placeholder',
-                                            'Votre prénom',
-                                        )}
-                                        required
-                                        className={fieldClasses}
-                                    />
-                                    <InputError message={errors.first_name} />
+                            <fieldset className="recruitment-v2-fieldset">
+                                <legend>
+                                    <span>1</span>
+                                    {t('recruitment_v2.coordinates')}
+                                </legend>
+                                <div className="grid gap-5 sm:grid-cols-2">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="first_name">
+                                            {t(
+                                                'devenir_agent.form.first_name',
+                                                'Prénom',
+                                            )}{' '}
+                                            <span className="text-super-securite-accent">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <Input
+                                            id="first_name"
+                                            name="first_name"
+                                            placeholder={t(
+                                                'devenir_agent.form.first_name_placeholder',
+                                                'Votre prénom',
+                                            )}
+                                            required
+                                            className={fieldClasses}
+                                        />
+                                        <InputError
+                                            message={errors.first_name}
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="last_name">
+                                            {t(
+                                                'devenir_agent.form.last_name',
+                                                'Nom',
+                                            )}{' '}
+                                            <span className="text-super-securite-accent">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <Input
+                                            id="last_name"
+                                            name="last_name"
+                                            placeholder={t(
+                                                'devenir_agent.form.last_name_placeholder',
+                                                'Votre nom',
+                                            )}
+                                            required
+                                            className={fieldClasses}
+                                        />
+                                        <InputError
+                                            message={errors.last_name}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="last_name">
-                                        {t('devenir_agent.form.last_name', 'Nom')}{' '}
-                                        <span className="text-super-securite-accent">
-                                            *
-                                        </span>
-                                    </Label>
-                                    <Input
-                                        id="last_name"
-                                        name="last_name"
-                                        placeholder={t(
-                                            'devenir_agent.form.last_name_placeholder',
-                                            'Votre nom',
-                                        )}
-                                        required
-                                        className={fieldClasses}
-                                    />
-                                    <InputError message={errors.last_name} />
-                                </div>
-                            </div>
 
-                            <div className="grid gap-5 sm:grid-cols-2">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="phone">
-                                        {t('devenir_agent.form.phone', 'Téléphone')}{' '}
-                                        <span className="text-super-securite-accent">
-                                            *
-                                        </span>
-                                    </Label>
-                                    <Input
-                                        id="phone"
-                                        name="phone"
-                                        type="tel"
-                                        required
-                                        placeholder={t(
-                                            'devenir_agent.form.phone_placeholder',
-                                            '+224 6XX XX XX XX',
-                                        )}
-                                        className={fieldClasses}
-                                    />
-                                    <InputError message={errors.phone} />
+                                <div className="grid gap-5 sm:grid-cols-2">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="phone">
+                                            {t(
+                                                'devenir_agent.form.phone',
+                                                'Téléphone',
+                                            )}{' '}
+                                            <span className="text-super-securite-accent">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <Input
+                                            id="phone"
+                                            name="phone"
+                                            type="tel"
+                                            required
+                                            placeholder={t(
+                                                'devenir_agent.form.phone_placeholder',
+                                                '+224 6XX XX XX XX',
+                                            )}
+                                            className={fieldClasses}
+                                        />
+                                        <InputError message={errors.phone} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="email">
+                                            {t(
+                                                'devenir_agent.form.email',
+                                                'E-mail',
+                                            )}
+                                        </Label>
+                                        <Input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            placeholder={t(
+                                                'devenir_agent.form.email_placeholder',
+                                                'vous@exemple.com',
+                                            )}
+                                            className={fieldClasses}
+                                        />
+                                        <InputError message={errors.email} />
+                                    </div>
                                 </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="email">
-                                        {t('devenir_agent.form.email', 'E-mail')}
-                                    </Label>
-                                    <Input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        placeholder={t(
-                                            'devenir_agent.form.email_placeholder',
-                                            'vous@exemple.com',
-                                        )}
-                                        className={fieldClasses}
-                                    />
-                                    <InputError message={errors.email} />
+                            </fieldset>
+                            <fieldset className="recruitment-v2-fieldset">
+                                <legend>
+                                    <span>2</span>
+                                    {t('recruitment_v2.profile')}
+                                </legend>
+                                <div className="grid gap-5 sm:grid-cols-2">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="post">
+                                            {t(
+                                                'devenir_agent.form.post',
+                                                'Poste',
+                                            )}{' '}
+                                            <span className="text-super-securite-accent">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <SearchableSelect
+                                            id="post"
+                                            name="post"
+                                            options={localizedPostOptions}
+                                            placeholder={t(
+                                                'devenir_agent.form.post_placeholder',
+                                                'Sélectionner un poste...',
+                                            )}
+                                            searchPlaceholder={t(
+                                                'devenir_agent.form.post_search_placeholder',
+                                                'Rechercher un poste...',
+                                            )}
+                                            emptyMessage={t(
+                                                'devenir_agent.form.post_empty',
+                                                'Aucun poste trouvé',
+                                            )}
+                                            required
+                                            variant="underline"
+                                            triggerClassName={fieldClasses}
+                                        />
+                                        <InputError message={errors.post} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="experience_years">
+                                            {t(
+                                                'devenir_agent.form.experience_years',
+                                                "Années d'expérience",
+                                            )}
+                                        </Label>
+                                        <Input
+                                            id="experience_years"
+                                            name="experience_years"
+                                            type="number"
+                                            min={0}
+                                            max={50}
+                                            placeholder={t(
+                                                'devenir_agent.form.experience_years_placeholder',
+                                                '0',
+                                            )}
+                                            className={fieldClasses}
+                                        />
+                                        <InputError
+                                            message={errors.experience_years}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="grid gap-5 sm:grid-cols-2">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="post">
-                                        {t('devenir_agent.form.post', 'Poste')}{' '}
-                                        <span className="text-super-securite-accent">
-                                            *
-                                        </span>
+                                <div className="grid gap-2 sm:max-w-md">
+                                    <Label htmlFor="availability">
+                                        {t(
+                                            'devenir_agent.form.availability',
+                                            'Disponibilité',
+                                        )}
                                     </Label>
                                     <SearchableSelect
-                                        id="post"
-                                        name="post"
-                                        options={localizedPostOptions}
+                                        id="availability"
+                                        name="availability"
+                                        options={localizedAvailabilityOptions}
                                         placeholder={t(
-                                            'devenir_agent.form.post_placeholder',
-                                            'Sélectionner un poste...',
+                                            'devenir_agent.form.availability_placeholder',
+                                            'Sélectionner...',
                                         )}
                                         searchPlaceholder={t(
-                                            'devenir_agent.form.post_search_placeholder',
-                                            'Rechercher un poste...',
+                                            'devenir_agent.form.availability_search_placeholder',
+                                            'Rechercher...',
                                         )}
                                         emptyMessage={t(
-                                            'devenir_agent.form.post_empty',
-                                            'Aucun poste trouvé',
+                                            'devenir_agent.form.availability_empty',
+                                            'Aucune disponibilité trouvée',
                                         )}
-                                        required
                                         variant="underline"
                                         triggerClassName={fieldClasses}
                                     />
-                                    <InputError message={errors.post} />
+                                    <InputError message={errors.availability} />
                                 </div>
+
+                                <div className="rounded-xl border border-super-securite-border bg-super-securite-surface/50 p-5">
+                                    <h3 className="mb-4 font-heading font-semibold text-super-securite-heading">
+                                        {t(
+                                            'devenir_agent.form.location_title',
+                                            'Localisation en Guinée',
+                                        )}
+                                    </h3>
+                                    <CommuneSearchSelect
+                                        value={communeId}
+                                        onChange={setCommuneId}
+                                        error={errors.commune_id}
+                                        fieldClasses={fieldClasses}
+                                    />
+                                    <div className="mt-5 grid gap-2">
+                                        <Label htmlFor="address_detail">
+                                            {t(
+                                                'devenir_agent.form.address_detail',
+                                                'Adresse complémentaire',
+                                            )}
+                                        </Label>
+                                        <Input
+                                            id="address_detail"
+                                            name="address_detail"
+                                            placeholder={t(
+                                                'devenir_agent.form.address_detail_placeholder',
+                                                'Repère, rue, secteur...',
+                                            )}
+                                            className={fieldClasses}
+                                        />
+                                        <InputError
+                                            message={errors.address_detail}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="grid gap-2">
-                                    <Label htmlFor="experience_years">
+                                    <Label htmlFor="certifications">
                                         {t(
-                                            'devenir_agent.form.experience_years',
-                                            "Années d'expérience",
+                                            'devenir_agent.form.certifications',
+                                            'Certifications / formations',
                                         )}
                                     </Label>
-                                    <Input
-                                        id="experience_years"
-                                        name="experience_years"
-                                        type="number"
-                                        min={0}
-                                        max={50}
-                                        placeholder={t(
-                                            'devenir_agent.form.experience_years_placeholder',
-                                            '0',
-                                        )}
+                                    <Textarea
+                                        id="certifications"
+                                        name="certifications"
+                                        rows={3}
                                         className={fieldClasses}
+                                        placeholder={t(
+                                            'devenir_agent.form.certifications_placeholder',
+                                            'Permis, CQP, formations sécurité...',
+                                        )}
                                     />
                                     <InputError
-                                        message={errors.experience_years}
+                                        message={errors.certifications}
                                     />
                                 </div>
-                            </div>
-
-                            <div className="grid gap-2 sm:max-w-md">
-                                <Label htmlFor="availability">
-                                    {t(
-                                        'devenir_agent.form.availability',
-                                        'Disponibilité',
-                                    )}
-                                </Label>
-                                <SearchableSelect
-                                    id="availability"
-                                    name="availability"
-                                    options={localizedAvailabilityOptions}
-                                    placeholder={t(
-                                        'devenir_agent.form.availability_placeholder',
-                                        'Sélectionner...',
-                                    )}
-                                    searchPlaceholder={t(
-                                        'devenir_agent.form.availability_search_placeholder',
-                                        'Rechercher...',
-                                    )}
-                                    emptyMessage={t(
-                                        'devenir_agent.form.availability_empty',
-                                        'Aucune disponibilité trouvée',
-                                    )}
-                                    variant="underline"
-                                    triggerClassName={fieldClasses}
-                                />
-                                <InputError message={errors.availability} />
-                            </div>
-
-                            <div className="rounded-xl border border-super-securite-border bg-super-securite-surface/50 p-5">
-                                <h3 className="font-heading mb-4 font-semibold text-super-securite-heading">
-                                    {t(
-                                        'devenir_agent.form.location_title',
-                                        'Localisation en Guinée',
-                                    )}
-                                </h3>
-                                <CommuneSearchSelect
-                                    value={communeId}
-                                    onChange={setCommuneId}
-                                    error={errors.commune_id}
-                                    fieldClasses={fieldClasses}
-                                />
-                                <div className="mt-5 grid gap-2">
-                                    <Label htmlFor="address_detail">
+                            </fieldset>
+                            <fieldset className="recruitment-v2-fieldset">
+                                <legend>
+                                    <span>3</span>
+                                    {t('recruitment_v2.motivation')}
+                                </legend>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="motivation">
                                         {t(
-                                            'devenir_agent.form.address_detail',
-                                            'Adresse complémentaire',
+                                            'devenir_agent.form.motivation',
+                                            'Motivation',
                                         )}
                                     </Label>
-                                    <Input
-                                        id="address_detail"
-                                        name="address_detail"
-                                        placeholder={t(
-                                            'devenir_agent.form.address_detail_placeholder',
-                                            'Repère, rue, secteur...',
-                                        )}
+                                    <Textarea
+                                        id="motivation"
+                                        name="motivation"
+                                        rows={4}
                                         className={fieldClasses}
+                                        placeholder={t(
+                                            'devenir_agent.form.motivation_placeholder',
+                                            'Pourquoi souhaitez-vous rejoindre Super Sécurité ?',
+                                        )}
                                     />
-                                    <InputError
-                                        message={errors.address_detail}
-                                    />
+                                    <InputError message={errors.motivation} />
                                 </div>
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="certifications">
-                                    {t(
-                                        'devenir_agent.form.certifications',
-                                        'Certifications / formations',
-                                    )}
-                                </Label>
-                                <Textarea
-                                    id="certifications"
-                                    name="certifications"
-                                    rows={3}
-                                    className={fieldClasses}
-                                    placeholder={t(
-                                        'devenir_agent.form.certifications_placeholder',
-                                        'Permis, CQP, formations sécurité...',
-                                    )}
-                                />
-                                <InputError message={errors.certifications} />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="motivation">
-                                    {t('devenir_agent.form.motivation', 'Motivation')}
-                                </Label>
-                                <Textarea
-                                    id="motivation"
-                                    name="motivation"
-                                    rows={4}
-                                    className={fieldClasses}
-                                    placeholder={t(
-                                        'devenir_agent.form.motivation_placeholder',
-                                        'Pourquoi souhaitez-vous rejoindre Super Sécurité ?',
-                                    )}
-                                />
-                                <InputError message={errors.motivation} />
-                            </div>
-
+                            </fieldset>
                             <label className="flex items-start gap-3 text-sm text-super-securite-muted">
                                 <input
                                     type="checkbox"

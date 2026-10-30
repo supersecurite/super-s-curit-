@@ -439,7 +439,7 @@
         "privacy_label": "Privacy",
         "privacy_text": "Your information is only used to respond to you. We are happy to sign an NDA if your project requires it.",
         "form_label": "Contact form",
-        "form_heading": "Describe your security needs",
+        "form_heading": "Request a quote",
         "form_required_hint": "Fields marked with * are required.",
         "form_title": "Send us a message",
         "form_name": "Full name",
@@ -451,13 +451,13 @@
         "form_company": "Company",
         "form_company_optional": "(optional)",
         "form_company_placeholder": "Your company name",
-        "form_project_type": "Project type",
+        "form_project_type": "Desired service",
         "form_project_placeholder": "Select...",
         "form_project_search": "Search a type...",
-        "form_message": "Project details",
-        "form_message_placeholder": "Describe your project: goals, context, preferred timeline...",
+        "form_message": "Message",
+        "form_message_placeholder": "Describe your needs in a few lines…",
         "form_privacy": "Your information stays confidential and is never shared.",
-        "form_submit": "Send",
+        "form_submit": "Send my request",
         "form_submitting": "Sending...",
         "project_types": [
             "Business security",
@@ -1556,7 +1556,9 @@
         "email_invalid": "Please enter a valid email address.",
         "phone_required": "Your phone number is required.",
         "message_required": "Please describe your project.",
-        "captcha_required": "Please complete the anti-bot verification."
+        "captcha_required": "Please complete the anti-bot verification.",
+        "consent_required": "Please accept the use of your data so we can handle your request.",
+        "site_location_required": "The site location is required."
     },
     "home_v2": {
         "eyebrow": "Private security company in Guinea",
@@ -1918,5 +1920,118 @@
         "contact_cta": "Talk to our team",
         "share": "Share this publication",
         "all_services": "All services"
+    },
+    "contact_v2": {
+        "label": "Contact",
+        "title_lead": "Let's talk about your",
+        "title_accent": "security",
+        "description": "Our team helps you define what your site needs.",
+        "coordinates_title": "Our details",
+        "hours": "24/7",
+        "whatsapp": "Write on WhatsApp",
+        "form_intro": "Fill in this form and our team will reply promptly.",
+        "site_location": "Site location",
+        "site_location_placeholder": "City, district, site…",
+        "consent": "I accept that my data is used to handle my request.",
+        "join_title": "How to reach us",
+        "join_text": "Our office is at :address. Write or call us to discuss your needs and receive a tailored proposal.",
+        "process_title": "How we work together",
+        "steps": [
+            {
+                "title": "Your need",
+                "description": "You contact us and share your security priorities."
+            },
+            {
+                "title": "Our analysis",
+                "description": "We study your context and your instructions to propose a suitable solution."
+            },
+            {
+                "title": "Your proposal",
+                "description": "You receive a clear offer, with staffing, hours and protocols."
+            }
+        ]
+    },
+    "recruitment_v2": {
+        "label": "Recruitment",
+        "title_lead": "Join a",
+        "title_accent": "committed team",
+        "description": "Your professionalism makes the difference.",
+        "apply": "Apply now",
+        "form_title": "Tell us about yourself",
+        "coordinates": "Your contact details",
+        "profile": "Your profile",
+        "motivation": "Your motivation",
+        "process_title": "A simple, transparent process",
+        "process_description": "We review every application carefully and contact you if your profile matches our needs.",
+        "benefits": [
+            {
+                "title": "Ongoing training",
+                "description": "Teams trained and supported throughout their career."
+            },
+            {
+                "title": "Supervision",
+                "description": "Professional support from experienced managers."
+            },
+            {
+                "title": "Team spirit",
+                "description": "Working together with respect, solidarity and trust."
+            },
+            {
+                "title": "Professional standards",
+                "description": "High standards to deliver quality security services."
+            }
+        ],
+        "steps": [
+            {
+                "title": "Submit your application",
+                "description": "Complete the form with your contact details, location and background."
+            },
+            {
+                "title": "Profile review",
+                "description": "Our team reviews your application confidentially."
+            },
+            {
+                "title": "Get in touch",
+                "description": "If an opportunity matches your profile, our team will contact you about the next steps."
+            }
+        ],
+        "faq_title": "Frequently asked questions",
+        "faqs": [
+            {
+                "question": "How do I apply?",
+                "answer": "Complete the form with your contact details and profile, then agree to the use of your data to submit your application."
+            },
+            {
+                "question": "Do I need previous experience?",
+                "answer": "Tell us about your experience and training in the form. Our team will assess your profile against recruitment needs."
+            },
+            {
+                "question": "How will I be contacted?",
+                "answer": "If an opportunity matches your profile, our team will contact you using the details provided in the form."
+            }
+        ],
+        "next_title": "What happens next?",
+        "next_description": "Here are the next steps in our recruitment process.",
+        "next_steps": [
+            {
+                "title": "Application review",
+                "description": "Our team reviews your application and background."
+            },
+            {
+                "title": "Profile selection",
+                "description": "Profiles matching our needs are identified for the next stage."
+            },
+            {
+                "title": "Contact",
+                "description": "If your profile is selected, our team will contact you."
+            }
+        ],
+        "about_button": "Discover our company",
+        "team_title": "Professionalism grows through teamwork",
+        "team_description": "At Super Sécurité, we believe in talent and teamwork. Joining our teams means contributing to safer environments.",
+        "question": "Have a question?",
+        "contact": "Contact our team",
+        "keep_updated": "Keep your contact details up to date so we can reach you.",
+        "team_alt": "Super Sécurité team during a field briefing"
     }
 }

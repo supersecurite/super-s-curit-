@@ -13,7 +13,7 @@ class ContactMessageMailable extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * @param  array{name: string, email: string, phone?: ?string, company?: ?string, project_type?: ?string, message: string}  $contact
+     * @param  array{name: string, email: string, phone?: ?string, company?: ?string, project_type?: ?string, site_location?: ?string, message: string}  $contact
      */
     public function __construct(
         public array $contact,

@@ -439,7 +439,7 @@
         "privacy_label": "隐私",
         "privacy_text": "您的信息仅用于回复您的请求。如项目需要，我们愿意签署保密协议。",
         "form_label": "联系表单",
-        "form_heading": "请描述您的安保需求",
+        "form_heading": "申请报价",
         "form_required_hint": "标有 * 的字段为必填项。",
         "form_title": "给我们留言",
         "form_name": "姓名",
@@ -451,13 +451,13 @@
         "form_company": "公司",
         "form_company_optional": "（选填）",
         "form_company_placeholder": "您的公司名称",
-        "form_project_type": "项目类型",
+        "form_project_type": "所需服务",
         "form_project_placeholder": "请选择…",
         "form_project_search": "搜索类型…",
-        "form_message": "项目详情",
+        "form_message": "留言",
         "form_message_placeholder": "请描述项目目标、背景及预期时间安排…",
         "form_privacy": "您的信息将保密，且不会与他人共享。",
-        "form_submit": "发送",
+        "form_submit": "发送我的请求",
         "form_submitting": "正在发送…",
         "project_types": [
             "企业安保",
@@ -1560,7 +1560,9 @@
         "email_invalid": "请输入有效的电子邮箱。",
         "phone_required": "请输入电话号码。",
         "message_required": "请描述您的项目。",
-        "captcha_required": "请完成防机器人验证。"
+        "captcha_required": "请完成防机器人验证。",
+        "consent_required": "请同意我们使用您的资料来处理此请求。",
+        "site_location_required": "请填写现场所在地。"
     },
     "home_v2": {
         "eyebrow": "几内亚私人安保公司",
@@ -1922,5 +1924,118 @@
         "contact_cta": "与团队交流",
         "share": "分享本篇内容",
         "all_services": "所有服务"
+    },
+    "contact_v2": {
+        "label": "联系",
+        "title_lead": "谈谈您的",
+        "title_accent": "安全保障",
+        "description": "我们的团队协助您明确现场需求。",
+        "coordinates_title": "联系方式",
+        "hours": "全天候",
+        "whatsapp": "通过 WhatsApp 联系",
+        "form_intro": "填写此表单，我们的团队会尽快回复。",
+        "site_location": "现场位置",
+        "site_location_placeholder": "城市、社区、现场…",
+        "consent": "我同意使用我的资料来处理此请求。",
+        "join_title": "如何找到我们",
+        "join_text": "我们的办公地点位于 :address。欢迎来信或来电，以便交流需求并获得合适的方案。",
+        "process_title": "合作流程",
+        "steps": [
+            {
+                "title": "您的需求",
+                "description": "您联系我们，并说明您的安全重点。"
+            },
+            {
+                "title": "我们的分析",
+                "description": "我们研究您的现场情况和要求，以便提出合适的方案。"
+            },
+            {
+                "title": "您的方案",
+                "description": "您会收到一份清晰的建议，包括人员、时间和操作规程。"
+            }
+        ]
+    },
+    "recruitment_v2": {
+        "label": "招聘",
+        "title_lead": "加入一支",
+        "title_accent": "敬业的团队",
+        "description": "您的专业精神，让安全更有保障。",
+        "apply": "提交申请",
+        "form_title": "向我们介绍您自己",
+        "coordinates": "联系方式",
+        "profile": "个人资料",
+        "motivation": "求职动机",
+        "process_title": "简单透明的申请流程",
+        "process_description": "我们认真审阅每份申请，如您的资料符合招聘需求，将与您联系。",
+        "benefits": [
+            {
+                "title": "持续培训",
+                "description": "为团队提供培训与职业发展支持。"
+            },
+            {
+                "title": "专业指导",
+                "description": "由经验丰富的负责人提供专业指导。"
+            },
+            {
+                "title": "团队精神",
+                "description": "以尊重、团结与信任开展合作。"
+            },
+            {
+                "title": "职业标准",
+                "description": "以高标准保障安保服务质量。"
+            }
+        ],
+        "steps": [
+            {
+                "title": "提交申请",
+                "description": "填写联系方式、所在地区和个人经历。"
+            },
+            {
+                "title": "审阅资料",
+                "description": "我们的团队将保密审阅您的申请。"
+            },
+            {
+                "title": "取得联系",
+                "description": "如有符合您条件的机会，团队将与您联系，说明后续流程。"
+            }
+        ],
+        "faq_title": "常见问题",
+        "faqs": [
+            {
+                "question": "如何申请？",
+                "answer": "填写表格中的联系方式和个人资料，并同意数据使用条款后提交申请。"
+            },
+            {
+                "question": "是否需要相关经验？",
+                "answer": "请在表格中说明您的工作经验与培训经历。团队将根据招聘需求评估您的资料。"
+            },
+            {
+                "question": "我会通过什么方式收到联系？",
+                "answer": "如有符合您条件的机会，团队将通过表格中提供的联系方式与您联系。"
+            }
+        ],
+        "next_title": "接下来会怎样？",
+        "next_description": "以下是招聘流程的后续步骤。",
+        "next_steps": [
+            {
+                "title": "审阅申请",
+                "description": "团队审阅您的申请和个人经历。"
+            },
+            {
+                "title": "筛选资料",
+                "description": "筛选符合需求的申请，进入后续流程。"
+            },
+            {
+                "title": "联系申请人",
+                "description": "如果您的资料通过筛选，团队将与您联系。"
+            }
+        ],
+        "about_button": "了解我们的公司",
+        "team_title": "专业精神源于团队协作",
+        "team_description": "Super Sécurité重视人才与团队的力量。加入我们的团队，为更安全的环境贡献力量。",
+        "question": "有疑问？",
+        "contact": "联系我们的团队",
+        "keep_updated": "请保持联系方式有效，以便我们联系您。",
+        "team_alt": "Super Sécurité团队在现场召开简报会"
     }
 }

@@ -439,7 +439,7 @@
         "privacy_label": "Confidentialité",
         "privacy_text": "Vos informations ne sont utilisées que pour vous répondre. Nous signons volontiers un NDA si votre projet l'exige.",
         "form_label": "Formulaire de contact",
-        "form_heading": "Décrivez votre besoin de sécurité",
+        "form_heading": "Demander un devis",
         "form_required_hint": "Les champs marqués d'un * sont obligatoires.",
         "form_title": "Envoyez-nous un message",
         "form_name": "Nom complet",
@@ -448,16 +448,16 @@
         "form_email_placeholder": "vous@exemple.com",
         "form_phone": "Téléphone",
         "form_phone_placeholder": "+224 ...",
-        "form_company": "Entreprise",
+        "form_company": "Société",
         "form_company_optional": "(optionnel)",
         "form_company_placeholder": "Nom de votre entreprise",
-        "form_project_type": "Type de projet",
+        "form_project_type": "Service souhaité",
         "form_project_placeholder": "Sélectionner...",
         "form_project_search": "Rechercher un type...",
-        "form_message": "Détails du projet",
-        "form_message_placeholder": "Décrivez votre projet : objectifs, contexte, délais souhaités...",
+        "form_message": "Message",
+        "form_message_placeholder": "Décrivez vos besoins en quelques lignes…",
         "form_privacy": "Vos informations restent confidentielles et ne sont jamais partagées.",
-        "form_submit": "Envoyer",
+        "form_submit": "Envoyer ma demande",
         "form_submitting": "Envoi en cours...",
         "project_types": [
             "Sécurité entreprise",
@@ -1556,7 +1556,9 @@
         "email_invalid": "L'adresse e-mail n'est pas valide.",
         "phone_required": "Le numéro de téléphone est obligatoire.",
         "message_required": "Veuillez décrire votre projet.",
-        "captcha_required": "La vérification anti-robot est requise."
+        "captcha_required": "La vérification anti-robot est requise.",
+        "consent_required": "Veuillez accepter l'utilisation de vos données pour traiter votre demande.",
+        "site_location_required": "La localisation du site est obligatoire."
     },
     "home_v2": {
         "eyebrow": "Société de sécurité privée en Guinée",
@@ -1918,5 +1920,118 @@
         "contact_cta": "Échanger avec notre équipe",
         "share": "Partager cette publication",
         "all_services": "Tous les services"
+    },
+    "contact_v2": {
+        "label": "Contact",
+        "title_lead": "Parlons de votre",
+        "title_accent": "sécurité",
+        "description": "Notre équipe vous accompagne dans la définition de vos besoins.",
+        "coordinates_title": "Nos coordonnées",
+        "hours": "24h/24 · 7j/7",
+        "whatsapp": "Écrire sur WhatsApp",
+        "form_intro": "Remplissez ce formulaire et notre équipe vous répond rapidement.",
+        "site_location": "Localisation du site",
+        "site_location_placeholder": "Ville, commune, site…",
+        "consent": "J'accepte que mes données soient utilisées pour traiter ma demande.",
+        "join_title": "Comment nous rejoindre",
+        "join_text": "Notre siège est situé à :address. Écrivez-nous ou appelez-nous pour échanger sur vos besoins et recevoir une proposition adaptée.",
+        "process_title": "Notre processus de collaboration",
+        "steps": [
+            {
+                "title": "Votre besoin",
+                "description": "Vous nous contactez et nous partagez vos enjeux de sécurité."
+            },
+            {
+                "title": "Notre analyse",
+                "description": "Nous étudions votre contexte et vos consignes pour proposer une solution adaptée."
+            },
+            {
+                "title": "Votre proposition",
+                "description": "Vous recevez une offre claire, avec les effectifs, les horaires et les protocoles."
+            }
+        ]
+    },
+    "recruitment_v2": {
+        "label": "Recrutement",
+        "title_lead": "Rejoignez une",
+        "title_accent": "équipe engagée",
+        "description": "Votre professionnalisme fait la différence.",
+        "apply": "Déposer ma candidature",
+        "form_title": "Présentez-nous votre profil",
+        "coordinates": "Vos coordonnées",
+        "profile": "Votre profil",
+        "motivation": "Votre motivation",
+        "process_title": "Un processus simple et transparent",
+        "process_description": "Nous étudions chaque candidature avec attention et vous contactons si votre profil correspond à nos besoins.",
+        "benefits": [
+            {
+                "title": "Formation continue",
+                "description": "Des équipes formées et accompagnées dans leur parcours."
+            },
+            {
+                "title": "Encadrement",
+                "description": "Un suivi professionnel par des responsables expérimentés."
+            },
+            {
+                "title": "Esprit d’équipe",
+                "description": "Une collaboration basée sur le respect, la solidarité et la confiance."
+            },
+            {
+                "title": "Exigence professionnelle",
+                "description": "Des standards élevés pour assurer la qualité de nos prestations."
+            }
+        ],
+        "steps": [
+            {
+                "title": "Envoyez votre candidature",
+                "description": "Renseignez le formulaire avec vos coordonnées, votre localisation et votre parcours."
+            },
+            {
+                "title": "Étude de votre profil",
+                "description": "Notre équipe examine votre candidature en toute confidentialité."
+            },
+            {
+                "title": "Prise de contact",
+                "description": "Si une opportunité correspond à votre profil, notre équipe vous contacte pour la suite."
+            }
+        ],
+        "faq_title": "Questions fréquentes",
+        "faqs": [
+            {
+                "question": "Comment envoyer ma candidature ?",
+                "answer": "Complétez le formulaire avec vos coordonnées et votre profil, puis acceptez le traitement de vos données pour envoyer votre candidature."
+            },
+            {
+                "question": "Faut-il avoir une expérience préalable ?",
+                "answer": "Indiquez votre expérience et vos formations dans le formulaire. Notre équipe étudiera votre profil selon les besoins de recrutement."
+            },
+            {
+                "question": "Comment serai-je contacté ?",
+                "answer": "Si une opportunité correspond à votre profil, notre équipe vous contactera aux coordonnées fournies dans le formulaire."
+            }
+        ],
+        "next_title": "Et maintenant ?",
+        "next_description": "Voici les prochaines étapes de notre processus de recrutement.",
+        "next_steps": [
+            {
+                "title": "Étude du dossier",
+                "description": "Notre équipe examine votre candidature et votre parcours."
+            },
+            {
+                "title": "Sélection des profils",
+                "description": "Les profils correspondant à nos besoins sont identifiés pour la suite du processus."
+            },
+            {
+                "title": "Prise de contact",
+                "description": "Si votre profil est retenu, notre équipe vous contactera."
+            }
+        ],
+        "about_button": "Découvrir notre entreprise",
+        "team_title": "Le professionnalisme se construit ensemble",
+        "team_description": "Chez Super Sécurité, nous croyons en la valeur des talents et en la force du collectif. Rejoindre nos équipes, c’est contribuer à des environnements plus sûrs.",
+        "question": "Une question ?",
+        "contact": "Contactez notre équipe",
+        "keep_updated": "Conservez vos coordonnées à jour pour être joignable.",
+        "team_alt": "Équipe Super Sécurité lors d’un briefing sur le terrain"
     }
 }

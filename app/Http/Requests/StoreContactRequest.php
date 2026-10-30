@@ -31,6 +31,8 @@ class StoreContactRequest extends FormRequest
             'phone' => ['required', 'string', 'max:50'],
             'company' => ['nullable', 'string', 'max:255'],
             'project_type' => ['nullable', 'string', 'max:100'],
+            'site_location' => ['required', 'string', 'max:255'],
+            'privacy_consent' => ['accepted'],
             'message' => ['required', 'string', 'max:5000'],
             'g-recaptcha-response' => [
                 Rule::requiredIf(fn (): bool => (bool) config('recaptcha.enabled')),
@@ -50,6 +52,8 @@ class StoreContactRequest extends FormRequest
             'email.email' => LocaleTranslations::trans('public_content.email_invalid'),
             'phone.required' => LocaleTranslations::trans('public_content.phone_required'),
             'message.required' => LocaleTranslations::trans('public_content.message_required'),
+            'site_location.required' => LocaleTranslations::trans('public_content.site_location_required'),
+            'privacy_consent.accepted' => LocaleTranslations::trans('public_content.consent_required'),
             'g-recaptcha-response' => LocaleTranslations::trans('public_content.captcha_required'),
         ];
     }
@@ -65,6 +69,8 @@ class StoreContactRequest extends FormRequest
             'phone' => 'téléphone',
             'company' => 'entreprise',
             'project_type' => 'type de projet',
+            'site_location' => 'localisation du site',
+            'privacy_consent' => 'consentement',
             'message' => 'message',
             'g-recaptcha-response' => 'vérification anti-robot',
         ];
