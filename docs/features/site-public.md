@@ -178,3 +178,11 @@ Validation Ressources : 144 assertions de rendu et de localisation FR/EN/zh, Typ
 - Le formulaire exige la localisation du site et l’accord d’utilisation des données. Société et service restent facultatifs. L’e-mail de contact reprend la localisation.
 - Textes d’interface FR/EN/zh. Sur mobile, la photo du hero est séparée du titre.
 - Illustration : `public/images/super-securite/contact-v2-hero.jpg`, une seule ombre intégrée à gauche, sans voile CSS.
+
+
+### Renouvellement des visuels — 31 octobre 2026
+
+- Quinze nouvelles illustrations générées via imagegen intégré, avec profils masculins et féminins variés et les tenues de référence : gardiennage sombre, chemises blanches ou bleues, harnais réfléchissants et sécurité incendie en polo rouge/pantalon marine à bandes argentées.
+- Remplacement des principaux heroes et scènes de présentation Accueil, À propos, quatre services, Ressources, Recrutement et Contact. Les fichiers précédents sont conservés ; les nouveaux chemins dans visuels-2026 évitent les anciennes images en cache.
+- Trois photos originales fournies sont copiées sans modification et utilisées sur les cartes de l’accueil et la confirmation de candidature. L’équipe réelle en tenues rouges/bleues apparaît aussi dans le parcours recrutement. Les reportages et médias éditoriaux publiés restent gérés par leur contenu existant.
+- Catalogue et consignes détaillées : storage/app/previews/visuels-2026.html et storage/app/previews/visuels-2026.json.

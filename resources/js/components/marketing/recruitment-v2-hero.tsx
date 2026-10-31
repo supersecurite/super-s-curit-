@@ -15,8 +15,8 @@ export default function RecruitmentV2Hero({
             <img
                 src={
                     confirmation
-                        ? '/images/super-securite/zones-minieres-v2-hero.jpg'
-                        : '/images/super-securite/recruitment-v2-hero.jpg'
+                        ? '/images/super-securite/visuels-2026/zones-minieres-v2-hero.jpg'
+                        : '/images/super-securite/visuels-2026/recruitment-v2-hero.jpg'
                 }
                 alt=""
                 width={1980}

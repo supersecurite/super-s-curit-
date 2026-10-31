@@ -28,7 +28,7 @@ export default function ResourcesV2Header({
                     aria-labelledby="resources-v2-title"
                 >
                     <img
-                        src="/images/super-securite/resources-v2-hero.jpg"
+                        src="/images/super-securite/visuels-2026/resources-v2-hero.jpg"
                         alt=""
                         width={1980}
                         height={794}

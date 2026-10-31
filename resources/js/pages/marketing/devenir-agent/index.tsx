@@ -45,7 +45,7 @@ export default function MarketingDevenirAgent() {
                 <div className="recruitment-v2-container recruitment-v2-application-grid">
                     <aside className="recruitment-v2-process">
                         <img
-                            src="/images/super-securite/about-v2-team.jpg"
+                            src="/images/super-securite/agents-intervention-patrouille-pickup.jpeg"
                             alt={t('recruitment_v2.team_alt')}
                             width={1980}
                             height={794}

@@ -42,7 +42,7 @@ export default function MarketingContact() {
             <SeoHead />
             <section className="contact-v2-hero">
                 <img
-                    src="/images/super-securite/contact-v2-hero.jpg"
+                    src="/images/super-securite/visuels-2026/contact-v2-hero.jpg"
                     alt=""
                     width={1980}
                     height={794}

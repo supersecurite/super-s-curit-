@@ -30,15 +30,17 @@ type HomePageProps = {
 };
 
 const images = {
-    hero: '/images/super-securite/home-v2-hero-daylight-shaded.jpg',
+    hero: '/images/super-securite/visuels-2026/home-v2-hero-daylight-shaded.jpg',
     fallback:
         '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
-    why: '/images/super-securite/agent-securite-radio-portrait.jpeg',
+    why: '/images/super-securite/visuels-2026/home-v3-fire-training.jpg',
     services: {
-        entreprise: '/images/super-securite/agents.jpeg',
-        residence: '/images/super-securite/base-vie-logements.jpeg',
+        entreprise:
+            '/images/super-securite/visuels-2026/agent-chemise-bleue-original.jpeg',
+        residence:
+            '/images/super-securite/visuels-2026/residence-v2-detail.jpg',
         chantiers:
-            '/images/super-securite/chantier-structure-beton-echafaudage-equipe.jpeg',
+            '/images/super-securite/visuels-2026/formation-incendie-original.jpeg',
         'zones-minieres':
             '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     },

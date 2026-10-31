@@ -768,3 +768,7 @@
 .about-v2-video-poster:hover > span {
     background: #97111a;
 }
+.home-v2-service-card:nth-child(1) .home-v2-service-image img,
+.home-v2-service-card:nth-child(3) .home-v2-service-image img {
+    object-position: center 25%;
+}

@@ -42,7 +42,7 @@ export default function MarketingAbout() {
             <SeoHead />
             <section className="about-v2-hero" aria-labelledby="about-v2-title">
                 <img
-                    src="/images/super-securite/about-v2-team.jpg"
+                    src="/images/super-securite/visuels-2026/about-v2-team.jpg"
                     alt=""
                     width={1980}
                     height={794}
@@ -115,7 +115,7 @@ export default function MarketingAbout() {
                     <p>{t('about_v2.approach_followup')}</p>
                 </div>
                 <img
-                    src="/images/super-securite/about-v2-supervision.jpg"
+                    src="/images/super-securite/visuels-2026/about-v2-supervision.jpg"
                     alt={t('about_v2.approach_image_alt')}
                     width={1564}
                     height={1006}
@@ -261,7 +261,7 @@ export default function MarketingAbout() {
                                 <img
                                     src={
                                         featuredVideo.thumbnail_url ||
-                                        '/images/super-securite/about-v2-supervision.jpg'
+                                        '/images/super-securite/visuels-2026/about-v2-supervision.jpg'
                                     }
                                     alt=""
                                     width={1280}
@@ -270,7 +270,7 @@ export default function MarketingAbout() {
                                     onError={(event) => {
                                         event.currentTarget.onerror = null;
                                         event.currentTarget.src =
-                                            '/images/super-securite/about-v2-supervision.jpg';
+                                            '/images/super-securite/visuels-2026/about-v2-supervision.jpg';
                                     }}
                                 />
                                 <span>

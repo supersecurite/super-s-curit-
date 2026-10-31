@@ -6,23 +6,23 @@ export const serviceV2Images: Record<
     { hero: string; intro: string; band: string }
 > = {
     entreprise: {
-        hero: '/images/super-securite/enterprise-v2-hero.jpg',
-        intro: '/images/super-securite/enterprise-v2-entrance.jpg',
-        band: '/images/super-securite/about-v2-supervision.jpg',
+        hero: '/images/super-securite/visuels-2026/enterprise-v2-hero.jpg',
+        intro: '/images/super-securite/visuels-2026/enterprise-v2-entrance.jpg',
+        band: '/images/super-securite/visuels-2026/about-v2-supervision.jpg',
     },
     residence: {
-        hero: '/images/super-securite/residence-v2-hero.jpg',
-        intro: '/images/super-securite/residence-v2-detail.jpg',
+        hero: '/images/super-securite/visuels-2026/residence-v2-hero.jpg',
+        intro: '/images/super-securite/visuels-2026/residence-v2-detail.jpg',
         band: '/images/super-securite/residence-v2-evening.jpg',
     },
     chantiers: {
-        hero: '/images/super-securite/chantiers-v2-hero.jpg',
-        intro: '/images/super-securite/chantiers-v2-detail.jpg',
+        hero: '/images/super-securite/visuels-2026/chantiers-v2-hero.jpg',
+        intro: '/images/super-securite/visuels-2026/chantiers-v2-detail.jpg',
         band: '/images/super-securite/chantier-structure-beton-echafaudage-equipe.jpeg',
     },
     'zones-minieres': {
-        hero: '/images/super-securite/zones-minieres-v2-hero.jpg',
-        intro: '/images/super-securite/zones-minieres-v2-detail.jpg',
+        hero: '/images/super-securite/visuels-2026/zones-minieres-v2-hero.jpg',
+        intro: '/images/super-securite/visuels-2026/zones-minieres-v2-detail.jpg',
         band: '/images/super-securite/installation-industrielle-convoyeurs-miniers.jpeg',
     },
 };

@@ -42,7 +42,7 @@ export default function MarketingDevenirAgentMerci() {
             </section>
             <section className="recruitment-v2-team recruitment-v2-container">
                 <img
-                    src="/images/super-securite/about-v2-team.jpg"
+                    src="/images/super-securite/visuels-2026/equipe-chemises-original.jpeg"
                     alt={t('recruitment_v2.team_alt')}
                     width={1980}
                     height={794}
