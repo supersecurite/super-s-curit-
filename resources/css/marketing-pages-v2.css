@@ -6,6 +6,12 @@
 .home-v2-brand img {
     width: 220px;
 }
+@media (min-width: 1280px) {
+    .home-v2-brand img {
+        width: 168px;
+        height: 44px;
+    }
+}
 .home-v2-desktop-nav {
     gap: 22px;
 }
