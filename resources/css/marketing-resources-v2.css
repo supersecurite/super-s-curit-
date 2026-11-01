@@ -9,7 +9,7 @@
 }
 .resources-v2-hero {
     position: relative;
-    background: #061625;
+    background: #000;
     min-height: 330px;
     color: #fff;
 }
@@ -100,7 +100,7 @@
     background: #fff;
     border: 1px solid #e1e7ed;
     border-radius: 5px;
-    box-shadow: 0 3px 9px rgb(6 22 37 / 0.025);
+    box-shadow: 0 3px 9px rgb(0 0 0 / 0.025);
 }
 .resource-v2-card > div.p-6 {
     display: flex;
@@ -170,7 +170,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 340px;
-    background: #061b2b;
+    background: #000;
 }
 .resource-v2-detail-intro {
     padding: 36px max(32px, 10%) 40px;
@@ -314,7 +314,7 @@
     border-left-color: #b2141b;
 }
 .resource-v2-sidebar > .resource-v2-contact {
-    background: #061b2b;
+    background: #000;
     color: #fff;
 }
 .resource-v2-contact h2 {

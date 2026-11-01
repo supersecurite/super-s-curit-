@@ -1,7 +1,7 @@
 /* Pied de page public commun, d'après la maquette V2. */
 .marketing-footer-v2 {
     color: #e8edf3;
-    background: #031623;
+    background: #000;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -36,9 +36,9 @@
     background:
         linear-gradient(
             90deg,
-            rgb(1 19 32 / 0.96),
-            rgb(1 19 32 / 0.88) 52%,
-            rgb(1 19 32 / 0.94)
+            rgb(0 0 0 / 0.96),
+            rgb(0 0 0 / 0.88) 52%,
+            rgb(0 0 0 / 0.94)
         ),
         url('/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg')
             center 65% / cover;
@@ -118,7 +118,7 @@
     padding: 18px 24px;
     border: 1px solid rgb(255 255 255 / 0.18);
     border-radius: 5px;
-    background: rgb(0 16 28 / 0.48);
+    background: rgb(0 0 0 / 0.48);
 }
 .marketing-footer-project .marketing-footer-eyebrow {
     font-size: 10px;

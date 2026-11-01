@@ -10,7 +10,7 @@
 .recruitment-v2-hero {
     position: relative;
     min-height: 370px;
-    background: #061625;
+    background: #000;
     color: #fff;
 }
 .recruitment-v2-hero > img {
@@ -94,7 +94,7 @@
     gap: 24px;
 }
 .recruitment-v2-process {
-    background: #061b2b;
+    background: #000;
     color: #fff;
     border-radius: 5px;
     overflow: hidden;

@@ -32,7 +32,7 @@
     padding: 0;
     overflow: hidden;
     border: 0;
-    background: #061625;
+    background: #000;
     color: #fff;
     font-family: var(--font-sans);
 }
@@ -54,7 +54,7 @@
     gap: 16px;
     padding: max(20px, env(safe-area-inset-top)) 24px 20px;
     border-bottom: 1px solid rgb(255 255 255 / 0.14);
-    background: #04111e;
+    background: #000;
 }
 .marketing-mobile-v2-brand {
     display: inline-flex;
@@ -89,7 +89,7 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
-    scrollbar-color: #476075 #061625;
+    scrollbar-color: #3a3a3a #000;
 }
 .marketing-mobile-v2-nav {
     padding: 22px 24px 14px;
@@ -220,7 +220,7 @@
     flex: 0 0 auto;
     padding: 18px 24px max(18px, env(safe-area-inset-bottom));
     border-top: 1px solid rgb(255 255 255 / 0.14);
-    background: #04111e;
+    background: #000;
 }
 .marketing-mobile-v2-quote {
     display: flex;
@@ -261,7 +261,7 @@
     border: 1px solid rgb(255 255 255 / 0.22);
     border-radius: 4px;
     color: #fff;
-    background: #0c2234;
+    background: #000;
     box-shadow: none;
 }
 .marketing-mobile-v2-language > svg {

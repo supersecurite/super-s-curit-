@@ -16,7 +16,7 @@
 .enterprise-v2-hero {
     position: relative;
     min-height: 380px;
-    background: #061625;
+    background: #000;
     color: #fff;
 }
 .enterprise-v2-hero > img {
@@ -161,7 +161,7 @@
     font-size: 13px;
 }
 .enterprise-v2-supervision {
-    background: #061b2b;
+    background: #000;
     color: #fff;
 }
 .enterprise-v2-supervision-inner {

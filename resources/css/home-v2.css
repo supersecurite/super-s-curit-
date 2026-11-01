@@ -18,10 +18,10 @@
     color: #fff;
     background: linear-gradient(
         90deg,
-        rgb(6 17 29 / 0.97) 0%,
-        rgb(20 37 53 / 0.93) 50%,
-        rgb(31 48 65 / 0.88) 78%,
-        rgb(42 57 73 / 0.82) 100%
+        rgb(0 0 0 / 0.97) 0%,
+        rgb(0 0 0 / 0.93) 50%,
+        rgb(0 0 0 / 0.88) 78%,
+        rgb(0 0 0 / 0.82) 100%
     );
     border-bottom: 1px solid rgb(255 255 255 / 0.15);
 }
@@ -128,7 +128,7 @@
     height: 36px;
     color: #fff;
     border-color: rgb(255 255 255 / 0.25);
-    background: rgb(6 17 29 / 0.4);
+    background: rgb(0 0 0 / 0.4);
 }
 .home-v2-hero {
     position: relative;
@@ -137,7 +137,7 @@
     isolation: isolate;
     overflow: hidden;
     color: #fff;
-    background: #06111d;
+    background: #000;
 }
 .home-v2-hero-photo {
     position: absolute;
@@ -261,7 +261,7 @@
     border: 1px solid #e7ebf0;
     border-radius: 6px;
     background: #fff;
-    box-shadow: 0 4px 14px rgb(5 15 30 / 0.05);
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.05);
 }
 .home-v2-service-image {
     display: block;
@@ -293,7 +293,7 @@
     border: 2px solid var(--super-securite-accent);
     border-radius: 50%;
     color: #fff;
-    background: #061321;
+    background: #000;
     box-shadow: 0 0 0 3px #fff;
 }
 .home-v2-service-body h3 {
@@ -333,7 +333,7 @@
     gap: 30px 18px;
     padding: 26px 22px;
     border-radius: 6px;
-    background: #061625;
+    background: #000;
     color: #fff;
 }
 .home-v2-fact {
@@ -382,7 +382,7 @@
 .home-v2-partners h2 {
     width: 200px;
     flex: 0 0 auto;
-    color: #172331;
+    color: #000;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.21em;
@@ -444,9 +444,9 @@
     inset: 0;
     background: linear-gradient(
         90deg,
-        #031320ed 0%,
-        #031320d9 45%,
-        #03132020 100%
+        #000000ed 0%,
+        #000000d9 45%,
+        #00000020 100%
     );
 }
 .home-v2-why-copy {
@@ -489,7 +489,7 @@
     flex: 0 0 auto;
     border-radius: 50%;
     color: var(--super-securite-accent);
-    background: #061625;
+    background: #000;
 }
 .home-v2-value h3 {
     font-size: 14px;
@@ -524,7 +524,7 @@
     position: absolute;
     inset: 0;
     z-index: -2;
-    background: linear-gradient(90deg, #061625cc, #0616254d);
+    background: linear-gradient(90deg, #000000cc, #0000004d);
 }
 .home-v2-future-copy {
     padding: 30px;
