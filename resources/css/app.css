@@ -241,8 +241,12 @@ html.app-page {
 }
 
 .marketing-page {
-    --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
-    --font-marketing: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-sans:
+        'Montserrat', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+    --font-heading: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+    --font-marketing: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer components {

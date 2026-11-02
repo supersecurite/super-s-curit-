@@ -14,6 +14,7 @@ Visiteurs anonymes. Tracking visites actif (hors pages exclues).
 
 ## Fonctionnement
 
+- Typographie du site public : Montserrat (texte, titres, navigation). Le backoffice conserve DM Sans et Space Grotesk.
 - Layout `marketing-layout` + `useVisitTracker`.
 - Locale dérivée de l’URL (`/` = FR, `/en/...` = EN) via `SetLocaleFromUrl`.
 - Traductions UI : `lang/fr.json` + `lang/en.json`, partagées Inertia (`locale`, `translations`), hook `useTrans()` / `tNode()`.

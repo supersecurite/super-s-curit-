@@ -160,6 +160,7 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 
 - 29 octobre 2026 — V2 : Ressources (listes actualités/conseils, deux pages de lecture et galerie) adaptées aux maquettes 07 à 11, navigation commune, filtres existants, partage, sommaire réel et interface FR/EN/zh.
 
+- 1 novembre 2026 — Site public : police Montserrat pour le texte, les titres et la navigation.
 - 30 octobre 2026 — V2 : page Contact adaptée à la maquette 14 (coordonnées, devis, carte, processus, FAQ), navigation V2, FR/EN/zh.
 
 - 31 octobre 2026 — Visuels : quinze illustrations renouvelées avec femmes/hommes distincts et différentes tenues, trois photos fournies intégrées et anciens fichiers conservés.
