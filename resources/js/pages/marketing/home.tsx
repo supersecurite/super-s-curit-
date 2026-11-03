@@ -30,7 +30,7 @@ type HomePageProps = {
 };
 
 const images = {
-    hero: '/images/super-securite/visuels-2026/home-v2-hero-daylight-shaded.jpg',
+    hero: '/images/super-securite/visuels-2026/noir/home-v2-hero-daylight-shaded.jpg',
     fallback:
         '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     why: '/images/super-securite/visuels-2026/home-v3-fire-training.jpg',

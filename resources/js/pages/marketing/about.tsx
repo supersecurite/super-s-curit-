@@ -42,7 +42,7 @@ export default function MarketingAbout() {
             <SeoHead />
             <section className="about-v2-hero" aria-labelledby="about-v2-title">
                 <img
-                    src="/images/super-securite/visuels-2026/about-v2-team.jpg"
+                    src="/images/super-securite/visuels-2026/noir/about-v2-team.jpg"
                     alt=""
                     width={1980}
                     height={794}

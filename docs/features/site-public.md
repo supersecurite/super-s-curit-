@@ -187,3 +187,10 @@ Validation Ressources : 144 assertions de rendu et de localisation FR/EN/zh, Typ
 - Remplacement des principaux heroes et scènes de présentation Accueil, À propos, quatre services, Ressources, Recrutement et Contact. Les fichiers précédents sont conservés ; les nouveaux chemins dans visuels-2026 évitent les anciennes images en cache.
 - Trois photos originales fournies sont copiées sans modification et utilisées sur les cartes de l’accueil et la confirmation de candidature. L’équipe réelle en tenues rouges/bleues apparaît aussi dans le parcours recrutement. Les reportages et médias éditoriaux publiés restent gérés par leur contenu existant.
 - Catalogue et consignes détaillées : storage/app/previews/visuels-2026.html et storage/app/previews/visuels-2026.json.
+
+
+### Dégradés noirs — 2 novembre 2026
+
+Les neuf images de bandeau utilisent une ombre noire neutre intégrée à la photo, remplaçant la teinte bleue. Les versions noires sont stockées dans public/images/super-securite/visuels-2026/noir et reliées aux pages existantes, y compris les vignettes de services qui réutilisent ces visuels. Aucune couche CSS supplémentaire. Versions bleues conservées ; catalogue et consigne exacte de retouche dans storage/app/previews/visuels-2026.json. Retouche réalisée avec imagegen intégré pour conserver les personnes, tenues, cadrages et lumière des scènes.
+
+Validation des dégradés noirs : neuf fichiers présents, 746 assertions de rendu V2 et 159 assertions publiques FR/EN/zh réussies, compilation et git diff --check réussis.

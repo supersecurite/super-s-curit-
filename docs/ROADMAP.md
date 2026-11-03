@@ -164,3 +164,5 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 - 30 octobre 2026 — V2 : page Contact adaptée à la maquette 14 (coordonnées, devis, carte, processus, FAQ), navigation V2, FR/EN/zh.
 
 - 31 octobre 2026 — Visuels : quinze illustrations renouvelées avec femmes/hommes distincts et différentes tenues, trois photos fournies intégrées et anciens fichiers conservés.
+
+- 2 novembre 2026 — Visuels : neuf bandeaux passés au dégradé noir intégré à la photo ; nouvelles URLs et versions précédentes conservées.
