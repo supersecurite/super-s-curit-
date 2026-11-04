@@ -2,6 +2,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import type { Page } from '@inertiajs/core';
 import type { ReactElement } from 'react';
 import { AppChrome } from '@/components/app-chrome';
+import { InertiaFullscreenLoader } from '@/components/inertia-fullscreen-loader';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import MarketingLayout from '@/layouts/marketing-layout';
@@ -44,12 +45,15 @@ createInertiaApp({
     },
     withApp(app) {
         const page = initialPageName(app);
+        const isPublic =
+            page.startsWith('marketing/') || page.startsWith('errors/');
 
-        if (page.startsWith('marketing/') || page.startsWith('errors/')) {
-            return app;
-        }
-
-        return <AppChrome>{app}</AppChrome>;
+        return (
+            <>
+                {isPublic ? app : <AppChrome>{app}</AppChrome>}
+                <InertiaFullscreenLoader />
+            </>
+        );
     },
     progress: false,
 });

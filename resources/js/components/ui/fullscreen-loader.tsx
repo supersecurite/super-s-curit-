@@ -1,10 +1,8 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { Loader2, LogOut, RefreshCw } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
-import { LumaSpin } from '@/components/ui/luma-spin';
 import { Spinner } from '@/components/ui/spinner';
-import SnowBallLoadingSpinner from '@/components/ui/snow-ball-loading-spinner';
 import { cn } from '@/lib/utils';
 
 export type SpinnerType =
@@ -17,8 +15,6 @@ export type SpinnerType =
     | 'ring'
     | 'bars'
     | 'infinite'
-    | 'luma-spin'
-    | 'snow-ball'
     | 'logo';
 
 interface FullscreenLoaderProps {
@@ -30,6 +26,8 @@ interface FullscreenLoaderProps {
     className?: string;
     overlayClassName?: string;
     zIndex?: number;
+    /** Si false, l'overlay n'intercepte pas les clics (navigations courtes). */
+    blocking?: boolean;
     onRefresh?: () => void;
     onLeave?: () => void;
     refreshLabel?: string;
@@ -43,15 +41,15 @@ function AnimatedAppLogo({ size = 88 }: { size?: number }) {
             style={{ width: size + 88, height: size + 88 }}
         >
             <span
-                className="loader-logo-ring absolute inset-0 rounded-full border-2 border-primary/25"
+                className="loader-logo-ring absolute inset-0 rounded-full border-2 border-white/25"
                 aria-hidden
             />
             <span
-                className="loader-logo-ring-delayed absolute inset-2 rounded-full border border-primary/40"
+                className="loader-logo-ring-delayed absolute inset-2 rounded-full border border-white/40"
                 aria-hidden
             />
             <span
-                className="loader-logo-glow absolute inset-4 rounded-full bg-primary/15 blur-xl"
+                className="loader-logo-glow absolute inset-4 rounded-full bg-[var(--super-securite-accent)]/25 blur-xl"
                 aria-hidden
             />
             <div className="loader-logo-mark relative z-10 drop-shadow-lg">
@@ -114,36 +112,24 @@ function renderSpinner(
     size: number,
     className?: string,
 ): ReactNode {
+    const style: CSSProperties = { width: size, height: size };
+
     switch (type) {
         case 'logo':
             return <AnimatedAppLogo size={size} />;
 
-        case 'luma-spin':
-            return <LumaSpin />;
-
-        case 'snow-ball':
-            return <SnowBallLoadingSpinner />;
-
         case 'default':
             return (
                 <Spinner
-                    className={cn('text-primary', className)}
-                    style={{ width: size, height: size }}
+                    className={cn('text-white', className)}
+                    style={style}
                 />
             );
 
-        case 'loader2':
-        case 'circle':
-        case 'pinwheel':
-        case 'circle-filled':
-        case 'ellipsis':
-        case 'ring':
-        case 'bars':
-        case 'infinite':
         default:
             return (
                 <Loader2
-                    className={cn('animate-spin text-primary', className)}
+                    className={cn('animate-spin text-white', className)}
                     size={size}
                 />
             );
@@ -159,6 +145,7 @@ export function FullscreenLoader({
     className,
     overlayClassName,
     zIndex = 10000,
+    blocking = true,
     onRefresh,
     onLeave,
     refreshLabel = 'Actualiser',
@@ -174,25 +161,24 @@ export function FullscreenLoader({
         <div
             className={cn(
                 'fixed inset-0 flex items-center justify-center backdrop-blur-sm',
-                overlayClassName || 'bg-background/60',
+                blocking ? 'pointer-events-auto' : 'pointer-events-none',
+                overlayClassName || 'bg-black/55',
                 className,
             )}
             style={{ zIndex }}
             aria-busy="true"
             aria-live="polite"
-            role="alertdialog"
-            aria-modal="true"
+            role={blocking ? 'alertdialog' : 'status'}
+            aria-modal={blocking || undefined}
             aria-label={message}
         >
-            <div className="flex max-w-sm flex-col items-center gap-5 px-6 text-center">
+            <div className="pointer-events-auto flex max-w-sm flex-col items-center gap-5 px-6 text-center">
                 {renderSpinner(spinnerType, spinnerSize)}
                 {message && (
-                    <p className="text-lg font-medium text-foreground">
-                        {message}
-                    </p>
+                    <p className="text-lg font-medium text-white">{message}</p>
                 )}
                 {subtitle && (
-                    <p className="text-sm text-muted-foreground">{subtitle}</p>
+                    <p className="text-sm text-white/70">{subtitle}</p>
                 )}
 
                 {showRecovery && (
@@ -212,7 +198,7 @@ export function FullscreenLoader({
                             <Button
                                 type="button"
                                 variant="outline"
-                                className="cursor-pointer gap-2 bg-background"
+                                className="cursor-pointer gap-2 border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
                                 onClick={onLeave}
                             >
                                 <LogOut className="size-4" />

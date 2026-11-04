@@ -6,10 +6,11 @@ import { onShowNavigationLoader } from '@/lib/navigation-loader';
 import { dashboard } from '@/routes';
 
 /**
- * Délai avant affichage auto (évite un flash sur navigations déjà en cache).
- * Le clic menu force l'affichage immédiatement via `showNavigationLoader()`.
+ * Délai avant affichage auto — évite flash et sensation de lenteur
+ * sur navigations déjà en cache / prefetchées.
+ * Le clic menu backoffice force l'affichage via `showNavigationLoader()`.
  */
-const SHOW_DELAY_MS = 150;
+const SHOW_DELAY_MS = 220;
 const STUCK_AFTER_MS = 12_000;
 
 const AUTH_PATH_PATTERN =
@@ -42,11 +43,23 @@ function shouldTrackVisit(visit: {
     return true;
 }
 
+function leaveFallbackUrl(): string {
+    if (
+        typeof document !== 'undefined' &&
+        document.documentElement.classList.contains('marketing-page')
+    ) {
+        return '/';
+    }
+
+    return dashboard.url();
+}
+
 /**
  * Overlay plein écran pendant les navigations Inertia.
  *
- * Monté au niveau racine (hors provider `usePage`) — events `router` + bus menu.
- * Masquage sur `navigate` / `success` (page appliquée), y compris prefetch.
+ * Monté via `withApp` (hors provider `usePage`) — events `router` + bus menu.
+ * Masquage immédiat sur `navigate` / `success` / `finish`.
+ * Overlay non bloquant tant que la visite n'est pas bloquée (stuck).
  */
 export function InertiaFullscreenLoader() {
     const [isLoading, setIsLoading] = useState(false);
@@ -174,16 +187,16 @@ export function InertiaFullscreenLoader() {
             return;
         }
 
-        window.location.assign(dashboard.url());
+        window.location.assign(leaveFallbackUrl());
     };
 
-    if (typeof document === 'undefined') {
+    if (typeof document === 'undefined' || !isLoading) {
         return null;
     }
 
     return createPortal(
         <FullscreenLoader
-            isLoading={isLoading}
+            isLoading
             spinnerType="logo"
             spinnerSize={88}
             message={
@@ -198,6 +211,8 @@ export function InertiaFullscreenLoader() {
                     ? 'Vous pouvez actualiser ou quitter cette page.'
                     : 'Veuillez patienter'
             }
+            overlayClassName="bg-black/55"
+            blocking={isStuck}
             onRefresh={isStuck ? handleRefresh : undefined}
             onLeave={isStuck ? handleLeave : undefined}
             refreshLabel="Actualiser"
