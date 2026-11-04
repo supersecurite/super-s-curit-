@@ -228,7 +228,7 @@ function MobileMenuBody({ pathname, superSecurite, close }: MenuBodyProps) {
                         </li>
                         <li>
                             <MobileMenuLink
-                                href={lp('/devenir-agent')}
+                                href={lp('/carrieres')}
                                 label={t('footer_v2.recruitment')}
                                 pathname={pathname}
                                 close={close}

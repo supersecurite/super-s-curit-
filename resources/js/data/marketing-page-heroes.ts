@@ -12,6 +12,7 @@ export type MarketingPageHeroPattern =
     | 'actualites'
     | 'conseils'
     | 'devenir-agent'
+    | 'carrieres'
     | 'contact'
     | 'about';
 
@@ -91,6 +92,25 @@ export const marketingPageHeroes = {
             `Agents qualifiés, missions variées et évolution possible au sein du réseau Super Sécurité à ${superSecuriteZoneLabel}. Inscrivez-vous dès maintenant.`,
         image: superSecuriteStock.pages.devenirAgent,
         imageAlt: `Recrutement agents Super Sécurité — ${superSecuriteZoneLabel}`,
+        stats: [
+            { label: 'Missions', value: 'Entreprise & terrain' },
+            { label: 'Disponibilité', value: superSecuriteHoursShort },
+            { label: 'Zone', value: superSecuriteZoneLabel },
+        ],
+    },
+    carrieres: {
+        id: 'carrieres',
+        pattern: 'carrieres',
+        layout: 'default',
+        underline: 'grow',
+        label: 'Carrières',
+        titleLead: 'Rejoignez une',
+        titleHighlight: 'équipe engagée',
+        titleTrail: '',
+        description:
+            `Développez votre carrière dans un environnement qui contribue à la sécurité de tous au quotidien à ${superSecuriteZoneLabel}.`,
+        image: superSecuriteStock.pages.devenirAgent,
+        imageAlt: `Carrières Super Sécurité — ${superSecuriteZoneLabel}`,
         stats: [
             { label: 'Missions', value: 'Entreprise & terrain' },
             { label: 'Disponibilité', value: superSecuriteHoursShort },

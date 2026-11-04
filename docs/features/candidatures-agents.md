@@ -1,29 +1,32 @@
 # Candidatures agents
 
-**Statut :** ✅ Complet
+**Statut :** ✅ Complet (étendu — liées aux offres Carrières)
 
 ## Vue d’ensemble
 
-Formulaire public « Devenir agent » + backoffice de suivi (statut, notes internes).
+Candidatures issues de la page Carrières (`/carrieres/{slug}/postuler`). Chaque nouvelle candidature est liée à une `JobOffer`. Le backoffice permet le suivi (statut, notes internes) et le filtre par offre.
 
 ## Acteurs & rôles
 
-- Public : soumission throttlée.
+- Public : soumission throttlée via une offre active.
 - Backoffice : `agent_applications.view` / `agent_applications.update`.
 
 ## Fonctionnement
 
-- Public : create / store / merci.
-- Admin : index, show ; formulaire de suivi masqué si pas `canUpdate`.
+- Public : store via `SubmitJobApplication` + e-mail RH + page merci.
+- Admin : index (filtres statut / offre / localisation / search), show, update statut + notes.
+- Historique : candidatures sans `job_offer_id` (avant module Carrières) restent consultables ; libellé poste via enum legacy.
 
 ## Fichiers clés
 
-- `app/Http/Controllers/Marketing/SecurityAgentApplicationController.php`
+- `app/Http/Controllers/Marketing/CareerController.php`
+- `app/Actions/JobOffers/SubmitJobApplication.php`
 - `app/Http/Controllers/Admin/SecurityAgentApplicationController.php`
 - `app/Policies/SecurityAgentApplicationPolicy.php`
 - `resources/js/pages/candidatures-agents/`
-- `resources/js/pages/marketing/` (devenir-agent)
+- `resources/js/pages/marketing/carrieres/`
 
 ## Limites & dette
 
-- Pas de notification e-mail documentée comme obligatoire à chaque candidature.
+- Pas de pièce jointe CV.
+- Validation formulaires publics encore FR (dette i18n).

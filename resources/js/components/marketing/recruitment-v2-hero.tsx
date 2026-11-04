@@ -4,8 +4,10 @@ import { useTrans } from '@/hooks/use-trans';
 /** Hero commun ; la confirmation garde son unique h1 dans le message de résultat. */
 export default function RecruitmentV2Hero({
     confirmation = false,
+    offersAnchor = false,
 }: {
     confirmation?: boolean;
+    offersAnchor?: boolean;
 }) {
     const { t } = useTrans();
     const Heading = confirmation ? 'p' : 'h1';
@@ -35,8 +37,13 @@ export default function RecruitmentV2Hero({
                     {t('recruitment_v2.description')}
                 </p>
                 {!confirmation && (
-                    <a className="home-v2-button" href="#candidature">
-                        {t('recruitment_v2.apply')}
+                    <a
+                        className="home-v2-button"
+                        href={offersAnchor ? '#offres' : '#candidature'}
+                    >
+                        {offersAnchor
+                            ? t('carrieres.see_offers', 'Voir les offres')
+                            : t('recruitment_v2.apply')}
                         <ArrowRight size={17} aria-hidden="true" />
                     </a>
                 )}

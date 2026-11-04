@@ -1,6 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { Loader2, LogOut, RefreshCw } from 'lucide-react';
-import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { cn } from '@/lib/utils';
@@ -52,11 +51,13 @@ function AnimatedAppLogo({ size = 88 }: { size?: number }) {
                 className="loader-logo-glow absolute inset-4 rounded-full bg-[var(--super-securite-accent)]/25 blur-xl"
                 aria-hidden
             />
-            <div className="loader-logo-mark relative z-10 drop-shadow-lg">
-                <AppLogoIcon
+            <div className="loader-logo-mark relative z-10 overflow-hidden rounded-xl drop-shadow-lg">
+                <img
+                    src="/icon-transparent.png"
                     alt="Super Sécurité"
-                    className="rounded"
-                    style={{ width: size, height: size }}
+                    width={size}
+                    height={size}
+                    className="size-full object-cover"
                 />
             </div>
 

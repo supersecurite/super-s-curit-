@@ -198,7 +198,7 @@ for (const locale of ['fr', 'en', 'zh']) {
         'actualites',
         'conseils-securite',
         'galerie',
-        'devenir-agent',
+        'carrieres',
         'mentions-legales',
         'politique-de-confidentialite',
     ]) {

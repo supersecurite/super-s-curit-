@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\BackofficeLocaleController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\Admin\GalleryVideoController as AdminGalleryVideoController;
+use App\Http\Controllers\Admin\JobOfferController as AdminJobOfferController;
 use App\Http\Controllers\Admin\MarketingCampaignController as AdminMarketingCampaignController;
 use App\Http\Controllers\Admin\MarketingContactController as AdminMarketingContactController;
 use App\Http\Controllers\Admin\MarketingEditorImageController as AdminMarketingEditorImageController;
@@ -104,6 +105,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('backoffice.permission:agent_applications')->group(function () {
         Route::resource('candidatures-agents', AdminSecurityAgentApplicationController::class)->only(['index', 'show', 'update']);
+    });
+
+    Route::middleware('backoffice.permission:job_offers')->group(function () {
+        Route::post('offres-emploi/{offres_emploi}/toggle', [AdminJobOfferController::class, 'toggle'])
+            ->name('offres-emploi.toggle');
+        Route::resource('offres-emploi', AdminJobOfferController::class);
     });
 
     Route::middleware('backoffice.permission:partners')->group(function () {

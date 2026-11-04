@@ -7,7 +7,7 @@ import { superSecuriteImages } from '@/data/super-securite-images';
 import { useMarketingPrimaryNavLinks } from '@/data/marketing-nav';
 import { useScrollProgress } from '@/hooks/use-scroll-progress';
 import { useTrans } from '@/hooks/use-trans';
-import { index as devenirAgentIndex } from '@/routes/devenir-agent';
+import { index as carrieresIndex } from '@/routes/carrieres';
 import { home } from '@/routes';
 import { localizePath } from '@/lib/locale-url';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
@@ -177,7 +177,7 @@ export default function MarketingHeader() {
                     <MarketingLanguageSelect className="hidden md:block" />
 
                     <Link
-                        href={lp(devenirAgentIndex.url())}
+                        href={lp(carrieresIndex.url())}
                         className="marketing-cta-primary marketing-magnetic hidden shrink-0 items-center gap-2 text-sm whitespace-nowrap md:inline-flex"
                     >
                         {t('nav.join')}

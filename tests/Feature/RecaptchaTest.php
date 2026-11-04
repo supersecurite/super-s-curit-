@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\JobOffer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -51,11 +52,12 @@ test('agent application rejects missing recaptcha when enabled', function () {
         'recaptcha.secret_key' => 'test-secret',
     ]);
 
-    $response = $this->post(route('devenir-agent.store'), [
+    $offer = JobOffer::factory()->create();
+
+    $response = $this->post(route('carrieres.store', $offer), [
         'first_name' => 'Test',
         'last_name' => 'Agent',
         'phone' => '+224600000000',
-        'post' => 'agent',
         'commune_id' => '104',
         'consent' => '1',
     ]);

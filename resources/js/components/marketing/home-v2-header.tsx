@@ -152,7 +152,7 @@ export default function HomeV2Header() {
                         links={resources}
                         pathname={pathname}
                     />
-                    {link('/devenir-agent', t('footer_v2.recruitment'))}
+                    {link('/carrieres', t('footer_v2.recruitment'))}
                     {link('/contact', t('nav.contact'))}
                 </nav>
                 <div className="home-v2-header-actions">

@@ -1951,11 +1951,19 @@
             }
         ]
     },
+    "carrieres": {
+        "offers_title": "Job openings",
+        "offers_empty": "No open positions right now. Please check back soon.",
+        "apply": "Apply",
+        "see_offers": "View openings",
+        "back_to_list": "Back to openings",
+        "applying_for": "Applying for"
+    },
     "recruitment_v2": {
-        "label": "Recruitment",
+        "label": "Careers",
         "title_lead": "Join a",
         "title_accent": "committed team",
-        "description": "Your professionalism makes the difference.",
+        "description": "Grow your career in an environment that helps keep everyone safe every day.",
         "apply": "Apply now",
         "form_title": "Tell us about yourself",
         "coordinates": "Your contact details",

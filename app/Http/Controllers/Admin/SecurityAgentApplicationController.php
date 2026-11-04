@@ -6,6 +6,7 @@ use App\Enums\SecurityAgentApplicationStatus;
 use App\Enums\SecurityAgentPost;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateSecurityAgentApplicationRequest;
+use App\Models\JobOffer;
 use App\Models\SecurityAgentApplication;
 use App\Support\IndexTableSort;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,7 @@ class SecurityAgentApplicationController extends Controller
     {
         $this->authorize('viewAny', SecurityAgentApplication::class);
 
-        $query = SecurityAgentApplication::query()->with('reviewedBy');
+        $query = SecurityAgentApplication::query()->with(['reviewedBy', 'jobOffer']);
 
         if ($request->filled('status') && $request->string('status')->toString() !== 'all') {
             $query->where('status', $request->string('status')->toString());
@@ -39,6 +40,10 @@ class SecurityAgentApplicationController extends Controller
 
         if ($request->filled('post') && $request->string('post')->toString() !== 'all') {
             $query->where('post', $request->string('post')->toString());
+        }
+
+        if ($request->filled('job_offer_id') && $request->string('job_offer_id')->toString() !== 'all') {
+            $query->where('job_offer_id', $request->integer('job_offer_id'));
         }
 
         if ($request->filled('search')) {
@@ -101,6 +106,7 @@ class SecurityAgentApplicationController extends Controller
                     'search',
                     'status',
                     'post',
+                    'job_offer_id',
                     'region_id',
                     'prefecture_id',
                     'commune_id',
@@ -112,6 +118,15 @@ class SecurityAgentApplicationController extends Controller
                 ->count(),
             'statuses' => SecurityAgentApplicationStatus::options(),
             'posts' => SecurityAgentPost::options(),
+            'jobOffers' => JobOffer::query()
+                ->withTrashed()
+                ->orderBy('title')
+                ->get(['id', 'uuid', 'title', 'is_active', 'deleted_at'])
+                ->map(fn (JobOffer $offer) => [
+                    'value' => (string) $offer->id,
+                    'label' => $offer->title.($offer->trashed() ? ' (supprimée)' : ($offer->is_active ? '' : ' (inactive)')),
+                ])
+                ->all(),
         ]);
     }
 
@@ -119,7 +134,7 @@ class SecurityAgentApplicationController extends Controller
     {
         $this->authorize('view', $candidaturesAgent);
 
-        $candidaturesAgent->load('reviewedBy');
+        $candidaturesAgent->load(['reviewedBy', 'jobOffer']);
 
         return Inertia::render('candidatures-agents/show', [
             'application' => $candidaturesAgent->toAdminArray(),

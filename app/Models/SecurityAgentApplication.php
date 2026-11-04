@@ -22,6 +22,7 @@ use Illuminate\Support\Str;
     'certifications',
     'motivation',
     'post',
+    'job_offer_id',
     'region_id',
     'region_name',
     'prefecture_id',
@@ -80,6 +81,16 @@ class SecurityAgentApplication extends Model
         return $this->belongsTo(User::class, 'reviewed_by_id');
     }
 
+    /**
+     * Offre liée (inclut les offres soft-deleted pour l'historique).
+     *
+     * @return BelongsTo<JobOffer, $this>
+     */
+    public function jobOffer(): BelongsTo
+    {
+        return $this->belongsTo(JobOffer::class)->withTrashed();
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim($this->first_name.' '.$this->last_name);
@@ -105,6 +116,18 @@ class SecurityAgentApplication extends Model
             'motivation' => $this->motivation,
             'post' => $this->post?->value,
             'post_label' => $this->postLabel(),
+            'job_offer_id' => $this->job_offer_id,
+            'job_offer' => $this->jobOffer !== null
+                ? [
+                    'uuid' => $this->jobOffer->uuid,
+                    'slug' => $this->jobOffer->slug,
+                    'title' => $this->jobOffer->title,
+                    'location' => $this->jobOffer->location,
+                    'contract_type' => $this->jobOffer->contract_type,
+                    'is_active' => $this->jobOffer->is_active,
+                    'deleted' => $this->jobOffer->trashed(),
+                ]
+                : null,
             'region_id' => $this->region_id,
             'region_name' => $this->region_name,
             'prefecture_id' => $this->prefecture_id,
@@ -140,6 +163,14 @@ class SecurityAgentApplication extends Model
 
     public function postLabel(): ?string
     {
+        if ($this->relationLoaded('jobOffer') && $this->jobOffer !== null) {
+            return $this->jobOffer->title;
+        }
+
+        if ($this->job_offer_id !== null) {
+            return $this->jobOffer?->title ?? $this->post?->label();
+        }
+
         return $this->post?->label();
     }
 

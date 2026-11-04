@@ -32,7 +32,7 @@ class StoreSecurityAgentApplicationRequest extends FormRequest
             'availability' => ['nullable', 'string', Rule::in(['jour', 'nuit', '24h', 'evenementiel'])],
             'certifications' => ['nullable', 'string', 'max:2000'],
             'motivation' => ['nullable', 'string', 'max:5000'],
-            'post' => ['required', 'string', Rule::enum(SecurityAgentPost::class)],
+            'post' => ['nullable', 'string', Rule::enum(SecurityAgentPost::class)],
             'commune_id' => ['required', 'string', 'max:20'],
             'address_detail' => ['nullable', 'string', 'max:500'],
             'consent' => ['accepted'],

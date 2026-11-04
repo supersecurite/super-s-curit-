@@ -3,6 +3,7 @@
 use App\Enums\SecurityAgentApplicationStatus;
 use App\Enums\SecurityAgentPost;
 use App\Mail\SecurityAgentApplicationReceived;
+use App\Models\JobOffer;
 use App\Models\SecurityAgentApplication;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -50,7 +51,34 @@ test('admins can filter applications by post', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->has('applications.data', 1)
             ->where('applications.data.0.post', 'superviseur')
-            ->where('applications.data.0.post_label', 'Superviseur')
+            ->where('applications.data.0.post_label', SecurityAgentPost::Superviseur->label())
+        );
+});
+
+test('admins can filter applications by job offer and see offer on show', function () {
+    $admin = User::factory()->admin()->create();
+    $offer = JobOffer::factory()->create(['title' => 'Technicien vidéosurveillance']);
+    $other = JobOffer::factory()->create(['title' => 'Autre offre']);
+
+    SecurityAgentApplication::factory()->create(['job_offer_id' => $offer->id]);
+    SecurityAgentApplication::factory()->create(['job_offer_id' => $other->id]);
+
+    $this->actingAs($admin)
+        ->get(route('candidatures-agents.index', ['job_offer_id' => $offer->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('applications.data', 1)
+            ->where('applications.data.0.job_offer.title', 'Technicien vidéosurveillance')
+            ->has('jobOffers')
+        );
+
+    $application = SecurityAgentApplication::query()->where('job_offer_id', $offer->id)->firstOrFail();
+
+    $this->actingAs($admin)
+        ->get(route('candidatures-agents.show', $application))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('application.job_offer.title', 'Technicien vidéosurveillance')
         );
 });
 
@@ -114,16 +142,15 @@ test('admins can update application status and notes', function () {
 test('public submission sends notification mail', function () {
     Mail::fake();
 
-    $this->post(route('devenir-agent.store'), [
+    $offer = JobOffer::factory()->create();
+
+    $this->post(route('carrieres.store', $offer), [
         'first_name' => 'Mail',
         'last_name' => 'Test',
         'phone' => '+224612000000',
-        'post' => 'coordinateur',
-        'region_id' => '1',
-        'prefecture_id' => '10',
         'commune_id' => '104',
         'consent' => '1',
-    ])->assertRedirect(route('devenir-agent.merci'));
+    ])->assertRedirect(route('carrieres.merci'));
 
     Mail::assertSent(SecurityAgentApplicationReceived::class);
 });

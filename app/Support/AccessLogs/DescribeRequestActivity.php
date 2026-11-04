@@ -32,6 +32,7 @@ final class DescribeRequestActivity
         'partners' => ['the' => 'le partenaire', 'the_plural' => 'les partenaires'],
         'users' => ['the' => 'l\'utilisateur', 'the_plural' => 'les utilisateurs', 'person' => true],
         'candidatures-agents' => ['the' => 'la candidature agent', 'the_plural' => 'les candidatures agents'],
+        'offres-emploi' => ['the' => 'l\'offre d\'emploi', 'the_plural' => 'les offres d\'emploi'],
         'analytics' => ['the' => 'les statistiques de visites', 'the_plural' => 'les statistiques de visites'],
         'marketing-clients' => ['the' => 'le contact marketing', 'the_plural' => 'les contacts marketing', 'person' => true],
         'marketing-lists' => ['the' => 'la liste marketing', 'the_plural' => 'les listes marketing'],

@@ -5,8 +5,8 @@ namespace App\Support;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Marketing\AboutController as MarketingAboutController;
 use App\Http\Controllers\Marketing\ArticleController as MarketingArticleController;
+use App\Http\Controllers\Marketing\CareerController as MarketingCareerController;
 use App\Http\Controllers\Marketing\GalleryController as MarketingGalleryController;
-use App\Http\Controllers\Marketing\SecurityAgentApplicationController as MarketingSecurityAgentApplicationController;
 use App\Http\Controllers\Marketing\SecurityTipController as MarketingSecurityTipController;
 use App\Http\Controllers\Marketing\ServiceController;
 use App\Models\Partner;
@@ -48,11 +48,15 @@ final class RegisterMarketingPublicRoutes
             Route::get('/actualites/{article:slug}', [MarketingArticleController::class, 'show'])->name($namePrefix.'actualites.show');
             Route::get('/conseils-securite', [MarketingSecurityTipController::class, 'index'])->name($namePrefix.'conseils-securite.index');
             Route::get('/conseils-securite/{securityTip:slug}', [MarketingSecurityTipController::class, 'show'])->name($namePrefix.'conseils-securite.show');
-            Route::get('/devenir-agent', [MarketingSecurityAgentApplicationController::class, 'create'])->name($namePrefix.'devenir-agent.index');
-            Route::post('/devenir-agent', [MarketingSecurityAgentApplicationController::class, 'store'])
+            Route::get('/carrieres', [MarketingCareerController::class, 'index'])->name($namePrefix.'carrieres.index');
+            Route::get('/carrieres/merci', [MarketingCareerController::class, 'thankYou'])->name($namePrefix.'carrieres.merci');
+            Route::get('/carrieres/{jobOffer:slug}/postuler', [MarketingCareerController::class, 'apply'])
+                ->name($namePrefix.'carrieres.postuler');
+            Route::post('/carrieres/{jobOffer:slug}/postuler', [MarketingCareerController::class, 'store'])
                 ->middleware('throttle:5,1')
-                ->name($namePrefix.'devenir-agent.store');
-            Route::get('/devenir-agent/merci', [MarketingSecurityAgentApplicationController::class, 'thankYou'])->name($namePrefix.'devenir-agent.merci');
+                ->name($namePrefix.'carrieres.store');
+            Route::redirect('/devenir-agent', LocaleUrl::localizePath('/carrieres', $locale), 301);
+            Route::redirect('/devenir-agent/merci', LocaleUrl::localizePath('/carrieres/merci', $locale), 301);
             Route::inertia('/contact', 'marketing/contact')->name($namePrefix.'contact');
             Route::inertia('/politique-de-confidentialite', 'marketing/privacy')->name($namePrefix.'privacy');
             Route::inertia('/mentions-legales', 'marketing/legal')->name($namePrefix.'legal');

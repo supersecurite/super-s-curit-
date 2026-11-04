@@ -392,21 +392,21 @@ return [
             ],
         ],
         [
-            'path' => '/devenir-agent',
-            'meta_title' => 'Devenir agent de sécurité | Super Sécurité — Conakry et région',
-            'meta_description' => 'Inscrivez-vous comme agent de sécurité à Conakry et région. Rejoignez le réseau Super Sécurité pour des missions de gardiennage et surveillance.',
+            'path' => '/carrieres',
+            'meta_title' => 'Carrières | Super Sécurité — Offres d\'emploi Conakry et région',
+            'meta_description' => 'Rejoignez Super Sécurité : consultez nos offres d\'emploi et postulez comme agent, superviseur ou technicien à Conakry et en région.',
             'schema_type' => 'WebPage',
-            'changefreq' => 'monthly',
+            'changefreq' => 'weekly',
             'priority' => 0.8,
             'image' => '/web-app-manifest-512x512.png',
-            'og_image_alt' => 'Recrutement agents Super Sécurité — Conakry et région',
+            'og_image_alt' => 'Carrières Super Sécurité — Conakry et région',
             'sources' => [
-                'resources/js/pages/marketing/devenir-agent/index.tsx',
+                'resources/js/pages/marketing/carrieres/index.tsx',
                 'config/seo.php',
             ],
         ],
         [
-            'path' => '/devenir-agent/merci',
+            'path' => '/carrieres/merci',
             'meta_title' => 'Candidature envoyée | Super Sécurité — Conakry et région',
             'meta_description' => 'Merci pour votre candidature. Notre équipe RH examinera votre profil et vous recontactera.',
             'schema_type' => 'WebPage',
@@ -415,7 +415,7 @@ return [
             'priority' => 0.1,
             'image' => '/web-app-manifest-512x512.png',
             'sources' => [
-                'resources/js/pages/marketing/devenir-agent/merci.tsx',
+                'resources/js/pages/marketing/carrieres/merci.tsx',
             ],
         ],
         [

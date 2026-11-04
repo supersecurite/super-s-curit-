@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
+    Briefcase,
     Contact,
     Globe,
     Handshake,
@@ -36,6 +37,7 @@ import { index as analyticsIndex } from '@/routes/analytics';
 import { index as articlesIndex } from '@/routes/articles';
 import { index as conseilsIndex } from '@/routes/conseils';
 import { index as candidaturesAgentsIndex } from '@/routes/candidatures-agents';
+import { index as offresEmploiIndex } from '@/routes/offres-emploi';
 import { index as usersIndex } from '@/routes/users';
 import { index as partnersIndex } from '@/routes/partners';
 import { index as marketingClientsIndex } from '@/routes/marketing-clients';
@@ -195,6 +197,14 @@ function buildNavGroups(
         adminChildren.push({
             title: partnersLabel,
             href: partnersIndex.url(),
+        });
+    }
+
+    if (hasFeatureAccess(permissions, 'job_offers')) {
+        adminChildren.push({
+            title: t('nav.job_offers', "Offres d'emploi"),
+            href: offresEmploiIndex.url(),
+            icon: Briefcase,
         });
     }
 

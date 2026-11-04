@@ -31,13 +31,13 @@ return [
             'og_image_alt' => 'Super Sécurité news — Conakry',
         ],
         [
-            'path' => '/devenir-agent',
-            'meta_title' => 'Become a security guard | Super Sécurité — Conakry and region',
-            'meta_description' => 'Apply as a security guard in Conakry and region. Join the Super Sécurité network for guarding and surveillance missions.',
-            'og_image_alt' => 'Super Sécurité guard recruitment — Conakry and region',
+            'path' => '/carrieres',
+            'meta_title' => 'Careers | Super Sécurité — Job offers in Conakry and region',
+            'meta_description' => 'Join Super Sécurité: browse open roles and apply as a guard, supervisor or technician in Conakry and region.',
+            'og_image_alt' => 'Super Sécurité careers — Conakry and region',
         ],
         [
-            'path' => '/devenir-agent/merci',
+            'path' => '/carrieres/merci',
             'meta_title' => 'Application submitted | Super Sécurité — Conakry and region',
             'meta_description' => 'Thank you for your application. Our HR team will review your profile and get in touch.',
             'robots' => 'noindex, nofollow',

@@ -1955,11 +1955,19 @@
             }
         ]
     },
+    "carrieres": {
+        "offers_title": "职位空缺",
+        "offers_empty": "目前暂无开放职位，请稍后再来查看。",
+        "apply": "申请",
+        "see_offers": "查看职位",
+        "back_to_list": "返回职位列表",
+        "applying_for": "申请职位"
+    },
     "recruitment_v2": {
-        "label": "招聘",
+        "label": "职业发展",
         "title_lead": "加入一支",
         "title_accent": "敬业的团队",
-        "description": "您的专业精神，让安全更有保障。",
+        "description": "在一个为日常安全做出贡献的环境中发展您的职业生涯。",
         "apply": "提交申请",
         "form_title": "向我们介绍您自己",
         "coordinates": "联系方式",

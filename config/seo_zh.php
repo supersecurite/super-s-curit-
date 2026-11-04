@@ -45,13 +45,13 @@ return [
             'og_image_alt' => '联系我们',
         ],
         [
-            'path' => '/devenir-agent',
-            'meta_title' => '成为安保人员 | Super Sécurité',
-            'meta_description' => '在科纳克里及周边地区参与多样化任务，发展安保职业生涯。欢迎申请。',
-            'og_image_alt' => '成为安保人员',
+            'path' => '/carrieres',
+            'meta_title' => '职业发展 | Super Sécurité',
+            'meta_description' => '加入 Super Sécurité：浏览职位空缺，申请科纳克里及周边地区的安保、主管或技术岗位。',
+            'og_image_alt' => '职业发展',
         ],
         [
-            'path' => '/devenir-agent/merci',
+            'path' => '/carrieres/merci',
             'meta_title' => '申请已提交 | Super Sécurité',
             'meta_description' => '感谢您的申请。我们的人力资源团队将审核您的资料，如有适合您所在地区和经验的机会，会与您联系。',
             'og_image_alt' => '申请已提交',

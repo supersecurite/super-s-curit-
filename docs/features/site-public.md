@@ -4,7 +4,7 @@
 
 ## Vue d’ensemble
 
-Site vitrine Super Sécurité : accueil, services, à propos, galerie, actualités, conseils, contact, devenir agent, légal / privacy.
+Site vitrine Super Sécurité : accueil, services, à propos, galerie, actualités, conseils, contact, carrières (offres d’emploi), légal / privacy.
 
 **Bilingue FR (défaut) + EN** — [ADR-0005](../decisions/0005-i18n-public-url-prefix.md).
 
@@ -43,7 +43,7 @@ Visiteurs anonymes. Tracking visites actif (hors pages exclues).
 
 - Backoffice bilingue : toasts `bt()`, messages Form Requests, UI via `lang/{locale}/backoffice.json` + `useTrans` — [ADR-0006](../decisions/0006-backoffice-locale-session.md).
 - Segments d’URL encore en français sous `/en/...` (`/en/a-propos`) — hors phase 2.
-- Formulaires publics (contact, devenir agent) : messages de validation encore FR (hors périmètre BO).
+- Formulaires publics (contact, carrières) : messages de validation encore FR (hors périmètre BO).
 
 - Changement de langue principale du navigateur : la sélection précédente est invalidée à la prochaine requête. Accueil FR/EN négocié automatiquement ; pages publiques statiques redirigées lors du changement détecté. Le backoffice suit le changement en session.
 

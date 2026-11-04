@@ -156,7 +156,7 @@ export default function MarketingFooter() {
                                 </details>
                             </li>
                             <li>
-                                <Link href={lp('/devenir-agent')}>
+                                <Link href={lp('/carrieres')}>
                                     {t('footer_v2.recruitment')}
                                 </Link>
                             </li>

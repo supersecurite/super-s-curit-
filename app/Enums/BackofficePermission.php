@@ -41,6 +41,11 @@ enum BackofficePermission: string
     case AgentApplicationsView = 'agent_applications.view';
     case AgentApplicationsUpdate = 'agent_applications.update';
 
+    case JobOffersView = 'job_offers.view';
+    case JobOffersCreate = 'job_offers.create';
+    case JobOffersUpdate = 'job_offers.update';
+    case JobOffersDelete = 'job_offers.delete';
+
     case UsersView = 'users.view';
     case UsersCreate = 'users.create';
     case UsersUpdate = 'users.update';
@@ -84,6 +89,7 @@ enum BackofficePermission: string
             'analytics' => 'Analytics',
             'access_logs' => 'Journal d\'accès',
             'agent_applications' => 'Candidatures agents',
+            'job_offers' => 'Offres d\'emploi',
             'users' => 'Utilisateurs',
             'partners' => 'Partenaires',
             'marketing_clients' => 'Marketing — clients',
@@ -100,25 +106,26 @@ enum BackofficePermission: string
             self::ArticlesView, self::ConseilsView,
             self::GalleryImagesView, self::GalleryVideosView,
             self::AnalyticsView, self::AccessLogsView, self::AgentApplicationsView,
+            self::JobOffersView,
             self::UsersView, self::PartnersView,
             self::MarketingClientsView, self::MarketingCampaignsView => 'Consulter',
 
             self::ArticlesCreate, self::ConseilsCreate,
             self::GalleryImagesCreate, self::GalleryVideosCreate,
-            self::UsersCreate, self::PartnersCreate,
+            self::UsersCreate, self::PartnersCreate, self::JobOffersCreate,
             self::MarketingClientsCreate, self::MarketingCampaignsCreate => 'Créer',
 
             self::ArticlesUpdate, self::ConseilsUpdate,
             self::GalleryImagesUpdate, self::GalleryVideosUpdate,
             self::UsersUpdate, self::PartnersUpdate,
-            self::AgentApplicationsUpdate,
+            self::AgentApplicationsUpdate, self::JobOffersUpdate,
             self::MarketingClientsUpdate, self::MarketingCampaignsUpdate => 'Modifier',
 
             self::ArticlesUpdateAny, self::ConseilsUpdateAny => 'Modifier tout le contenu',
 
             self::ArticlesDelete, self::ConseilsDelete,
             self::GalleryImagesDelete, self::GalleryVideosDelete,
-            self::UsersDelete, self::PartnersDelete,
+            self::UsersDelete, self::PartnersDelete, self::JobOffersDelete,
             self::MarketingClientsDelete, self::MarketingCampaignsDelete => 'Supprimer',
 
             self::ArticlesDeleteAny, self::ConseilsDeleteAny => 'Supprimer tout le contenu',
@@ -172,6 +179,11 @@ enum BackofficePermission: string
 
             self::AgentApplicationsView => 'Voir les candidatures agents.',
             self::AgentApplicationsUpdate => 'Traiter et mettre à jour les candidatures.',
+
+            self::JobOffersView => 'Voir les offres d\'emploi Carrières.',
+            self::JobOffersCreate => 'Créer des offres d\'emploi.',
+            self::JobOffersUpdate => 'Modifier et activer/désactiver des offres d\'emploi.',
+            self::JobOffersDelete => 'Supprimer des offres d\'emploi.',
 
             self::UsersView => 'Voir la liste des utilisateurs.',
             self::UsersCreate => 'Créer de nouveaux comptes.',
@@ -258,6 +270,7 @@ enum BackofficePermission: string
             'analytics' => [self::AnalyticsView],
             'access_logs' => [self::AccessLogsView],
             'agent_applications' => self::forFeature('agent_applications'),
+            'job_offers' => self::forFeature('job_offers'),
             'users' => self::forFeature('users'),
             'partners' => self::forFeature('partners'),
             'marketing_clients' => self::forFeature('marketing_clients'),

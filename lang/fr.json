@@ -1646,7 +1646,7 @@
         "links_title": "Liens utiles",
         "services_title": "Nos services",
         "resources": "Ressources",
-        "recruitment": "Recrutement",
+        "recruitment": "Carrières",
         "privacy": "Confidentialité",
         "legal_navigation": "Informations légales",
         "rights": "© :year Super Sécurité. Tous droits réservés."
@@ -1951,11 +1951,19 @@
             }
         ]
     },
+    "carrieres": {
+        "offers_title": "Offres d'emploi",
+        "offers_empty": "Aucune offre ouverte pour le moment. Revenez bientôt.",
+        "apply": "Postuler",
+        "see_offers": "Voir les offres",
+        "back_to_list": "Retour aux offres",
+        "applying_for": "Poste visé"
+    },
     "recruitment_v2": {
-        "label": "Recrutement",
+        "label": "Carrières",
         "title_lead": "Rejoignez une",
         "title_accent": "équipe engagée",
-        "description": "Votre professionnalisme fait la différence.",
+        "description": "Développez votre carrière dans un environnement qui contribue à la sécurité de tous au quotidien.",
         "apply": "Déposer ma candidature",
         "form_title": "Présentez-nous votre profil",
         "coordinates": "Vos coordonnées",

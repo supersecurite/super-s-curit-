@@ -14,7 +14,8 @@ Gabarit commun : Vue d’ensemble → Acteurs & rôles → Fonctionnement → Fi
 
 ### Acteurs & RH
 - [`utilisateurs-roles.md`](utilisateurs-roles.md) — Comptes, rôles, permissions
-- [`candidatures-agents.md`](candidatures-agents.md) — Candidatures devenir agent
+- [`candidatures-agents.md`](candidatures-agents.md) — Candidatures liées aux offres
+- [`carrieres.md`](carrieres.md) — Offres d’emploi publiques + CRUD backoffice
 
 ### Plateforme
 - [`auth.md`](auth.md) — Fortify, 2FA, reset

@@ -11,14 +11,17 @@ import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { useTrans } from '@/hooks/use-trans';
-import { store } from '@/routes/devenir-agent';
+import { store as careersStore } from '@/routes/carrieres';
 
 type AvailabilityOption = { value: string; label: string };
-type PostOption = { value: string; label: string };
+
+type JobOfferProp = {
+    slug: string;
+    title: string;
+};
 
 type PageProps = {
     availabilityOptions: AvailabilityOption[];
-    postOptions: PostOption[];
     flash: { success?: string | null };
     recaptcha: {
         enabled: boolean;
@@ -30,22 +33,16 @@ type PageProps = {
 const fieldClasses =
     'border-super-securite-border bg-super-securite-surface-elevated text-super-securite-heading placeholder:text-super-securite-muted focus-visible:border-super-securite-accent focus-visible:ring-super-securite-accent/30';
 
-export default function SecurityAgentRegistrationForm() {
-    const { availabilityOptions, postOptions, recaptcha } =
-        usePage<PageProps>().props;
+export default function SecurityAgentRegistrationForm({
+    jobOffer,
+}: {
+    jobOffer: JobOfferProp;
+}) {
+    const { availabilityOptions, recaptcha } = usePage<PageProps>().props;
     const { t } = useTrans();
     const [communeId, setCommuneId] = useState('');
     const [recaptchaToken, setRecaptchaToken] = useState('');
     const recaptchaRef = useRef<RecaptchaFieldHandle>(null);
-
-    const localizedPostOptions = useMemo(
-        () =>
-            postOptions.map((opt) => ({
-                value: opt.value,
-                label: t(`devenir_agent.posts.${opt.value}`, opt.label),
-            })),
-        [postOptions, t],
-    );
 
     const localizedAvailabilityOptions = useMemo(
         () =>
@@ -78,13 +75,13 @@ export default function SecurityAgentRegistrationForm() {
                 </p>
 
                 <Form
-                    {...store.form()}
+                    action={careersStore.url(jobOffer.slug)}
+                    method="post"
                     resetOnSuccess={[
                         'first_name',
                         'last_name',
                         'phone',
                         'email',
-                        'post',
                         'experience_years',
                         'availability',
                         'certifications',
@@ -216,39 +213,15 @@ export default function SecurityAgentRegistrationForm() {
                                     <span>2</span>
                                     {t('recruitment_v2.profile')}
                                 </legend>
+                                <div className="grid gap-2 rounded-lg border border-super-securite-border bg-super-securite-bg/40 px-4 py-3 sm:max-w-xl">
+                                    <p className="text-xs font-semibold tracking-wide text-super-securite-muted uppercase">
+                                        {t('carrieres.applying_for', 'Poste visé')}
+                                    </p>
+                                    <p className="font-heading text-base font-semibold text-super-securite-heading">
+                                        {jobOffer.title}
+                                    </p>
+                                </div>
                                 <div className="grid gap-5 sm:grid-cols-2">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="post">
-                                            {t(
-                                                'devenir_agent.form.post',
-                                                'Poste',
-                                            )}{' '}
-                                            <span className="text-super-securite-accent">
-                                                *
-                                            </span>
-                                        </Label>
-                                        <SearchableSelect
-                                            id="post"
-                                            name="post"
-                                            options={localizedPostOptions}
-                                            placeholder={t(
-                                                'devenir_agent.form.post_placeholder',
-                                                'Sélectionner un poste...',
-                                            )}
-                                            searchPlaceholder={t(
-                                                'devenir_agent.form.post_search_placeholder',
-                                                'Rechercher un poste...',
-                                            )}
-                                            emptyMessage={t(
-                                                'devenir_agent.form.post_empty',
-                                                'Aucun poste trouvé',
-                                            )}
-                                            required
-                                            variant="underline"
-                                            triggerClassName={fieldClasses}
-                                        />
-                                        <InputError message={errors.post} />
-                                    </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="experience_years">
                                             {t(
@@ -272,35 +245,36 @@ export default function SecurityAgentRegistrationForm() {
                                             message={errors.experience_years}
                                         />
                                     </div>
-                                </div>
-
-                                <div className="grid gap-2 sm:max-w-md">
-                                    <Label htmlFor="availability">
-                                        {t(
-                                            'devenir_agent.form.availability',
-                                            'Disponibilité',
-                                        )}
-                                    </Label>
-                                    <SearchableSelect
-                                        id="availability"
-                                        name="availability"
-                                        options={localizedAvailabilityOptions}
-                                        placeholder={t(
-                                            'devenir_agent.form.availability_placeholder',
-                                            'Sélectionner...',
-                                        )}
-                                        searchPlaceholder={t(
-                                            'devenir_agent.form.availability_search_placeholder',
-                                            'Rechercher...',
-                                        )}
-                                        emptyMessage={t(
-                                            'devenir_agent.form.availability_empty',
-                                            'Aucune disponibilité trouvée',
-                                        )}
-                                        variant="underline"
-                                        triggerClassName={fieldClasses}
-                                    />
-                                    <InputError message={errors.availability} />
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="availability">
+                                            {t(
+                                                'devenir_agent.form.availability',
+                                                'Disponibilité',
+                                            )}
+                                        </Label>
+                                        <SearchableSelect
+                                            id="availability"
+                                            name="availability"
+                                            options={localizedAvailabilityOptions}
+                                            placeholder={t(
+                                                'devenir_agent.form.availability_placeholder',
+                                                'Sélectionner...',
+                                            )}
+                                            searchPlaceholder={t(
+                                                'devenir_agent.form.availability_search_placeholder',
+                                                'Rechercher...',
+                                            )}
+                                            emptyMessage={t(
+                                                'devenir_agent.form.availability_empty',
+                                                'Aucune disponibilité trouvée',
+                                            )}
+                                            variant="underline"
+                                            triggerClassName={fieldClasses}
+                                        />
+                                        <InputError
+                                            message={errors.availability}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="rounded-xl border border-super-securite-border bg-super-securite-surface/50 p-5">

@@ -25,6 +25,14 @@ type ApplicationDetail = {
     phone: string;
     email: string | null;
     post_label: string | null;
+    job_offer: {
+        uuid: string;
+        title: string;
+        location: string;
+        contract_type: string;
+        is_active: boolean;
+        deleted: boolean;
+    } | null;
     experience_years: number | null;
     availability_label: string | null;
     certifications: string | null;
@@ -127,7 +135,25 @@ export default function CandidaturesAgentsShow() {
                                 Coordonnées
                             </h2>
                             <div className="grid gap-3 text-sm">
-                                {application.post_label ? (
+                                {application.job_offer ? (
+                                    <div className="rounded-lg border bg-muted/30 p-3 text-sm">
+                                        <p className="flex items-center gap-2 font-medium">
+                                            <Briefcase className="text-muted-foreground size-4" />
+                                            {application.job_offer.title}
+                                        </p>
+                                        <p className="text-muted-foreground mt-1 pl-6">
+                                            {application.job_offer.location}
+                                            {' · '}
+                                            {application.job_offer.contract_type}
+                                            {application.job_offer.deleted
+                                                ? ' · offre supprimée'
+                                                : application.job_offer
+                                                        .is_active
+                                                  ? ''
+                                                  : ' · offre inactive'}
+                                        </p>
+                                    </div>
+                                ) : application.post_label ? (
                                     <p className="flex items-center gap-2">
                                         <Briefcase className="text-muted-foreground size-4" />
                                         <span>

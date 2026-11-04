@@ -28,6 +28,11 @@ type ApplicationRow = {
     phone: string;
     email: string | null;
     post_label: string | null;
+    job_offer: {
+        title: string;
+        location: string;
+        contract_type: string;
+    } | null;
     location_summary: string;
     status: string;
     status_label: string;
@@ -38,6 +43,7 @@ type ApplicationRow = {
 
 type StatusOption = { value: string; label: string };
 type PostOption = { value: string; label: string };
+type JobOfferOption = { value: string; label: string };
 
 type PaginatedApplications = {
     data: ApplicationRow[];
@@ -53,6 +59,7 @@ type PageProps = {
         search?: string;
         status?: string;
         post?: string;
+        job_offer_id?: string;
         region_id?: string;
         prefecture_id?: string;
         commune_id?: string;
@@ -60,6 +67,7 @@ type PageProps = {
     pendingCount: number;
     statuses: StatusOption[];
     posts: PostOption[];
+    jobOffers: JobOfferOption[];
 };
 
 function statusBadgeVariant(
@@ -79,7 +87,7 @@ function statusBadgeVariant(
 
 export default function CandidaturesAgentsIndex() {
     const { t } = useTrans();
-    const { applications, filters, pendingCount, statuses, posts } =
+    const { applications, filters, pendingCount, statuses, posts, jobOffers } =
         usePage<PageProps>().props;
 
     setLayoutProps({
@@ -143,12 +151,15 @@ export default function CandidaturesAgentsIndex() {
             },
             {
                 id: 'post',
-                header: 'Poste',
+                header: 'Offre / poste',
                 sortKey: 'post',
                 sortable: true,
                 mobileRole: 'subtitle',
                 className: 'text-muted-foreground',
-                cell: (application) => application.post_label ?? '—',
+                cell: (application) =>
+                    application.job_offer?.title ??
+                    application.post_label ??
+                    '—',
             },
             {
                 id: 'phone',
@@ -317,7 +328,44 @@ export default function CandidaturesAgentsIndex() {
                         </div>
                         <div className="min-w-0">
                             <Label className="mb-1 block text-sm">
-                                {t('applications.post_filter', 'Poste')}
+                                {t('applications.job_offer_filter', "Offre d'emploi")}
+                            </Label>
+                            <SearchableSelect
+                                options={[
+                                    {
+                                        value: 'all',
+                                        label: t(
+                                            'applications.all_job_offers',
+                                            'Toutes les offres',
+                                        ),
+                                    },
+                                    ...jobOffers.map((offer) => ({
+                                        value: offer.value,
+                                        label: offer.label,
+                                    })),
+                                ]}
+                                value={filters.job_offer_id ?? 'all'}
+                                onChange={(jobOfferId) =>
+                                    applyFilters({
+                                        job_offer_id:
+                                            jobOfferId === 'all'
+                                                ? undefined
+                                                : jobOfferId,
+                                    })
+                                }
+                                placeholder={t(
+                                    'applications.job_offer_filter',
+                                    "Offre d'emploi",
+                                )}
+                                searchPlaceholder={t(
+                                    'common.search_ellipsis',
+                                    'Rechercher…',
+                                )}
+                            />
+                        </div>
+                        <div className="min-w-0">
+                            <Label className="mb-1 block text-sm">
+                                {t('applications.post_filter', 'Poste (legacy)')}
                             </Label>
                             <SearchableSelect
                                 options={[

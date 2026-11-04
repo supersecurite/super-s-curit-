@@ -31,6 +31,7 @@ class VisitTracking
         'partners',
         'users',
         'candidatures-agents',
+        'offres-emploi',
         'analytics',
         'settings',
         'marketing-clients',
