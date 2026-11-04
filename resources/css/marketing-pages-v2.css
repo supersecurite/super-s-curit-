@@ -1,13 +1,8 @@
 /* Présentation V2 : grille éditoriale commune aux deux maquettes. */
-/* Même dégradé noir que l’accueil — pas de fond transparent. */
+/* Header noir opaque — même fond que l’accueil. */
 .home-v2-header-solid {
     margin-bottom: calc(-1 * var(--home-v2-header-height));
-    background: linear-gradient(
-        180deg,
-        rgb(0, 0, 0) 0%,
-        rgb(0, 0, 0) 55%,
-        rgba(0, 0, 0, 0.568) 100%
-    );
+    background: #000;
 }
 .home-v2-brand img {
     width: 220px;

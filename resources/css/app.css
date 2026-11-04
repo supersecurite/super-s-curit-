@@ -185,27 +185,23 @@
     --primary-400-rgb: 237 28 36;
     --primary-300-rgb: 237 28 36;
 
-    /* Boutons pleins : dégradé brillant sur le rouge thème (reflet blanc, pas autre teinte). */
+    /* Boutons pleins : dégradé rouge client (btn-devis). */
+    --btn-accent-rouge: #f50505;
     --btn-accent-shine: linear-gradient(
-        165deg,
-        rgb(255 255 255 / 0.42) 0%,
-        rgb(255 255 255 / 0.16) 16%,
-        rgb(255 255 255 / 0.04) 38%,
-        var(--super-securite-accent) 52%,
-        var(--super-securite-accent) 100%
+        170deg,
+        #fa1a14 0%,
+        #f10808 50%,
+        #d70000 100%
     );
     --btn-accent-shine-hover: linear-gradient(
-        165deg,
-        rgb(255 255 255 / 0.52) 0%,
-        rgb(255 255 255 / 0.22) 18%,
-        rgb(255 255 255 / 0.06) 40%,
-        var(--super-securite-accent) 54%,
-        var(--super-securite-accent) 100%
+        170deg,
+        #e30a0a 0%,
+        #d10000 50%,
+        #b80000 100%
     );
     --btn-accent-shine-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 0.45),
-        inset 0 -1px 0 rgb(0 0 0 / 0.12),
-        0 6px 18px rgb(237 28 36 / 0.32);
+        inset 0 1px 0 rgb(255 255 255 / 0.18),
+        inset 0 -1px 0 rgb(0 0 0 / 0.16);
 }
 
 @layer base {
@@ -275,30 +271,53 @@ html.app-page {
 
 @layer components {
     .btn-accent-shine {
-        background-color: var(--super-securite-accent);
+        --rouge: var(--btn-accent-rouge);
+        position: relative;
+        isolation: isolate;
+        background-color: #f10808;
         background-image: var(--btn-accent-shine);
-        border-color: var(--super-securite-accent);
+        border-color: transparent;
         box-shadow: var(--btn-accent-shine-shadow);
-        transition:
-            background-image 0.18s ease,
-            box-shadow 0.18s ease,
-            filter 0.18s ease;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .btn-accent-shine:hover {
-        background-image: var(--btn-accent-shine-hover);
-        filter: brightness(1.04);
-        box-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.55),
-            inset 0 -1px 0 rgb(0 0 0 / 0.1),
-            0 8px 22px rgb(237 28 36 / 0.4);
+    .btn-accent-shine::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        background: var(--btn-accent-shine-hover);
+        opacity: 0;
+        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-accent-shine:hover,
+    .btn-accent-shine:focus-visible {
+        transform: translateY(-1px);
+    }
+
+    .btn-accent-shine:hover::before,
+    .btn-accent-shine:focus-visible::before {
+        opacity: 1;
     }
 
     .btn-accent-shine:active {
-        filter: brightness(0.98);
-        box-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.3),
-            inset 0 2px 4px rgb(0 0 0 / 0.18);
+        transform: translateY(0);
+    }
+
+    .btn-accent-shine:focus-visible {
+        outline: 2px solid var(--rouge);
+        outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .btn-accent-shine,
+        .btn-accent-shine::before {
+            transition: none;
+            transform: none !important;
+        }
     }
 
     html.app-page [data-sidebar='menu-button'][data-active='true'],
@@ -590,15 +609,52 @@ html.app-page {
     }
 
     .marketing-cta-primary {
-        @apply inline-flex cursor-pointer items-center justify-center rounded-xl px-8 py-3.5 font-heading text-sm font-semibold text-white focus-visible:ring-2 focus-visible:ring-super-securite-accent focus-visible:ring-offset-2 focus-visible:ring-offset-super-securite-bg focus-visible:outline-none;
-        background-color: var(--super-securite-accent);
+        --rouge: var(--btn-accent-rouge);
+        @apply relative inline-flex cursor-pointer items-center justify-center rounded-xl px-8 py-3.5 font-heading text-sm font-semibold text-white;
+        isolation: isolate;
+        background-color: #f10808;
         background-image: var(--btn-accent-shine);
         box-shadow: var(--btn-accent-shine-shadow);
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .marketing-cta-primary:hover {
-        background-image: var(--btn-accent-shine-hover);
-        filter: brightness(1.04);
+    .marketing-cta-primary::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        background: var(--btn-accent-shine-hover);
+        opacity: 0;
+        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .marketing-cta-primary:hover,
+    .marketing-cta-primary:focus-visible {
+        transform: translateY(-1px);
+    }
+
+    .marketing-cta-primary:hover::before,
+    .marketing-cta-primary:focus-visible::before {
+        opacity: 1;
+    }
+
+    .marketing-cta-primary:active {
+        transform: translateY(0);
+    }
+
+    .marketing-cta-primary:focus-visible {
+        outline: 2px solid var(--rouge);
+        outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .marketing-cta-primary,
+        .marketing-cta-primary::before {
+            transition: none;
+            transform: none !important;
+        }
     }
 
     .marketing-cta-secondary {

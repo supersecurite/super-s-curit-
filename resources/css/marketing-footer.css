@@ -144,27 +144,52 @@
     line-height: 1.5;
 }
 .marketing-footer-quote {
+    --rouge: var(--btn-accent-rouge);
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    min-height: 42px;
-    padding: 10px 24px;
-    border-radius: 4px;
+    min-height: 48px;
+    padding: 0 28px;
+    border-radius: 6px;
     color: #fff;
-    background-color: var(--super-securite-accent);
+    background-color: #f10808;
     background-image: var(--btn-accent-shine);
     box-shadow: var(--btn-accent-shine-shadow);
     font-size: 12px;
     font-weight: 700;
-    transition:
-        background-image 0.18s ease,
-        filter 0.18s ease,
-        box-shadow 0.18s ease;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.marketing-footer-quote:hover {
-    background-image: var(--btn-accent-shine-hover);
-    filter: brightness(1.04);
+.marketing-footer-quote::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--btn-accent-shine-hover);
+    opacity: 0;
+    transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.marketing-footer-quote:hover,
+.marketing-footer-quote:focus-visible {
+    transform: translateY(-1px);
+}
+.marketing-footer-quote:hover::before,
+.marketing-footer-quote:focus-visible::before {
+    opacity: 1;
+}
+.marketing-footer-quote:active {
+    transform: translateY(0);
+}
+.marketing-footer-quote:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
 }
 .marketing-footer-columns {
     display: grid;

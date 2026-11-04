@@ -15,10 +15,10 @@ export const superSecuritePartners: readonly SuperSecuritePartner[] = [
         name: 'AKIBA FINANCE',
         logo: partnerLogo('akiba.jpeg'),
     },
-    {
-        name: 'DJOLOF CHICKEN',
-        logo: partnerLogo('Djolof.jpeg'),
-    },
+    // {
+    //     name: 'DJOLOF CHICKEN',
+    //     logo: partnerLogo('Djolof.jpeg'),
+    // },
     {
         name: 'Heroes Coffee',
         logo: partnerLogo('Heroescoffee.jpeg'),

@@ -1589,19 +1589,19 @@
         ],
         "facts": [
             {
-                "value": "+300",
+                "value": "300+",
                 "label": "Agents"
             },
             {
-                "value": "+5",
+                "value": "5+",
                 "label": "Years of experience"
             },
             {
-                "value": "+100",
+                "value": "100+",
                 "label": "Sites"
             },
             {
-                "value": "+50",
+                "value": "50+",
                 "label": "Clients"
             }
         ],
