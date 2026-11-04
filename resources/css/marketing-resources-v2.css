@@ -56,7 +56,7 @@
     color: #102337;
 }
 .resources-v2-tabs a[aria-current='page'] {
-    color: #bc141c;
+    color: var(--super-securite-accent);
     font-weight: 700;
 }
 .resources-v2-tabs a[aria-current='page']::after {
@@ -123,7 +123,7 @@
 }
 .resource-v2-card .resource-v2-category {
     border-radius: 3px;
-    background: #bd151d;
+    background: var(--super-securite-accent);
     backdrop-filter: none;
     bottom: 12px;
     left: 12px;
@@ -213,7 +213,7 @@
     display: table;
     margin-top: 24px;
     padding: 5px 10px;
-    background: #bd151d;
+    background: var(--super-securite-accent);
     border-radius: 3px;
     font-size: 12px;
 }
@@ -310,8 +310,8 @@
     padding-left: 12px;
 }
 .resource-v2-sidebar li a:hover {
-    color: #b2141b;
-    border-left-color: #b2141b;
+    color: var(--super-securite-accent);
+    border-left-color: var(--super-securite-accent);
 }
 .resource-v2-sidebar > .resource-v2-contact {
     background: #000;
@@ -353,7 +353,7 @@
     margin-top: 32px;
     padding-top: 20px;
     border-top: 1px solid #dfe5ec;
-    color: #b6141b;
+    color: var(--super-securite-accent);
 }
 .resource-v2-related {
     padding-top: 12px;
@@ -382,7 +382,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: #b6141b;
+    color: var(--super-securite-accent);
     font-size: 14px;
     font-weight: 650;
     margin-top: 16px;

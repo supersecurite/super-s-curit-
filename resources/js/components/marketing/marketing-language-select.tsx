@@ -104,11 +104,23 @@ export default function MarketingLanguageSelect({
     };
 
     return (
-        <Select value={locale} onValueChange={selectLanguage}>
+        <Select
+            value={locale}
+            onValueChange={selectLanguage}
+            onOpenChange={(open) => {
+                if (!open) {
+                    requestAnimationFrame(() => {
+                        if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                        }
+                    });
+                }
+            }}
+        >
             <SelectTrigger
                 aria-label={t('language.label', 'Langue')}
                 className={cn(
-                    'h-10 max-w-48 cursor-pointer border-super-securite-border bg-white text-super-securite-heading shadow-sm',
+                    'h-10 max-w-48 cursor-pointer border-super-securite-border bg-white text-super-securite-heading shadow-sm focus-visible:border-super-securite-border focus-visible:ring-0',
                     className,
                 )}
             >

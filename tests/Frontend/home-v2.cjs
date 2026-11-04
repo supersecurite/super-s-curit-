@@ -161,6 +161,7 @@ for (const locale of ['fr', 'en', 'zh']) {
         copy.title_accent,
         copy.quote_cta,
         copy.why_title,
+        copy.future_title,
         ...copy.values.map((x) => x.title),
     ]) {
         assert.ok(html.includes(text), locale + ': ' + text);

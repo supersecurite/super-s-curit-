@@ -162,6 +162,7 @@ Validation des trois services : 746 assertions de rendu V2 et 66 assertions de l
 ### Ressources V2 — 29 octobre 2026
 
 - Les listes d’actualités, de conseils et la galerie partagent un bandeau Ressources et une navigation entre trois rubriques. Les URLs publiques existantes et leurs préfixes de langue sont conservés ; le menu Ressources regroupe toujours ces trois entrées.
+- Gabarit commun `ResourcesV2Layout` (SEO, bandeau, onglets, conteneur) ; actualités et conseils passent par `ResourcesV2ContentIndex` + `ResourceV2Card` ; la galerie réutilise le même layout.
 - Actualités et conseils : cartes plus compactes, premier contenu mis en avant au format éditorial large, recherche, catégories, tri, pagination et partage conservés. Aucun contenu de démonstration ajouté.
 - Détails : titre et métadonnées dans un hero à deux colonnes avec le média publié, contenu intégral existant, colonne de partage/contact, sommaire généré depuis les vrais titres h2/h3 après rendu, liens de retour et contenus similaires localisés. Sur mobile, photo et titre sont séparés pour assurer la lisibilité sans voile ajouté à la photo.
 - Galerie : bandeau commun, boutons Photos/Vidéos avec état accessible, filtre de service sous forme de select avec les compteurs existants ; photos, visionneuse et vidéos publiées conservées. Le diaporama automatique du hero est remplacé par le bandeau commun.

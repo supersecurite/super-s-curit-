@@ -34,6 +34,7 @@ const images = {
     fallback:
         '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     why: '/images/super-securite/visuels-2026/home-v3-fire-training.jpg',
+    future: '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     services: {
         entreprise:
             '/images/super-securite/visuels-2026/agent-chemise-bleue-original.jpeg',
@@ -128,6 +129,7 @@ export default function MarketingHome() {
                     </ul>
                 </div>
             </section>
+
             <section
                 id="services"
                 className="home-v2-services"
@@ -164,7 +166,7 @@ export default function MarketingHome() {
                                     />
                                 </Link>
                                 <div className="home-v2-service-body">
-                                    <span className="home-v2-service-icon">
+                                    <span className="home-v2-service-icon bg-black">
                                         <Icon
                                             size={24}
                                             strokeWidth={1.6}
@@ -236,6 +238,7 @@ export default function MarketingHome() {
                     </div>
                 </div>
             </section>
+
             <section
                 id="references"
                 className="home-v2-partners"
@@ -252,14 +255,15 @@ export default function MarketingHome() {
                                 key={partner.name}
                                 src={partner.logo}
                                 alt={partner.name}
-                                width={150}
-                                height={150}
+                                width={300}
+                                height={300}
                                 loading="lazy"
                             />
                         ))}
                     </div>
                 </div>
             </section>
+
             <section
                 className="home-v2-why"
                 aria-labelledby="home-v2-why-title"
@@ -306,6 +310,24 @@ export default function MarketingHome() {
                         );
                     })}
                 </div>
+                <Link
+                    href={lp('/contact')}
+                    className="home-v2-future"
+                    aria-label={t('home_v2.future_cta')}
+                >
+                    <img
+                        src={images.future}
+                        alt=""
+                        width={1000}
+                        height={1000}
+                        loading="lazy"
+                    />
+                    <div className="home-v2-future-shade" aria-hidden="true" />
+                    <div className="home-v2-future-copy">
+                        <strong>{t('home_v2.future_title')}</strong>
+                        <span aria-hidden="true" />
+                    </div>
+                </Link>
             </section>
             <HomeV2ResourceHighlights
                 articles={featuredArticles}

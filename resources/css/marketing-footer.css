@@ -97,14 +97,15 @@
 }
 .marketing-footer-map-label {
     position: absolute;
-    top: 41%;
-    left: 38%;
+    top: 35%;
+    left: 50%;
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 17px;
     font-weight: 750;
     color: #fff;
+    transform: translate(-50%, -50%);
 }
 .marketing-footer-map-label svg {
     color: var(--super-securite-accent);
@@ -156,7 +157,7 @@
     font-weight: 700;
 }
 .marketing-footer-quote:hover {
-    background: #a91119;
+    background: var(--super-securite-accent-hover);
 }
 .marketing-footer-columns {
     display: grid;
@@ -255,7 +256,7 @@
     color: #fff;
 }
 .marketing-footer-socials a:hover {
-    color: #ff646a;
+    color: var(--super-securite-accent);
 }
 .marketing-footer-bottom {
     border-top: 1px solid rgb(255 255 255 / 0.16);
@@ -339,9 +340,13 @@
         padding: 20px;
     }
     .marketing-footer-columns {
-        grid-template-columns: 1fr;
-        gap: 26px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px 20px;
         padding-block: 30px;
+    }
+    .marketing-footer-brand,
+    .marketing-footer-contact {
+        grid-column: 1 / -1;
     }
     .marketing-footer-brand {
         padding-bottom: 24px;

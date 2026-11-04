@@ -150,14 +150,14 @@
 }
 .marketing-mobile-v2-link.is-active,
 .marketing-mobile-v2-group.is-active > .marketing-mobile-v2-link {
-    color: #ff5961;
+    color: var(--super-securite-accent);
 }
 .marketing-mobile-v2-link.is-active::before,
 .marketing-mobile-v2-group.is-active > .marketing-mobile-v2-link::before {
     background: var(--super-securite-accent);
 }
 .marketing-mobile-v2-link:hover {
-    color: #ff7b82;
+    color: var(--super-securite-accent);
 }
 .marketing-mobile-v2-group-trigger[data-state='open'] > svg {
     transform: rotate(180deg);
@@ -211,7 +211,7 @@
 }
 .marketing-mobile-v2-contact svg {
     flex: 0 0 auto;
-    color: #ff5961;
+    color: var(--super-securite-accent);
 }
 .marketing-mobile-v2-contact a:hover {
     color: #fff;
@@ -238,7 +238,7 @@
     line-height: 1.5;
 }
 .marketing-mobile-v2-quote:hover {
-    background: #a91119;
+    background: var(--super-securite-accent-hover);
 }
 .marketing-mobile-v2-quote > svg {
     flex: 0 0 auto;

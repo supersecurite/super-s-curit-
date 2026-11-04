@@ -32,6 +32,8 @@ const inertia = {
 const realComponents = new Set([
     '@/components/marketing/marketing-content-filters',
     '@/components/marketing/resources-v2-header',
+    '@/components/marketing/resources-v2-content-index',
+    '@/components/marketing/resource-v2-card',
     '@/components/marketing/resource-v2-detail',
     '@/components/lexical-editor/content-renderer',
     '@/components/marketing/contact-form',

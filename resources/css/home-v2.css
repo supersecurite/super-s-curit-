@@ -129,6 +129,13 @@
     color: #fff;
     border-color: rgb(255 255 255 / 0.25);
     background: rgb(0 0 0 / 0.4);
+    box-shadow: none;
+}
+.home-v2-language:focus,
+.home-v2-language:focus-visible {
+    border-color: rgb(255 255 255 / 0.25);
+    outline: none;
+    box-shadow: none;
 }
 .home-v2-hero {
     position: relative;
@@ -310,9 +317,8 @@
     height: 49px;
     border: 2px solid var(--super-securite-accent);
     border-radius: 50%;
-    color: #fff;
-    background: #000;
-    box-shadow: 0 0 0 3px #fff;
+    color: #000000;
+    background: var(--super-securite-accent);
 }
 .home-v2-service-body h3 {
     font-size: 14px;
@@ -435,14 +441,23 @@
     filter: grayscale(0);
     opacity: 1;
 }
+/* Grands écrans : les 3 cartes sur une seule ligne. */
 .home-v2-why {
     display: grid;
-    grid-template-columns: 1.3fr 1.15fr 0.65fr;
-    min-height: 300px;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.2fr) minmax(0, 0.7fr);
+    gap: 14px;
+    min-height: 320px;
+    margin: 0 4% 40px;
+}
+.home-v2-why-story,
+.home-v2-values,
+.home-v2-future {
+    border-radius: 8px;
+    overflow: hidden;
 }
 .home-v2-why-story {
     position: relative;
-    min-height: 300px;
+    min-height: 320px;
     overflow: hidden;
     isolation: isolate;
     color: #fff;
@@ -468,7 +483,7 @@
     );
 }
 .home-v2-why-copy {
-    padding: 52px 32% 45px 9%;
+    padding: 48px 28% 42px 8%;
 }
 .home-v2-why-copy h2 {
     color: #fff;
@@ -491,8 +506,10 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-content: center;
-    gap: 42px 22px;
+    gap: 36px 22px;
     padding: 40px 28px;
+    background: #fff;
+    border: 1px solid #e7ebf0;
 }
 .home-v2-value {
     display: flex;
@@ -506,6 +523,7 @@
     height: 46px;
     flex: 0 0 auto;
     border-radius: 50%;
+    border: 1.5px solid var(--super-securite-accent);
     color: var(--super-securite-accent);
     background: #000;
 }
@@ -523,11 +541,12 @@
 .home-v2-future {
     position: relative;
     display: flex;
-    align-items: center;
-    margin: 16px 16px 16px 0;
-    border-radius: 6px;
-    overflow: hidden;
+    align-items: flex-end;
+    min-width: 0;
+    width: 100%;
+    min-height: 320px;
     color: #fff;
+    text-decoration: none;
     isolation: isolate;
 }
 .home-v2-future > img {
@@ -537,34 +556,35 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 40%;
 }
 .home-v2-future-shade {
     position: absolute;
     inset: 0;
     z-index: -2;
-    background: linear-gradient(90deg, #000000cc, #0000004d);
+    background: linear-gradient(
+        180deg,
+        rgb(0 0 0 / 0.35) 0%,
+        rgb(0 0 0 / 0.72) 55%,
+        rgb(0 0 0 / 0.88) 100%
+    );
 }
 .home-v2-future-copy {
-    padding: 30px;
+    padding: 28px 24px 32px;
 }
 .home-v2-future-copy > strong {
     display: block;
-    font-size: 27px;
-    line-height: 1.08;
+    font-size: clamp(22px, 1.8vw, 28px);
+    line-height: 1.12;
     letter-spacing: -0.025em;
     font-weight: 750;
 }
 .home-v2-future-copy > span {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin-top: 26px;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 650;
-}
-.home-v2-future-copy > span svg {
-    color: var(--super-securite-accent);
+    display: block;
+    width: 42px;
+    height: 3px;
+    margin-top: 18px;
+    background: var(--super-securite-accent);
 }
 .home-v2-editorial {
     max-width: 1440px;
@@ -597,25 +617,49 @@
         grid-template-columns: repeat(4, minmax(0, 1fr));
         padding: 22px 30px;
     }
+}
+/* Écrans moyens : 2 premières cartes sur une ligne, la 3ᵉ en pleine largeur. */
+@media (max-width: 1399px) and (min-width: 768px) {
     .home-v2-why {
-        grid-template-columns: 1.15fr 1.2fr;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.1fr);
+        grid-template-areas:
+            'story values'
+            'future future';
+    }
+    .home-v2-why-story {
+        grid-area: story;
+    }
+    .home-v2-values {
+        grid-area: values;
     }
     .home-v2-future {
-        grid-column: 1 / -1;
-        min-height: 160px;
-        margin: 0 4% 24px;
+        grid-area: future;
+        width: 100%;
+        min-height: 180px;
+        align-items: center;
+    }
+    .home-v2-future-shade {
+        background: linear-gradient(
+            90deg,
+            rgb(0 0 0 / 0.82) 0%,
+            rgb(0 0 0 / 0.55) 55%,
+            rgb(0 0 0 / 0.35) 100%
+        );
     }
     .home-v2-future-copy {
         display: flex;
         align-items: center;
-        gap: 50px;
+        gap: 28px;
         width: 100%;
+        padding: 28px 32px;
     }
     .home-v2-future-copy > strong {
-        max-width: 480px;
+        max-width: 520px;
     }
     .home-v2-future-copy > span {
-        margin: 0;
+        width: 42px;
+        margin-top: 0;
+        flex: 0 0 auto;
     }
 }
 @media (max-width: 767px) {
@@ -738,28 +782,49 @@
         height: 90px;
     }
     .home-v2-why {
-        display: block;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'story'
+            'values'
+            'future';
+        gap: 12px;
+        margin-inline: 5%;
+        margin-bottom: 32px;
+    }
+    .home-v2-why-story {
+        grid-area: story;
+        min-height: 260px;
     }
     .home-v2-why-copy {
-        padding: 45px 30% 45px 5%;
+        padding: 42px 28% 40px 6%;
     }
     .home-v2-values {
-        gap: 30px 20px;
-        padding: 34px 5%;
+        grid-area: values;
+        gap: 28px 18px;
+        padding: 32px 6%;
     }
     .home-v2-future {
-        min-height: 230px;
-        margin: 0 4% 24px;
+        grid-area: future;
+        min-height: 260px;
+        align-items: flex-end;
+    }
+    .home-v2-future-shade {
+        background: linear-gradient(
+            180deg,
+            rgb(0 0 0 / 0.3) 0%,
+            rgb(0 0 0 / 0.78) 100%
+        );
     }
     .home-v2-future-copy {
         display: block;
-        padding: 28px;
+        padding: 28px 24px;
     }
     .home-v2-future-copy > strong {
-        max-width: 260px;
+        max-width: 280px;
     }
     .home-v2-future-copy > span {
-        margin-top: 24px;
+        margin-top: 16px;
     }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -788,7 +853,7 @@
     background: rgb(255 255 255 / 0.12);
 }
 .home-v2-text-link {
-    color: var(--super-securite-accent-hover);
+    color: var(--super-securite-accent);
 }
 .home-v2-value > div,
 .home-v2-fact > div {

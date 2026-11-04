@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react';
-import { ArrowDownUp, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { SearchableSelect } from '@/components/ui/searchable-select';
 import { useTrans as useUiTranslations } from '@/hooks/use-trans';
 
@@ -92,39 +92,36 @@ export default function MarketingContentFilters({
                     )}
                     triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 h-auto"
                 />
-                <div className="relative min-w-[12rem]">
-                    <ArrowDownUp className="pointer-events-none absolute top-1/2 left-4 z-10 size-4 -translate-y-1/2 text-super-securite-muted" />
-                    <SearchableSelect
-                        className="pl-7"
-                        options={SORT_OPTIONS.map((option, index) => ({
-                            value: option.value,
-                            label: uiText(
-                                [
-                                    'ui.newest',
-                                    'ui.oldest',
-                                    'ui.most_viewed',
-                                    'ui.least_viewed',
-                                ][index],
-                                option.label,
-                            ),
-                        }))}
-                        value={currentSortValue(filters)}
-                        onChange={(value) => {
-                            const [sort_by, sort_direction] = value.split(':');
+                <SearchableSelect
+                    className="min-w-[12rem]"
+                    options={SORT_OPTIONS.map((option, index) => ({
+                        value: option.value,
+                        label: uiText(
+                            [
+                                'ui.newest',
+                                'ui.oldest',
+                                'ui.most_viewed',
+                                'ui.least_viewed',
+                            ][index],
+                            option.label,
+                        ),
+                    }))}
+                    value={currentSortValue(filters)}
+                    onChange={(value) => {
+                        const [sort_by, sort_direction] = value.split(':');
 
-                            applyFilters({ sort_by, sort_direction });
-                        }}
-                        placeholder={uiText(
-                            'ui.components.text_cdcede56427e',
-                            'Trier par',
-                        )}
-                        searchPlaceholder={uiText(
-                            'ui.components.text_8984247e3f42',
-                            'Rechercher...',
-                        )}
-                        triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 pl-11 h-auto"
-                    />
-                </div>
+                        applyFilters({ sort_by, sort_direction });
+                    }}
+                    placeholder={uiText(
+                        'ui.components.text_cdcede56427e',
+                        'Trier par',
+                    )}
+                    searchPlaceholder={uiText(
+                        'ui.components.text_8984247e3f42',
+                        'Rechercher...',
+                    )}
+                    triggerClassName="rounded-xl border-super-securite-border bg-white/70 py-3 h-auto"
+                />
             </div>
         </div>
     );

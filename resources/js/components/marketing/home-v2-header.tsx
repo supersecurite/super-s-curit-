@@ -32,7 +32,17 @@ function DesktopNavGroup({
     );
 
     return (
-        <DropdownMenu>
+        <DropdownMenu
+            onOpenChange={(open) => {
+                if (!open) {
+                    requestAnimationFrame(() => {
+                        if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                        }
+                    });
+                }
+            }}
+        >
             <DropdownMenuTrigger
                 className={'home-v2-nav-link' + (active ? ' is-active' : '')}
             >
