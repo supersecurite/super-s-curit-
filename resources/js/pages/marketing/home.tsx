@@ -121,7 +121,6 @@ export default function MarketingHome() {
                                     />
                                     <div>
                                         <span>{pillar.title}</span>
-                                        <small>{pillar.description}</small>
                                     </div>
                                 </li>
                             );
