@@ -51,7 +51,20 @@ function DesktopNavGroup({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="home-v2-dropdown" sideOffset={14}>
                 {links.map((link) => (
-                    <DropdownMenuItem key={link.href} asChild>
+                    <DropdownMenuItem
+                        key={link.href}
+                        asChild
+                        onSelect={() => {
+                            requestAnimationFrame(() => {
+                                if (
+                                    document.activeElement instanceof
+                                    HTMLElement
+                                ) {
+                                    document.activeElement.blur();
+                                }
+                            });
+                        }}
+                    >
                         <Link
                             href={link.href}
                             className="home-v2-dropdown-item"

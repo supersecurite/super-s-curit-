@@ -231,14 +231,21 @@
     gap: 16px;
     padding: 12px 16px;
     border-radius: 4px;
-    background: var(--super-securite-accent-hover);
+    background-color: var(--super-securite-accent);
+    background-image: var(--btn-accent-shine);
+    box-shadow: var(--btn-accent-shine-shadow);
     color: #fff;
     font-size: 14px;
     font-weight: 700;
     line-height: 1.5;
+    transition:
+        background-image 0.18s ease,
+        filter 0.18s ease,
+        box-shadow 0.18s ease;
 }
 .marketing-mobile-v2-quote:hover {
-    background: var(--super-securite-accent-hover);
+    background-image: var(--btn-accent-shine-hover);
+    filter: brightness(1.04);
 }
 .marketing-mobile-v2-quote > svg {
     flex: 0 0 auto;

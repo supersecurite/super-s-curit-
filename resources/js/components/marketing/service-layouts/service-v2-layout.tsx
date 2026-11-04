@@ -176,14 +176,16 @@ export default function ServiceV2Layout({
             </section>
             <section className="enterprise-v2-perimeter">
                 <div className="about-v2-container">
-                    <div className="enterprise-v2-section-heading">
+                    <header className="enterprise-v2-section-heading">
                         <h2 className="enterprise-v2-heading">
                             {serviceId === 'entreprise'
                                 ? t('enterprise_v2.perimeter')
                                 : content.sectionsTitle}
                         </h2>
-                        <p>{content.intro[0]}</p>
-                    </div>
+                        <p className="enterprise-v2-section-lead">
+                            {content.intro[0]}
+                        </p>
+                    </header>
                     <div className="enterprise-v2-service-grid">
                         {content.sections.map((item, index) => {
                             const Icon =
@@ -191,15 +193,14 @@ export default function ServiceV2Layout({
 
                             return (
                                 <article key={item.title}>
-                                    <Icon
-                                        size={40}
-                                        strokeWidth={1.6}
+                                    <span
+                                        className="enterprise-v2-service-icon"
                                         aria-hidden="true"
-                                    />
-                                    <div>
-                                        <h3>{item.title}</h3>
-                                        <p>{item.description}</p>
-                                    </div>
+                                    >
+                                        <Icon size={28} strokeWidth={1.6} />
+                                    </span>
+                                    <h3>{item.title}</h3>
+                                    <p>{item.description}</p>
                                 </article>
                             );
                         })}
@@ -207,7 +208,7 @@ export default function ServiceV2Layout({
                 </div>
             </section>
             <section className="enterprise-v2-supervision">
-                <div className="about-v2-container enterprise-v2-supervision-inner">
+                <div className="enterprise-v2-supervision-inner">
                     <img
                         src={assets.band}
                         alt={text('supervision_alt')}

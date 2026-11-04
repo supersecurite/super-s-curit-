@@ -30,7 +30,7 @@ const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_SURFACE_CLASSNAME =
-  "relative flex h-full w-full flex-col overflow-hidden text-white bg-gradient-to-b from-[color:var(--primary-800)] via-[color:var(--primary-700)] to-[color:var(--primary-800)] group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-white/10 group-data-[variant=floating]:shadow-2xl group-data-[variant=floating]:shadow-primary/25 group-data-[variant=inset]:rounded-2xl group-data-[variant=inset]:border group-data-[variant=inset]:border-white/10 group-data-[variant=inset]:shadow-xl group-data-[variant=inset]:shadow-primary/25 group-data-[variant=inset]:backdrop-blur-xl"
+  "relative flex h-full w-full flex-col overflow-hidden bg-black text-white group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-white/10 group-data-[variant=floating]:shadow-2xl group-data-[variant=floating]:shadow-black/40 group-data-[variant=inset]:rounded-2xl group-data-[variant=inset]:border group-data-[variant=inset]:border-white/10 group-data-[variant=inset]:shadow-xl group-data-[variant=inset]:shadow-black/40 group-data-[variant=inset]:backdrop-blur-xl"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
@@ -173,8 +173,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          "flex h-full w-(--sidebar-width) flex-col border border-white/10 text-white shadow-xl",
-          "bg-gradient-to-b from-[color:var(--primary-800)] via-[color:var(--primary-700)] to-[color:var(--primary-800)]",
+          "flex h-full w-(--sidebar-width) flex-col border border-white/10 bg-black text-white shadow-xl",
           className
         )}
         {...props}
@@ -195,7 +194,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) border-white/10 bg-gradient-to-b from-[color:var(--primary-800)] via-[color:var(--primary-700)] to-[color:var(--primary-800)] p-0 text-white [&>button]:hidden"
+          className="w-(--sidebar-width) border-white/10 bg-black p-0 text-white [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -369,7 +368,7 @@ function SidebarSeparator({
     <Separator
       data-slot="sidebar-separator"
       data-sidebar="separator"
-      className={cn("bg-gradient-to-r from-transparent via-[color:var(--primary-400)]/30 to-transparent mx-2 w-auto h-px", className)}
+      className={cn("bg-gradient-to-r from-transparent via-white/30 to-transparent mx-2 w-auto h-px", className)}
       {...props}
     />
   )
@@ -381,7 +380,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb-[color:var(--primary-400)]/20 scrollbar-track-transparent hover:scrollbar-thumb-[color:var(--primary-400)]/30 group-data-[collapsible=icon]:overflow-hidden",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30 group-data-[collapsible=icon]:overflow-hidden",
         className
       )}
       {...props}
@@ -650,7 +649,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        "border-[color:var(--primary-400)]/20 mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
+        "border-white/20 mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
         "group-data-[collapsible=icon]:hidden",
         className
       )}

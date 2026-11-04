@@ -161,6 +161,8 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 - 29 octobre 2026 — V2 : Ressources (listes actualités/conseils, deux pages de lecture et galerie) adaptées aux maquettes 07 à 11, navigation commune, filtres existants, partage, sommaire réel et interface FR/EN/zh.
 
 - 4 novembre 2026 — Ressources V2 : gabarit commun `ResourcesV2Layout` pour actualités, conseils et galerie ; listes éditoriales via `ResourcesV2ContentIndex`.
+- 4 novembre 2026 — Couleur : un seul rouge thème `#ed1c24` (échelle `primary-*` et hover alignés) ; sidebar backoffice en noir.
+- 4 novembre 2026 — Typographie : Montserrat unifiée sur tout le site (public + backoffice) ; DM Sans / Space Grotesk retirés.
 - 1 novembre 2026 — Site public : police Montserrat pour le texte, les titres et la navigation.
 - 30 octobre 2026 — V2 : page Contact adaptée à la maquette 14 (coordonnées, devis, carte, processus, FAQ), navigation V2, FR/EN/zh.
 

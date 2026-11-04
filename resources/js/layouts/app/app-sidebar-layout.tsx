@@ -31,7 +31,7 @@ export default function AppSidebarLayout({
                     className="flex min-h-0 flex-col overflow-x-hidden"
                 >
                     <div
-                        className="h-1.5 shrink-0 bg-gradient-to-r from-primary via-primary/80 to-primary/60 md:rounded-t-2xl"
+                        className="h-1.5 shrink-0 bg-primary md:rounded-t-2xl"
                         aria-hidden
                     />
                     <AppSidebarHeader />

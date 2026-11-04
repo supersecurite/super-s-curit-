@@ -10,8 +10,11 @@
 .contact-v2-hero {
     position: relative;
     min-height: 370px;
+    padding-top: var(--home-v2-header-height, 88px);
     background: #000;
     color: #fff;
+    isolation: isolate;
+    overflow: hidden;
 }
 .contact-v2-hero > img {
     position: absolute;
@@ -20,6 +23,21 @@
     height: 100%;
     object-fit: cover;
     object-position: center 30%;
+    z-index: -2;
+}
+.contact-v2-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+        100deg,
+        rgb(0 0 0 / 0.88) 0%,
+        rgb(0 0 0 / 0.55) 42%,
+        rgb(0 0 0 / 0.18) 72%,
+        rgb(0 0 0 / 0.05) 100%
+    );
 }
 .contact-v2-hero > div {
     position: relative;
@@ -252,10 +270,27 @@
 .contact-v2-faq > h2 {
     margin-bottom: 22px;
 }
+.contact-v2-faq-group + .contact-v2-faq-group {
+    margin-top: 8px;
+}
+.contact-v2-faq-separator {
+    height: 2px;
+    margin: 28px 0 18px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        var(--super-securite-accent) 0%,
+        rgb(237 28 36 / 0.35) 42%,
+        rgb(237 28 36 / 0.08) 100%
+    );
+}
 .contact-v2-faq h3 {
-    margin: 22px 0 12px;
+    margin: 0 0 12px;
+    padding-left: 12px;
+    border-left: 3px solid var(--super-securite-accent);
     font-size: 18px;
     font-weight: 750;
+    color: var(--super-securite-heading);
 }
 .contact-v2-faq-grid {
     display: grid;
@@ -312,11 +347,17 @@
 }
 @media (max-width: 767px) {
     .contact-v2-hero {
-        padding-top: 240px;
+        padding-top: calc(var(--home-v2-header-height, 72px) + 240px);
     }
     .contact-v2-hero > img {
-        height: 240px;
+        top: 0;
+        bottom: auto;
+        height: calc(var(--home-v2-header-height, 72px) + 240px);
         object-position: 72% center;
+    }
+    .contact-v2-hero::after {
+        bottom: auto;
+        height: calc(var(--home-v2-header-height, 72px) + 240px);
     }
     .contact-v2-hero > div {
         padding-top: 28px;

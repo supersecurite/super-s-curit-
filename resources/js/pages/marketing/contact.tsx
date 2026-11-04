@@ -180,8 +180,14 @@ export default function MarketingContact() {
 
             <section id="faq" className="contact-v2-faq contact-v2-container">
                 <h2>{t('contact.faq_title')}</h2>
-                {faqGroups.map((group) => (
-                    <div key={group.title}>
+                {faqGroups.map((group, index) => (
+                    <div className="contact-v2-faq-group" key={group.title}>
+                        {index > 0 ? (
+                            <div
+                                className="contact-v2-faq-separator"
+                                aria-hidden="true"
+                            />
+                        ) : null}
                         <h3>{group.title}</h3>
                         <div className="contact-v2-faq-grid">
                             {group.faqs.map((faq) => (

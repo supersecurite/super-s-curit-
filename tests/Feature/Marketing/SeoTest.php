@@ -162,11 +162,19 @@ test('contact page structured data includes faq and contact page type', function
 test('map embed url uses coordinates to display office marker', function () {
     $lat = config('super-securite.map.latitude');
     $lng = config('super-securite.map.longitude');
+    $address = (string) config('super-securite.address');
 
     expect(BusinessLocation::embedUrl())
+        ->toContain('q=')
         ->toContain($lat)
         ->toContain($lng)
-        ->toContain('output=embed');
+        ->toContain('output=embed')
+        ->toContain(rawurlencode($address));
+
+    expect(BusinessLocation::directionsUrl())
+        ->toContain('query=')
+        ->toContain($lat)
+        ->toContain($lng);
 });
 
 test('contact page includes map section and local seo meta', function () {

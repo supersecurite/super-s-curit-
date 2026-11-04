@@ -1589,20 +1589,20 @@
         ],
         "facts": [
             {
-                "value": "24/7",
-                "label": "Présence et disponibilité"
+                "value": "+300",
+                "label": "Agents"
             },
             {
-                "value": "4",
-                "label": "Domaines d’intervention"
+                "value": "+5",
+                "label": "Ans d'expérience"
             },
             {
-                "value": "Guinée",
-                "label": "Expertise du terrain"
+                "value": "+100",
+                "label": "Sites"
             },
             {
-                "value": "Sur mesure",
-                "label": "Solutions de sécurité"
+                "value": "+50",
+                "label": "Clients"
             }
         ],
         "why_label": "Pourquoi nous choisir",
@@ -1619,7 +1619,7 @@
             },
             {
                 "title": "Technologie",
-                "description": "Des outils modernes et un suivi transparent"
+                "description": "Des solutions modernes et évolutives"
             },
             {
                 "title": "Engagement",

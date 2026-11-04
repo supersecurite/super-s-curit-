@@ -2,16 +2,14 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     ArrowRight,
     Building2,
+    Cctv,
     Clock3,
     Factory,
     Handshake,
-    MapPin,
-    MonitorCheck,
-    Settings2,
+    HardHat,
     ShieldCheck,
     TrendingUp,
     Users,
-    Zap,
 } from 'lucide-react';
 import HomeV2ResourceHighlights from '@/components/marketing/home-v2-resource-highlights';
 import SeoHead from '@/components/marketing/seo-head';
@@ -33,7 +31,7 @@ const images = {
     hero: '/images/super-securite/visuels-2026/noir/home-v2-hero-daylight-shaded.jpg',
     fallback:
         '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
-    why: '/images/super-securite/visuels-2026/home-v3-fire-training.jpg',
+    why: '/images/super-securite/agents.jpeg',
     future: '/images/super-securite/zone-miniere-chargeuse-camion-benne-terre-rouge.jpeg',
     services: {
         entreprise:
@@ -61,8 +59,8 @@ export default function MarketingHome() {
     const values = tNode<CopyItem[]>('home_v2.values', []);
     const partnerList = partners.length ? partners : superSecuritePartners;
     const pillarIcons = [ShieldCheck, Users, Factory, TrendingUp];
-    const factIcons = [Clock3, Building2, MapPin, Settings2];
-    const valueIcons = [ShieldCheck, Zap, MonitorCheck, Handshake];
+    const factIcons = [Users, HardHat, Building2, Handshake];
+    const valueIcons = [ShieldCheck, Clock3, Cctv, Handshake];
 
     return (
         <div className="home-v2">
@@ -108,7 +106,7 @@ export default function MarketingHome() {
                             </Link>
                         </div>
                     </div>
-                    <ul className="home-v2-pillars rounded-lg">
+                    <ul className="home-v2-pillars">
                         {pillars.map((pillar, index) => {
                             const Icon = pillarIcons[index];
 
@@ -165,7 +163,7 @@ export default function MarketingHome() {
                                     />
                                 </Link>
                                 <div className="home-v2-service-body">
-                                    <span className="home-v2-service-icon bg-black">
+                                    <span className="home-v2-service-icon">
                                         <Icon
                                             size={24}
                                             strokeWidth={1.6}
@@ -254,6 +252,7 @@ export default function MarketingHome() {
                                 key={partner.name}
                                 src={partner.logo}
                                 alt={partner.name}
+                                title={partner.name}
                                 width={300}
                                 height={300}
                                 loading="lazy"

@@ -1589,20 +1589,20 @@
         ],
         "facts": [
             {
-                "value": "24/7",
-                "label": "Presence and availability"
+                "value": "+300",
+                "label": "Agents"
             },
             {
-                "value": "4",
-                "label": "Areas of expertise"
+                "value": "+5",
+                "label": "Years of experience"
             },
             {
-                "value": "Guinea",
-                "label": "Local expertise"
+                "value": "+100",
+                "label": "Sites"
             },
             {
-                "value": "Tailored",
-                "label": "Security solutions"
+                "value": "+50",
+                "label": "Clients"
             }
         ],
         "why_label": "Why choose us",
@@ -1619,7 +1619,7 @@
             },
             {
                 "title": "Technology",
-                "description": "Modern tools and transparent monitoring"
+                "description": "Modern and scalable solutions"
             },
             {
                 "title": "Commitment",
@@ -1923,8 +1923,8 @@
     },
     "contact_v2": {
         "label": "Contact",
-        "title_lead": "Let's talk about your",
-        "title_accent": "security",
+        "title_lead": "Let's talk about",
+        "title_accent": "your security",
         "description": "Our team helps you define what your site needs.",
         "coordinates_title": "Our details",
         "hours": "24/7",

@@ -16,12 +16,17 @@ final class BusinessLocation
         ];
     }
 
+    /**
+     * iframe Maps : `q=` place le marqueur (contrairement à `ll=` qui ne fait que centrer).
+     */
     public static function embedUrl(): string
     {
         $coordinates = self::coordinates();
         $latLng = $coordinates['latitude'].','.$coordinates['longitude'];
+        $address = trim((string) config('super-securite.address'));
+        $query = rawurlencode($address !== '' ? $address.' @'.$latLng : $latLng);
 
-        return 'https://maps.google.com/maps?ll='.$latLng
+        return 'https://maps.google.com/maps?q='.$query
             .'&hl=fr&z='.$coordinates['zoom']
             .'&output=embed';
     }

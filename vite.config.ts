@@ -3,7 +3,7 @@ import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
-import { bunny, local } from 'laravel-vite-plugin/fonts';
+import { local } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ command }) => ({
@@ -17,14 +17,6 @@ export default defineConfig(({ command }) => ({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
             refresh: true,
             fonts: [
-                bunny('DM Sans', {
-                    weights: [400, 500, 600],
-                    display: 'swap',
-                }),
-                bunny('Space Grotesk', {
-                    weights: [600, 700],
-                    display: 'swap',
-                }),
                 local('Montserrat', {
                     variants: [400, 500, 600, 700, 800].map((weight) => ({
                         src: `resources/fonts/montserrat/montserrat-latin-${weight}-normal.woff2`,
