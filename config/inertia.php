@@ -16,8 +16,9 @@ return [
     */
 
     'ssr' => [
-        'enabled' => true,
-        'url' => 'http://127.0.0.1:13714',
+        // Désactivé en local par défaut : le warm-up Vite SSR timeout pendant optimizeDeps.
+        'enabled' => (bool) env('INERTIA_SSR_ENABLED', env('APP_ENV') !== 'local'),
+        'url' => env('INERTIA_SSR_URL', 'http://127.0.0.1:13714'),
         // 'bundle' => base_path('bootstrap/ssr/ssr.mjs'),
 
     ],

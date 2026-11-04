@@ -107,7 +107,7 @@ export default function MarketingHome() {
                             </Link>
                         </div>
                     </div>
-                    <ul className="home-v2-pillars">
+                    <ul className="home-v2-pillars rounded-lg">
                         {pillars.map((pillar, index) => {
                             const Icon = pillarIcons[index];
 

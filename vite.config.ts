@@ -6,7 +6,12 @@ import laravel from 'laravel-vite-plugin';
 import { bunny, local } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+    server: {
+        host: '127.0.0.1',
+        port: 5173,
+        strictPort: true,
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
@@ -29,7 +34,10 @@ export default defineConfig({
                 }),
             ],
         }),
-        inertia(),
+        // En `vite` (serve), le warm-up SSR démarre avant optimizeDeps et expire à 60s sur Windows.
+        inertia({
+            ssr: command === 'serve' ? false : undefined,
+        }),
         react({
             babel: {
                 plugins: ['babel-plugin-react-compiler'],
@@ -65,4 +73,4 @@ export default defineConfig({
             },
         },
     },
-});
+}));
