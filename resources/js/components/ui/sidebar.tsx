@@ -30,7 +30,7 @@ const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_SURFACE_CLASSNAME =
-  "relative flex h-full w-full flex-col overflow-hidden bg-black text-white group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-white/10 group-data-[variant=floating]:shadow-2xl group-data-[variant=floating]:shadow-black/40 group-data-[variant=inset]:rounded-2xl group-data-[variant=inset]:border group-data-[variant=inset]:border-white/10 group-data-[variant=inset]:shadow-xl group-data-[variant=inset]:shadow-black/40 group-data-[variant=inset]:backdrop-blur-xl"
+  "admin-sidebar-surface relative flex h-full w-full flex-col overflow-hidden text-white group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-white/10 group-data-[variant=floating]:shadow-2xl group-data-[variant=floating]:shadow-black/40 group-data-[variant=inset]:rounded-2xl group-data-[variant=inset]:border group-data-[variant=inset]:border-white/10 group-data-[variant=inset]:shadow-xl group-data-[variant=inset]:shadow-black/40 group-data-[variant=inset]:backdrop-blur-xl"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
@@ -173,7 +173,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          "flex h-full w-(--sidebar-width) flex-col border border-white/10 bg-black text-white shadow-xl",
+          "admin-sidebar-surface flex h-full w-(--sidebar-width) flex-col border border-white/10 text-white shadow-xl",
           className
         )}
         {...props}
@@ -194,7 +194,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) border-white/10 bg-black p-0 text-white [&>button]:hidden"
+          className="admin-sidebar-surface w-(--sidebar-width) border-white/10 p-0 text-white [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,

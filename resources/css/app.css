@@ -212,7 +212,7 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
-
+    
     * {
         @apply border-border;
     }
@@ -257,8 +257,8 @@ html.app-page {
     --border: var(--super-securite-border);
     --input: var(--super-securite-border);
     --ring: var(--super-securite-accent);
-    /* Sidebar noir thème — pas un rouge assombri. */
-    --sidebar: #000000;
+    /* Sidebar : dégradé rouge des boutons (voir .admin-sidebar-surface). */
+    --sidebar: #f10808;
     --sidebar-foreground: #ffffff;
     --sidebar-primary: #ffffff;
     --sidebar-primary-foreground: #000000;
@@ -270,6 +270,12 @@ html.app-page {
 }
 
 @layer components {
+    .admin-sidebar-surface {
+        background-color: #f10808;
+        background-image: var(--btn-accent-shine);
+        color: #fff;
+    }
+
     .btn-accent-shine {
         --rouge: var(--btn-accent-rouge);
         position: relative;
@@ -322,7 +328,7 @@ html.app-page {
 
     html.app-page [data-sidebar='menu-button'][data-active='true'],
     html.app-page [data-sidebar='menu-sub-button'][data-active='true'] {
-        background: rgba(3, 0, 0, 0.664);
+        background: rgb(0 0 0 / 0.22);
         color: #ffffff;
         box-shadow: inset 4px 0 0 #ffffff;
     }
