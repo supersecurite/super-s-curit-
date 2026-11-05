@@ -10,7 +10,6 @@
 .contact-v2-hero {
     position: relative;
     min-height: 370px;
-    padding-top: var(--home-v2-header-height, 88px);
     background: #000;
     color: #fff;
     isolation: isolate;
@@ -347,17 +346,17 @@
 }
 @media (max-width: 767px) {
     .contact-v2-hero {
-        padding-top: calc(var(--home-v2-header-height, 72px) + 240px);
+        padding-top: 240px;
     }
     .contact-v2-hero > img {
         top: 0;
         bottom: auto;
-        height: calc(var(--home-v2-header-height, 72px) + 240px);
+        height: 240px;
         object-position: 72% center;
     }
     .contact-v2-hero::after {
         bottom: auto;
-        height: calc(var(--home-v2-header-height, 72px) + 240px);
+        height: 240px;
     }
     .contact-v2-hero > div {
         padding-top: 28px;

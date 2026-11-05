@@ -13,8 +13,6 @@
     top: 0;
     z-index: 50;
     flex-shrink: 0;
-    /* La photo du hero se prolonge sous le bandeau sticky. */
-    margin-bottom: calc(-1 * var(--home-v2-header-height));
     color: #fff;
     background: #000;
     border-bottom: 0;
@@ -189,7 +187,6 @@
 .home-v2-hero {
     position: relative;
     min-height: 500px;
-    padding-top: var(--home-v2-header-height);
     isolation: isolate;
     overflow: hidden;
     color: #fff;
@@ -204,27 +201,19 @@
     object-position: center 48%;
     z-index: -3;
 }
-/* Dégradé porté par la section hero (pas par la liste des piliers). */
+/* Voile uniquement à droite ; la partie gauche reste sans dégradé. */
 .home-v2-hero::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-        linear-gradient(
-            90deg,
-            rgb(0 0 0 / 0.92) 0%,
-            rgb(0 0 0 / 0.78) 28%,
-            rgba(0, 0, 0, 0.842) 52%,
-            transparent 72%
-        ),
-        linear-gradient(
-            270deg,
-            rgb(0 0 0 / 0.65) 0%,
-            rgba(0, 0, 0, 0.863) 22%,
-            transparent 42%
-        );
+    background: linear-gradient(
+        270deg,
+        rgb(0 0 0 / 0.65) 0%,
+        rgb(0 0 0 / 0.45) 22%,
+        transparent 42%
+    );
 }
 .home-v2-hero-inner {
     max-width: 1536px;
@@ -272,20 +261,7 @@
 }
 .home-v2-hero h1 > strong {
     font-weight: inherit;
-    /* Dégradé brillant type maquette : clair → rouge thème → clair. */
-    background-image: linear-gradient(
-        100deg,
-        #ffffff 0%,
-        #ffd6d8 16%,
-        var(--super-securite-accent) 38%,
-        var(--super-securite-accent) 62%,
-        #ffb8bb 82%,
-        #ffffff 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+    color: #fff;
 }
 .home-v2-intro {
     max-width: 550px;
@@ -303,19 +279,21 @@
     z-index: 0;
     display: grid;
     gap: 25px;
-    width: 200px;
+    width: 150px;
     margin-right: 0;
     padding: 8px 0;
     list-style: none;
 }
-.home-v2-intro,
-.home-v2-pillars {
-    text-shadow: 0 1px 5px rgb(0 0 0 / 0.65);
+.home-v2-intro {
+    text-shadow: 0 1px 5px rgb(0 0 0 / 0.80);
 }
 .home-v2-pillars li {
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: color-mix(in srgb, var(--super-securite-accent) 45%, transparent);
+    color: #fff;
 }
 .home-v2-pillars svg {
     flex: 0 0 auto;
@@ -826,6 +804,7 @@
     }
     .home-v2-pillars li {
         gap: 10px;
+        padding: 10px 12px;
     }
     .home-v2-pillars svg {
         width: 22px;

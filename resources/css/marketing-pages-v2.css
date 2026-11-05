@@ -1,7 +1,6 @@
 /* Présentation V2 : grille éditoriale commune aux deux maquettes. */
 /* Header noir opaque — même fond que l’accueil. */
 .home-v2-header-solid {
-    margin-bottom: calc(-1 * var(--home-v2-header-height));
     background: #000;
 }
 .home-v2-brand img {
@@ -234,7 +233,6 @@
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    padding-top: var(--home-v2-header-height, 88px);
     background: #000;
     color: #fff;
 }
@@ -576,7 +574,6 @@
         width: 184px;
     }
     .home-v2-hero {
-        padding-top: var(--home-v2-header-height);
         min-height: 0;
     }
     .home-v2-hero-photo {
@@ -607,18 +604,18 @@
         font-size: 21px;
     }
     .about-v2-hero {
-        padding-top: calc(var(--home-v2-header-height, 72px) + 240px);
+        padding-top: 240px;
     }
     .about-v2-hero > img {
         position: absolute;
         inset: 0 auto auto 0;
         display: block;
-        height: calc(var(--home-v2-header-height, 72px) + 240px);
+        height: 240px;
         object-position: 72% center;
     }
     .about-v2-hero::after {
         bottom: auto;
-        height: calc(var(--home-v2-header-height, 72px) + 240px);
+        height: 240px;
     }
     .about-v2-hero-inner {
         min-height: 0;

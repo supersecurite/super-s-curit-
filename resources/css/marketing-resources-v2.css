@@ -11,7 +11,6 @@
     position: relative;
     background: #000;
     min-height: 330px;
-    padding-top: var(--home-v2-header-height, 88px);
     color: #fff;
     isolation: isolate;
     overflow: hidden;
@@ -448,17 +447,17 @@
 }
 @media (max-width: 767px) {
     .resources-v2-hero {
-        padding-top: calc(var(--home-v2-header-height, 72px) + 220px);
+        padding-top: 220px;
     }
     .resources-v2-hero > img {
         top: 0;
         bottom: auto;
-        height: calc(var(--home-v2-header-height, 72px) + 220px);
+        height: 220px;
         object-position: 75% center;
     }
     .resources-v2-hero::after {
         bottom: auto;
-        height: calc(var(--home-v2-header-height, 72px) + 220px);
+        height: 220px;
     }
     .resources-v2-hero > div {
         padding-top: 28px;

@@ -55,19 +55,7 @@ export default function MarketingCarrieres({ offers }: Props) {
     return (
         <div className="carrieres-index">
             <SeoHead />
-            <section className="carrieres-hero">
-                <div className="carrieres-hero-copy">
-                    <p className="carrieres-kicker">
-                        {t('recruitment_v2.label')}
-                    </p>
-                    <h1>
-                        {t('recruitment_v2.title_lead')}
-                        <strong>{t('recruitment_v2.title_accent')}</strong>
-                    </h1>
-                    <p className="carrieres-hero-lead">
-                        {t('recruitment_v2.description')}
-                    </p>
-                </div>
+            <section className="contact-v2-hero">
                 <img
                     src="/images/super-securite/visuels-2026/noir/recruitment-v2-hero.jpg"
                     alt=""
@@ -75,6 +63,16 @@ export default function MarketingCarrieres({ offers }: Props) {
                     height={794}
                     fetchPriority="high"
                 />
+                <div className="contact-v2-container">
+                    <p className="contact-v2-eyebrow">
+                        {t('recruitment_v2.label')}
+                    </p>
+                    <h1>
+                        {t('recruitment_v2.title_lead')}
+                        <strong>{t('recruitment_v2.title_accent')}</strong>
+                    </h1>
+                    <p>{t('recruitment_v2.description')}</p>
+                </div>
             </section>
 
             <section
