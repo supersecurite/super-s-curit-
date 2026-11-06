@@ -837,13 +837,17 @@
     .home-v2-partners-inner {
         display: block;
         padding-block: 26px;
+        text-align: center;
     }
     .home-v2-partners h2 {
         width: auto;
         margin-bottom: 25px;
     }
+    .home-v2-partners h2 > span {
+        margin-inline: auto;
+    }
     .home-v2-partner-logos {
-        justify-content: flex-start;
+        justify-content: center;
         gap: 20px 28px;
     }
     .home-v2-partner-logos img {
