@@ -25,6 +25,7 @@ Page publique `/carrieres` listant les offres d’emploi actives (maquette recru
 ### Backoffice offres
 
 - CRUD `/offres-emploi` via Actions (`CreateJobOffer`, `UpdateJobOffer`, `ToggleJobOfferActive`, `DeleteJobOffer`).
+- Description saisie avec l’éditeur Lexical (même composant que les articles) ; rendu public via `ContentRenderer`.
 - Soft delete ; les candidatures historiques restent liées (`withTrashed` sur la relation).
 
 ### Candidatures

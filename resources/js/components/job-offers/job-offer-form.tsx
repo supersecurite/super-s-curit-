@@ -1,11 +1,14 @@
-import { Form, Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { useCallback, useState } from 'react';
+import InputError from '@/components/input-error';
+import Editor from '@/components/lexical-editor/editor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useTrans } from '@/hooks/use-trans';
 
 type JobOfferFormData = {
+    id?: number;
     title: string;
     location: string;
     contract_type: string;
@@ -31,28 +34,61 @@ export default function JobOfferForm({
     method = 'post',
 }: JobOfferFormProps) {
     const { t } = useTrans();
+    const [processing, setProcessing] = useState(false);
+    const [formData, setFormData] = useState({
+        title: offer?.title ?? '',
+        location: offer?.location ?? '',
+        contract_type: offer?.contract_type ?? 'Temps plein',
+        description: offer?.description ?? '',
+        is_active: offer?.is_active ?? true,
+    });
+
+    const updateField = useCallback(
+        (field: keyof typeof formData, value: string | boolean) => {
+            setFormData((prev) => ({ ...prev, [field]: value }));
+        },
+        [],
+    );
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        setProcessing(true);
+
+        router.post(
+            submitUrl,
+            {
+                ...(method === 'put' ? { _method: 'put' } : {}),
+                title: formData.title,
+                location: formData.location,
+                contract_type: formData.contract_type,
+                description: formData.description,
+                is_active: formData.is_active ? '1' : '0',
+            },
+            {
+                forceFormData: true,
+                onFinish: () => setProcessing(false),
+            },
+        );
+    };
 
     return (
-        <Form
-            action={submitUrl}
-            method="post"
+        <form
+            onSubmit={handleSubmit}
             className="space-y-6 rounded-xl border bg-card p-6"
         >
-            {method === 'put' ? (
-                <input type="hidden" name="_method" value="put" />
-            ) : null}
-
             <div className="space-y-2">
-                <Label htmlFor="title">{t('job_offers.field_title', 'Intitulé')}</Label>
+                <Label htmlFor="title">
+                    {t('job_offers.field_title', 'Intitulé')}
+                </Label>
                 <Input
                     id="title"
-                    name="title"
-                    defaultValue={offer?.title ?? ''}
+                    value={formData.title}
+                    onChange={(event) =>
+                        updateField('title', event.target.value)
+                    }
                     required
                 />
-                {errors.title ? (
-                    <p className="text-sm text-destructive">{errors.title}</p>
-                ) : null}
+                <InputError message={errors.title} />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -62,14 +98,14 @@ export default function JobOfferForm({
                     </Label>
                     <Input
                         id="location"
-                        name="location"
-                        defaultValue={offer?.location ?? ''}
+                        value={formData.location}
+                        onChange={(event) =>
+                            updateField('location', event.target.value)
+                        }
                         required
                         placeholder="Conakry"
                     />
-                    {errors.location ? (
-                        <p className="text-sm text-destructive">{errors.location}</p>
-                    ) : null}
+                    <InputError message={errors.location} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="contract_type">
@@ -77,54 +113,56 @@ export default function JobOfferForm({
                     </Label>
                     <Input
                         id="contract_type"
-                        name="contract_type"
-                        defaultValue={offer?.contract_type ?? 'Temps plein'}
+                        value={formData.contract_type}
+                        onChange={(event) =>
+                            updateField('contract_type', event.target.value)
+                        }
                         required
                     />
-                    {errors.contract_type ? (
-                        <p className="text-sm text-destructive">
-                            {errors.contract_type}
-                        </p>
-                    ) : null}
+                    <InputError message={errors.contract_type} />
                 </div>
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="description">
+                <Label>
                     {t('job_offers.field_description', 'Description')}
                 </Label>
-                <Textarea
-                    id="description"
-                    name="description"
-                    rows={5}
-                    defaultValue={offer?.description ?? ''}
+                <Editor
+                    key={offer?.id ?? 'new-offer'}
+                    initialContent={offer?.description ?? ''}
+                    onChange={(content) => updateField('description', content)}
                 />
-                {errors.description ? (
-                    <p className="text-sm text-destructive">{errors.description}</p>
-                ) : null}
+                <InputError message={errors.description} />
             </div>
 
             <div className="flex items-center gap-2">
-                <input type="hidden" name="is_active" value="0" />
                 <input
                     id="is_active"
-                    name="is_active"
                     type="checkbox"
-                    value="1"
-                    defaultChecked={offer?.is_active ?? true}
+                    checked={formData.is_active}
+                    onChange={(event) =>
+                        updateField('is_active', event.target.checked)
+                    }
                     className="size-4 rounded border"
                 />
                 <Label htmlFor="is_active">
-                    {t('job_offers.field_active', 'Offre active (visible sur le site)')}
+                    {t(
+                        'job_offers.field_active',
+                        'Offre active (visible sur le site)',
+                    )}
                 </Label>
             </div>
 
             <div className="flex flex-wrap gap-3">
-                <Button type="submit">{submitLabel}</Button>
+                <Button type="submit" disabled={processing}>
+                    {submitLabel}
+                </Button>
                 <Button variant="outline" asChild>
-                    <Link href={cancelHref}>{t('common.cancel', 'Annuler')}</Link>
+                    <Link href={cancelHref}>
+                        {t('common.cancel', 'Annuler')}
+                    </Link>
                 </Button>
             </div>
-        </Form>
+        </form>
     );
 }

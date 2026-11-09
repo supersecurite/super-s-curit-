@@ -21,7 +21,7 @@ class StoreJobOfferRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'location' => ['required', 'string', 'max:255'],
             'contract_type' => ['required', 'string', 'max:100'],
-            'description' => ['nullable', 'string', 'max:5000'],
+            'description' => ['nullable', 'string'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
