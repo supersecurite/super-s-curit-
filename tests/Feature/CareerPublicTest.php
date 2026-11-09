@@ -74,6 +74,30 @@ test('english careers page uses translated offer fields when available', functio
         );
 });
 
+test('chinese careers page uses translated offer fields when available', function () {
+    JobOffer::factory()->create([
+        'title' => 'Agent de sécurité',
+        'title_zh' => '保安员',
+        'location' => 'Conakry',
+        'location_zh' => '科纳克里',
+        'contract_type' => 'Temps plein',
+        'contract_type_zh' => '全职',
+        'description' => 'Description française.',
+        'description_zh' => '中文描述。',
+    ]);
+
+    $this->get('/zh/carrieres')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/carrieres/index')
+            ->where('offers.0.title', '保安员')
+            ->where('offers.0.contract_type', '全职')
+            ->where('offers.0.excerpt', '中文描述。')
+            ->where('offers.0.has_chinese', true)
+            ->where('offers.0.is_locale_fallback', false)
+        );
+});
+
 test('inactive offer apply page returns 404', function () {
     $offer = JobOffer::factory()->inactive()->create();
 

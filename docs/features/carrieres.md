@@ -25,7 +25,7 @@ Page publique `/carrieres` listant les offres d’emploi actives (maquette recru
 ### Backoffice offres
 
 - CRUD `/offres-emploi` via Actions (`CreateJobOffer`, `UpdateJobOffer`, `ToggleJobOfferActive`, `DeleteJobOffer`).
-- Traduction EN comme les articles : onglets FR/EN dans le formulaire (`title_en`, `location_en`, `contract_type_en`, `description_en`). Locale publique via `JobOffer::localized()` (fallback FR).
+- Traductions CMS FR/EN/ZH : onglets dans le formulaire (`*_en`, `*_zh` pour titre, lieu, contrat, description). Locale publique via `JobOffer::localized()` (fallback FR).
 - Description saisie avec l’éditeur Lexical (même composant que les articles) ; détail public via `ContentRenderer`, liste via `JobOffer::excerpt()`.
 - Soft delete ; les candidatures historiques restent liées (`withTrashed` sur la relation).
 

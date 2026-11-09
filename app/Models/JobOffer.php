@@ -20,12 +20,16 @@ use Illuminate\Support\Str;
     'slug',
     'title',
     'title_en',
+    'title_zh',
     'location',
     'location_en',
+    'location_zh',
     'contract_type',
     'contract_type_en',
+    'contract_type_zh',
     'description',
     'description_en',
+    'description_zh',
     'is_active',
     'published_at',
 ])]
@@ -108,16 +112,17 @@ class JobOffer extends Model
      *     contract_type: string,
      *     description: string|null,
      *     is_fallback: bool,
-     *     has_english: bool
+     *     has_english: bool,
+     *     has_chinese: bool
      * }
      */
     public function localized(?string $locale = null): array
     {
         $locale ??= app()->getLocale();
-        $wantsEnglish = $locale === 'en';
         $hasEnglish = filled($this->title_en);
+        $hasChinese = filled($this->title_zh);
 
-        if ($wantsEnglish && $hasEnglish) {
+        if ($locale === 'en' && $hasEnglish) {
             return [
                 'title' => (string) $this->title_en,
                 'location' => $this->location_en ?: $this->location,
@@ -125,6 +130,19 @@ class JobOffer extends Model
                 'description' => filled($this->description_en) ? $this->description_en : $this->description,
                 'is_fallback' => false,
                 'has_english' => true,
+                'has_chinese' => $hasChinese,
+            ];
+        }
+
+        if ($locale === 'zh' && $hasChinese) {
+            return [
+                'title' => (string) $this->title_zh,
+                'location' => $this->location_zh ?: $this->location,
+                'contract_type' => $this->contract_type_zh ?: $this->contract_type,
+                'description' => filled($this->description_zh) ? $this->description_zh : $this->description,
+                'is_fallback' => false,
+                'has_english' => $hasEnglish,
+                'has_chinese' => true,
             ];
         }
 
@@ -135,6 +153,7 @@ class JobOffer extends Model
             'description' => $this->description,
             'is_fallback' => $locale !== LocaleUrl::defaultLocale(),
             'has_english' => $hasEnglish,
+            'has_chinese' => $hasChinese,
         ];
     }
 
@@ -174,6 +193,7 @@ class JobOffer extends Model
             'excerpt' => $this->excerpt(description: $localized['description']),
             'is_locale_fallback' => $localized['is_fallback'],
             'has_english' => $localized['has_english'],
+            'has_chinese' => $localized['has_chinese'],
         ];
     }
 
@@ -193,6 +213,7 @@ class JobOffer extends Model
             'description' => $localized['description'],
             'is_locale_fallback' => $localized['is_fallback'],
             'has_english' => $localized['has_english'],
+            'has_chinese' => $localized['has_chinese'],
         ];
     }
 
@@ -207,12 +228,16 @@ class JobOffer extends Model
             'slug' => $this->slug,
             'title' => $this->title,
             'title_en' => $this->title_en,
+            'title_zh' => $this->title_zh,
             'location' => $this->location,
             'location_en' => $this->location_en,
+            'location_zh' => $this->location_zh,
             'contract_type' => $this->contract_type,
             'contract_type_en' => $this->contract_type_en,
+            'contract_type_zh' => $this->contract_type_zh,
             'description' => $this->description,
             'description_en' => $this->description_en,
+            'description_zh' => $this->description_zh,
             'is_active' => $this->is_active,
             'applications_count' => $this->applications_count ?? $this->applications()->count(),
             'published_at' => $this->published_at?->toIso8601String(),

@@ -8,12 +8,16 @@ type OfferFormData = {
     uuid: string;
     title: string;
     title_en?: string | null;
+    title_zh?: string | null;
     location: string;
     location_en?: string | null;
+    location_zh?: string | null;
     contract_type: string;
     contract_type_en?: string | null;
+    contract_type_zh?: string | null;
     description: string | null;
     description_en?: string | null;
+    description_zh?: string | null;
     is_active: boolean;
 };
 

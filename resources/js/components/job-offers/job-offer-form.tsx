@@ -7,16 +7,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTrans } from '@/hooks/use-trans';
 
+type ContentLocale = 'fr' | 'en' | 'zh';
+
 type JobOfferFormData = {
     id?: number;
     title: string;
     title_en?: string | null;
+    title_zh?: string | null;
     location: string;
     location_en?: string | null;
+    location_zh?: string | null;
     contract_type: string;
     contract_type_en?: string | null;
+    contract_type_zh?: string | null;
     description?: string | null;
     description_en?: string | null;
+    description_zh?: string | null;
     is_active: boolean;
 };
 
@@ -29,6 +35,23 @@ type JobOfferFormProps = {
     method?: 'post' | 'put';
 };
 
+const localeTabs: Array<{
+    id: ContentLocale;
+    labelKey: string;
+    fallback: string;
+}> = [
+    { id: 'fr', labelKey: 'job_offers.locale_fr', fallback: 'Français' },
+    { id: 'en', labelKey: 'job_offers.locale_en', fallback: 'English' },
+    { id: 'zh', labelKey: 'job_offers.locale_zh', fallback: '中文' },
+];
+
+function fieldKey(
+    base: 'title' | 'location' | 'contract_type' | 'description',
+    locale: ContentLocale,
+): keyof JobOfferFormData {
+    return locale === 'fr' ? base : (`${base}_${locale}` as keyof JobOfferFormData);
+}
+
 export default function JobOfferForm({
     submitUrl,
     submitLabel,
@@ -39,16 +62,20 @@ export default function JobOfferForm({
 }: JobOfferFormProps) {
     const { t } = useTrans();
     const [processing, setProcessing] = useState(false);
-    const [localeTab, setLocaleTab] = useState<'fr' | 'en'>('fr');
+    const [localeTab, setLocaleTab] = useState<ContentLocale>('fr');
     const [formData, setFormData] = useState({
         title: offer?.title ?? '',
         title_en: offer?.title_en ?? '',
+        title_zh: offer?.title_zh ?? '',
         location: offer?.location ?? '',
         location_en: offer?.location_en ?? '',
+        location_zh: offer?.location_zh ?? '',
         contract_type: offer?.contract_type ?? 'Temps plein',
         contract_type_en: offer?.contract_type_en ?? '',
+        contract_type_zh: offer?.contract_type_zh ?? '',
         description: offer?.description ?? '',
         description_en: offer?.description_en ?? '',
+        description_zh: offer?.description_zh ?? '',
         is_active: offer?.is_active ?? true,
     });
 
@@ -69,12 +96,16 @@ export default function JobOfferForm({
                 ...(method === 'put' ? { _method: 'put' } : {}),
                 title: formData.title,
                 title_en: formData.title_en,
+                title_zh: formData.title_zh,
                 location: formData.location,
                 location_en: formData.location_en,
+                location_zh: formData.location_zh,
                 contract_type: formData.contract_type,
                 contract_type_en: formData.contract_type_en,
+                contract_type_zh: formData.contract_type_zh,
                 description: formData.description,
                 description_en: formData.description_en,
+                description_zh: formData.description_zh,
                 is_active: formData.is_active ? '1' : '0',
             },
             {
@@ -84,184 +115,119 @@ export default function JobOfferForm({
         );
     };
 
+    const titleField = fieldKey('title', localeTab);
+    const locationField = fieldKey('location', localeTab);
+    const contractField = fieldKey('contract_type', localeTab);
+    const descriptionField = fieldKey('description', localeTab);
+    const isFrench = localeTab === 'fr';
+
+    const titleLabel =
+        localeTab === 'fr'
+            ? t('job_offers.field_title', 'Intitulé')
+            : localeTab === 'en'
+              ? t('job_offers.field_title_en', 'Title (English)')
+              : t('job_offers.field_title_zh', '标题（中文）');
+    const locationLabel =
+        localeTab === 'fr'
+            ? t('job_offers.field_location', 'Lieu')
+            : localeTab === 'en'
+              ? t('job_offers.field_location_en', 'Location (English)')
+              : t('job_offers.field_location_zh', '地点（中文）');
+    const contractLabel =
+        localeTab === 'fr'
+            ? t('job_offers.field_contract', 'Type de contrat')
+            : localeTab === 'en'
+              ? t('job_offers.field_contract_en', 'Contract type (English)')
+              : t('job_offers.field_contract_zh', '合同类型（中文）');
+    const descriptionLabel =
+        localeTab === 'fr'
+            ? t('job_offers.field_description', 'Description')
+            : localeTab === 'en'
+              ? t('job_offers.field_description_en', 'Description (English)')
+              : t('job_offers.field_description_zh', '描述（中文）');
+
     return (
         <form
             onSubmit={handleSubmit}
             className="space-y-6 rounded-xl border bg-card p-6"
         >
             <div className="inline-flex gap-1 rounded-lg bg-muted p-1">
-                <button
-                    type="button"
-                    onClick={() => setLocaleTab('fr')}
-                    className={
-                        localeTab === 'fr'
-                            ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
-                            : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
-                    }
-                >
-                    {t('job_offers.locale_fr', 'Français')}
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setLocaleTab('en')}
-                    className={
-                        localeTab === 'en'
-                            ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
-                            : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
-                    }
-                >
-                    {t('job_offers.locale_en', 'English')}
-                </button>
+                {localeTabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setLocaleTab(tab.id)}
+                        className={
+                            localeTab === tab.id
+                                ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
+                                : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
+                        }
+                    >
+                        {t(tab.labelKey, tab.fallback)}
+                    </button>
+                ))}
             </div>
 
-            {localeTab === 'fr' ? (
-                <>
-                    <div className="space-y-2">
-                        <Label htmlFor="title">
-                            {t('job_offers.field_title', 'Intitulé')}
-                        </Label>
-                        <Input
-                            id="title"
-                            value={formData.title}
-                            onChange={(event) =>
-                                updateField('title', event.target.value)
-                            }
-                            required
-                        />
-                        <InputError message={errors.title} />
-                    </div>
+            <div className="space-y-2">
+                <Label htmlFor={String(titleField)}>{titleLabel}</Label>
+                <Input
+                    id={String(titleField)}
+                    value={String(formData[titleField] ?? '')}
+                    onChange={(event) =>
+                        updateField(titleField, event.target.value)
+                    }
+                    required={isFrench}
+                />
+                <InputError message={errors[String(titleField)]} />
+            </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="location">
-                                {t('job_offers.field_location', 'Lieu')}
-                            </Label>
-                            <Input
-                                id="location"
-                                value={formData.location}
-                                onChange={(event) =>
-                                    updateField('location', event.target.value)
-                                }
-                                required
-                                placeholder="Conakry"
-                            />
-                            <InputError message={errors.location} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="contract_type">
-                                {t(
-                                    'job_offers.field_contract',
-                                    'Type de contrat',
-                                )}
-                            </Label>
-                            <Input
-                                id="contract_type"
-                                value={formData.contract_type}
-                                onChange={(event) =>
-                                    updateField(
-                                        'contract_type',
-                                        event.target.value,
-                                    )
-                                }
-                                required
-                            />
-                            <InputError message={errors.contract_type} />
-                        </div>
-                    </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                    <Label htmlFor={String(locationField)}>
+                        {locationLabel}
+                    </Label>
+                    <Input
+                        id={String(locationField)}
+                        value={String(formData[locationField] ?? '')}
+                        onChange={(event) =>
+                            updateField(locationField, event.target.value)
+                        }
+                        required={isFrench}
+                        placeholder="Conakry"
+                    />
+                    <InputError message={errors[String(locationField)]} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={String(contractField)}>
+                        {contractLabel}
+                    </Label>
+                    <Input
+                        id={String(contractField)}
+                        value={String(formData[contractField] ?? '')}
+                        onChange={(event) =>
+                            updateField(contractField, event.target.value)
+                        }
+                        required={isFrench}
+                    />
+                    <InputError message={errors[String(contractField)]} />
+                </div>
+            </div>
 
-                    <div className="space-y-2">
-                        <Label>
-                            {t('job_offers.field_description', 'Description')}
-                        </Label>
-                        <Editor
-                            key={`${offer?.id ?? 'new-offer'}-fr`}
-                            initialContent={offer?.description ?? ''}
-                            onChange={(content) =>
-                                updateField('description', content)
-                            }
-                        />
-                        <InputError message={errors.description} />
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className="space-y-2">
-                        <Label htmlFor="title_en">
-                            {t(
-                                'job_offers.field_title_en',
-                                'Title (English)',
-                            )}
-                        </Label>
-                        <Input
-                            id="title_en"
-                            value={formData.title_en}
-                            onChange={(event) =>
-                                updateField('title_en', event.target.value)
-                            }
-                        />
-                        <InputError message={errors.title_en} />
-                    </div>
-
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="location_en">
-                                {t(
-                                    'job_offers.field_location_en',
-                                    'Location (English)',
-                                )}
-                            </Label>
-                            <Input
-                                id="location_en"
-                                value={formData.location_en}
-                                onChange={(event) =>
-                                    updateField(
-                                        'location_en',
-                                        event.target.value,
-                                    )
-                                }
-                                placeholder="Conakry"
-                            />
-                            <InputError message={errors.location_en} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="contract_type_en">
-                                {t(
-                                    'job_offers.field_contract_en',
-                                    'Contract type (English)',
-                                )}
-                            </Label>
-                            <Input
-                                id="contract_type_en"
-                                value={formData.contract_type_en}
-                                onChange={(event) =>
-                                    updateField(
-                                        'contract_type_en',
-                                        event.target.value,
-                                    )
-                                }
-                            />
-                            <InputError message={errors.contract_type_en} />
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>
-                            {t(
-                                'job_offers.field_description_en',
-                                'Description (English)',
-                            )}
-                        </Label>
-                        <Editor
-                            key={`${offer?.id ?? 'new-offer'}-en`}
-                            initialContent={offer?.description_en ?? ''}
-                            onChange={(content) =>
-                                updateField('description_en', content)
-                            }
-                        />
-                        <InputError message={errors.description_en} />
-                    </div>
-                </>
-            )}
+            <div className="space-y-2">
+                <Label>{descriptionLabel}</Label>
+                <Editor
+                    key={`${offer?.id ?? 'new-offer'}-${localeTab}`}
+                    initialContent={
+                        String(
+                            (offer?.[descriptionField] as string | null) ?? '',
+                        )
+                    }
+                    onChange={(content) =>
+                        updateField(descriptionField, content)
+                    }
+                />
+                <InputError message={errors[String(descriptionField)]} />
+            </div>
 
             <div className="flex items-center gap-2">
                 <input

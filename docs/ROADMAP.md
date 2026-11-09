@@ -31,7 +31,7 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Galerie photos / vidéos | Contenu | ✅ Complet | `docs/features/galerie.md` |
 | Partenaires | Contenu | ✅ Complet | `docs/features/partenaires.md` |
 | Candidatures agents | RH | ✅ Complet | Liées aux offres — `docs/features/candidatures-agents.md` |
-| Carrières / offres d'emploi | RH | ✅ Complet | Page publique + CRUD admin + champs EN (comme articles) — `docs/features/carrieres.md` |
+| Carrières / offres d'emploi | RH | ✅ Complet | Page publique + CRUD admin + champs EN/ZH — `docs/features/carrieres.md` |
 | Utilisateurs & permissions | Acteurs | ✅ Complet | `docs/features/utilisateurs-roles.md` |
 | Rôle `commercial` + droits marketing | Acteurs | ✅ Complet | [ADR-0001](decisions/0001-role-commercial.md) — prérequis module communication |
 | Site marketing public | Public | ✅ Complet | i18n FR/EN phase 2 (backoffice session + CMS `*_en`) — [ADR-0005](decisions/0005-i18n-public-url-prefix.md) · [ADR-0006](decisions/0006-backoffice-locale-session.md) · `docs/features/site-public.md` |
