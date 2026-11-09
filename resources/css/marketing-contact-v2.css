@@ -9,7 +9,7 @@
 }
 .contact-v2-hero {
     position: relative;
-    min-height: 420px;
+    min-height: 500px;
     background: #000;
     color: #fff;
     isolation: isolate;
@@ -40,8 +40,8 @@
 }
 .contact-v2-hero > div {
     position: relative;
-    padding-top: 64px;
-    padding-bottom: 56px;
+    padding-top: 80px;
+    padding-bottom: 72px;
 }
 .contact-v2-eyebrow {
     text-transform: uppercase;
@@ -346,17 +346,17 @@
 }
 @media (max-width: 767px) {
     .contact-v2-hero {
-        padding-top: 260px;
+        padding-top: 300px;
     }
     .contact-v2-hero > img {
         top: 0;
         bottom: auto;
-        height: 260px;
+        height: 300px;
         object-position: 72% center;
     }
     .contact-v2-hero::after {
         bottom: auto;
-        height: 260px;
+        height: 300px;
     }
     .contact-v2-hero > div {
         padding-top: 28px;

@@ -261,10 +261,10 @@
 }
 .about-v2-hero-inner {
     position: relative;
-    min-height: 470px;
+    min-height: 550px;
     display: flex;
     align-items: center;
-    padding-block: 56px;
+    padding-block: 72px;
 }
 .about-v2-hero-copy {
     width: 48%;
@@ -579,7 +579,7 @@
     .home-v2-hero-photo {
         position: relative;
         display: block;
-        height: 260px;
+        height: 300px;
         object-position: 65% center;
     }
     .home-v2-hero-inner {
@@ -604,18 +604,18 @@
         font-size: 21px;
     }
     .about-v2-hero {
-        padding-top: 260px;
+        padding-top: 300px;
     }
     .about-v2-hero > img {
         position: absolute;
         inset: 0 auto auto 0;
         display: block;
-        height: 260px;
+        height: 300px;
         object-position: 72% center;
     }
     .about-v2-hero::after {
         bottom: auto;
-        height: 260px;
+        height: 300px;
     }
     .about-v2-hero-inner {
         min-height: 0;
