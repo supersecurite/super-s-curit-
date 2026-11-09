@@ -164,8 +164,11 @@
     box-shadow: none;
 }
 .home-v2-header-quote {
-    min-height: 42px;
-    padding: 12px 20px;
+    min-height: 34px;
+    gap: 8px;
+    padding: 0 14px;
+    font-size: 11px;
+    letter-spacing: 0.05em;
     white-space: nowrap;
 }
 .home-v2-header-quote:focus-visible {

@@ -188,6 +188,70 @@
 .recruitment-v2-apply-form {
     max-width: 920px;
 }
+.carrieres-offer-detail .carrieres-apply-block {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid #e3e8ed;
+}
+.carrieres-offer-detail .carrieres-apply-block > h2 {
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    color: #102337;
+}
+.carrieres-offer-summary {
+    display: grid;
+    gap: 14px;
+    margin: 0 0 22px;
+}
+.carrieres-offer-summary dt {
+    margin-bottom: 2px;
+    color: #6b7785;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+.carrieres-offer-summary dd {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 650;
+    color: #102337;
+    line-height: 1.4;
+}
+.carrieres-offer-summary + .home-v2-button {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 18px;
+    font-size: 12px;
+}
+.carrieres-offer-rh {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.carrieres-offer-rh li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #102337;
+}
+.carrieres-offer-rh svg {
+    flex: 0 0 auto;
+    color: var(--super-securite-accent);
+}
+.carrieres-offer-rh a {
+    color: inherit;
+    text-decoration: none;
+}
+.carrieres-offer-rh a:hover {
+    color: var(--super-securite-accent);
+}
 .recruitment-v2-application {
     background: #f2f5f7;
     padding: 32px 0;

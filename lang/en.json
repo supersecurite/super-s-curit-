@@ -1973,7 +1973,10 @@
         "gallery_team_alt": "Super Sécurité team in training",
         "gallery_training_alt": "Agent training session",
         "gallery_briefing_alt": "Team briefing before a shift",
-        "gallery_round_alt": "Officers on a site patrol"
+        "gallery_round_alt": "Officers on a site patrol",
+        "offer_about": "About the role",
+        "apply_form_title": "Submit your application",
+        "offer_summary": "Offer summary"
     },
     "recruitment_v2": {
         "label": "Careers",

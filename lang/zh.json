@@ -1977,7 +1977,10 @@
         "gallery_team_alt": "Super Sécurité 团队培训",
         "gallery_training_alt": "安保人员培训课程",
         "gallery_briefing_alt": "上岗前的团队简报",
-        "gallery_round_alt": "安保人员在现场巡逻"
+        "gallery_round_alt": "安保人员在现场巡逻",
+        "offer_about": "职位说明",
+        "apply_form_title": "提交申请",
+        "offer_summary": "职位概要"
     },
     "recruitment_v2": {
         "label": "职业发展",

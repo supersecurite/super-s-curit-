@@ -1973,7 +1973,10 @@
         "gallery_team_alt": "Équipe Super Sécurité en formation",
         "gallery_training_alt": "Session de formation des agents",
         "gallery_briefing_alt": "Briefing de l’équipe avant prise de poste",
-        "gallery_round_alt": "Ronde des agents sur site"
+        "gallery_round_alt": "Ronde des agents sur site",
+        "offer_about": "À propos du poste",
+        "apply_form_title": "Déposer votre candidature",
+        "offer_summary": "Résumé de l’offre"
     },
     "recruitment_v2": {
         "label": "Carrières",
