@@ -12,7 +12,7 @@ Permissions `conseils.*` (miroir des articles).
 
 ## Fonctionnement
 
-- Backoffice : `conseils` resource (slug) ; champs EN optionnels (`title_en`, `excerpt_en`, `content_en`).
+- Backoffice : `conseils` resource (slug) ; champs EN/ZH optionnels (`title_en|zh`, `excerpt_en|zh`, `content_en|zh`).
 - Public : `/conseils-securite`, `/conseils-securite/{slug}` (+ `/en/...` localisé, fallback FR).
 - Mutations create/update via `app/Actions/SecurityTips/`.
 
@@ -30,4 +30,4 @@ Permissions `conseils.*` (miroir des articles).
 ## Limites & dette
 
 - Aligné sur le workflow articles ; toute évolution d’approbation doit rester cohérente entre les deux modules.
-- Pas de `slug_en`.
+- Pas de `slug_en` / `slug_zh` (même slug FR sous `/en` et `/zh`).

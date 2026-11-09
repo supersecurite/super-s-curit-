@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Support\SecurityTipStatusTransition;
 
 /**
- * Crée un conseil de sécurité avec champs FR + EN optionnels.
+ * Crée un conseil de sécurité avec champs FR / EN / ZH optionnels.
  */
 class CreateSecurityTip extends Action
 {

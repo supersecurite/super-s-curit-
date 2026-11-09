@@ -17,12 +17,15 @@ use Illuminate\Support\Str;
 #[Fillable([
     'title',
     'title_en',
+    'title_zh',
     'slug',
     'status',
     'excerpt',
     'excerpt_en',
+    'excerpt_zh',
     'content',
     'content_en',
+    'content_zh',
     'image',
     'category',
     'tags',
@@ -257,6 +260,7 @@ class Article extends Model
             'published_at_formatted' => $this->published_at?->locale(app()->getLocale())->isoFormat('D MMMM YYYY'),
             'is_locale_fallback' => $localized['is_fallback'],
             'has_english' => $localized['has_english'],
+            'has_chinese' => $localized['has_chinese'],
         ];
 
         if ($includeContent) {
@@ -275,9 +279,11 @@ class Article extends Model
             'id' => $this->id,
             'title' => $this->title,
             'title_en' => $this->title_en,
+            'title_zh' => $this->title_zh,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'excerpt_en' => $this->excerpt_en,
+            'excerpt_zh' => $this->excerpt_zh,
             'image' => $this->image,
             'image_url' => $this->image_url,
             'image_source' => $this->image_source,
@@ -307,6 +313,7 @@ class Article extends Model
         if ($includeContent) {
             $data['content'] = $this->content;
             $data['content_en'] = $this->content_en;
+            $data['content_zh'] = $this->content_zh;
         }
 
         return $data;

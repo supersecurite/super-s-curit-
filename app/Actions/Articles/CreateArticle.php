@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Support\ArticleStatusTransition;
 
 /**
- * Crée une actualité (brouillon soumis pour validation) avec champs FR + EN optionnels.
+ * Crée une actualité (brouillon soumis pour validation) avec champs FR / EN / ZH optionnels.
  */
 class CreateArticle extends Action
 {

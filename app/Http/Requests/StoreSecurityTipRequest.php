@@ -21,10 +21,13 @@ class StoreSecurityTipRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'title_en' => ['nullable', 'string', 'max:255'],
+            'title_zh' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string', 'max:1000'],
             'excerpt_en' => ['nullable', 'string', 'max:1000'],
+            'excerpt_zh' => ['nullable', 'string', 'max:1000'],
             'content' => ['nullable', 'string'],
             'content_en' => ['nullable', 'string'],
+            'content_zh' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:2048'],
             'category' => ['nullable', 'string', 'max:255'],
             'tags' => ['nullable', 'array'],

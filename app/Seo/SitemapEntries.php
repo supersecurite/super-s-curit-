@@ -46,6 +46,7 @@ class SitemapEntries
                 'sources' => ['database/articles'],
                 'lastmod' => $article->updated_at?->toAtomString(),
                 'has_english' => filled($article->title_en),
+                'has_chinese' => filled($article->title_zh),
             ])
             ->all();
 
@@ -61,6 +62,7 @@ class SitemapEntries
                 'sources' => ['database/security_tips'],
                 'lastmod' => $securityTip->updated_at?->toAtomString(),
                 'has_english' => filled($securityTip->title_en),
+                'has_chinese' => filled($securityTip->title_zh),
             ])
             ->all();
 
@@ -106,12 +108,16 @@ class SitemapEntries
                 $staticPaths[] = $entry['path'];
             }
 
-            if (! ($entry['has_english'] ?? false)) {
-                continue;
-            }
-
             foreach (LocaleUrl::supported() as $locale) {
-                if ($locale !== 'en') {
+                if (LocaleUrl::isDefault($locale)) {
+                    continue;
+                }
+
+                if ($locale === 'en' && ! ($entry['has_english'] ?? false)) {
+                    continue;
+                }
+
+                if ($locale === 'zh' && ! ($entry['has_chinese'] ?? false)) {
                     continue;
                 }
 

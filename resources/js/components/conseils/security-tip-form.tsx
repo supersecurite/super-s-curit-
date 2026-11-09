@@ -15,15 +15,20 @@ export type StatusOption = {
     label: string;
 };
 
+type ContentLocale = 'fr' | 'en' | 'zh';
+
 export type SecurityTipFormData = {
     id?: number;
     slug: string;
     title: string;
     title_en?: string | null;
+    title_zh?: string | null;
     excerpt: string;
     excerpt_en?: string | null;
+    excerpt_zh?: string | null;
     content: string;
     content_en?: string | null;
+    content_zh?: string | null;
     category: string;
     tags: string[];
     featured: boolean;
@@ -62,10 +67,13 @@ export default function SecurityTipForm({
     const [formData, setFormData] = useState({
         title: securityTip?.title ?? '',
         title_en: securityTip?.title_en ?? '',
+        title_zh: securityTip?.title_zh ?? '',
         excerpt: securityTip?.excerpt ?? '',
         excerpt_en: securityTip?.excerpt_en ?? '',
+        excerpt_zh: securityTip?.excerpt_zh ?? '',
         content: securityTip?.content ?? '',
         content_en: securityTip?.content_en ?? '',
+        content_zh: securityTip?.content_zh ?? '',
         category: securityTip?.category ?? '',
         tags: (securityTip?.tags ?? []).join(', '),
         featured: securityTip?.featured ?? false,
@@ -75,7 +83,7 @@ export default function SecurityTipForm({
             : '',
         image: null as File | null,
     });
-    const [localeTab, setLocaleTab] = useState<'fr' | 'en'>('fr');
+    const [localeTab, setLocaleTab] = useState<ContentLocale>('fr');
     const [imagePreview, setImagePreview] = useState<string | null>(
         securityTip?.image_url ?? null,
     );
@@ -115,13 +123,16 @@ export default function SecurityTipForm({
 
         payload.append('title', formData.title);
         payload.append('title_en', formData.title_en);
+        payload.append('title_zh', formData.title_zh);
         if (showStatusField) {
             payload.append('status', formData.status);
         }
         payload.append('excerpt', formData.excerpt);
         payload.append('excerpt_en', formData.excerpt_en);
+        payload.append('excerpt_zh', formData.excerpt_zh);
         payload.append('content', formData.content);
         payload.append('content_en', formData.content_en);
+        payload.append('content_zh', formData.content_zh);
         payload.append('category', formData.category);
         if (canFeature) {
             payload.append('featured', formData.featured ? '1' : '0');
@@ -153,34 +164,44 @@ export default function SecurityTipForm({
                 <div className="space-y-6 lg:col-span-2">
                     <div className="app-panel space-y-4 p-6">
                         <div className="inline-flex gap-1 rounded-lg bg-muted p-1">
-                            <button
-                                type="button"
-                                onClick={() => setLocaleTab('fr')}
-                                className={
-                                    localeTab === 'fr'
-                                        ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
-                                        : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
-                                }
-                            >
-                                {uiText(
-                                    'ui.components.text_e495d53b967a',
-                                    'Français',
-                                )}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setLocaleTab('en')}
-                                className={
-                                    localeTab === 'en'
-                                        ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
-                                        : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
-                                }
-                            >
-                                {uiText(
-                                    'ui.components.text_ba118bf7fc9c',
-                                    'English',
-                                )}
-                            </button>
+                            {(
+                                [
+                                    {
+                                        id: 'fr' as const,
+                                        label: uiText(
+                                            'articles.locale_fr',
+                                            'Français',
+                                        ),
+                                    },
+                                    {
+                                        id: 'en' as const,
+                                        label: uiText(
+                                            'articles.locale_en',
+                                            'English',
+                                        ),
+                                    },
+                                    {
+                                        id: 'zh' as const,
+                                        label: uiText(
+                                            'articles.locale_zh',
+                                            '中文',
+                                        ),
+                                    },
+                                ] as const
+                            ).map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    type="button"
+                                    onClick={() => setLocaleTab(tab.id)}
+                                    className={
+                                        localeTab === tab.id
+                                            ? 'rounded-md bg-background px-3 py-1.5 text-sm font-medium shadow-sm'
+                                            : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground'
+                                    }
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
                         </div>
 
                         {localeTab === 'fr' ? (
@@ -244,7 +265,7 @@ export default function SecurityTipForm({
                                     <InputError message={errors.content} />
                                 </div>
                             </>
-                        ) : (
+                        ) : localeTab === 'en' ? (
                             <>
                                 <div className="grid gap-2">
                                     <Label htmlFor="title_en">
@@ -305,6 +326,69 @@ export default function SecurityTipForm({
                                         }
                                     />
                                     <InputError message={errors.content_en} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="title_zh">
+                                        {uiText(
+                                            'articles.form_title_zh',
+                                            '标题（中文）',
+                                        )}
+                                    </Label>
+                                    <Input
+                                        id="title_zh"
+                                        value={formData.title_zh}
+                                        onChange={(e) =>
+                                            updateField(
+                                                'title_zh',
+                                                e.target.value,
+                                            )
+                                        }
+                                    />
+                                    <InputError message={errors.title_zh} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="excerpt_zh">
+                                        {uiText(
+                                            'articles.form_excerpt_zh',
+                                            '摘要（中文）',
+                                        )}
+                                    </Label>
+                                    <textarea
+                                        id="excerpt_zh"
+                                        rows={3}
+                                        value={formData.excerpt_zh}
+                                        onChange={(e) =>
+                                            updateField(
+                                                'excerpt_zh',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    />
+                                    <InputError message={errors.excerpt_zh} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label>
+                                        {uiText(
+                                            'articles.form_content_zh',
+                                            '内容（中文）',
+                                        )}
+                                    </Label>
+                                    <Editor
+                                        key={`${securityTip?.id ?? 'new'}-zh`}
+                                        initialContent={
+                                            securityTip?.content_zh ?? ''
+                                        }
+                                        onChange={(content) =>
+                                            updateField('content_zh', content)
+                                        }
+                                    />
+                                    <InputError message={errors.content_zh} />
                                 </div>
                             </>
                         )}

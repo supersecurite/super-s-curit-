@@ -16,9 +16,9 @@ Permissions `articles.*` (view, create, update, update_any, delete, delete_any, 
 - Création → statut en attente ; approbation / publication réservée à `articles.approve`.
 - Feature (une) : `articles.feature`.
 - Public : `/actualites`, `/actualites/{slug}` (+ `/en/...` avec contenu localisé).
-- Champs EN optionnels : `title_en`, `excerpt_en`, `content_en` — fallback FR si absents ; bandeau CMS seulement en fallback.
+- Champs EN/ZH optionnels : `title_en|zh`, `excerpt_en|zh`, `content_en|zh` — fallback FR si absents ; bandeau CMS seulement en fallback.
 - Mutations create/update via `app/Actions/Articles/`.
-- Sitemap `/en/actualites/{slug}` uniquement si `title_en` renseigné.
+- Sitemap `/en/...` si `title_en`, `/zh/...` si `title_zh`.
 
 ## Fichiers clés
 
@@ -34,4 +34,4 @@ Permissions `articles.*` (view, create, update, update_any, delete, delete_any, 
 ## Limites & dette
 
 - Limite de featured gérée côté contrôleur.
-- Pas de `slug_en` (même slug FR sous `/en`).
+- Pas de `slug_en` / `slug_zh` (même slug FR sous `/en` et `/zh`).

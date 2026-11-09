@@ -26,8 +26,8 @@ Voir `AGENTS.md` et `CONTRIBUTING.md`.
 | Authentification (Fortify, 2FA, verrouillage inactivité) | Plateforme | ✅ Complet | `docs/features/auth.md` |
 | Dashboard | Plateforme | ✅ Complet | Filtré par permissions — `docs/features/dashboard.md` |
 | Analytics / visites | Plateforme | ✅ Complet | Exclusion backoffice — `docs/features/analytics.md` |
-| Actualités (articles) | Contenu | ✅ Complet | Approbation, feature — `docs/features/articles.md` |
-| Conseils de sécurité | Contenu | ✅ Complet | `docs/features/conseils.md` |
+| Actualités (articles) | Contenu | ✅ Complet | Approbation, feature, champs EN/ZH — `docs/features/articles.md` |
+| Conseils de sécurité | Contenu | ✅ Complet | Champs EN/ZH — `docs/features/conseils.md` |
 | Galerie photos / vidéos | Contenu | ✅ Complet | `docs/features/galerie.md` |
 | Partenaires | Contenu | ✅ Complet | `docs/features/partenaires.md` |
 | Candidatures agents | RH | ✅ Complet | Liées aux offres — `docs/features/candidatures-agents.md` |
