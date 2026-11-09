@@ -7,9 +7,13 @@ type OfferFormData = {
     id: number;
     uuid: string;
     title: string;
+    title_en?: string | null;
     location: string;
+    location_en?: string | null;
     contract_type: string;
+    contract_type_en?: string | null;
     description: string | null;
+    description_en?: string | null;
     is_active: boolean;
 };
 

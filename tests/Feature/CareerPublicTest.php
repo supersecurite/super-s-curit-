@@ -50,6 +50,30 @@ test('careers page exposes a plain-text excerpt instead of lexical json', functi
         );
 });
 
+test('english careers page uses translated offer fields when available', function () {
+    JobOffer::factory()->create([
+        'title' => 'Agent de sécurité',
+        'title_en' => 'Security officer',
+        'location' => 'Conakry',
+        'location_en' => 'Conakry',
+        'contract_type' => 'Temps plein',
+        'contract_type_en' => 'Full time',
+        'description' => 'Description française.',
+        'description_en' => 'English description.',
+    ]);
+
+    $this->get('/en/carrieres')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/carrieres/index')
+            ->where('offers.0.title', 'Security officer')
+            ->where('offers.0.contract_type', 'Full time')
+            ->where('offers.0.excerpt', 'English description.')
+            ->where('offers.0.has_english', true)
+            ->where('offers.0.is_locale_fallback', false)
+        );
+});
+
 test('inactive offer apply page returns 404', function () {
     $offer = JobOffer::factory()->inactive()->create();
 

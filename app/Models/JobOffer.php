@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\LocaleUrl;
 use Database\Factories\JobOfferFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,9 +19,13 @@ use Illuminate\Support\Str;
     'uuid',
     'slug',
     'title',
+    'title_en',
     'location',
+    'location_en',
     'contract_type',
+    'contract_type_en',
     'description',
+    'description_en',
     'is_active',
     'published_at',
 ])]
@@ -95,14 +100,53 @@ class JobOffer extends Model
     }
 
     /**
+     * Résout les champs publics pour la locale courante (fallback FR).
+     *
+     * @return array{
+     *     title: string,
+     *     location: string,
+     *     contract_type: string,
+     *     description: string|null,
+     *     is_fallback: bool,
+     *     has_english: bool
+     * }
+     */
+    public function localized(?string $locale = null): array
+    {
+        $locale ??= app()->getLocale();
+        $wantsEnglish = $locale === 'en';
+        $hasEnglish = filled($this->title_en);
+
+        if ($wantsEnglish && $hasEnglish) {
+            return [
+                'title' => (string) $this->title_en,
+                'location' => $this->location_en ?: $this->location,
+                'contract_type' => $this->contract_type_en ?: $this->contract_type,
+                'description' => filled($this->description_en) ? $this->description_en : $this->description,
+                'is_fallback' => false,
+                'has_english' => true,
+            ];
+        }
+
+        return [
+            'title' => (string) $this->title,
+            'location' => (string) $this->location,
+            'contract_type' => (string) $this->contract_type,
+            'description' => $this->description,
+            'is_fallback' => $locale !== LocaleUrl::defaultLocale(),
+            'has_english' => $hasEnglish,
+        ];
+    }
+
+    /**
      * Résumé texte pour la liste publique (sans JSON Lexical brut).
      */
-    public function excerpt(int $limit = 180): ?string
+    public function excerpt(int $limit = 180, ?string $description = null): ?string
     {
         $plain = trim(preg_replace(
             '/\s+/u',
             ' ',
-            Article::extractTextFromContent($this->description),
+            Article::extractTextFromContent($description ?? $this->description),
         ) ?? '');
 
         if ($plain === '') {
@@ -119,13 +163,17 @@ class JobOffer extends Model
      */
     public function toPublicListArray(): array
     {
+        $localized = $this->localized();
+
         return [
             'uuid' => $this->uuid,
             'slug' => $this->slug,
-            'title' => $this->title,
-            'location' => $this->location,
-            'contract_type' => $this->contract_type,
-            'excerpt' => $this->excerpt(),
+            'title' => $localized['title'],
+            'location' => $localized['location'],
+            'contract_type' => $localized['contract_type'],
+            'excerpt' => $this->excerpt(description: $localized['description']),
+            'is_locale_fallback' => $localized['is_fallback'],
+            'has_english' => $localized['has_english'],
         ];
     }
 
@@ -134,13 +182,17 @@ class JobOffer extends Model
      */
     public function toPublicArray(): array
     {
+        $localized = $this->localized();
+
         return [
             'uuid' => $this->uuid,
             'slug' => $this->slug,
-            'title' => $this->title,
-            'location' => $this->location,
-            'contract_type' => $this->contract_type,
-            'description' => $this->description,
+            'title' => $localized['title'],
+            'location' => $localized['location'],
+            'contract_type' => $localized['contract_type'],
+            'description' => $localized['description'],
+            'is_locale_fallback' => $localized['is_fallback'],
+            'has_english' => $localized['has_english'],
         ];
     }
 
@@ -150,8 +202,17 @@ class JobOffer extends Model
     public function toAdminArray(): array
     {
         return [
-            ...$this->toPublicArray(),
             'id' => $this->id,
+            'uuid' => $this->uuid,
+            'slug' => $this->slug,
+            'title' => $this->title,
+            'title_en' => $this->title_en,
+            'location' => $this->location,
+            'location_en' => $this->location_en,
+            'contract_type' => $this->contract_type,
+            'contract_type_en' => $this->contract_type_en,
+            'description' => $this->description,
+            'description_en' => $this->description_en,
             'is_active' => $this->is_active,
             'applications_count' => $this->applications_count ?? $this->applications()->count(),
             'published_at' => $this->published_at?->toIso8601String(),

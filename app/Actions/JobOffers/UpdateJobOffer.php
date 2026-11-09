@@ -20,9 +20,13 @@ class UpdateJobOffer extends Action
 
         $offer->fill([
             'title' => $title,
+            'title_en' => $data['title_en'] ?? null,
             'location' => $data['location'],
+            'location_en' => $data['location_en'] ?? null,
             'contract_type' => $data['contract_type'],
+            'contract_type_en' => $data['contract_type_en'] ?? null,
             'description' => $data['description'] ?? null,
+            'description_en' => $data['description_en'] ?? null,
             'is_active' => $isActive,
         ]);
 
