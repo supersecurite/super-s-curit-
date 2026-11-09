@@ -13,7 +13,7 @@ type JobOfferRow = {
     title: string;
     location: string;
     contract_type: string;
-    description: string | null;
+    excerpt: string | null;
 };
 
 type Props = {
@@ -124,16 +124,21 @@ export default function MarketingCarrieres({ offers }: Props) {
                                 <span />
                             </div>
                             <ul className="carrieres-offers-list">
-                                {offers.map((offer) => (
+                                {offers.map((offer, index) => (
                                     <li
                                         className="carrieres-offer"
                                         key={offer.uuid}
                                     >
                                         <div className="carrieres-offer-main">
-                                            <h3>{offer.title}</h3>
-                                            {offer.description ? (
-                                                <p>{offer.description}</p>
-                                            ) : null}
+                                            <span className="carrieres-offer-index">
+                                                {offerIndex(index)}
+                                            </span>
+                                            <div>
+                                                <h3>{offer.title}</h3>
+                                                {offer.excerpt ? (
+                                                    <p>{offer.excerpt}</p>
+                                                ) : null}
+                                            </div>
                                         </div>
                                         <p className="carrieres-offer-meta">
                                             <span className="carrieres-offer-key">

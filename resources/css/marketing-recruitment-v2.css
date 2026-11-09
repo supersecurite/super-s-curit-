@@ -898,7 +898,7 @@
     align-items: center;
 }
 .carrieres-offers-head {
-    padding: 12px 36px;
+    padding: 12px 28px;
     color: #6b7785;
     font-size: 11px;
     font-weight: 700;
@@ -909,18 +909,34 @@
     margin: 0;
     padding: 0;
     list-style: none;
+    overflow: hidden;
+    border: 1px solid #d8e0e7;
+    background: #fff;
 }
 .carrieres-offer {
-    margin-inline: 16px;
-    padding: 28px 20px;
-    border-top: 1px solid #d8e0e7;
+    margin: 0;
+    padding: 28px 28px;
+    border-top: 1px solid #e3e8ed;
     transition: background-color 180ms ease;
 }
-.carrieres-offer:last-child {
-    border-bottom: 1px solid #d8e0e7;
+.carrieres-offer:first-child {
+    border-top: 0;
 }
 .carrieres-offer:hover {
-    background: #fff;
+    background: #f8fafc;
+}
+.carrieres-offer-main {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+.carrieres-offer-index {
+    color: var(--super-securite-accent, #ed1c24);
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    line-height: 1.8;
 }
 .carrieres-offer-main h3 {
     margin: 0;
@@ -942,6 +958,7 @@
 }
 .carrieres-offer-meta {
     margin: 0;
+    color: #102337;
     font-size: 15px;
     font-weight: 650;
 }
@@ -949,6 +966,10 @@
     display: none;
 }
 .carrieres-offer .home-v2-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     min-height: 46px;
     padding: 0 22px;
     font-size: 12px;
@@ -1101,13 +1122,16 @@
     .carrieres-offer {
         grid-template-columns: 1fr 1fr;
         align-items: start;
-        margin-inline: 0;
-        padding: 24px 16px;
+        padding: 24px 18px;
     }
     .carrieres-offer-main,
     .carrieres-offer .home-v2-button {
         grid-column: 1 / -1;
         justify-self: stretch;
+    }
+    .carrieres-offer-main {
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 12px;
     }
     .carrieres-offer-key {
         display: block;

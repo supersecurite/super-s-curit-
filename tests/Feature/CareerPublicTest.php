@@ -8,6 +8,10 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->withoutVite();
+});
+
 test('careers page lists only active offers', function () {
     JobOffer::factory()->create(['title' => 'Agent actif', 'is_active' => true]);
     JobOffer::factory()->inactive()->create(['title' => 'Agent inactif']);
@@ -18,6 +22,31 @@ test('careers page lists only active offers', function () {
             ->component('marketing/carrieres/index')
             ->has('offers', 1)
             ->where('offers.0.title', 'Agent actif')
+        );
+});
+
+test('careers page exposes a plain-text excerpt instead of lexical json', function () {
+    JobOffer::factory()->create([
+        'title' => 'Agent lexical',
+        'description' => json_encode([
+            'root' => [
+                'children' => [[
+                    'type' => 'paragraph',
+                    'children' => [[
+                        'type' => 'text',
+                        'text' => 'Mission de surveillance nocturne à Conakry.',
+                    ]],
+                ]],
+            ],
+        ], JSON_THROW_ON_ERROR),
+    ]);
+
+    $this->get(route('carrieres.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('marketing/carrieres/index')
+            ->where('offers.0.excerpt', 'Mission de surveillance nocturne à Conakry.')
+            ->missing('offers.0.description')
         );
 });
 

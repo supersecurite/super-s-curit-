@@ -95,6 +95,41 @@ class JobOffer extends Model
     }
 
     /**
+     * Résumé texte pour la liste publique (sans JSON Lexical brut).
+     */
+    public function excerpt(int $limit = 180): ?string
+    {
+        $plain = trim(preg_replace(
+            '/\s+/u',
+            ' ',
+            Article::extractTextFromContent($this->description),
+        ) ?? '');
+
+        if ($plain === '') {
+            return null;
+        }
+
+        return Str::limit($plain, $limit);
+    }
+
+    /**
+     * Payload liste publique — extrait lisible, sans description Lexical complète.
+     *
+     * @return array<string, mixed>
+     */
+    public function toPublicListArray(): array
+    {
+        return [
+            'uuid' => $this->uuid,
+            'slug' => $this->slug,
+            'title' => $this->title,
+            'location' => $this->location,
+            'contract_type' => $this->contract_type,
+            'excerpt' => $this->excerpt(),
+        ];
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toPublicArray(): array

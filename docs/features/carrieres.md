@@ -16,8 +16,8 @@ Page publique `/carrieres` listant les offres d’emploi actives (maquette recru
 
 ### Public
 
-- `GET /carrieres` — page dédiée (hero scindé, raisons numérotées, liste des offres `is_active`, coordonnées RH et carte). Téléphones RH : +224 613207531, +224 623933385. E-mail : rh@supersecurite.com. Adresse : siège.
-- `GET /carrieres/{slug}/postuler` — détail d’offre (mise en page type articles) + formulaire de candidature.
+- `GET /carrieres` — page dédiée (hero type Contact, liste des offres `is_active` avec `excerpt` texte brut — pas le JSON Lexical —, coordonnées RH et carte). Téléphones RH : +224 613207531, +224 623933385. E-mail : rh@supersecurite.com. Adresse : siège.
+- `GET /carrieres/{slug}/postuler` — détail d’offre (mise en page type articles, `ContentRenderer`) + formulaire de candidature.
 - `POST /carrieres/{slug}/postuler` — crée `SecurityAgentApplication` avec `job_offer_id`.
 - `GET /carrieres/merci` — confirmation.
 - Redirects 301 : `/devenir-agent` → `/carrieres`, `/devenir-agent/merci` → `/carrieres/merci`.
@@ -25,7 +25,7 @@ Page publique `/carrieres` listant les offres d’emploi actives (maquette recru
 ### Backoffice offres
 
 - CRUD `/offres-emploi` via Actions (`CreateJobOffer`, `UpdateJobOffer`, `ToggleJobOfferActive`, `DeleteJobOffer`).
-- Description saisie avec l’éditeur Lexical (même composant que les articles) ; rendu public via `ContentRenderer`.
+- Description saisie avec l’éditeur Lexical (même composant que les articles) ; détail public via `ContentRenderer`, liste via `JobOffer::excerpt()`.
 - Soft delete ; les candidatures historiques restent liées (`withTrashed` sur la relation).
 
 ### Candidatures

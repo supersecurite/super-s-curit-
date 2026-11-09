@@ -21,7 +21,7 @@ class CareerController extends Controller
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->get()
-            ->map(fn (JobOffer $offer) => $offer->toPublicArray())
+            ->map(fn (JobOffer $offer) => $offer->toPublicListArray())
             ->all();
 
         return Inertia::render('marketing/carrieres/index', [
