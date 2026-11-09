@@ -15,7 +15,7 @@
 }
 .enterprise-v2-hero {
     position: relative;
-    min-height: 380px;
+    min-height: 430px;
     background: #000;
     color: #fff;
     isolation: isolate;
@@ -46,8 +46,8 @@
 }
 .enterprise-v2-hero-inner {
     position: relative;
-    padding-top: 32px;
-    padding-bottom: 40px;
+    padding-top: 44px;
+    padding-bottom: 52px;
 }
 .enterprise-v2-breadcrumb {
     display: flex;
@@ -404,17 +404,17 @@
 }
 @media (max-width: 767px) {
     .enterprise-v2-hero {
-        padding-top: 240px;
+        padding-top: 260px;
     }
     .enterprise-v2-hero > img {
         top: 0;
         bottom: auto;
-        height: 240px;
+        height: 260px;
         object-position: 75% center;
     }
     .enterprise-v2-hero::after {
         bottom: auto;
-        height: 240px;
+        height: 260px;
     }
     .enterprise-v2-hero-inner {
         padding-top: 24px;

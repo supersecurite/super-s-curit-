@@ -189,7 +189,7 @@
 }
 .home-v2-hero {
     position: relative;
-    min-height: 500px;
+    min-height: 560px;
     isolation: isolate;
     overflow: hidden;
     color: #fff;
@@ -220,9 +220,9 @@
 }
 .home-v2-hero-inner {
     max-width: 1536px;
-    min-height: 500px;
+    min-height: 560px;
     margin: auto;
-    padding: 62px 4%;
+    padding: 72px 4%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -758,7 +758,7 @@
     }
     .home-v2-hero,
     .home-v2-hero-inner {
-        min-height: 570px;
+        min-height: 620px;
     }
     .home-v2-hero-inner {
         padding-block: 50px 28px;

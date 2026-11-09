@@ -9,7 +9,7 @@
 }
 .recruitment-v2-hero {
     position: relative;
-    min-height: 370px;
+    min-height: 420px;
     background: #000;
     color: #fff;
     isolation: isolate;
@@ -40,8 +40,8 @@
 }
 .recruitment-v2-hero > div {
     position: relative;
-    padding-top: 48px;
-    padding-bottom: 42px;
+    padding-top: 60px;
+    padding-bottom: 52px;
 }
 .recruitment-v2-eyebrow {
     text-transform: uppercase;
@@ -705,17 +705,17 @@
 }
 @media (max-width: 767px) {
     .recruitment-v2-hero {
-        padding-top: 240px;
+        padding-top: 260px;
     }
     .recruitment-v2-hero > img {
         top: 0;
         bottom: auto;
-        height: 240px;
+        height: 260px;
         object-position: 75% center;
     }
     .recruitment-v2-hero::after {
         bottom: auto;
-        height: 240px;
+        height: 260px;
     }
     .recruitment-v2-hero > div {
         padding-top: 28px;
