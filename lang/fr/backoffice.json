@@ -1,4 +1,13 @@
 {
+    "fullscreen_loader": {
+        "loading": "Chargement…",
+        "saving": "Enregistrement…",
+        "stuck": "Chargement trop long",
+        "please_wait": "Veuillez patienter",
+        "stuck_hint": "Vous pouvez actualiser ou quitter cette page.",
+        "refresh": "Actualiser",
+        "leave": "Quitter"
+    },
     "common": {
         "save": "Enregistrer",
         "cancel": "Annuler",

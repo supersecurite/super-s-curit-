@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/react';
+import type { Page } from '@inertiajs/core';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FullscreenLoader } from '@/components/ui/fullscreen-loader';
@@ -15,6 +16,95 @@ const STUCK_AFTER_MS = 12_000;
 
 const AUTH_PATH_PATTERN =
     /^\/(login|register|forgot-password|reset-password|two-factor-challenge|confirm-password)(\/|$)/;
+
+type LoaderCopy = {
+    loading: string;
+    saving: string;
+    stuck: string;
+    please_wait: string;
+    stuck_hint: string;
+    refresh: string;
+    leave: string;
+};
+
+const FALLBACK_COPY: Record<string, LoaderCopy> = {
+    fr: {
+        loading: 'Chargement…',
+        saving: 'Enregistrement…',
+        stuck: 'Chargement trop long',
+        please_wait: 'Veuillez patienter',
+        stuck_hint: 'Vous pouvez actualiser ou quitter cette page.',
+        refresh: 'Actualiser',
+        leave: 'Quitter',
+    },
+    en: {
+        loading: 'Loading…',
+        saving: 'Saving…',
+        stuck: 'Taking longer than usual',
+        please_wait: 'Please wait',
+        stuck_hint: 'You can refresh or leave this page.',
+        refresh: 'Refresh',
+        leave: 'Leave',
+    },
+    zh: {
+        loading: '加载中…',
+        saving: '正在保存…',
+        stuck: '加载时间过长',
+        please_wait: '请稍候',
+        stuck_hint: '您可以刷新或离开此页面。',
+        refresh: '刷新',
+        leave: '离开',
+    },
+};
+
+function readNestedString(
+    source: unknown,
+    key: string,
+): string | undefined {
+    if (!source || typeof source !== 'object') {
+        return undefined;
+    }
+
+    const value = (source as Record<string, unknown>)[key];
+
+    return typeof value === 'string' ? value : undefined;
+}
+
+function resolveLocale(page?: Page): string {
+    const fromProps = page?.props?.locale;
+
+    if (typeof fromProps === 'string' && fromProps !== '') {
+        return fromProps;
+    }
+
+    if (typeof document !== 'undefined') {
+        const lang = document.documentElement.lang.split('-')[0];
+
+        if (lang) {
+            return lang;
+        }
+    }
+
+    return 'fr';
+}
+
+function resolveCopy(page?: Page): LoaderCopy {
+    const locale = resolveLocale(page);
+    const fallback = FALLBACK_COPY[locale] ?? FALLBACK_COPY.fr;
+    const group = (page?.props?.translations as Record<string, unknown> | undefined)
+        ?.fullscreen_loader;
+
+    return {
+        loading: readNestedString(group, 'loading') ?? fallback.loading,
+        saving: readNestedString(group, 'saving') ?? fallback.saving,
+        stuck: readNestedString(group, 'stuck') ?? fallback.stuck,
+        please_wait:
+            readNestedString(group, 'please_wait') ?? fallback.please_wait,
+        stuck_hint: readNestedString(group, 'stuck_hint') ?? fallback.stuck_hint,
+        refresh: readNestedString(group, 'refresh') ?? fallback.refresh,
+        leave: readNestedString(group, 'leave') ?? fallback.leave,
+    };
+}
 
 function isAuthPage(): boolean {
     if (typeof window === 'undefined') {
@@ -65,6 +155,7 @@ export function InertiaFullscreenLoader() {
     const [isLoading, setIsLoading] = useState(false);
     const [isForm, setIsForm] = useState(false);
     const [isStuck, setIsStuck] = useState(false);
+    const [copy, setCopy] = useState<LoaderCopy>(() => resolveCopy());
     const showTimeoutRef = useRef<number | undefined>(undefined);
     const stuckTimeoutRef = useRef<number | undefined>(undefined);
 
@@ -106,6 +197,10 @@ export function InertiaFullscreenLoader() {
             armStuckTimer();
         };
 
+        const syncCopy = (page: Page) => {
+            setCopy(resolveCopy(page));
+        };
+
         const removeForceShow = onShowNavigationLoader(() => {
             show(false);
         });
@@ -129,11 +224,13 @@ export function InertiaFullscreenLoader() {
             }, SHOW_DELAY_MS);
         });
 
-        const removeNavigate = router.on('navigate', () => {
+        const removeNavigate = router.on('navigate', (event) => {
+            syncCopy(event.detail.page);
             hide();
         });
 
-        const removeSuccess = router.on('success', () => {
+        const removeSuccess = router.on('success', (event) => {
+            syncCopy(event.detail.page);
             hide();
         });
 
@@ -201,22 +298,18 @@ export function InertiaFullscreenLoader() {
             spinnerSize={88}
             message={
                 isStuck
-                    ? 'Chargement trop long'
+                    ? copy.stuck
                     : isForm
-                      ? 'Enregistrement…'
-                      : 'Chargement…'
+                      ? copy.saving
+                      : copy.loading
             }
-            subtitle={
-                isStuck
-                    ? 'Vous pouvez actualiser ou quitter cette page.'
-                    : 'Veuillez patienter'
-            }
+            subtitle={isStuck ? copy.stuck_hint : copy.please_wait}
             overlayClassName="bg-black/55"
             blocking={isStuck}
             onRefresh={isStuck ? handleRefresh : undefined}
             onLeave={isStuck ? handleLeave : undefined}
-            refreshLabel="Actualiser"
-            leaveLabel="Quitter"
+            refreshLabel={copy.refresh}
+            leaveLabel={copy.leave}
         />,
         document.body,
     );

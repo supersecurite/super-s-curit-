@@ -49,6 +49,15 @@
         "discover": "Discover",
         "featured": "Featured"
     },
+    "fullscreen_loader": {
+        "loading": "Loading…",
+        "saving": "Saving…",
+        "stuck": "Taking longer than usual",
+        "please_wait": "Please wait",
+        "stuck_hint": "You can refresh or leave this page.",
+        "refresh": "Refresh",
+        "leave": "Leave"
+    },
     "articles": {
         "description": "Field missions, experience reports and Super Sécurité updates.",
         "view_all": "View all news",

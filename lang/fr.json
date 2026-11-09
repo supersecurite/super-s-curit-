@@ -49,6 +49,15 @@
         "discover": "Découvrez",
         "featured": "À la une"
     },
+    "fullscreen_loader": {
+        "loading": "Chargement…",
+        "saving": "Enregistrement…",
+        "stuck": "Chargement trop long",
+        "please_wait": "Veuillez patienter",
+        "stuck_hint": "Vous pouvez actualiser ou quitter cette page.",
+        "refresh": "Actualiser",
+        "leave": "Quitter"
+    },
     "articles": {
         "description": "Missions sur le terrain, retours d'expérience et nouveautés de Super Sécurité.",
         "view_all": "Voir toutes les actualités",

@@ -49,6 +49,15 @@
         "discover": "了解详情",
         "featured": "精选"
     },
+    "fullscreen_loader": {
+        "loading": "加载中…",
+        "saving": "正在保存…",
+        "stuck": "加载时间过长",
+        "please_wait": "请稍候",
+        "stuck_hint": "您可以刷新或离开此页面。",
+        "refresh": "刷新",
+        "leave": "离开"
+    },
     "articles": {
         "description": "Super Sécurité 的现场任务、经验分享与最新动态。",
         "view_all": "查看全部新闻",

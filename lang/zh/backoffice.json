@@ -1,4 +1,13 @@
 {
+    "fullscreen_loader": {
+        "loading": "加载中…",
+        "saving": "正在保存…",
+        "stuck": "加载时间过长",
+        "please_wait": "请稍候",
+        "stuck_hint": "您可以刷新或离开此页面。",
+        "refresh": "刷新",
+        "leave": "离开"
+    },
     "common": {
         "save": "保存",
         "cancel": "取消",
