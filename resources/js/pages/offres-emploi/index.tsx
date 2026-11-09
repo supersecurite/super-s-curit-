@@ -123,11 +123,11 @@ export default function JobOffersIndex() {
                         onClick={() => {
                             if (
                                 confirm(
-                                    t('job_offers.delete_confirm', {
-                                        title: offer.title,
-                                        defaultValue:
-                                            'Supprimer l’offre « :title » ?',
-                                    }),
+                                    t(
+                                        'job_offers.delete_confirm',
+                                        'Supprimer l’offre « :title » ?',
+                                        { title: offer.title },
+                                    ),
                                 )
                             ) {
                                 router.delete(destroy.url(offer.uuid));

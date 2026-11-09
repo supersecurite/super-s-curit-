@@ -188,6 +188,77 @@
 .recruitment-v2-apply-form {
     max-width: 920px;
 }
+.carrieres-offer-detail .carrieres-offer-body {
+    margin-bottom: 8px;
+}
+.carrieres-offer-detail .carrieres-offer-body > h2 {
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    color: #102337;
+}
+.carrieres-offer-detail .carrieres-offer-richtext,
+.carrieres-offer-detail .carrieres-offer-richtext.prose {
+    max-width: none;
+    color: #3a4b5c;
+    font-size: 16px;
+    line-height: 1.8;
+}
+.carrieres-offer-detail .carrieres-offer-richtext p {
+    margin: 0 0 1em;
+}
+.carrieres-offer-detail .carrieres-offer-richtext p:last-child {
+    margin-bottom: 0;
+}
+.carrieres-offer-detail .carrieres-offer-richtext h1,
+.carrieres-offer-detail .carrieres-offer-richtext h2,
+.carrieres-offer-detail .carrieres-offer-richtext h3,
+.carrieres-offer-detail .carrieres-offer-richtext h4 {
+    color: #102337;
+    font-family: var(--font-heading);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+}
+.carrieres-offer-detail .carrieres-offer-richtext h2 {
+    margin: 1.4em 0 0.55em;
+    font-size: 1.35em;
+}
+.carrieres-offer-detail .carrieres-offer-richtext h3 {
+    margin: 1.25em 0 0.45em;
+    font-size: 1.15em;
+}
+.carrieres-offer-detail .carrieres-offer-richtext ul,
+.carrieres-offer-detail .carrieres-offer-richtext ol {
+    margin: 0 0 1em;
+    padding-left: 1.35em;
+}
+.carrieres-offer-detail .carrieres-offer-richtext li {
+    margin-bottom: 0.35em;
+}
+.carrieres-offer-detail .carrieres-offer-richtext ul {
+    list-style: disc;
+}
+.carrieres-offer-detail .carrieres-offer-richtext ol {
+    list-style: decimal;
+}
+.carrieres-offer-detail .carrieres-offer-richtext strong {
+    color: #102337;
+    font-weight: 700;
+}
+.carrieres-offer-detail .carrieres-offer-richtext a {
+    color: var(--super-securite-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.carrieres-offer-detail .carrieres-offer-richtext blockquote {
+    margin: 1em 0;
+    padding: 0.35em 0 0.35em 1em;
+    border-left: 3px solid var(--super-securite-accent);
+    color: #536376;
+    font-style: italic;
+}
 .carrieres-offer-detail .carrieres-apply-block {
     margin-top: 36px;
     padding-top: 28px;

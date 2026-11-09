@@ -69,15 +69,21 @@ export default function MarketingCarrieresPostuler({ jobOffer }: Props) {
             <div className="resources-v2-container resource-v2-reading-grid">
                 <article id="resource-v2-content">
                     {jobOffer.description ? (
-                        <>
-                            <p className="resource-v2-excerpt">
+                        <section
+                            className="carrieres-offer-body"
+                            aria-labelledby="carrieres-offer-about"
+                        >
+                            <h2 id="carrieres-offer-about">
                                 {t(
                                     'carrieres.offer_about',
                                     'À propos du poste',
                                 )}
-                            </p>
-                            <ContentRenderer content={jobOffer.description} />
-                        </>
+                            </h2>
+                            <ContentRenderer
+                                content={jobOffer.description}
+                                className="carrieres-offer-richtext"
+                            />
+                        </section>
                     ) : null}
 
                     <div id="candidature" className="carrieres-apply-block">
