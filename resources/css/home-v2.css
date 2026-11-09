@@ -166,9 +166,9 @@
 .home-v2-header-quote {
     min-height: 34px;
     gap: 8px;
-    padding: 0 14px;
+    padding: 0 10px;
     font-size: 11px;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     white-space: nowrap;
 }
 .home-v2-header-quote:focus-visible {
