@@ -10,7 +10,7 @@
 .resources-v2-hero {
     position: relative;
     background: #000;
-    min-height: 460px;
+    min-height: 500px;
     color: #fff;
     isolation: isolate;
     overflow: hidden;
@@ -447,17 +447,17 @@
 }
 @media (max-width: 767px) {
     .resources-v2-hero {
-        padding-top: 290px;
+        padding-top: 300px;
     }
     .resources-v2-hero > img {
         top: 0;
         bottom: auto;
-        height: 290px;
+        height: 300px;
         object-position: 75% center;
     }
     .resources-v2-hero::after {
         bottom: auto;
-        height: 290px;
+        height: 300px;
     }
     .resources-v2-hero > div {
         padding-top: 28px;

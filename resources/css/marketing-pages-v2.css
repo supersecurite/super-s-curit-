@@ -231,6 +231,7 @@
 }
 .about-v2-hero {
     position: relative;
+    min-height: 500px;
     overflow: hidden;
     isolation: isolate;
     background: #000;
@@ -261,7 +262,7 @@
 }
 .about-v2-hero-inner {
     position: relative;
-    min-height: 550px;
+    min-height: 500px;
     display: flex;
     align-items: center;
     padding-block: 72px;
