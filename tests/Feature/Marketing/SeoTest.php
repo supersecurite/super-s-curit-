@@ -121,8 +121,13 @@ test('marketing pages include server rendered title and description', function (
 });
 
 test('legal pages are available', function () {
-    $this->get(route('privacy'))->assertOk();
-    $this->get(route('legal'))->assertOk();
+    $this->get(route('privacy'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->component('marketing/privacy'));
+
+    $this->get(route('legal'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->component('marketing/legal'));
 });
 
 test('shared page meta is provided to inertia on marketing pages', function () {

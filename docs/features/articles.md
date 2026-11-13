@@ -19,6 +19,7 @@ Permissions `articles.*` (view, create, update, update_any, delete, delete_any, 
 - Champs EN/ZH optionnels : `title_en|zh`, `excerpt_en|zh`, `content_en|zh` — fallback FR si absents ; bandeau CMS seulement en fallback.
 - Mutations create/update via `app/Actions/Articles/`.
 - Sitemap `/en/...` si `title_en`, `/zh/...` si `title_zh`.
+- Éditeur Lexical : les liens sont des nœuds `link` (pas du markdown texte) ; le rendu public (`ContentRenderer`) les affiche en ancres cliquables, avec repli pour les anciens contenus `[texte](url)`.
 
 ## Fichiers clés
 
@@ -30,6 +31,7 @@ Permissions `articles.*` (view, create, update, update_any, delete, delete_any, 
 - `app/Models/Article.php`
 - `resources/js/pages/articles/`
 - `resources/js/pages/marketing/articles/`
+- `resources/js/components/lexical-editor/` (toolbar + `content-renderer`)
 
 ## Limites & dette
 

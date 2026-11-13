@@ -345,7 +345,7 @@ return [
         [
             'path' => '/mentions-legales',
             'meta_title' => 'Mentions légales | Super Sécurité',
-            'meta_description' => 'Mentions légales Super Sécurité : éditeur du site, contact et hébergement.',
+            'meta_description' => 'Mentions légales Super Sécurité : éditeur du site, RCCM et contact.',
             'robots' => 'index, follow',
         ],
     ],

@@ -1,4 +1,5 @@
 import { useTrans as useUiTranslations } from '@/hooks/use-trans';
+import { $createLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import {
     INSERT_ORDERED_LIST_COMMAND,
     INSERT_UNORDERED_LIST_COMMAND,
@@ -7,6 +8,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
 import {
+    $createTextNode,
     $getSelection,
     $isRangeSelection,
     FORMAT_ELEMENT_COMMAND,
@@ -42,6 +44,21 @@ const HEADING_OPTIONS = [
     { label: 'Titre 2', value: 'h2', icon: <Heading2 className="size-4" /> },
     { label: 'Normal', value: 'p', icon: <Type className="size-4" /> },
 ];
+
+/** Complète le schéma si l'utilisateur saisit un domaine nu. */
+function normalizeLinkUrl(url: string): string {
+    const trimmed = url.trim();
+
+    if (trimmed === '') {
+        return trimmed;
+    }
+
+    if (/^(https?:\/\/|mailto:|tel:|\/|#)/i.test(trimmed)) {
+        return trimmed;
+    }
+
+    return `https://${trimmed}`;
+}
 
 function ToolbarButton({
     onClick,
@@ -115,19 +132,40 @@ export default function Toolbar({
     }, [editor, onPickImageFile]);
 
     const insertLink = useCallback(() => {
-        const url = window.prompt("Entrez l'URL du lien :");
-        if (!url) {
+        const rawUrl = window.prompt("Entrez l'URL du lien :");
+        if (!rawUrl) {
             return;
         }
-        const text = window.prompt('Entrez le texte du lien :', url);
-        if (text) {
-            editor.update(() => {
-                const selection = $getSelection();
-                if ($isRangeSelection(selection)) {
-                    selection.insertText(`[${text}](${url})`);
-                }
-            });
+
+        const url = normalizeLinkUrl(rawUrl);
+        let hasTextSelection = false;
+
+        editor.getEditorState().read(() => {
+            const selection = $getSelection();
+            hasTextSelection =
+                $isRangeSelection(selection) && !selection.isCollapsed();
+        });
+
+        if (hasTextSelection) {
+            editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
+            return;
         }
+
+        const text = window.prompt('Entrez le texte du lien :', url);
+        if (!text) {
+            return;
+        }
+
+        editor.update(() => {
+            const selection = $getSelection();
+            if (!$isRangeSelection(selection)) {
+                return;
+            }
+
+            const linkNode = $createLinkNode(url);
+            linkNode.append($createTextNode(text));
+            selection.insertNodes([linkNode]);
+        });
     }, [editor]);
 
     return (

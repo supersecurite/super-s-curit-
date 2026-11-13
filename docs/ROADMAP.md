@@ -166,6 +166,7 @@ Voir `.cursor/rules/domain-invariants.mdc`.
 - 4 novembre 2026 — Typographie : Montserrat unifiée sur tout le site (public + backoffice) ; DM Sans / Space Grotesk retirés.
 - 1 novembre 2026 — Site public : police Montserrat pour le texte, les titres et la navigation.
 - 30 octobre 2026 — V2 : page Contact adaptée à la maquette 14 (coordonnées, devis, carte, processus, FAQ), navigation V2, FR/EN/zh.
+- 13 novembre 2026 — V2 : Mentions légales et Confidentialité alignées sur le template Contact (hero, header V2, contenu en blocs).
 
 - 31 octobre 2026 — Visuels : quinze illustrations renouvelées avec femmes/hommes distincts et différentes tenues, trois photos fournies intégrées et anciens fichiers conservés.
 

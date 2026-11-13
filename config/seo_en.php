@@ -71,7 +71,7 @@ return [
         [
             'path' => '/mentions-legales',
             'meta_title' => 'Legal notice | Super Sécurité',
-            'meta_description' => 'Super Sécurité legal notice: publisher, contact and hosting.',
+            'meta_description' => 'Super Sécurité legal notice: publisher, RCCM and contact.',
         ],
     ],
 

@@ -283,6 +283,13 @@
 }
 #resource-v2-content a {
     overflow-wrap: anywhere;
+    color: var(--super-securite-accent);
+    font-weight: 550;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+#resource-v2-content a:hover {
+    opacity: 0.9;
 }
 #resource-v2-content pre {
     overflow-x: auto;

@@ -1,7 +1,5 @@
 import { usePage } from '@inertiajs/react';
 import SeoHead from '@/components/marketing/seo-head';
-import PageHero from '@/components/marketing/page-hero';
-import Reveal from '@/components/marketing/reveal';
 import { useTrans } from '@/hooks/use-trans';
 import type { SuperSecuriteConfig } from '@/types/super-securite';
 
@@ -38,35 +36,48 @@ export default function PrivacyPage() {
         },
         {
             title: t('privacy.rights_title'),
-            body: t('privacy.rights_body').replace(':email', superSecurite.email),
+            body: t('privacy.rights_body').replace(
+                ':email',
+                superSecurite.email,
+            ),
         },
     ] as const;
 
     return (
-        <>
+        <div className="legal-v2">
             <SeoHead />
 
-            <PageHero
-                label={t('privacy.label')}
-                title={t('privacy.title')}
-                description={t('privacy.description')}
-                align="center"
-            />
+            <section
+                className="contact-v2-hero"
+                aria-labelledby="privacy-v2-title"
+            >
+                <img
+                    src="/images/super-securite/visuels-2026/noir/contact-v2-hero.jpg"
+                    alt=""
+                    width={1980}
+                    height={794}
+                    fetchPriority="high"
+                />
+                <div className="contact-v2-container">
+                    <p className="contact-v2-eyebrow">{t('privacy.label')}</p>
+                    <h1 id="privacy-v2-title">
+                        {t('privacy.title_lead')}
+                        <strong>{t('privacy.title_accent')}</strong>
+                    </h1>
+                    <p>{t('privacy.description')}</p>
+                </div>
+            </section>
 
-            <section className="pb-24">
-                <div className="mx-auto max-w-3xl space-y-10 px-4 sm:px-6 lg:px-8">
-                    {sections.map((section, index) => (
-                        <Reveal key={section.title} delay={index * 60}>
-                            <h2 className="font-heading text-lg font-semibold text-super-securite-heading">
-                                {section.title}
-                            </h2>
-                            <p className="mt-3 text-sm leading-relaxed text-super-securite-muted">
-                                {section.body}
-                            </p>
-                        </Reveal>
+            <section className="legal-v2-main">
+                <div className="contact-v2-container legal-v2-content">
+                    {sections.map((section) => (
+                        <article className="legal-v2-block" key={section.title}>
+                            <h2>{section.title}</h2>
+                            <p>{section.body}</p>
+                        </article>
                     ))}
                 </div>
             </section>
-        </>
+        </div>
     );
 }

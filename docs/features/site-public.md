@@ -182,6 +182,12 @@ Validation Ressources : 144 assertions de rendu et de localisation FR/EN/zh, Typ
 - Textes d’interface FR/EN/zh. Sur mobile, la photo du hero est séparée du titre.
 - Illustration : `public/images/super-securite/contact-v2-hero.jpg`, une seule ombre intégrée à gauche, sans voile CSS.
 
+### Légal V2 — 13 novembre 2026
+
+- Mentions légales et politique de confidentialité passent au template V2 : hero type Contact (`contact-v2-hero`, hauteur 500 px), header V2, blocs de contenu bordés.
+- Contenu métier : éditeur, RCCM, contact (sans directeur de publication ni hébergement) ; sections confidentialité inchangées. Textes FR/EN/zh avec `title_lead` / `title_accent`.
+- Styles : `resources/css/marketing-legal-v2.css`.
+
 
 ### Renouvellement des visuels — 31 octobre 2026
 

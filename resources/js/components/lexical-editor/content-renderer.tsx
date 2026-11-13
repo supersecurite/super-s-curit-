@@ -27,6 +27,8 @@ type ContentRendererProps = {
 };
 
 const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+const MARKDOWN_LINK_PATTERN =
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+|tel:[^\s)]+|\/[^\s)]+)\)/g;
 
 function validateAndParseContent(rawContent: string | null | undefined) {
     if (!rawContent) {
@@ -59,6 +61,84 @@ function validateAndParseContent(rawContent: string | null | undefined) {
     }
 }
 
+function renderAnchor(href: string, children: ReactNode, key?: string | number) {
+    const isExternal = /^https?:\/\//i.test(href);
+
+    return (
+        <a
+            key={key}
+            href={href}
+            className="font-medium text-super-securite-accent underline underline-offset-2 hover:opacity-90"
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+            {children}
+        </a>
+    );
+}
+
+function applyTextFormat(text: ReactNode, format?: number): ReactNode {
+    if (!format || typeof format !== 'number') {
+        return text;
+    }
+
+    let formattedText: ReactNode = text;
+
+    if (format & 1) {
+        formattedText = <strong>{formattedText}</strong>;
+    }
+    if (format & 2) {
+        formattedText = <em>{formattedText}</em>;
+    }
+    if (format & 4) {
+        formattedText = <u>{formattedText}</u>;
+    }
+    if (format & 8) {
+        formattedText = <del>{formattedText}</del>;
+    }
+    if (format & 16) {
+        formattedText = (
+            <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
+                {formattedText}
+            </code>
+        );
+    }
+
+    return formattedText;
+}
+
+/** Compatibilité : anciens contenus où le lien était stocké en markdown texte. */
+function renderTextWithMarkdownLinks(
+    text: string,
+    format?: number,
+): ReactNode {
+    const parts: ReactNode[] = [];
+    let lastIndex = 0;
+    const pattern = new RegExp(MARKDOWN_LINK_PATTERN.source, 'g');
+    let match: RegExpExecArray | null;
+
+    while ((match = pattern.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+            parts.push(
+                applyTextFormat(text.slice(lastIndex, match.index), format),
+            );
+        }
+
+        parts.push(renderAnchor(match[2], applyTextFormat(match[1], format), match.index));
+        lastIndex = match.index + match[0].length;
+    }
+
+    if (parts.length === 0) {
+        return applyTextFormat(text, format);
+    }
+
+    if (lastIndex < text.length) {
+        parts.push(applyTextFormat(text.slice(lastIndex), format));
+    }
+
+    return parts;
+}
+
 function renderTextContent(child: LexicalNode): ReactNode {
     const text = child.text ?? '';
 
@@ -66,33 +146,7 @@ function renderTextContent(child: LexicalNode): ReactNode {
         return null;
     }
 
-    if (child.format && typeof child.format === 'number') {
-        let formattedText: ReactNode = text;
-
-        if (child.format & 1) {
-            formattedText = <strong>{formattedText}</strong>;
-        }
-        if (child.format & 2) {
-            formattedText = <em>{formattedText}</em>;
-        }
-        if (child.format & 4) {
-            formattedText = <u>{formattedText}</u>;
-        }
-        if (child.format & 8) {
-            formattedText = <del>{formattedText}</del>;
-        }
-        if (child.format & 16) {
-            formattedText = (
-                <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
-                    {formattedText}
-                </code>
-            );
-        }
-
-        return formattedText;
-    }
-
-    return text;
+    return renderTextWithMarkdownLinks(text, child.format);
 }
 
 function renderImage(node: LexicalNode, index: number) {
@@ -147,20 +201,10 @@ function renderNodeChildren(children: LexicalNode[] | undefined): ReactNode {
         }
 
         if (child.type === 'link' && child.children) {
-            return (
-                <a
-                    key={index}
-                    href={child.url || '#'}
-                    className="text-super-securite-accent hover:underline"
-                    target={child.url?.startsWith('http') ? '_blank' : '_self'}
-                    rel={
-                        child.url?.startsWith('http')
-                            ? 'noopener noreferrer'
-                            : undefined
-                    }
-                >
-                    {renderNodeChildren(child.children)}
-                </a>
+            return renderAnchor(
+                child.url || '#',
+                renderNodeChildren(child.children),
+                index,
             );
         }
 

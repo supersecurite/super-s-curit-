@@ -629,18 +629,19 @@
     "legal": {
         "label": "Légal",
         "title": "Mentions légales",
+        "title_lead": "Mentions",
+        "title_accent": "légales",
         "description": "Informations légales relatives au site supersecurite.com.",
         "publisher": "Éditeur",
         "publisher_body": "Super Sécurité — sécurité privée à Conakry et région.",
         "rccm": "RCCM",
-        "contact": "Contact",
-        "director": "Directeur de publication",
-        "hosting": "Hébergement",
-        "hosting_body": "Hostinger International Ltd. — site accessible via HTTPS."
+        "contact": "Contact"
     },
     "privacy": {
         "label": "Légal",
         "title": "Politique de confidentialité",
+        "title_lead": "Politique de",
+        "title_accent": "confidentialité",
         "description": "Transparence sur la collecte et l'utilisation de vos données personnelles.",
         "controller_title": "Responsable du traitement",
         "controller_body": "Super Sécurité — :address. Contact : :email.",

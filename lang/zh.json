@@ -629,18 +629,19 @@
     "legal": {
         "label": "法律信息",
         "title": "法律声明",
+        "title_lead": "法律",
+        "title_accent": "声明",
         "description": "supersecurite.com 网站的法律信息。",
         "publisher": "网站发布者",
         "publisher_body": "Super Sécurité，科纳克里及周边地区的私人安保服务商。",
         "rccm": "商业及动产信用登记号（RCCM）",
-        "contact": "联系方式",
-        "director": "出版负责人",
-        "hosting": "网站托管",
-        "hosting_body": "Hostinger International Ltd.，网站通过 HTTPS 访问。"
+        "contact": "联系方式"
     },
     "privacy": {
         "label": "法律信息",
         "title": "隐私政策",
+        "title_lead": "隐私",
+        "title_accent": "政策",
         "description": "了解我们如何收集和使用您的个人数据。",
         "controller_title": "数据控制者",
         "controller_body": "Super Sécurité — :address。联系方式：:email。",

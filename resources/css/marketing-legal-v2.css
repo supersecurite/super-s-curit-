@@ -1,0 +1,62 @@
+/* Pages légales V2 — hero partagé avec contact-v2, contenu éditorial. */
+.legal-v2 {
+    background: #fff;
+    color: #102337;
+}
+.legal-v2-main {
+    padding-block: 40px 64px;
+}
+.legal-v2-content {
+    max-width: 820px;
+    display: grid;
+    gap: 22px;
+}
+.legal-v2-block {
+    border: 1px solid #e2e8ee;
+    border-radius: 6px;
+    padding: 26px 28px;
+    background: #fff;
+}
+.legal-v2-block h2 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #102337;
+}
+.legal-v2-block h2::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 3px;
+    margin-bottom: 12px;
+    background: var(--super-securite-accent);
+}
+.legal-v2-block p,
+.legal-v2-block li {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #3d4d5c;
+}
+.legal-v2-block a {
+    color: var(--super-securite-accent);
+    font-weight: 550;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.legal-v2-block a:hover {
+    opacity: 0.9;
+}
+.legal-v2 a:focus-visible {
+    outline: 2px solid var(--super-securite-accent);
+    outline-offset: 4px;
+}
+@media (max-width: 767px) {
+    .legal-v2-main {
+        padding-block: 28px 48px;
+    }
+    .legal-v2-block {
+        padding: 20px;
+    }
+}
