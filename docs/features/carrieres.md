@@ -8,7 +8,7 @@ Page publique `/carrieres` listant les offres d’emploi actives (maquette recru
 
 ## Acteurs & rôles
 
-- Public : consulter les offres actives, postuler (throttle + reCAPTCHA).
+- Public : consulter les offres actives, postuler (throttle + reCAPTCHA v2 sur le formulaire V2 ; mêmes clés / `RECAPTCHA_USE_TEST_KEYS` que le contact).
 - Backoffice offres : `job_offers.view|create|update|delete`.
 - Backoffice candidatures : `agent_applications.view|update` (filtre et détail par offre).
 

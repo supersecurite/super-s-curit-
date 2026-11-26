@@ -181,6 +181,7 @@ Validation Ressources : 144 assertions de rendu et de localisation FR/EN/zh, Typ
 - Le formulaire exige la localisation du site et l’accord d’utilisation des données. Société et service restent facultatifs. L’e-mail de contact reprend la localisation.
 - Textes d’interface FR/EN/zh. Sur mobile, la photo du hero est séparée du titre.
 - Illustration : `public/images/super-securite/contact-v2-hero.jpg`, une seule ombre intégrée à gauche, sans voile CSS.
+- reCAPTCHA v2 sur le formulaire V2 (`RecaptchaField` + règle `Recaptcha`). En local : `RECAPTCHA_USE_TEST_KEYS=true` (clés Google de test, domaine `.test` OK). En prod : clés réelles avec domaines enregistrés dans la console Google.
 
 ### Légal V2 — 13 novembre 2026
 

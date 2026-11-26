@@ -65,6 +65,21 @@ test('agent application rejects missing recaptcha when enabled', function () {
     $response->assertSessionHasErrors(['g-recaptcha-response']);
 });
 
+test('contact page shares recaptcha props when enabled', function () {
+    config([
+        'recaptcha.enabled' => true,
+        'recaptcha.site_key' => 'site-key-for-test',
+        'recaptcha.language' => 'fr',
+    ]);
+
+    $this->get(route('contact'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('recaptcha.enabled', true)
+            ->where('recaptcha.siteKey', 'site-key-for-test')
+            ->where('recaptcha.language', 'fr'));
+});
+
 test('contact form accepts valid recaptcha token when enabled', function () {
     Mail::fake();
 

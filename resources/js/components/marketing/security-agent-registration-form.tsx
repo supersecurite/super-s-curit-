@@ -54,7 +54,7 @@ export default function SecurityAgentRegistrationForm({
     );
 
     return (
-        <div className="marketing-card relative overflow-hidden">
+        <div className="marketing-card relative overflow-visible">
             <div
                 className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-super-securite-accent/10 blur-3xl"
                 aria-hidden
